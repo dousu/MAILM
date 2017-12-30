@@ -6752,14 +6752,14 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
     //2.要素を順番にチェック(create_measures(res,cat,beat_num))．symbolががでてくるかひとつでもfalseなら1へ戻る．symbolが出たら1へ戻る．
     //3.最初にできたものをgenerateしたものとする．できなかった場合は，std::vector<Rule>()を返す.
     {
-        int rand_index;
+      int rand_index,i;
         bool creatable = false;
         RuleDBType temp = sentenceDB;
         std::vector<Rule> work_list;
-        for(int i = 0; i < sentenceDB.size(); i++){
+        for(i = 0; i < sentenceDB.size(); i++){
             bool suc=true;
             work_list.clear();
-            rand_index = MT19937::irand % temp.size();
+            rand_index = MT19937::irand() % temp.size();
             Rule base_r = temp[rand_index];
             work_list.push_back(base_r);
             for(auto& ex_el : base_r.external){
