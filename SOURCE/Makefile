@@ -1,6 +1,6 @@
 LD = -L/usr/local/lib
 ID = -I/usr/local/include
-SOURCEDIR = ./SOURCE
+SOURCEDIR = .
 LIBS = -lboost_serialization -lboost_system -lboost_program_options
 OBJ1 = MAILMAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o XMLreader.o IndexFactory.o Prefices.o LogBox.o MT19937.o Semantics.o MAILMParameters.o
 OBJ2 = MAILMAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o XMLreader2.o IndexFactory.o Prefices.o LogBox.o MT19937.o Semantics.o MAILMParameters.o
