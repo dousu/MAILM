@@ -996,7 +996,7 @@ KnowledgeBase::chunking(Rule& src, Rule& dst) {
         if(intention.chunk_equal(
             src.internal.front(),
             dst.internal.front()
-            )
+            ) || true
         ){
             m_check = true;
         }else{
@@ -2086,7 +2086,7 @@ KnowledgeBase::collect_merge_cat(
             it != rule_db.end()
         ) {
             if (
-                src.external == (*it).external && intention.merge_equal(src.internal.front(),(*it).internal.front())
+                src.external == (*it).external && (intention.merge_equal(src.internal.front(),(*it).internal.front()) || true)
             ){
                 if(
                     src.cat != (*it).cat
@@ -2115,7 +2115,7 @@ KnowledgeBase::collect_merge_cat(
     }else{ //RULE_TYPE::NOUN
         while (it != rule_db.end()) {
             if (
-                src.external == (*it).external && intention.merge_equal(src.internal.front(),(*it).internal.front())
+                src.external == (*it).external && (intention.merge_equal(src.internal.front(),(*it).internal.front()) || true)
             ){
                 if( src.cat != (*it).cat ){
                     if(

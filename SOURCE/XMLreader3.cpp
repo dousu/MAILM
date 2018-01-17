@@ -139,8 +139,7 @@ void
 XMLreader::load(std::string file_path,
           std::vector<std::string>& buf, int file_no) {
   boost::property_tree::ptree pt;
-  boost::property_tree::read_xml(file_path.c_str(),
-                                               pt);
+  boost::property_tree::read_xml(file_path.c_str(),pt);
 
   std::vector<std::string> lbuf1,lbuf2;
 
@@ -169,7 +168,7 @@ XMLreader::load(std::string file_path,
     std::string("I")+
     Prefices::CLN+
     boost::lexical_cast<std::string>(index_count)
-    );
+  );
   core_meaning[index_count] = std::vector<std::string>();
   core_meaning[index_count].push_back(std::string("SENTENCE"));
   core_meaning[index_count].push_back(std::string("s")+labeling[file_no]);
@@ -198,7 +197,6 @@ XMLreader::load(std::string file_path,
 
   //楽曲の繰り返しもあるので全部検査するのを変化がなくなるまで行う
   while(loop){
-
 
     //何巡目かカウント
     p_num++;
