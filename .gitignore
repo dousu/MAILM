@@ -113,6 +113,7 @@ ipch/
 *.sln
 *.vcxproj
 *.vcxproj.*
+packages.config
 
 # Guidance Automation Toolkit
 *.gpState

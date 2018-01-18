@@ -17,18 +17,18 @@ std::map<int, std::vector<int> > XMLreader::beat_map;
 std::map<int, std::string> XMLreader::labeling;
 std::map<int, std::vector<std::string> > XMLreader::core_meaning;
 
-int XMLreader::index_count = 1;
-int XMLreader::variable_count = 1;
-int XMLreader::category_count = 1;
+int XMLreader::index_count = -1;
+int XMLreader::variable_count = -1;
+int XMLreader::category_count = -1;
 int XMLreader::symbol_count = 1;
 
 //Dictionary::Dictionary() {
-//	// TODO Auto-generated constructor stub
+//  // TODO Auto-generated constructor stub
 //
 //}
 //
 //Dictionary::~Dictionary() {
-//	// TODO Auto-generated destructor stub
+//  // TODO Auto-generated destructor stub
 //}
 
 void
@@ -66,7 +66,7 @@ XMLreader::make_init_data(std::vector<std::string>& file_paths,
                   std::string& alias_file_path,
                   std::string& dic_xml_path){//,
                   // std::string& meaning_rules_path) {
-  std::cout << "XMLreader2" << std::endl;
+  std::cout << "XMLreader3" << std::endl;
   {
     alias.clear();
     conv_alias.clear();
@@ -139,8 +139,7 @@ void
 XMLreader::load(std::string file_path,
           std::vector<std::string>& buf, int file_no) {
   boost::property_tree::ptree pt;
-  boost::property_tree::read_xml(file_path.c_str(),
-                                               pt);
+  boost::property_tree::read_xml(file_path.c_str(),pt);
 
   std::vector<std::string> lbuf1,lbuf2;
 
@@ -169,7 +168,7 @@ XMLreader::load(std::string file_path,
     std::string("I")+
     Prefices::CLN+
     boost::lexical_cast<std::string>(index_count)
-    );
+  );
   core_meaning[index_count] = std::vector<std::string>();
   core_meaning[index_count].push_back(std::string("SENTENCE"));
   core_meaning[index_count].push_back(std::string("s")+labeling[file_no]);
@@ -190,7 +189,7 @@ XMLreader::load(std::string file_path,
     Prefices::CLN
   );
 
-  index_count++;
+  index_count--;
 
   // beat_map[file_no] = 0;
   beat_map[file_no] = std::vector<int>();
@@ -198,7 +197,6 @@ XMLreader::load(std::string file_path,
 
   //楽曲の繰り返しもあるので全部検査するのを変化がなくなるまで行う
   while(loop){
-
 
     //何巡目かカウント
     p_num++;
@@ -231,17 +229,13 @@ XMLreader::load(std::string file_path,
       std::to_string(0)+
       Prefices::CLN
     );
-    index_count++;
+    index_count--;
 
     //score以下の木を順番に取っていく
     BOOST_FOREACH (
       const boost::property_tree::ptree::value_type& measure_t,
       pt.get_child(path1.c_str())
     ) {
-
-      // if(measure_t.first == "measure"){
-      //   std::cout << measure_t.first << ": " << ((measure_t.second.get_optional<int>( (std::string("<xmlattr>.number")).c_str()) ).get() == measure_num) << std::endl;
-      // }
 
       //measureであり次に検査すべきmeasureか判定
       if(measure_t.first == "measure" &&
@@ -259,8 +253,8 @@ XMLreader::load(std::string file_path,
           if(
             period_t.first == "period" &&
               (
-              period_t.second.get_optional<int>(
-                (std::string("<xmlattr>.number")).c_str()
+                period_t.second.get_optional<int>(
+                  (std::string("<xmlattr>.number")).c_str()
                 )
               ).get() == p_num
           ){
@@ -270,8 +264,6 @@ XMLreader::load(std::string file_path,
             break;
           }
         }
-
-        // std::cout << measure_t.first << ": " << p_fl << std::endl;
 
         if(p_fl){
           //metric番号の初期化
@@ -308,8 +300,6 @@ XMLreader::load(std::string file_path,
               //ここで順番に処理していけば順序通りにとれる
               std::string str;
 
-              // std::cout << "AAA" << std::endl;
-
               //すべてのpitch classを取得
               BOOST_FOREACH(
                 const boost::property_tree::ptree::value_type& class_t,
@@ -342,8 +332,6 @@ XMLreader::load(std::string file_path,
                 core_meaning[index_count].push_back("rest");
                 
               }
-
-              // std::cout << str << std::endl;
 
               //strのaliasの作成とword_exへの保存
               std::string str2;
@@ -390,7 +378,7 @@ XMLreader::load(std::string file_path,
                   core_meaning[index_count] = std::vector<std::string>();
                 }
                 core_meaning[index_count].push_back(std::string("MEASURE"));
-                core_meaning[index_count].push_back(std::string("c")+(measure_t.second.get_optional<std::string>( (std::string("<xmlattr>.number")).c_str()) ).get());
+                // core_meaning[index_count].push_back(std::string("m")+std::to_string(file_no) + std::string("_") +(measure_t.second.get_optional<std::string>( (std::string("<xmlattr>.number")).c_str()) ).get());
 
                 //variableをつけて汎用表現にする
                 tmp = tmp +
@@ -399,6 +387,7 @@ XMLreader::load(std::string file_path,
                   Prefices::CLN +
                   boost::lexical_cast<std::string>(variable_count);
                 
+                //sentence internal and external
                 sub_ex.push_back(tmp);
                 sub_in.push_back(tmp);
 
@@ -417,11 +406,12 @@ XMLreader::load(std::string file_path,
                   Prefices::CLN+
                   std::to_string(1)
                 );
+                //sub用
                 length++;
 
-                index_count++;
-                variable_count++;
-                category_count++;
+                index_count--;
+                variable_count--;
+                category_count--;
               }
 
               break;

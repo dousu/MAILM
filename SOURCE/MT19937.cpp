@@ -1,8 +1,8 @@
 /*
  * MT19937E.cpp
  *
- *  Created on: 2011/08/04
- *      Author: Rindow
+ *  Created on: 2012/12/04
+ *      Author: Hiroki Sudo
  */
 
 #include "MT19937.h"
@@ -22,23 +22,11 @@ unsigned long long int MT19937::rcount=0LL;
 
 boost::mt19937 MT19937::igen(111);
 boost::uniform_int<int> MT19937::idist(0, INT_MAX);
-boost::variate_generator<
-	boost::mt19937,
-	boost::uniform_int<int>
-> MT19937::_irand(
-	MT19937::igen,
-	MT19937::idist
-);
+boost::variate_generator<boost::mt19937, boost::uniform_int<int> > MT19937::_irand(MT19937::igen, MT19937::idist);
 
 boost::mt19937 MT19937::rgen(111);
 boost::uniform_real<double> MT19937::rdist(0, 1);
-boost::variate_generator<
-	boost::mt19937,
-	boost::uniform_real<double>
-> MT19937::_rrand(
-	MT19937::rgen,
-	MT19937::rdist
-);
+boost::variate_generator<boost::mt19937, boost::uniform_real<double> > MT19937::_rrand(MT19937::rgen, MT19937::rdist);
 
 
 int MT19937::irand(void){
@@ -59,24 +47,22 @@ double MT19937::rrand(void){
 }
 
 void MT19937::waste(void){
-	   unsigned long long int i = 0LL;
-	   while (i < icount){
-		   _irand();
-		   i++;
-	   }
+	//    unsigned long long int i = 0LL;
+	//    while (i < icount){
+	// 	   _irand();
+	// 	   i++;
+	//    }
 
-	   i=0;
-	   while(i < rcount){
-		   _rrand();
-		   i++;
-	   }
+	//    i=0;
+	//    while(i < rcount){
+	// 	   _rrand();
+	// 	   i++;
+	//    }
+	_irand.engine().discard(icount);
+	_rrand.engine().discard(rcount);
 }
 
 void MT19937::set_seed(uint32_t seed_value){
-	   _irand.engine().seed(
-	   		static_cast<unsigned long>(seed_value)
-	   );
-	   _rrand.engine().seed(
-	   		static_cast<unsigned long>(seed_value)
-	   );
+	   _irand.engine().seed(static_cast<unsigned long>(seed_value));
+	   _rrand.engine().seed(static_cast<unsigned long>(seed_value));
 }
