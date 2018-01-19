@@ -7,6 +7,13 @@
 *.o
 *.obj
 
+#Output files
+*.prm
+*.rst
+*.ave
+*.sd
+*.acc
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -113,7 +120,10 @@ ipch/
 *.sln
 *.vcxproj
 *.vcxproj.*
-packages.config
+
+# Visual Studio Code
+*.code-workspace
+*.vscode*
 
 # Guidance Automation Toolkit
 *.gpState
