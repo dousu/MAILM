@@ -682,6 +682,49 @@ KnowledgeBase::unify_loop_sub(int now_cat, int target_cat, int type, RuleDBType&
 	}
 }
 
+std::vector<std::vector<int> > KnowledgeBase::calculation_assignment(int value, int size)
+{
+	//valueをsize個の配列に整数としてどのように割り振れるのかのリストを返す．
+	std::vector<std::vector<int> > result;
+	if (value == 0) {
+		result.reserve(1);
+		std::vector<int> work;
+		work.reserve(size);
+		for (int i = 0; i < size; i++) {
+			work.emplace_back(1);
+		}
+		result.push_back(work);
+	}
+	else {
+		std::vector<std::vector<int> > work_result;
+		work_result = calculation_assignment(value - 1, size);
+		result.reserve(work_result.size()*size);
+		for (auto& list : work_result) {
+			for (int index = 0; index < size; index++) {
+				std::vector<int> copy = list;
+				copy[index]++;
+				result.push_back(copy);
+			}
+		}
+	}
+	return result;
+}
+
+std::vector<std::vector<int> > KnowledgeBase::calculation_task_list(int size)
+{
+	//0か1が入っている配列を返す．
+	//ひとつだけ1であるすべてのパターンを含む．
+	std::vector<std::vector<int> > result;
+	std::vector<int> zeros(size);
+	result.reserve(size);
+	for (int index = 0; index < size; index++) {
+		std::vector<int> copy = zeros;
+		copy[index]++;
+		result.push_back(copy);
+	}
+	return result;
+}
+
 /*
  * ALGORITHM
  * Chunk
@@ -2092,7 +2135,7 @@ KnowledgeBase::merging(Rule& src) {
 void
 KnowledgeBase::collect_merge_cat(
 	Rule& src,
-	std::vector<Rule>& rule_db,
+	RuleDBType& rule_db,
 	std::map<int, bool>& unified_sent_cat,
 	std::map<int, bool>& unified_word_cat,
 	std::map<int, bool>& unified_ind
@@ -3257,10 +3300,6 @@ KnowledgeBase::lemma_construct_grounding_patterns(
 	bool& is_semicomplete,
 	bool& sent_search
 ) {
-	typedef std::pair<
-		std::multimap<int, Rule>::iterator,
-		std::multimap<int, Rule>::iterator
-	> DictionaryRange;
 	RuleDBType::iterator
 		sent_it,
 		end_it;
@@ -3653,10 +3692,6 @@ std::map<KnowledgeBase::PATTERN_TYPE,
 KnowledgeBase::construct_grounding_patterns(
 	Rule& src
 ) {
-	typedef std::pair<
-		std::multimap<int, Rule>::iterator,
-		std::multimap<int, Rule>::iterator
-	> DictionaryRange;
 
 	/*
 	 * Srcに対して、それぞれの文規則がグラウンド可能か検査する
@@ -4600,10 +4635,6 @@ KnowledgeBase::lemma_construct_grounding_patterns_keep_id(
 	bool& is_semicomplete,
 	bool& sent_search
 ) {
-	typedef std::pair<
-		std::multimap<int, Rule>::iterator,
-		std::multimap<int, Rule>::iterator
-	> DictionaryRange;
 	RuleDBType::iterator
 		sent_it,
 		end_it;
@@ -4997,10 +5028,6 @@ std::map<KnowledgeBase::PATTERN_TYPE,
 KnowledgeBase::construct_grounding_patterns_keep_id(
 	Rule& src
 ) {
-	typedef std::pair<
-		std::multimap<int, Rule>::iterator,
-		std::multimap<int, Rule>::iterator
-	> DictionaryRange;
 
 	/*
 	 * Srcに対して、それぞれの文規則がグラウンド可能か検査する
@@ -6871,11 +6898,11 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 	//2.要素を順番にチェック(create_measures(res,cat,beat_num))．symbolががでてくるかひとつでもfalseなら1へ戻る．symbolが出たら1へ戻る．
 	//3.最初にできたものをgenerateしたものとする．できなかった場合は，std::vector<Rule>()を返す.
 	{
-		int rand_index, i;
+		int rand_index, i = 0;
 		bool creatable = false;
 		RuleDBType temp = sentenceDB;
 		std::vector<Rule> work_list;
-		for (i = 0; i < sentenceDB.size(); i++) {
+		for (; temp.size() != 0; i++) {
 			bool suc = true;
 			work_list.clear();
 			rand_index = MT19937::irand() % temp.size();
@@ -6894,7 +6921,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 
 			temp.erase(temp.begin() + rand_index);
 		}
-		if (i != sentenceDB.size()) {
+		if (temp.size() != 0) {
 			res = work_list;
 			creatable = true;
 		}
@@ -6909,37 +6936,114 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 	return res;
 }
 
-//measureがひとつ以上でるように好きに組み立てる
+//measureがひとつ以上でるようにランダムに組み立てる
 bool
-KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_num, int beat_num) {
-	//1.cat_numに基づいてランダムにルールを選択
+KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num) {
+	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
 	//3.すべての候補を試す前にここまでくればtrueを返す．
-	//(
-	//    DB_dic.find(grnd_elm.cat) != DB_dic.end() && //変数のカテゴリが辞書に有り
-	//    DB_dic[grnd_elm.cat].find(mean_elm.obj) != DB_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
-	//) ||
-	//(grnd_elm.sent_type && app_sent_map.find(mean_elm.obj) != app_sent_map.end() ) //sentenceの方に適用可能ルールがある
 	// DictionaryRange item_range =DB_dic[grnd_elm.cat].equal_range(mean_elm.obj);
+	if (DB_dic.find(cat_el.cat) == DB_dic.end() && DB_dic[cat_el.cat].size() == 0) {
+		return false;
+	}
+	//条件適合
+	bool suc;
+	//失敗するかもしれないのでワーキング用のres
+	std::vector<Rule> work_res;
+	//比較用Conception作成
+	Conception cc;
+	cc.add("MEASURE");
+	//std::for_eachはキャプチャがめんどくさいのでforイテレーション
+	DictionaryRange item_range;
+	item_range.first = DB_dic[cat_el.cat].begin();
+	item_range.second = DB_dic[cat_el.cat].end();
+	for (; item_range.first != item_range.second && !suc; item_range.first++) {
+		//初期化
+		suc = false;
+		work_res = res;
+		Rule base_rule = (*item_range.first).second;
+
+		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
+			//作業用external初期化
+			std::vector<Element> work_external = base_rule.external;
+
+			suc = create_beats(work_res, work_external, beat_num);
+		}
+		else {//違うならば，MEASUREを探す
+			suc = true;
+			for (auto& trg : base_rule.external) {
+				suc &= create_measures(work_res, trg, beat_num);
+				if (!suc) {
+					break;
+				}
+			}
+		}
+		if (suc) {
+			res = work_res;
+			break;
+		}
+	}
+	return suc;
 }
 
-//beat_numの制約を満たすように好きに組み立てる
+//要素数beat_numの制約を満たすようにランダムに組み立てる
 bool
-KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Rule> external, int beat_num) {
-	//1.state==beat_numであればfalseを返す．
-	//2.cat_numに基づいてランダムにルールを選択.
-	//3.measureであるルールなら2に戻る．要素数がbeat_numより大きければ2に戻る．
-	//4.各要素をチェック．
-	//5.1.symbolの分だけstateをインクリメント
-	//5.2.1categoryの数がbeat_num-stateより大きければ2に戻る.
-	//5.2.2各categoryへのbeat_num-stateの整数分配パターンを列挙する.
-	//5.2.3分配パターンからランダムに選択する．
-	//5.2.4各categoryでランダムにルールを選択．
-	//5.2.5そのexternalをcreate_beats(res,sub_external,pattern[i])でチェック．falseであれば5.2.4に戻る．
-	//5.2.6すべての候補でfalseであれば5.2.3に戻る．
-	//5.2.7すべての分配パターンを試す前にここまでくればtrueを返す．
-	//6.すべての2の候補が終わってしまったらfalseを返す．
+KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num) {
+	//1.externalのサイズがbeat_num以下でなければfalseを返す．
+	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
+	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
+	//3.1.beat_numの分配方法を計算する．
+	//3.2.各分配方法をランダムに選択してすべてのcreate_beat_lt, create_beat_eqがtrueになるか試行する．
+	//3.3.すべてfalseであればfalseを返す．
+	//4.すべてtrueになったwork_resをresに追加，externalをwork_externalで上書きする．
+	//5.trueを返す．
+	if (external.size() >= beat_num) {
+		return false;
+	}
+	int cat_num = 0;
+	std::for_each(external.begin(), external.end(), [&cat_num](Element& el) mutable {
+		if (el.is_cat()) {
+			cat_num++;
+		}
+	});
+	int lt_num = beat_num - cat_num;
+	std::vector<int> t_assignment_list;//なるべく等分配での割り当て
+
+	//t_assignmentの計算
+	t_assignment_list.reserve(cat_num);
+	for (int i = 0; i < cat_num; i++) {
+		t_assignment_list.emplace_back(int(lt_num / cat_num)+1);
+		if (i < (lt_num % cat_num)) {
+			t_assignment_list[i]++;
+		}
+	}
+	std::shuffle(t_assignment_list.begin(), t_assignment_list.end(), MT19937::_irand.engine());
+	//t_assignment_listを使ったeqでの探索
+
+
+	std::vector<std::vector<int> > assignment_list, task_list;//文字数の割り当て，lt,eqの割り当て
+	//assignment_listの計算
+	assignment_list = calculation_assignment(lt_num, cat_num);
+	//task_listの計算
+	task_list = calculation_task_list(cat_num);
+
+	//ltとeqによる網羅探索
+}
+
+//指定要素数beat_num以下になるルール群を返す
+bool KnowledgeBase::create_beat_lt(std::vector<Rule>& res, std::vector<Rule>& external, int& space_num)
+{
+	int add_size = 0;
+
+
+
+	return add_size;
+}
+
+bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, std::vector<Rule>& external, int space_num)
+{
+	return false;
 }
 
 std::string
