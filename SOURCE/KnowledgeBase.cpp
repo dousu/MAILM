@@ -710,19 +710,16 @@ std::vector<std::vector<int> > KnowledgeBase::calculation_assignment(int value, 
 	return result;
 }
 
-std::vector<std::vector<int> > KnowledgeBase::calculation_task_list(int size)
-{
-	//0か1が入っている配列を返す．
-	//ひとつだけ1であるすべてのパターンを含む．
-	std::vector<std::vector<int> > result;
-	std::vector<int> zeros(size);
-	result.reserve(size);
-	for (int index = 0; index < size; index++) {
-		std::vector<int> copy = zeros;
-		copy[index]++;
-		result.push_back(copy);
+Element& return_cat(std::vector<Element>& external,int index){
+	int i=0;
+	for(auto& elem : external){
+		if(elem.is_cat()){
+			i++
+		}
+		if(i==index){
+			return elem;
+		}
 	}
-	return result;
 }
 
 /*
@@ -6958,11 +6955,11 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	DictionaryRange item_range;
 	item_range.first = DB_dic[cat_el.cat].begin();
 	item_range.second = DB_dic[cat_el.cat].end();
-	for (; item_range.first != item_range.second && !suc; item_range.first++) {
+	for (; item_range.first != item_range.second; item_range.first++) {
 		//初期化
-		suc = false;
 		work_res = res;
 		Rule base_rule = (*item_range.first).second;
+		work_res.push_back(base_rule);
 
 		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
 			//作業用external初期化
@@ -7019,31 +7016,82 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		}
 	}
 	std::shuffle(t_assignment_list.begin(), t_assignment_list.end(), MT19937::_irand.engine());
+	
 	//t_assignment_listを使ったeqでの探索
-
+	//うまくいった場合はtrueを返す．
+	{
+		bool t_check = true;
+		std::vector<Rule> work_res = res;
+		for(int index = 0;index<t_assignment_list.size();index++){
+			t_check &= create_beat_eq(work_res, return_cat(external,index+1), t_assignment_list[index]);
+		}
+		if(t_check){
+			res = work_res;
+			return true;
+		}
+	}
 
 	std::vector<std::vector<int> > assignment_list, task_list;//文字数の割り当て，lt,eqの割り当て
 	//assignment_listの計算
 	assignment_list = calculation_assignment(lt_num, cat_num);
-	//task_listの計算
-	task_list = calculation_task_list(cat_num);
 
-	//ltとeqによる網羅探索
-}
-
-//指定要素数beat_num以下になるルール群を返す
-bool KnowledgeBase::create_beat_lt(std::vector<Rule>& res, std::vector<Rule>& external, int& space_num)
-{
-	int add_size = 0;
-
-
-
-	return add_size;
-}
-
-bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, std::vector<Rule>& external, int space_num)
-{
+	//eqによる網羅探索
+	for(auto& list : assignment_list){
+		bool lt_eq_check = true;
+		std::vector<Rule> work_res = res;
+		for(int index=0;index<list.size();index++){
+			lt_eq_check &= create_beat_eq(work_res,return_cat(external, index+1),list[index]);
+		}
+		if(lt_eq_check){
+			res = work_res;
+			return true;
+		}
+	}
 	return false;
+}
+
+bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num)
+{
+	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
+		return false;
+	}
+
+	bool suc;
+	std::vector<Rule> work_res;
+
+	DictionaryRange item_range;
+	item_range.first = DB_dic[elem.cat].begin();
+	item_range.second = DB_dic[elem.cat].end();
+	for (; item_range.first != item_range.second; item_range.first++) {
+		Rule base_rule = (*item_range.first).second;
+		if(base_rule.external.size()>space_num){
+			suc = false;
+			continue;
+		}
+		//初期化
+		work_res = res;
+		work_res.push_back(base_rule);
+
+		int cat_num = 0;
+		std::for_each(base_rule.external.begin(), base_rule.external.end(), [&cat_num](Element& el) mutable {
+			if (el.is_cat()) {
+				cat_num++;
+			}
+		});
+
+		suc = true;
+		for (auto& trg : base_rule.external) {
+			suc &= create_measures(work_res, trg, beat_num);
+			if (!suc) {
+				break;
+			}
+		}
+		if (suc) {
+			res = work_res;
+			break;
+		}
+	}
+	return suc;
 }
 
 std::string

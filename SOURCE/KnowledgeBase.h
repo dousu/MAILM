@@ -394,10 +394,7 @@ public:
 		create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num);
 
 	bool
-		create_beat_lt(std::vector<Rule>& res, std::vector<Rule>& external, int& space_num);
-
-	bool
-		create_beat_eq(std::vector<Rule>& res, std::vector<Rule>& external, int space_num);
+		create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num);
 
 	std::string
 		meaning_no_to_s(int obj);
@@ -488,8 +485,8 @@ private:
 	std::vector<std::vector<int> >
 		calculation_assignment(int,int);
 
-	std::vector<std::vector<int> >
-		calculation_task_list(int);
+	Element&
+		return_cat(std::vector<Element>& external,int index);
 
 private:
 	friend class boost::serialization::access;
