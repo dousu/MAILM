@@ -21,6 +21,8 @@ KnowledgeBase::KnowledgeBase() {
 	cat_indexer.index_counter = 1;
 	var_indexer.index_counter = 1;
 	ind_indexer.index_counter = 1;
+	gen_cat = 1;
+	gen_ind = 1;
 }
 
 KnowledgeBase::~KnowledgeBase() {
@@ -710,13 +712,13 @@ std::vector<std::vector<int> > KnowledgeBase::calculation_assignment(int value, 
 	return result;
 }
 
-Element& return_cat(std::vector<Element>& external,int index){
-	int i=0;
-	for(auto& elem : external){
-		if(elem.is_cat()){
-			i++
+Element& KnowledgeBase::return_cat(std::vector<Element>& external, int index) {
+	int i = 0;
+	for (auto& elem : external) {
+		if (elem.is_cat()) {
+			i++;
 		}
-		if(i==index){
+		if (i == index) {
 			return elem;
 		}
 	}
@@ -6887,6 +6889,7 @@ KnowledgeBase::dic_change_ind(DicDBType& dic, int ind, int toind) {
 // }
 
 //3つの流れ（invent with conditions, remap meaning for music score, make concepts for transfer）
+//XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
 std::vector<Rule>
 KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning) {
 	std::vector<Rule> res;
@@ -6894,19 +6897,26 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 	//1.sをランダムに選ぶ. stateをbeat_numにしておく.
 	//2.要素を順番にチェック(create_measures(res,cat,beat_num))．symbolががでてくるかひとつでもfalseなら1へ戻る．symbolが出たら1へ戻る．
 	//3.最初にできたものをgenerateしたものとする．できなかった場合は，std::vector<Rule>()を返す.
-	{
+	{//ルールの作り替えも必要
 		int rand_index, i = 0;
 		bool creatable = false;
 		RuleDBType temp = sentenceDB;
 		std::vector<Rule> work_list;
+		std::map<int, std::vector<std::string> > work_map;
 		for (; temp.size() != 0; i++) {
 			bool suc = true;
 			work_list.clear();
+			work_map.clear();
 			rand_index = MT19937::irand() % temp.size();
 			Rule base_r = temp[rand_index];
+			base_r.cat = 0;
+			base_r.internal.front().obj = --gen_ind;
 			work_list.push_back(base_r);
+			work_map[base_r.internal.front().obj] = std::vector<std::string>(1, "SENTENCE");
 			for (auto& ex_el : base_r.external) {
-				if (!create_measures(work_list, ex_el, beat_num)) {
+				Element trg_el = ex_el;
+				ex_el.cat = --gen_cat;
+				if (ex_el.is_sym() || (!create_measures(work_list, trg_el, beat_num, work_map))) {
 					work_list.clear();
 					suc = false;
 					break;
@@ -6920,22 +6930,18 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}
 		if (temp.size() != 0) {
 			res = work_list;
+			core_meaning = work_map;
 			creatable = true;
 		}
 
 	}
-	//remaping and making concepts
-	{
-
-	}
-
 
 	return res;
 }
 
 //measureがひとつ以上でるようにランダムに組み立てる
 bool
-KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num) {
+KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num, std::map<int, std::vector<std::string> >& map) {
 	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
@@ -6948,6 +6954,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	bool suc;
 	//失敗するかもしれないのでワーキング用のres
 	std::vector<Rule> work_res;
+	std::map<int, std::vector<std::string> > work_map;
 	//比較用Conception作成
 	Conception cc;
 	cc.add("MEASURE");
@@ -6958,19 +6965,25 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	for (; item_range.first != item_range.second; item_range.first++) {
 		//初期化
 		work_res = res;
+		work_map = map;
 		Rule base_rule = (*item_range.first).second;
+		base_rule.cat = gen_cat + 1;
+		base_rule.internal.front().obj = --gen_ind;
 		work_res.push_back(base_rule);
-
 		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
+			work_map[base_rule.internal.front().obj] = std::vector<std::string>(1, "MEASURE");
 			//作業用external初期化
 			std::vector<Element> work_external = base_rule.external;
 
-			suc = create_beats(work_res, work_external, beat_num);
+			suc = create_beats(work_res, work_external, beat_num, work_map);
 		}
 		else {//違うならば，MEASUREを探す
+			work_map[base_rule.internal.front().obj] = std::vector<std::string>();
 			suc = true;
-			for (auto& trg : base_rule.external) {
-				suc &= create_measures(work_res, trg, beat_num);
+			for (auto& cat_el : base_rule.external) {
+				Element trg = cat_el;
+				cat_el.cat = --gen_cat;
+				suc &= create_measures(work_res, trg, beat_num, work_map);
 				if (!suc) {
 					break;
 				}
@@ -6978,15 +6991,17 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		}
 		if (suc) {
 			res = work_res;
+			map = work_map;
 			break;
 		}
 	}
 	return suc;
 }
 
-//要素数beat_numの制約を満たすようにランダムに組み立てる
+//externalがbeat_numの制約を満たすかチェック
+//要素数beat_numの制約を満たすようにサイズ数を分配する
 bool
-KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num) {
+KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num, std::map<int, std::vector<std::string> >& map) {
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
 	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
@@ -6995,38 +7010,55 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	//3.3.すべてfalseであればfalseを返す．
 	//4.すべてtrueになったwork_resをresに追加，externalをwork_externalで上書きする．
 	//5.trueを返す．
-	if (external.size() >= beat_num) {
+	if (external.size() > beat_num) {
 		return false;
 	}
+
 	int cat_num = 0;
 	std::for_each(external.begin(), external.end(), [&cat_num](Element& el) mutable {
 		if (el.is_cat()) {
 			cat_num++;
 		}
 	});
+
+	//categoryがない場合はサイズで判定
+	if (cat_num == 0) {
+		if (external.size() == beat_num) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	int lt_num = beat_num - cat_num;
 	std::vector<int> t_assignment_list;//なるべく等分配での割り当て
 
 	//t_assignmentの計算
 	t_assignment_list.reserve(cat_num);
 	for (int i = 0; i < cat_num; i++) {
-		t_assignment_list.emplace_back(int(lt_num / cat_num)+1);
+		t_assignment_list.emplace_back(int(lt_num / cat_num) + 1);
 		if (i < (lt_num % cat_num)) {
 			t_assignment_list[i]++;
 		}
 	}
 	std::shuffle(t_assignment_list.begin(), t_assignment_list.end(), MT19937::_irand.engine());
-	
+
 	//t_assignment_listを使ったeqでの探索
 	//うまくいった場合はtrueを返す．
 	{
 		bool t_check = true;
 		std::vector<Rule> work_res = res;
-		for(int index = 0;index<t_assignment_list.size();index++){
-			t_check &= create_beat_eq(work_res, return_cat(external,index+1), t_assignment_list[index]);
+		std::map<int, std::vector<std::string> > work_map = map;
+		for (int index = 0; index < t_assignment_list.size(); index++) {
+			Element test = return_cat(external, index + 1);
+			Element trg = test;
+			return_cat(external, index + 1).cat = --gen_cat;
+			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index], work_map);
 		}
-		if(t_check){
+		if (t_check) {
 			res = work_res;
+			map = work_map;
 			return true;
 		}
 	}
@@ -7036,21 +7068,27 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	assignment_list = calculation_assignment(lt_num, cat_num);
 
 	//eqによる網羅探索
-	for(auto& list : assignment_list){
+	for (auto& list : assignment_list) {
 		bool lt_eq_check = true;
 		std::vector<Rule> work_res = res;
-		for(int index=0;index<list.size();index++){
-			lt_eq_check &= create_beat_eq(work_res,return_cat(external, index+1),list[index]);
+		std::map<int, std::vector<std::string> > work_map = map;
+		for (int index = 0; index < list.size(); index++) {
+			Element test = return_cat(external, index + 1);
+			Element trg = test;
+			return_cat(external, index + 1).cat = --gen_cat;
+			lt_eq_check &= create_beat_eq(work_res, trg, list[index], work_map);
 		}
-		if(lt_eq_check){
+		if (lt_eq_check) {
 			res = work_res;
+			map = work_map;
 			return true;
 		}
 	}
 	return false;
 }
 
-bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num)
+//要素数space_numの制約を満たす可能性のあるルールを選択
+bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num, std::map<int, std::vector<std::string> >& map)
 {
 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
 		return false;
@@ -7058,36 +7096,29 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 
 	bool suc;
 	std::vector<Rule> work_res;
+	std::map<int, std::vector<std::string> > work_map;
 
 	DictionaryRange item_range;
 	item_range.first = DB_dic[elem.cat].begin();
 	item_range.second = DB_dic[elem.cat].end();
 	for (; item_range.first != item_range.second; item_range.first++) {
 		Rule base_rule = (*item_range.first).second;
-		if(base_rule.external.size()>space_num){
+		if (base_rule.external.size() > space_num) {
 			suc = false;
 			continue;
 		}
-		//初期化
+		base_rule.cat = gen_cat + 1;
+		base_rule.internal.front().obj = --gen_ind;
+		//初期化 
 		work_res = res;
+		work_map = map;
 		work_res.push_back(base_rule);
+		work_map[base_rule.internal.front().obj] = std::vector<std::string>();
 
-		int cat_num = 0;
-		std::for_each(base_rule.external.begin(), base_rule.external.end(), [&cat_num](Element& el) mutable {
-			if (el.is_cat()) {
-				cat_num++;
-			}
-		});
-
-		suc = true;
-		for (auto& trg : base_rule.external) {
-			suc &= create_measures(work_res, trg, beat_num);
-			if (!suc) {
-				break;
-			}
-		}
+		suc = create_beats(work_res, base_rule.external, space_num, work_map);
 		if (suc) {
 			res = work_res;
+			map = work_map;
 			break;
 		}
 	}

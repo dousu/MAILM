@@ -11,10 +11,10 @@
 #include <vector>
 #include <boost/range/algorithm_ext.hpp>
 
-//templateでとるクラスTはElement.hで宣言されている
-//diffは参照渡しにする
-//意味はなくなるより余分にあったほうがいい
-//意味は意味の集合として扱う(+,-,difference)
+ //templateでとるクラスTはElement.hで宣言されている
+ //diffは参照渡しにする
+ //意味はなくなるより余分にあったほうがいい
+ //意味は意味の集合として扱う(+,-,difference)
 #include "Element.h"
 
 // struct CompVec {
@@ -32,7 +32,7 @@
 //     		return vec_int[i] < another.vec_int[i];
 //     	}
 //     }
-//     return vec_int.size() < another.vec_int.size();
+//     return vec_int.size() < another.vec_int.size(); 
 //   }
 //   bool operator==(const CompVec& another) const {
 //     if(vec_int.size() != another.vec_int.size()){
@@ -50,27 +50,27 @@
 // };
 
 // typedef std::map<CompVec,std::vector<int> > TransRules;
-typedef std::map<int,std::vector<Element> >TransRules;
+typedef std::map<int, std::vector<Element> >TransRules;
 
 template <typename T>
 class Semantics {
 public:
 	std::map<int, T > mapping;
 	TransRules rules;
-	std::map<int,std::set<int> > merge_list;
+	std::map<int, std::set<int> > merge_list;
 
-	T& operator[] (int x){
+	T& operator[] (int x) {
 		return mapping[x];
 	}
 
-	void store(Element a,T v);
-	bool equal(Element a,Element b);
-	bool chunk_equal(Element a,Element b);
-	bool merge_equal(Element a,Element b);
-	bool replace_equal(Element a,Element b);
-	void chunk(Element a,Element b,Element c, Element d,Element e, int pos, int d_size, int e_size, int type);
-	void merge(Element a,Element b, Element c);
-	void replace(Element a,Element b,Element c, int b_pos, int b_size);
+	void store(Element a, T v);
+	bool equal(Element a, Element b);
+	bool chunk_equal(Element a, Element b);
+	bool merge_equal(Element a, Element b);
+	bool replace_equal(Element a, Element b);
+	void chunk(Element a, Element b, Element c, Element d, Element e, int pos, int d_size, int e_size, int type);
+	void merge(Element a, Element b, Element c);
+	void replace(Element a, Element b, Element c, int b_pos, int b_size);
 	void unique_unify(Element a, std::vector<Element> v_e);//下が残る
 	std::vector<Element> trans(Element a);
 

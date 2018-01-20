@@ -86,6 +86,9 @@ public:
 		ABSOLUTE, COMPLETE, SEMICOMPLETE, RANDOM, SORTED_ALL
 	};
 
+	int gen_cat;
+	int gen_ind;
+
 	IndexFactory cat_indexer;
 	IndexFactory var_indexer;
 	IndexFactory ind_indexer;
@@ -314,8 +317,6 @@ public:
 		);
 	std::vector<Rule>
 		grounded_rules(Rule src);
-	void
-		indexer(std::vector<Rule>& meanings);
 	std::vector<Rule>
 		rules(void);
 	/*!
@@ -388,13 +389,13 @@ public:
 		generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning);
 
 	bool
-		create_measures(std::vector<Rule>& res, Element& cat_num, int beat_num);
+		create_measures(std::vector<Rule>& res, Element& cat_num, int beat_num, std::map<int, std::vector<std::string> >& map);
 
 	bool
-		create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num);
+		create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num, std::map<int, std::vector<std::string> >& map);
 
 	bool
-		create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num);
+		create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num, std::map<int, std::vector<std::string> >& map);
 
 	std::string
 		meaning_no_to_s(int obj);
@@ -483,10 +484,10 @@ private:
 		unify_loop_sub(int, int, int, RuleDBType&, std::vector<int>&);
 
 	std::vector<std::vector<int> >
-		calculation_assignment(int,int);
+		calculation_assignment(int, int);
 
 	Element&
-		return_cat(std::vector<Element>& external,int index);
+		return_cat(std::vector<Element>& external, int index);
 
 private:
 	friend class boost::serialization::access;

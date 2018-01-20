@@ -38,6 +38,7 @@ Parameters::Parameters() {
   RESULT_EXT = ".rst";
   LOG_EXT = ".log";
 
+
   BASE_PATH = "../RESULT/";
   SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
   RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
@@ -152,7 +153,7 @@ Parameters::set_option(boost::program_options::variables_map& vm) {
 }
 
 std::string
-Parameters::to_s(void) {
+Parameters::to_s() {
   std::vector<std::string> bag;
   std::string str = "";
 
