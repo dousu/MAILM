@@ -1,7 +1,7 @@
 LD = -L/usr/local/lib
 ID = -I/usr/local/include
 SOURCEDIR = ./SOURCE
-LIBS = -lboost_serialization -lboost_system -lboost_program_options
+LIBS = -lboost_serialization -lboost_system -lboost_program_options -lboost_filesystem
 OBJ = Semantics.o KirbyAgent.o MAILMAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o XMLreader.o XMLreader2.o IndexFactory.o Prefices.o LogBox.o MT19937.o Semantics.o MAILMParameters.o Parameters.o
 OBJ1 = Semantics.o KirbyAgent.o MAILMAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o XMLreader.o IndexFactory.o Prefices.o LogBox.o MT19937.o Semantics.o MAILMParameters.o Parameters.o
 OBJ2 = Semantics.o KirbyAgent.o MAILMAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o XMLreader2.o IndexFactory.o Prefices.o LogBox.o MT19937.o Semantics.o MAILMParameters.o Parameters.o
@@ -46,4 +46,4 @@ $(SOURCEDIR)/MAILM_main.cpp: ${OBJS} $(SOURCEDIR)/MAILM_main.h
 clean:
 	rm -f ${SOURCEDIR}/*.o ${SOURCEDIR}/*.dump ${SOURCEDIR}/*.exe ${SOURCEDIR}/*.log ${SOURCEDIR}/*.rst
 
-all: ma1 ma
+all: ma1 ma2
