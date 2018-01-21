@@ -1,0 +1,1613 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<score>
+  <title>
+    02.xml
+  </title>
+  <measure number='1' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='1-2' beat='down'/>
+        <component ref='1-3' beat='down'/>
+        <component ref='1-4' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='1-5' beat='down'/>
+        <component ref='1-6' beat='down'/>
+        <component ref='1-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='1'/>
+  </measure>
+  <measure number='2' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='2-2' beat='down'/>
+        <component ref='2-3' beat='down'/>
+        <component ref='2-4' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='2-5' beat='down'/>
+        <component ref='2-6' beat='down'/>
+        <component ref='2-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='1'/>
+  </measure>
+  <measure number='3' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='3-1' beat='down'/>
+        <component ref='3-2' beat='down'/>
+        <component ref='3-3' beat='up'/>
+        <component ref='3-4' beat='up'/>
+        <component ref='3-7' beat='down'/>
+        <component ref='3-8' beat='down'/>
+        <component ref='3-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='3-5' beat='down'/>
+        <component ref='3-10' beat='down'/>
+        <component ref='3-11' beat='down'/>
+        <component ref='3-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='4' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='4-1' beat='down'/>
+        <component ref='4-2' beat='down'/>
+        <component ref='4-3' beat='up'/>
+        <component ref='4-4' beat='up'/>
+        <component ref='4-7' beat='down'/>
+        <component ref='4-8' beat='down'/>
+        <component ref='4-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='4-5' beat='down'/>
+        <component ref='4-10' beat='down'/>
+        <component ref='4-11' beat='down'/>
+        <component ref='4-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='5' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='5-1' beat='down'/>
+        <component ref='5-2' beat='down'/>
+        <component ref='5-3' beat='up'/>
+        <component ref='5-4' beat='up'/>
+        <component ref='5-7' beat='down'/>
+        <component ref='5-8' beat='down'/>
+        <component ref='5-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='5-5' beat='down'/>
+        <component ref='5-10' beat='down'/>
+        <component ref='5-11' beat='down'/>
+        <component ref='5-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='6' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='6-1' beat='down'/>
+        <component ref='6-2' beat='down'/>
+        <component ref='6-3' beat='up'/>
+        <component ref='6-4' beat='up'/>
+        <component ref='6-7' beat='down'/>
+        <component ref='6-8' beat='down'/>
+        <component ref='6-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='6-5' beat='down'/>
+        <component ref='6-10' beat='down'/>
+        <component ref='6-11' beat='down'/>
+        <component ref='6-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='7' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='7-2' beat='up'/>
+        <component ref='7-5' beat='down'/>
+        <component ref='7-6' beat='down'/>
+        <component ref='7-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='7-3' beat='down'/>
+        <component ref='7-4' beat='up'/>
+        <component ref='7-8' beat='down'/>
+        <component ref='7-9' beat='down'/>
+        <component ref='7-10' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='8' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='8-1' beat='down'/>
+        <component ref='8-4' beat='down'/>
+        <component ref='8-5' beat='down'/>
+        <component ref='8-6' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='8-3' beat='down'/>
+        <component ref='8-7' beat='down'/>
+        <component ref='8-8' beat='down'/>
+        <component ref='8-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='9' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='9-1' beat='down'/>
+        <component ref='9-2' beat='up'/>
+        <component ref='9-5' beat='down'/>
+        <component ref='9-6' beat='down'/>
+        <component ref='9-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='9-3' beat='down'/>
+        <component ref='9-4' beat='up'/>
+        <component ref='9-8' beat='down'/>
+        <component ref='9-9' beat='down'/>
+        <component ref='9-10' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+    <period number='3'/>
+  </measure>
+  <measure number='10' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='10-1' beat='down'/>
+        <component ref='10-4' beat='down'/>
+        <component ref='10-5' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='10-3' beat='down'/>
+        <component ref='10-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='2'/>
+  </measure>
+  <measure number='11' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='11-1' beat='down'/>
+        <component ref='11-4' beat='down'/>
+        <component ref='11-5' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='11-2' beat='down'/>
+        <component ref='11-4' beat='down'/>
+        <component ref='11-5' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='3'/>
+  </measure>
+  <measure number='12' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='12-1' beat='down'/>
+        <component ref='12-3' beat='down'/>
+        <component ref='12-4' beat='down'/>
+        <component ref='12-5' beat='up'/>
+        <component ref='12-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='1'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='12-1' beat='down'/>
+        <component ref='12-2' beat='up'/>
+        <component ref='12-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='1'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='13' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='13-1' beat='down'/>
+        <component ref='13-3' beat='down'/>
+        <component ref='13-4' beat='down'/>
+        <component ref='13-5' beat='up'/>
+        <component ref='13-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='13-1' beat='down'/>
+        <component ref='13-2' beat='up'/>
+        <component ref='13-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='14' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='14-1' beat='down'/>
+        <component ref='14-3' beat='down'/>
+        <component ref='14-4' beat='down'/>
+        <component ref='14-5' beat='up'/>
+        <component ref='14-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='1'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='14-1' beat='down'/>
+        <component ref='14-2' beat='up'/>
+        <component ref='14-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='1'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='15' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='15-1' beat='down'/>
+        <component ref='15-3' beat='down'/>
+        <component ref='15-4' beat='down'/>
+        <component ref='15-5' beat='up'/>
+        <component ref='15-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='15-1' beat='down'/>
+        <component ref='15-2' beat='up'/>
+        <component ref='15-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='16' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='16-1' beat='down'/>
+        <component ref='16-3' beat='down'/>
+        <component ref='16-4' beat='down'/>
+        <component ref='16-5' beat='up'/>
+        <component ref='16-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='1'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='16-1' beat='down'/>
+        <component ref='16-2' beat='up'/>
+        <component ref='16-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='1'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='17' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='17-1' beat='down'/>
+        <component ref='17-3' beat='down'/>
+        <component ref='17-4' beat='down'/>
+        <component ref='17-5' beat='up'/>
+        <component ref='17-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='17-1' beat='down'/>
+        <component ref='17-2' beat='up'/>
+        <component ref='17-7' beat='down'/>
+        <component ref='17-8' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='18' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='18-1' beat='down'/>
+        <component ref='18-2' beat='up'/>
+        <component ref='18-5' beat='down'/>
+        <component ref='18-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='18-3' beat='down'/>
+        <component ref='18-4' beat='up'/>
+        <component ref='18-7' beat='down'/>
+        <component ref='18-8' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='1'/>
+        <E pron='0'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='19' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='19-1' beat='down'/>
+        <component ref='19-3' beat='down'/>
+        <component ref='19-4' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='1'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='19-2' beat='down'/>
+        <component ref='19-5' beat='down'/>
+        <component ref='19-6' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='4'/>
+    <period number='6'/>
+  </measure>
+  <measure number='20' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='20-1' beat='down'/>
+        <component ref='20-2' beat='down'/>
+        <component ref='20-3' beat='up'/>
+        <component ref='20-4' beat='up'/>
+        <component ref='20-7' beat='down'/>
+        <component ref='20-8' beat='down'/>
+        <component ref='20-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='20-5' beat='down'/>
+        <component ref='20-10' beat='down'/>
+        <component ref='20-11' beat='down'/>
+        <component ref='20-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='21' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='21-1' beat='down'/>
+        <component ref='21-2' beat='down'/>
+        <component ref='21-3' beat='up'/>
+        <component ref='21-4' beat='up'/>
+        <component ref='21-7' beat='down'/>
+        <component ref='21-8' beat='down'/>
+        <component ref='21-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='21-5' beat='down'/>
+        <component ref='21-10' beat='down'/>
+        <component ref='21-11' beat='down'/>
+        <component ref='21-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='22' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='22-1' beat='down'/>
+        <component ref='22-2' beat='down'/>
+        <component ref='22-3' beat='up'/>
+        <component ref='22-4' beat='up'/>
+        <component ref='22-7' beat='down'/>
+        <component ref='22-8' beat='down'/>
+        <component ref='22-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='22-5' beat='down'/>
+        <component ref='22-10' beat='down'/>
+        <component ref='22-11' beat='down'/>
+        <component ref='22-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='23' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='23-1' beat='down'/>
+        <component ref='23-2' beat='down'/>
+        <component ref='23-3' beat='up'/>
+        <component ref='23-4' beat='up'/>
+        <component ref='23-7' beat='down'/>
+        <component ref='23-8' beat='down'/>
+        <component ref='23-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='23-5' beat='down'/>
+        <component ref='23-10' beat='down'/>
+        <component ref='23-11' beat='down'/>
+        <component ref='23-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='24' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='24-2' beat='up'/>
+        <component ref='24-5' beat='down'/>
+        <component ref='24-6' beat='down'/>
+        <component ref='24-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='24-3' beat='down'/>
+        <component ref='24-4' beat='up'/>
+        <component ref='24-8' beat='down'/>
+        <component ref='24-9' beat='down'/>
+        <component ref='24-10' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='25' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='25-1' beat='down'/>
+        <component ref='25-3' beat='down'/>
+        <component ref='25-4' beat='down'/>
+        <component ref='25-5' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='25-2' beat='down'/>
+        <component ref='25-6' beat='down'/>
+        <component ref='25-7' beat='down'/>
+        <component ref='25-8' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='26' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='26-1' beat='down'/>
+        <component ref='26-2' beat='up'/>
+        <component ref='26-5' beat='down'/>
+        <component ref='26-6' beat='down'/>
+        <component ref='26-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='26-3' beat='down'/>
+        <component ref='26-4' beat='up'/>
+        <component ref='26-8' beat='down'/>
+        <component ref='26-9' beat='down'/>
+        <component ref='26-10' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+    <period number='7'/>
+  </measure>
+  <measure number='27' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='27-1' beat='down'/>
+        <component ref='27-2' beat='down'/>
+        <component ref='27-3' beat='down'/>
+        <component ref='27-4' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='27-1' beat='down'/>
+        <component ref='27-5' beat='down'/>
+        <component ref='27-6' beat='down'/>
+        <component ref='27-7' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='5'/>
+  </measure>
+  <measure number='28' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='28-1' beat='down'/>
+        <component ref='28-2' beat='down'/>
+        <component ref='28-3' beat='up'/>
+        <component ref='28-4' beat='up'/>
+        <component ref='28-7' beat='down'/>
+        <component ref='28-8' beat='down'/>
+        <component ref='28-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='28-5' beat='down'/>
+        <component ref='28-10' beat='down'/>
+        <component ref='28-11' beat='down'/>
+        <component ref='28-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='7'/>
+  </measure>
+  <measure number='29' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='29-1' beat='down'/>
+        <component ref='29-2' beat='down'/>
+        <component ref='29-3' beat='up'/>
+        <component ref='29-4' beat='up'/>
+        <component ref='29-7' beat='down'/>
+        <component ref='29-8' beat='down'/>
+        <component ref='29-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='29-5' beat='down'/>
+        <component ref='29-10' beat='down'/>
+        <component ref='29-11' beat='down'/>
+        <component ref='29-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='8'/>
+  </measure>
+  <measure number='30' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='30-1' beat='down'/>
+        <component ref='30-2' beat='down'/>
+        <component ref='30-3' beat='up'/>
+        <component ref='30-4' beat='up'/>
+        <component ref='30-7' beat='down'/>
+        <component ref='30-8' beat='down'/>
+        <component ref='30-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='30-5' beat='down'/>
+        <component ref='30-10' beat='down'/>
+        <component ref='30-11' beat='down'/>
+        <component ref='30-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='8'/>
+  </measure>
+  <measure number='31' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='31-1' beat='down'/>
+        <component ref='31-2' beat='down'/>
+        <component ref='31-3' beat='up'/>
+        <component ref='31-4' beat='up'/>
+        <component ref='31-7' beat='down'/>
+        <component ref='31-8' beat='down'/>
+        <component ref='31-9' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='1'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='31-5' beat='down'/>
+        <component ref='31-10' beat='down'/>
+        <component ref='31-11' beat='down'/>
+        <component ref='31-12' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='1'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='8'/>
+  </measure>
+  <measure number='32' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='32-1' beat='down'/>
+        <component ref='32-2' beat='down'/>
+        <component ref='32-3' beat='up'/>
+        <component ref='32-4' beat='up'/>
+        <component ref='32-7' beat='down'/>
+        <component ref='32-8' beat='down'/>
+        <component ref='32-9' beat='up'/>
+        <component ref='32-10' beat='up'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='1'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='0'/>
+        <Ais pron='0'/>
+        <B pron='1'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='32-5' beat='down'/>
+        <component ref='32-11' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='0'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='0'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='8'/>
+  </measure>
+  <measure number='33' metricals='2'>
+    <metric number='1' unit-beat='down'>
+      <constitution>
+        <component ref='33-1' beat='down'/>
+        <component ref='33-2' beat='down'/>
+        <component ref='33-4' beat='down'/>
+        <component ref='33-5' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <metric number='2' unit-beat='up'>
+      <constitution>
+        <component ref='33-1' beat='down'/>
+        <component ref='33-2' beat='down'/>
+        <component ref='33-4' beat='down'/>
+        <component ref='33-5' beat='down'/>
+      </constitution>
+      <pitchclass>
+        <C pron='1'/>
+        <Cis pron='0'/>
+        <D pron='0'/>
+        <Dis pron='0'/>
+        <E pron='1'/>
+        <F pron='0'/>
+        <Fis pron='0'/>
+        <G pron='0'/>
+        <Gis pron='0'/>
+        <A pron='1'/>
+        <Ais pron='0'/>
+        <B pron='0'/>
+      </pitchclass>
+    </metric>
+    <period number='8'/>
+  </measure>
+</score>

@@ -10,6 +10,7 @@
 
 #include "KirbyAgent.h"
 #include "XMLreader.h"
+#include "Semantics.h"
 
 class MAILMAgent : public KirbyAgent {
 public:
@@ -24,6 +25,8 @@ public:
 	void hear(std::vector<Rule>& rules, std::map<int, std::vector<std::string> >& mapping);
 
 	void registration(std::map<int, std::vector<std::string> >& core_meaning);
+
+	void init_semantics(TransRules ini_sem);
 
 	//utility
 	std::string tr_vector_Rule_to_string(std::vector<Rule> vector);

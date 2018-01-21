@@ -50,6 +50,8 @@
 #include "LogBox.h"
 #include "KnowledgeBase.h"
 #include "Prefices.h"
+#include "MAILMParameters.h"
+#include "MAILMAgent.h"
 
 void
 load_input_data(std::vector<std::string>&, std::string&);

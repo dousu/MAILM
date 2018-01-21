@@ -71,6 +71,11 @@ void MAILMAgent::registration(std::map<int, std::vector<std::string> >& core_mea
 	}
 }
 
+void MAILMAgent::init_semantics(TransRules ini_sem)
+{
+	kb.init_semantics_rules(ini_sem);
+}
+
 //utility 
 
 std::string
