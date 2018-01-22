@@ -845,6 +845,7 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 		std::cerr << "[unique unify]INCORRECT ELEMENT" << std::endl;
 		throw "[unique unify]INCORRECT ELEMENT";
 	}
+	//aに統合する
 	for (auto& b : v_e) {
 		if (!(b.is_ind())) {
 			std::cerr << "[unique unify]INCORRECT ELEMENT in vector" << std::endl;
@@ -862,38 +863,24 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 	int next_pos;
 	int pos, size;
 	for (auto& rule : rules) {
-
-		// std::cout << "\n****************test check31" << std::endl;
-
 		std::vector<Element>::iterator it;
 		pos = 1;
 		size = 1;
 
 		//aを一回探すのを繰り返す
 		next_pos = -1;
-		ch_v.clear();
-		outer_list.clear();
 		while (next_pos < (int)rule.second.size()) {//最後に調べた場所がendかどうかチェック
-
-		  // std::cout << "\n****************test check32" << std::endl;
-
 			next_pos += 1;//次の位置が戻ってきたときの最後に調べた位置になる
 			if ((rule.second.begin() + next_pos) == rule.second.end()) {
 				it = rule.second.end();
 				break;//次に調べる場所がendだったらbreak;
 			}
 			it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
-			//ch_vをitの位置に合わせて修正する
-			// for(int& obj : ch_v){
-			//  　obj++;//ひとつインデックスが増えているのでそれを含んでいるchはすべて増える
-			//   obj--;//最後に処理していなかった分
-			// }
 
+			ch_v.clear();
+			outer_list.clear();
 			//aを一回探す
 			while (it != rule.second.end()) {
-
-				// std::cout << "CHECK: " << (*it).to_s() << std::endl;
-
 				//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
 				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
 					for (int obj : (*it).ch) {
@@ -903,8 +890,7 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 				}
 
 				if ((*it) == a) {
-					// target_f=true;
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これでaの分がpushされてないことはなくなる
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
 					}
@@ -915,12 +901,7 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得//内部が始まる位置はずれる
-					// 追加するものもなし
-					// Element new_b;
-					// new_b = b;
 					b_in_res.clear();
-
-
 
 					//outerをカウントしてposになったら，
 					//rule.second.begin()からの位置insert_posを決定，
@@ -940,10 +921,6 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 							inner_c = 0;
 							inner_flag = true;
 							insert_pos = it - rule.second.begin();
-							//ありえない
-							// if(inner_c==size){
-							//   break;
-							// }
 						}
 						if (inner_flag) {
 							int itr_num = (*it).ch.front();
@@ -1007,12 +984,10 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 			}
 
 			for (int o_el : outer_list) {
-				// std::cout << "ADDING: [" << o_el << "]" << std::endl;
 				(*(rule.second.begin() + o_el)).ch.front()--;//ひとつしかch持ってない想定
 			}
 		}
 	}
-
 }
 template <typename T>
 std::vector<Element> Semantics<T>::trans(Element a) {

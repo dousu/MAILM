@@ -188,7 +188,9 @@ make_tree_str_for_dot(std::vector<Rule>& r_list, std::vector<int> beat_nums, int
 				else {
 					memo[(*ls_it).cat] += 1;
 				}
-				head = std::string("\"") + Prefices::CAT + std::to_string((*ls_it).cat) + Prefices::UNO + std::to_string(memo[(*ls_it).cat]) + std::string("\\n") + Prefices::IND + std::to_string((*ls_it).internal.front().obj) + std::string("\\n") + kb.meaning_no_to_s((*ls_it).internal.front().obj) + std::string("\"");
+				Element deb = (*ls_it).internal.front();
+				deb;
+				head = std::string("\"") + Prefices::CAT + std::to_string((*ls_it).cat) + Prefices::UNO + std::to_string(memo[(*ls_it).cat]) /*+ std::string("\\n") + Prefices::IND + std::to_string((*ls_it).internal.front().obj) + std::string("\\n") + kb.meaning_no_to_s((*ls_it).internal.front().obj)*/ + std::string("\"");
 				smp.push_back(frm + std::string(" -> ") + head);
 				stack.front().second--;
 				if (stack.front().second == 0) {
@@ -558,11 +560,6 @@ int main(int argc, char* argv[]) {
 	registration(reader.core_meaning, kb);
 	TransRules meaning_rules;
 	initial_rules(reader.i_rules_str, meaning_rules); //XMLreaderには極力何も依存させない
-	
-	
-	kb.init_semantics_rules(meaning_rules);
-	kb.dic_add(kb.DB_dic, buf);
-	kb.send_box(buf);
 
 	MAILMAgent ma;
 	TransRules i_rules;
@@ -570,14 +567,14 @@ int main(int argc, char* argv[]) {
 	i_rules = meaning_rules;
 	//kb.init_semantics_rules(i_rules);//追跡用
 	ma.init_semantics(i_rules);
-	ma.hear(buf,reader.core_meaning);
+	ma.hear(buf, reader.core_meaning);
 	std::cout << "\n%%% previous" << std::endl;
 	std::cout << ma.to_s() << std::endl;
 	ma.learn();
 	std::cout << "LEARNED" << std::endl;
 	std::cout << "\n%%% after" << std::endl;
 	std::cout << ma.to_s() << std::endl;
-	
+
 	std::cout << ma.kb.sentenceDB.size() << std::endl;
 	std::cout << ma.kb.wordDB.size() << std::endl;
 
@@ -592,19 +589,6 @@ int main(int argc, char* argv[]) {
 	//}
 	//std::cout << std::endl;
 
-	std::cout << "\n%%% previous" << std::endl;
-	std::cout << kb.to_s() << std::endl;
-	// std::cout << std::endl << "TransRules before learning" << std::endl << kb.intention.rules_to_s() << std::endl << std::endl;
-
-	kb.consolidate();
-	std::cout << "LEARNED" << std::endl;
-	// kb.consolidate();
-	std::cout << "\n%%% after" << std::endl;
-	std::cout << kb.to_s() << std::endl;
-
-	std::cout << kb.sentenceDB.size() << std::endl;
-	std::cout << kb.wordDB.size() << std::endl;
-
 	log.refresh_log();
 
 	//parse test
@@ -616,44 +600,27 @@ int main(int argc, char* argv[]) {
 	std::vector<std::string>::iterator t_it;
 	bool fl;
 
-	std::cout << std::endl << "LEARNED SEMANTICS" << std::endl << kb.intention.to_s() << std::endl;
+	//std::cout << std::endl << "LEARNED SEMANTICS" << std::endl << ma.kb.intention.to_s() << std::endl;
 
-	KnowledgeBase::InType inter = kb.meaning_no(12);
+	KnowledgeBase::InType inter = ma.kb.meaning_no(1);
 
-	std::cout << "\nInType Test View" << std::endl;
+	/*std::cout << "\nInType Test View" << std::endl;
 	KnowledgeBase::InType::iterator in_it = inter.begin();
 	for (; in_it != inter.end(); in_it++) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
-	std::cout << std::endl << std::endl;
+	std::cout << std::endl << std::endl;*/
 
 	Rule r_sample;
-	// r_sample.internal = kb.meaning_no(1);
-	// r_sample.type = RULE_TYPE::SENTENCE;
-	// r_sample.cat = 0;
-	// std::cout << "TRANS TEST 01.xml" << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;
+	r_sample.internal = kb.meaning_no(1);
+	r_sample.type = RULE_TYPE::SENTENCE;
+	r_sample.cat = 0;
+	std::cout << "TRANS TEST 01.xml" << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;
 
 	std::vector<Rule> r_list;
 	std::string tree_str;
 	int no;
 	std::vector<int> beat_nums;
-
-	// no=1;
-	// beat_nums = reader.beat_map[no];
-	// std::string name = labeling[no];
-	// r_list.clear();
-	// std::cout << "Construct " << name << ".xml" << std::endl;
-	// if(kb.explain(kb.meaning_no(no),r_list)){
-
-	//     tree_str=make_tree_str_for_dot(r_list,beat_nums,no);
-	//     std::cout << "tree fin." << std::endl;
-
-	//     output_data(boost::lexical_cast<std::string>("../dot/") + name + std::string(".dot"),tree_str);
-	//     std::cout << "output fin." << std::endl;
-
-	// }else{
-	//     std::cout << "Can't construct" << std::endl;
-	// }
 
 	for (int i = 1; i <= labeling.size(); i++) {
 		no = i;
@@ -661,12 +628,18 @@ int main(int argc, char* argv[]) {
 		std::string name = labeling[no];
 		r_list.clear();
 		std::cout << "Construct " << name << ".xml" << std::endl;
-		if (kb.explain(kb.meaning_no(no), r_list)) {
+		if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
 
-			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, kb);
+			std::cout << "Test View r_list:" << std::endl;
+			for (auto& r : r_list) {
+				std::cout << r.to_s() << std::endl;
+			}
+			std::cout << std::endl;
+
+			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, ma.kb);
 			std::cout << "tree fin." << std::endl;
 
-			output_data(boost::lexical_cast<std::string>("../dot/") + name + std::string(".dot"), tree_str);
+			output_data(param.BASE_PATH + name + std::string(".dot"), tree_str);
 			std::cout << "output fin." << std::endl;
 
 		}
