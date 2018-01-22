@@ -82,38 +82,6 @@ void output_data(
 }
 
 void registration(
-	std::vector<Rule>& buf,
-	KnowledgeBase& kb
-) {
-	std::vector<Rule>::iterator buf_it = buf.begin();
-	for (; buf_it != buf.end(); buf_it++) {
-
-		// std::cout << (*buf_it).to_s() << std::endl;
-
-		if ((*buf_it).type == RULE_TYPE::MEASURE) {
-			Conception ss;
-			ss.add("MEASURE");
-			kb.define((*buf_it).internal.front(), ss);
-			(*buf_it).type = RULE_TYPE::NOUN;
-		}
-		else if ((*buf_it).type == RULE_TYPE::SENTENCE) {
-			Conception ss;
-			ss.add("SENTENCE");
-			kb.define((*buf_it).internal.front(), ss);
-		}
-		else if ((*buf_it).type == RULE_TYPE::NOUN) {
-			Conception ss;
-			//ss.add("");
-			kb.define((*buf_it).internal.front(), ss);
-		}
-		else {
-			std::cerr << "CANNOT MATCH RULE_TYPE" << std::endl;
-			throw "CANNOT MATCH RULE_TYPE";
-		}
-	}
-}
-
-void registration(
 	std::map<int, std::vector<std::string> >& core_meaning,
 	KnowledgeBase& kb
 ) {
@@ -138,11 +106,6 @@ initial_rules(
 		for (auto& str : p_int_vecstr.second) {
 			buf.push_back(Element(str));
 		}
-
-		// Rule r;
-		// r.internal = buf;
-		// r.type = RULE_TYPE::SENTENCE;
-		// std::cout << "INIT_RULES " << p_int_vecstr.first <<": " << r.to_s() << std::endl;
 
 		i_rules[p_int_vecstr.first] = buf;
 	}
@@ -256,17 +219,17 @@ make_tree_str_for_dot(std::vector<Rule>& r_list, std::vector<int> beat_nums, int
 			// stack.insert(stack.begin(),mini_stack.begin(),mini_stack.end());
 		}
 
-		for (int i = 0; i < vis.size(); i++) {
-			std::string graph_node;
-			graph_node = std::string("c") + std::to_string(i + 1);
-			code_v.push_back(graph_node);
-			for (auto& trg : vis[i]) {
-				smp.push_back(trg + std::string(" -> ") + graph_node);
-			}
-		}
-		for (int i = 0; i < vis.size(); i++) {
-			smp.push_back(std::string("c") + std::to_string(i + 1) + std::string("[image=\"") + std::string("./graph") + std::to_string(code_num) + Prefices::DEL + std::to_string(i + 1) + std::string(".png\"]"));
-		}
+		//for (int i = 0; i < vis.size(); i++) {
+		//	std::string graph_node;
+		//	graph_node = std::string("c") + std::to_string(i + 1);
+		//	code_v.push_back(graph_node);
+		//	for (auto& trg : vis[i]) {
+		//		smp.push_back(trg + std::string(" -> ") + graph_node);
+		//	}
+		//}
+		//for (int i = 0; i < vis.size(); i++) {
+		//	smp.push_back(std::string("c") + std::to_string(i + 1) + std::string("[image=\"") + std::string("./graph") + std::to_string(code_num) + Prefices::DEL + std::to_string(i + 1) + std::string(".png\"]"));
+		//}
 	}
 
 	//rankルール生成
@@ -308,21 +271,21 @@ make_tree_str_for_dot(std::vector<Rule>& r_list, std::vector<int> beat_nums, int
 		nt_ranks.push_back(nt_rank);
 	}
 
-	std::string c_rank;
-	std::vector<std::string>::iterator str_v_it;
-	c_rank = std::string("{rank = max;");
-	str_v_it = code_v.begin();
-	for (; str_v_it != code_v.end(); str_v_it++) {
-		c_rank += (std::string(" \"") + *str_v_it + std::string("\";"));
-	}
-	c_rank += std::string("}");
+	//std::string c_rank;
+	//std::vector<std::string>::iterator str_v_it;
+	//c_rank = std::string("{rank = max;");
+	//str_v_it = code_v.begin();
+	//for (; str_v_it != code_v.end(); str_v_it++) {
+	//	c_rank += (std::string(" \"") + *str_v_it + std::string("\";"));
+	//}
+	//c_rank += std::string("}");
 
 
 	//smp処理
 	std::string tmp = begin_str;
 	tmp += boost::algorithm::join(smp, ";\n");
 	tmp += std::string(";\n");
-	tmp += c_rank;
+	//tmp += c_rank;
 	tmp += std::string("\n");
 	tmp += boost::algorithm::join(nt_ranks, "\n");
 	tmp += std::string("\n");
@@ -486,6 +449,8 @@ int main(int argc, char* argv[]) {
 		exit(0);
 	}
 
+	LogBox::set_filepath(param.BASE_PATH+param.LOG_FILE);
+
 	std::vector<std::string> inputs;
 	bool test_mode = true;
 
@@ -543,12 +508,9 @@ int main(int argc, char* argv[]) {
 
 	std::vector<Rule> buf;
 	std::cout << "\n****************sample test" << std::endl;
-	std::vector<std::string>::reverse_iterator
-		input_it = inputs.rbegin();
+	std::vector<std::string>::reverse_iterator input_it = inputs.rbegin();
 	for (; input_it != inputs.rend(); input_it++) {
 		Rule s_tmp(*input_it);
-
-		// std::cout << s_tmp.to_s() << std::endl;
 
 		buf.push_back(s_tmp);
 	}
@@ -556,24 +518,21 @@ int main(int argc, char* argv[]) {
 	std::cout << "completion to parse for rules" << std::endl;
 
 	TransRules meaning_rules;
-	initial_rules(reader.i_rules_str, meaning_rules); //XMLreaderには極力何も依存させない
+	initial_rules(reader.i_rules_str, meaning_rules);
 
 	MAILMAgent ma;
 	TransRules i_rules;
 	// i_rules.insert(*meaning_rules.begin());
 	i_rules = meaning_rules;
-	//kb.init_semantics_rules(i_rules);//追跡用
 	ma.init_semantics(i_rules);
 	ma.hear(buf, reader.core_meaning);
 	std::cout << "\n%%% previous" << std::endl;
 	std::cout << ma.to_s() << std::endl;
 	ma.learn();
 	std::cout << "LEARNED" << std::endl;
+	ma.grow();
 	std::cout << "\n%%% after" << std::endl;
 	std::cout << ma.to_s() << std::endl;
-
-	std::cout << ma.kb.sentenceDB.size() << std::endl;
-	std::cout << ma.kb.wordDB.size() << std::endl;
 
 	log.refresh_log();
 
@@ -597,11 +556,11 @@ int main(int argc, char* argv[]) {
 	}
 	std::cout << std::endl << std::endl;*/
 
-	Rule r_sample;
+	/*Rule r_sample;
 	r_sample.internal = kb.meaning_no(1);
 	r_sample.type = RULE_TYPE::SENTENCE;
 	r_sample.cat = 0;
-	std::cout << "TRANS TEST 01.xml" << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;
+	std::cout << "TRANS TEST 01.xml" << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;*/
 
 	std::vector<Rule> r_list;
 	std::string tree_str;
@@ -625,7 +584,7 @@ int main(int argc, char* argv[]) {
 			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
 			std::cout << "tree fin." << std::endl;
 
-			output_data(boost::lexical_cast<std::string>("../dot/") + name + std::string(".dot"), tree_str);
+			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
 			std::cout << "output fin." << std::endl;
 
 		}
@@ -633,6 +592,34 @@ int main(int argc, char* argv[]) {
 			std::cout << "Can't construct" << std::endl;
 		}
 	}
+
+	std::cout << "SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
+	std::cout << ma.kb.sentenceDB.size() << std::endl;
+	std::cout << ma.kb.wordDB.size() << std::endl;
+
+	std::vector<int> nums_v{ 3,4 };
+	MAILMAgent parent,child;
+	std::map<int, std::vector<std::string> > mm, ch_mm;
+	std::vector<Rule> parent_origin, ch_hear;
+	parent = ma;
+	for (int i = 1; i < 10; i++) {
+		child = parent.make_child();
+		child.init_semantics(i_rules);
+		ch_hear=buf;
+		mm.clear();
+		ch_mm.clear();
+		for (int j = 0; j < 5; j++) {
+			int b_num = nums_v[MT19937::irand()%nums_v.size()];
+			parent_origin = parent.say(b_num, mm, j + 1);
+			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
+			ch_mm.insert(mm.begin(), mm.end());
+		}
+		child.hear(ch_hear, ch_mm);
+		child.learn();
+		child.grow();
+		parent = child;
+	}
+	std::cout << parent.kb.to_s() << std::endl;
 
 	log.refresh_log();
 

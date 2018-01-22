@@ -17,11 +17,11 @@ public:
 
 	MAILMAgent make_child(void);
 
-	MAILMAgent& grow(std::vector<Rule>);
+	MAILMAgent& grow();
 
 	MAILMAgent& operator=(const MAILMAgent& dst);
 
-	std::vector<Rule> say(int beat_num, std::map<int, std::vector<std::string> >& mapping);
+	std::vector<Rule> say(int beat_num, std::map<int, std::vector<std::string> >& mapping, int no);
 	void hear(std::vector<Rule>& rules, std::map<int, std::vector<std::string> >& mapping);
 
 	void registration(std::map<int, std::vector<std::string> >& core_meaning);

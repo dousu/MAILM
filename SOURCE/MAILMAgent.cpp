@@ -31,7 +31,7 @@ MAILMAgent::make_child(void) {
 }
 
 MAILMAgent&
-MAILMAgent::grow(std::vector<Rule> meanings) {
+MAILMAgent::grow() {
 
 	kb.consolidate();
 	kb.gen_cat = XMLreader::index_count;
@@ -41,9 +41,9 @@ MAILMAgent::grow(std::vector<Rule> meanings) {
 }
 
 std::vector<Rule>
-MAILMAgent::say(int beat_num, std::map<int, std::vector<std::string> >& mapping) {
+MAILMAgent::say(int beat_num, std::map<int, std::vector<std::string> >& mapping, int no) {
 	try {
-		std::vector<Rule> res = kb.generate_score(beat_num, mapping);
+		std::vector<Rule> res = kb.generate_score(beat_num, mapping, no*(-1));
 		return res;
 	}
 	catch (...) {

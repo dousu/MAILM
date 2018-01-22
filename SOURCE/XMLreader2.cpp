@@ -205,8 +205,7 @@ XMLreader::load(std::string file_path,
 			Prefices::CLN +
 			boost::lexical_cast<std::string>(index_count)
 		);
-		// core_meaning[index_count] = std::vector<std::string>();
-		// core_meaning[index_count].push_back(std::string(""));
+		core_meaning[index_count] = std::vector<std::string>();
 		dic_in.push_back(
 			std::string("I") +
 			Prefices::CLN +
@@ -445,7 +444,9 @@ XMLreader::load(std::string file_path,
 			variable_count++;
 		}
 		else {
-			index_count--;
+			index_count++;
+			//erase index_count
+			//core_meaning[index_count] = std::vector<std::string>();
 		}
 
 	}

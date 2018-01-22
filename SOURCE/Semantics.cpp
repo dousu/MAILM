@@ -64,8 +64,8 @@ template <typename T>
 bool Semantics<T>::merge_equal(Element a, Element b) {
 	T tmp_v;
 	if (!(a.is_ind() && b.is_ind())) {
-		std::cerr << "[chunk_equal]INCORRECT ELEMENT" << std::endl;
-		throw "[chunk_equal]INCORRECT ELEMENT";
+		std::cerr << "[merge_equal]INCORRECT ELEMENT" << std::endl;
+		throw "[merge_equal]INCORRECT ELEMENT";
 	}
 	// if(mapping[a.obj].empty() || mapping[b.obj].empty()){
 	//   // std::cout << mapping.size() << std::endl;
@@ -80,8 +80,8 @@ template <typename T>
 bool Semantics<T>::replace_equal(Element a, Element b) {
 	T tmp_v;
 	if (!(a.is_ind() && b.is_ind())) {
-		std::cerr << "[chunk_equal]INCORRECT ELEMENT" << std::endl;
-		throw "[chunk_equal]INCORRECT ELEMENT";
+		std::cerr << "[replace_equal]INCORRECT ELEMENT" << std::endl;
+		throw "[replace_equal]INCORRECT ELEMENT";
 	}
 	// if(mapping[a.obj].empty() || mapping[b.obj].empty()){
 	//   // std::cout << mapping.size() << std::endl;
