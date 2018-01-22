@@ -23,7 +23,6 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/unordered_map.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/filesystem.hpp>
 
 #include "Rule.h"
@@ -106,10 +105,6 @@ public:
 
 	Semantics<Conception> intention;
 
-	typedef boost::unordered_map<std::vector<int>,
-		boost::unordered_map<int, std::vector<Rule> > > IndexT;
-	boost::shared_ptr<IndexT> fabricate_index;
-	bool indexed;
 	typedef std::pair<
 		std::multimap<int, Rule>::iterator,
 		std::multimap<int, Rule>::iterator

@@ -35,12 +35,6 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/filesystem.hpp>
- //#include <boost/numeric/ublas/matrix.hpp> 
- //#include <boost/numeric/ublas/io.hpp>
-
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
-#include <boost/ref.hpp>
 
 #include "Rule.h"
 #include "Element.h"

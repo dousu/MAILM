@@ -12,12 +12,6 @@
 #include <string>
 #include <fstream>
 #include <boost/program_options.hpp>
- //#include <boost/system/config.hpp>
- //#include <boost/filesystem.hpp>
- //#include <boost/filesystem/path.hpp>
- //#include <boost/filesystem/fstream.hpp>
-
- //#include <boost/shared_ptr.hpp>
 
 #include "Parameters.h"
 #include "LogBox.h"

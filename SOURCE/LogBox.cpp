@@ -53,9 +53,6 @@ LogBox::pop_log(int nth) {
 void
 LogBox::set_filepath(std::string file) {
 	log_file = file;
-	//writer = boost::shared_ptr<LogWriter>(new LogWriter(file));
-	//boost::thread th(writer.get());
-	//th.detach();
 }
 
 void
