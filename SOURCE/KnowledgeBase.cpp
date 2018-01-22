@@ -2647,7 +2647,7 @@ KnowledgeBase::replacing(
 				temp.external == word.external &&
 				temp.internal.front() == word.internal.front()
 				) ||
-			temp.external.size() <= word.external.size() //|| intention.replace_equal(temp.internal.front(),word.internal.front())
+			temp.external.size() <= word.external.size() || intention.replace_equal(temp.internal.front(),word.internal.front())
 			) {
 			it++;
 			continue; //while
@@ -2660,10 +2660,6 @@ KnowledgeBase::replacing(
 			it++;
 			continue; //while
 		}
-
-		// std::cout << "\n****************test check23 end" << std::endl;
-
-		// std::cout << "\n****************test check24" << std::endl;
 
 		//external check
 		int ex_limit;

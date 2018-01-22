@@ -174,7 +174,7 @@ make_tree_str_for_dot(std::vector<Rule>& r_list, std::vector<int> beat_nums, int
 		r_str_to_int.clear();
 		smp.clear();
 		code_v.clear();
-		top = std::string("\"") + Prefices::SEN/*+std::to_string((*r_it).front().cat)*/ + std::string("\\n") + Prefices::IND + std::to_string((*ls_it).internal.front().obj) + std::string("\\n") + kb.meaning_no_to_s((*ls_it).internal.front().obj) + std::string("\"");
+		top = std::string("\"") + Prefices::SEN/*+std::to_string((*r_it).front().cat)*//* + std::string("\\n") + Prefices::IND + std::to_string((*ls_it).internal.front().obj) + std::string("\\n") + kb.meaning_no_to_s((*ls_it).internal.front().obj) */+ std::string("\"");
 		stack.push_back(std::pair<std::string, int>(top, 0));
 		r_int_to_str.insert(std::multimap<int, std::string>::value_type(0, top));
 		r_str_to_int.insert(std::map<std::string, int>::value_type(top, 0));
@@ -555,9 +555,6 @@ int main(int argc, char* argv[]) {
 	labeling = reader.labeling;
 	std::cout << "completion to parse for rules" << std::endl;
 
-	//ルールの意味を登録
-	// registration(buf,kb);
-	registration(reader.core_meaning, kb);
 	TransRules meaning_rules;
 	initial_rules(reader.i_rules_str, meaning_rules); //XMLreaderには極力何も依存させない
 
@@ -577,17 +574,6 @@ int main(int argc, char* argv[]) {
 
 	std::cout << ma.kb.sentenceDB.size() << std::endl;
 	std::cout << ma.kb.wordDB.size() << std::endl;
-
-	//確認
-	//std::cout << "MAP LIST** " << std::endl;// << Rule(reader.dic_xml["../XML/01.xml"]).to_s() << std::endl;
-	//TransRules::iterator map_it = i_rules.begin();
-	//for (; map_it != i_rules.end(); map_it++) {
-	//	Rule tmp_rule;
-	//	tmp_rule.type = RULE_TYPE::SENTENCE;
-	//	tmp_rule.internal = (*map_it).second;
-	//	std::cout << (*map_it).first << "<:>" << tmp_rule.to_s() << std::endl;
-	//}
-	//std::cout << std::endl;
 
 	log.refresh_log();
 
@@ -621,14 +607,14 @@ int main(int argc, char* argv[]) {
 	std::string tree_str;
 	int no;
 	std::vector<int> beat_nums;
-
+	KnowledgeBase view_kb = ma.kb;
 	for (int i = 1; i <= labeling.size(); i++) {
 		no = i;
 		beat_nums = reader.beat_map[no];
 		std::string name = labeling[no];
 		r_list.clear();
 		std::cout << "Construct " << name << ".xml" << std::endl;
-		if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
+		if (ma.kb.explain(view_kb.meaning_no(no), r_list)) {
 
 			std::cout << "Test View r_list:" << std::endl;
 			for (auto& r : r_list) {
@@ -636,10 +622,10 @@ int main(int argc, char* argv[]) {
 			}
 			std::cout << std::endl;
 
-			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, ma.kb);
+			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
 			std::cout << "tree fin." << std::endl;
 
-			output_data(param.BASE_PATH + name + std::string(".dot"), tree_str);
+			output_data(boost::lexical_cast<std::string>("../dot/") + name + std::string(".dot"), tree_str);
 			std::cout << "output fin." << std::endl;
 
 		}
