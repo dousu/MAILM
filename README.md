@@ -24,7 +24,7 @@ S. Kirby(2002)が提案したILM(Iterated Learning Model, 繰り返し学習モ�
 
     ruby 2.4
   
-    boost 1.59推奨
+    boost 1.62.0推奨
   
     c++14
   
