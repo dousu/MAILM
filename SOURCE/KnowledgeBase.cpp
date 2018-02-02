@@ -6889,6 +6889,7 @@ KnowledgeBase::dic_change_ind(DicDBType& dic, int ind, int toind) {
 std::vector<Rule>
 KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning, int no = -1) {
 	std::vector<Rule> res;
+	std::cerr << "#####generating score" << std::endl;
 	//invention
 	//1.sをランダムに選ぶ. stateをbeat_numにしておく.
 	//2.要素を順番にチェック(create_measures(res,cat,beat_num))．symbolががでてくるかひとつでもfalseなら1へ戻る．symbolが出たら1へ戻る．
@@ -6932,6 +6933,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}
 
 	}
+	std::cerr << "generating score#####" << std::endl;
 
 	return res;
 }
@@ -6939,6 +6941,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 //measureがひとつ以上でるようにランダムに組み立てる
 bool
 KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num, std::map<int, std::vector<std::string> >& map) {
+	std::cerr << "#####creating measures " << cat_el.to_s() << " " << beat_num << std::endl;
 	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
@@ -6992,6 +6995,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 			break;
 		}
 	}
+	std::cerr << "creating measures#####" << std::endl;
 	return suc;
 }
 
@@ -6999,6 +7003,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 //要素数beat_numの制約を満たすようにサイズ数を分配する
 bool
 KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num, std::map<int, std::vector<std::string> >& map) {
+	std::cerr << "#####creating beats " << beat_num << std::endl;
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
 	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
@@ -7081,12 +7086,14 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 			return true;
 		}
 	}
+	std::cerr << "creating beats#####" << std::endl;
 	return false;
 }
 
 //要素数space_numの制約を満たす可能性のあるルールを選択
 bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num, std::map<int, std::vector<std::string> >& map)
 {
+	std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << std::endl;
 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
 		return false;
 	}
@@ -7119,6 +7126,7 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 			break;
 		}
 	}
+	std::cerr << "creating definite beat#####" << std::endl;
 	return suc;
 }
 

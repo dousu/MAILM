@@ -43,9 +43,7 @@ MAILMAgent::grow() {
 std::vector<Rule>
 MAILMAgent::say(int beat_num, std::map<int, std::vector<std::string> >& mapping, int no) {
 	try {
-		std::cerr << "#####saying" << std::endl;
 		std::vector<Rule> res = kb.generate_score(beat_num, mapping, no*(-1));
-		std::cerr << "saying#####" << std::endl;
 		return res;
 	}
 	catch (...) {
