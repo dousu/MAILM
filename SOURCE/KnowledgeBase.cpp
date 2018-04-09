@@ -6899,22 +6899,20 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		bool creatable = false;
 		RuleDBType temp = sentenceDB;
 		std::vector<Rule> work_list;
-		std::map<int, std::vector<std::string> > work_map;
 		for (; temp.size() != 0; i++) {
 			bool suc = true;
 			work_list.clear();
-			work_map.clear();
 			rand_index = MT19937::irand() % temp.size();
 			Rule base_r = temp[rand_index];
 			base_r.cat = 0;
 			base_r.internal.front().obj = --gen_ind;
 			work_list.push_back(base_r);
-			work_map[base_r.internal.front().obj] = std::vector<std::string>(1, "SENTENCE");
-			work_map[base_r.internal.front().obj].push_back(std::string("s")+std::to_string(no));
+			// work_map[base_r.internal.front().obj] = std::vector<std::string>(1, "SENTENCE");
+			// work_map[base_r.internal.front().obj].push_back(std::string("s")+std::to_string(no));
 			for (auto& ex_el : base_r.external) {
 				Element trg_el = ex_el;
 				ex_el.cat = --gen_cat;
-				if (ex_el.is_sym() || (!create_measures(work_list, trg_el, beat_num, work_map))) {
+				if (ex_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num, work_map))) {
 					work_list.clear();
 					suc = false;
 					break;
