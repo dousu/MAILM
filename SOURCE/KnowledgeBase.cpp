@@ -6884,7 +6884,7 @@ KnowledgeBase::dic_change_ind(DicDBType& dic, int ind, int toind) {
 //     }
 // }
 
-//3つの流れ（invent with conditions, remap meaning for music score, make concepts for transfer）
+//3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
 //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
 std::vector<Rule>
 KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning, int no = -1) {
@@ -6904,15 +6904,10 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			work_list.clear();
 			rand_index = MT19937::irand() % temp.size();
 			Rule base_r = temp[rand_index];
-			base_r.cat = 0;
-			base_r.internal.front().obj = --gen_ind;
 			work_list.push_back(base_r);
-			// work_map[base_r.internal.front().obj] = std::vector<std::string>(1, "SENTENCE");
-			// work_map[base_r.internal.front().obj].push_back(std::string("s")+std::to_string(no));
 			for (auto& ex_el : base_r.external) {
 				Element trg_el = ex_el;
-				ex_el.cat = --gen_cat;
-				if (ex_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num, work_map))) {
+				if (trg_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num))) {
 					work_list.clear();
 					suc = false;
 					break;
@@ -6926,10 +6921,14 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}
 		if (temp.size() != 0) {
 			res = work_list;
-			core_meaning = work_map;
+			
 			creatable = true;
 		}
 
+	}
+	{//mapping
+		std::map<int, std::vector<std::string> > work_map;
+		core_meaning = work_map;
 	}
 	std::cerr << "generating score#####" << std::endl;
 
@@ -6938,7 +6937,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 
 //measureがひとつ以上でるようにランダムに組み立てる
 bool
-KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num, std::map<int, std::vector<std::string> >& map) {
+KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num) {
 	std::cerr << "#####creating measures " << cat_el.to_s() << " " << beat_num << std::endl;
 	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
@@ -6952,7 +6951,6 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	bool suc;
 	//失敗するかもしれないのでワーキング用のres
 	std::vector<Rule> work_res;
-	std::map<int, std::vector<std::string> > work_map;
 	//比較用Conception作成
 	Conception cc;
 	cc.add("MEASURE");
@@ -7000,7 +6998,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 //externalがbeat_numの制約を満たすかチェック
 //要素数beat_numの制約を満たすようにサイズ数を分配する
 bool
-KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num, std::map<int, std::vector<std::string> >& map) {
+KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num) {
 	std::cerr << "#####creating beats " << beat_num << std::endl;
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
@@ -7089,7 +7087,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 }
 
 //要素数space_numの制約を満たす可能性のあるルールを選択
-bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num, std::map<int, std::vector<std::string> >& map)
+bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num)
 {
 	std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << std::endl;
 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {

@@ -384,13 +384,13 @@ public:
 		generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning, int no);
 
 	bool
-		create_measures(std::vector<Rule>& res, Element& cat_num, int beat_num, std::map<int, std::vector<std::string> >& map);
+		create_measures(std::vector<Rule>& res, Element& cat_num, int beat_num);
 
 	bool
-		create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num, std::map<int, std::vector<std::string> >& map);
+		create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num);
 
 	bool
-		create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num, std::map<int, std::vector<std::string> >& map);
+		create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num);
 
 	std::string
 		meaning_no_to_s(int obj);
