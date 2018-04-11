@@ -6926,7 +6926,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}
 
 	}
-	{//mapping
+	if(res.size()!=0){//mapping
 		std::map<int, std::vector<std::string> > work_map;
 		core_meaning = work_map;
 	}
@@ -6955,31 +6955,32 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	Conception cc;
 	cc.add("MEASURE");
 	//std::for_eachはキャプチャがめんどくさいのでforイテレーション
-	DictionaryRange item_range;
-	item_range.first = DB_dic[cat_el.cat].begin();
-	item_range.second = DB_dic[cat_el.cat].end();
-	for (; item_range.first != item_range.second; item_range.first++) {
+	std::multimap<int, Rule> work_DB = DB_dic[cat_el.cat];
+	std::multimap<int, Rule>::iterator DB_loc;
+	for (DB_loc = work_DB.begin(); work_DB.size() != 0; work_DB.erase(DB_loc)) {
 		//初期化
+		int rand_index = MT19937::irand() % work_DB.size();
 		work_res = res;
 		work_map = map;
-		Rule base_rule = (*item_range.first).second;
-		base_rule.cat = gen_cat + 1;
-		base_rule.internal.front().obj = --gen_ind;
+		DB_loc = work_DB.begin() + rand_index;
+		Rule base_rule = (*DB_loc).second;
 		work_res.push_back(base_rule);
+		//MEASUREであればビート数を合わせに行くかシンボルが入っていればビート数を合わせに行くか
 		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
-			work_map[base_rule.internal.front().obj] = std::vector<std::string>(1, "MEASURE");
 			//作業用external初期化
 			std::vector<Element> work_external = base_rule.external;
 
-			suc = create_beats(work_res, work_external, beat_num, work_map);
+			suc = create_beats(work_res, work_external, beat_num);
 		}
 		else {//違うならば，MEASUREを探す
-			work_map[base_rule.internal.front().obj] = std::vector<std::string>();
 			suc = true;
 			for (auto& cat_el : base_rule.external) {
 				Element trg = cat_el;
-				cat_el.cat = --gen_cat;
-				suc &= create_measures(work_res, trg, beat_num, work_map);
+				if(trg.is_cat()){
+					suc &= create_measures(work_res, trg, beat_num);
+				}else{
+					suc = false;
+				}
 				if (!suc) {
 					break;
 				}
@@ -6987,7 +6988,6 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		}
 		if (suc) {
 			res = work_res;
-			map = work_map;
 			break;
 		}
 	}
@@ -7029,13 +7029,13 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		}
 	}
 
-	int lt_num = beat_num - cat_num;
+	int lt_num = beat_num - (external.size() - cat_num);
 	std::vector<int> t_assignment_list;//なるべく等分配での割り当て
 
 	//t_assignmentの計算
 	t_assignment_list.reserve(cat_num);
 	for (int i = 0; i < cat_num; i++) {
-		t_assignment_list.emplace_back(int(lt_num / cat_num) + 1);
+		t_assignment_list.emplace_back(int(lt_num / cat_num));
 		if (i < (lt_num % cat_num)) {
 			t_assignment_list[i]++;
 		}
