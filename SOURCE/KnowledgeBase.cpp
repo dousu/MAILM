@@ -687,8 +687,12 @@ KnowledgeBase::unify_loop_sub(int now_cat, int target_cat, int type, RuleDBType&
 std::vector<std::vector<int> > KnowledgeBase::calculation_assignment(int value, int size)
 {
 	//valueをsize個の配列に整数としてどのように割り振れるのかのリストを返す．
+	if(value < size){
+		std::cerr << "Cannot calculate" << std::endl;
+		return std::vector<std::vector<int> >();
+	}
 	std::vector<std::vector<int> > result;
-	if (value == 0) {
+	if (value == size) {
 		result.reserve(1);
 		std::vector<int> work;
 		work.reserve(size);
@@ -6928,6 +6932,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 	}
 	if(res.size()!=0){//mapping
 		std::map<int, std::vector<std::string> > work_map;
+		
 		core_meaning = work_map;
 	}
 	std::cerr << "generating score#####" << std::endl;
@@ -6961,7 +6966,6 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		//初期化
 		int rand_index = MT19937::irand() % work_DB.size();
 		work_res = res;
-		work_map = map;
 		DB_loc = work_DB.begin() + rand_index;
 		Rule base_rule = (*DB_loc).second;
 		work_res.push_back(base_rule);
@@ -7047,16 +7051,13 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	{
 		bool t_check = true;
 		std::vector<Rule> work_res = res;
-		std::map<int, std::vector<std::string> > work_map = map;
 		for (int index = 0; index < t_assignment_list.size(); index++) {
 			Element test = return_cat(external, index + 1);
 			Element trg = test;
-			return_cat(external, index + 1).cat = --gen_cat;
 			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index], work_map);
 		}
 		if (t_check) {
 			res = work_res;
-			map = work_map;
 			return true;
 		}
 	}
@@ -7069,16 +7070,13 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	for (auto& list : assignment_list) {
 		bool lt_eq_check = true;
 		std::vector<Rule> work_res = res;
-		std::map<int, std::vector<std::string> > work_map = map;
 		for (int index = 0; index < list.size(); index++) {
 			Element test = return_cat(external, index + 1);
 			Element trg = test;
-			return_cat(external, index + 1).cat = --gen_cat;
 			lt_eq_check &= create_beat_eq(work_res, trg, list[index], work_map);
 		}
 		if (lt_eq_check) {
 			res = work_res;
-			map = work_map;
 			return true;
 		}
 	}
@@ -7096,29 +7094,25 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 
 	bool suc;
 	std::vector<Rule> work_res;
-	std::map<int, std::vector<std::string> > work_map;
 
-	DictionaryRange item_range;
-	item_range.first = DB_dic[elem.cat].begin();
-	item_range.second = DB_dic[elem.cat].end();
-	for (; item_range.first != item_range.second; item_range.first++) {
-		Rule base_rule = (*item_range.first).second;
+	std::multimap<int, Rule> work_DB = DB_dic[elem.cat];
+	std::multimap<int, Rule>::iterator DB_loc;
+	for (DB_loc = work_DB.begin(); work_DB.size() != 0; work_DB.erase(DB_loc)) {
+		int rand_index = MT19937::irand() % work_DB.size();
+		work_res = res;
+		DB_loc = work_DB.begin() + rand_index;
+		Rule base_rule = (*DB_loc).second;
 		if (base_rule.external.size() > space_num) {
 			suc = false;
 			continue;
 		}
-		base_rule.cat = gen_cat + 1;
-		base_rule.internal.front().obj = --gen_ind;
 		//初期化 
 		work_res = res;
-		work_map = map;
 		work_res.push_back(base_rule);
-		work_map[base_rule.internal.front().obj] = std::vector<std::string>();
 
-		suc = create_beats(work_res, base_rule.external, space_num, work_map);
+		suc = create_beats(work_res, base_rule.external, space_num);
 		if (suc) {
 			res = work_res;
-			map = work_map;
 			break;
 		}
 	}
