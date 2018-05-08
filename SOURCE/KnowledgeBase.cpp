@@ -6925,7 +6925,9 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}
 		if (temp.size() != 0) {
 			res = work_list;
-			
+			for(auto& rule : work_list){
+				
+			}
 			creatable = true;
 		}
 
