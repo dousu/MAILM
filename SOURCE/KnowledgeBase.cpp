@@ -6911,7 +6911,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			work_list.push_back(base_r);
 			for (auto& ex_el : base_r.external) {
 				Element trg_el = ex_el;
-				if (trg_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num))) {
+				if (trg_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num)) || !ex_el.is_cat()) {
 					work_list.clear();
 					suc = false;
 					break;
@@ -6925,7 +6925,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}
 		if (temp.size() != 0) {
 			res = work_list;
-			for(auto& rule : work_list){
+			for(auto& rule : res){
 				
 			}
 			creatable = true;
