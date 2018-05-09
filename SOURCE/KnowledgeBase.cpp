@@ -6930,11 +6930,12 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			}
 			creatable = true;
 		}
-
 	}
 	if(res.size()!=0){//mapping
 		std::map<int, std::vector<std::string> > work_map;
+
 		
+
 		core_meaning = work_map;
 	}
 	std::cerr << "generating score#####" << std::endl;
