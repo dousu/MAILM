@@ -13,7 +13,7 @@ int KnowledgeBase::ABSENT_LIMIT = 1;
 uint32_t KnowledgeBase::CONTROLS = 0x00L;
 int KnowledgeBase::buzz_length = 3;
 int KnowledgeBase::RECURSIVE_LIMIT = 3;
-int KnowledgeBase::MEASURE_NO = -10000;
+int KnowledgeBase::CATEGORY_NO= -10000;
 int KnowledgeBase::SENTENCE_NO = -10000;
 int KnowledgeBase::INDEX_NO = -10000;
 int KnowledgeBase::VARIABLE_NO = -10000;
@@ -6952,7 +6952,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 						onloop = false;
 						//create word rule for measure
 						int cat_ind, int_ind;
-						cat_ind=MEASURE_NO--;
+						cat_ind=CATEGORY_NO--;
 						int_ind=INDEX_NO--;
 						Element el,cat_el;
 						el.set_ind(int_ind);
