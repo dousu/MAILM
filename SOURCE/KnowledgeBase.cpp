@@ -13,7 +13,9 @@ int KnowledgeBase::ABSENT_LIMIT = 1;
 uint32_t KnowledgeBase::CONTROLS = 0x00L;
 int KnowledgeBase::buzz_length = 3;
 int KnowledgeBase::RECURSIVE_LIMIT = 3;
-// int KnowledgeBase::MEASURE_NO = 10000;
+int KnowledgeBase::MEASURE_NO = -10000;
+int KnowledgeBase::SENTENCE_NO = -10000;
+int KnowledgeBase::INDEX_NO = -10000;
 int KnowledgeBase::VARIABLE_NO = -10000;
 
 KnowledgeBase::KnowledgeBase() {
@@ -6924,19 +6926,68 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			temp.erase(temp.begin() + rand_index);
 		}
 		if (temp.size() != 0) {
-			res = work_list;
-			for(auto& rule : res){
-				
+			//writing################################################
+			//create a list of rules "res" and mapping "core_meaning"
+			std::map<int, std::vector<std::string> > work_map;
+			std::vector<Element> categories; //for sentence
+			std::vector<Element> terminals; //for symbols in measure
+			Conception cc; //MeasureConception
+			cc.add("MEASURE");
+			bool measure_flag = false, onloop=false;
+			for(auto& rule : work_list){
+				if(!onloop && intention[rule.internal.front().obj].include(cc)){
+					onloop = true;
+					terminals = rule.external;
+				}
+				if(onloop){
+					//Insert symbols of rules to "terminals"
+					int loc = next_category(terminals.begin(), terminals.end());
+					auto it = terminals.erase(terminals.begin() + loc);
+					terminals.insert(it, rule.external.begin(), rule.external.end());
+					//If "terminals" don't include any categories,
+					//"measure_flag" becomes true.
+					measure_flag = next_category(terminals.begin(), terminals.end()) == -1 ? true:false;
+					if(measure_flag){
+						measure_flag = false;
+						onloop = false;
+						//create word rule for measure
+						int cat_ind, int_ind;
+						cat_ind=MEASURE_NO--;
+						int_ind=INDEX_NO--;
+						Element el,cat_el;
+						el.set_ind(int_ind);
+						cat_el.set_cat(categories.size()+1,cat_ind);
+						categories.push_back(cat_el);
+						Rule add_r;
+						add_r.set_noun(cat_ind,el,terminals);
+						work_map[el.obj]=std::vector<std::string>();
+						work_map[el.obj].push_back("MEASURE");
+						terminals.clear();
+					}
+				}
 			}
+			//rule for sentence
+			int int_ind;
+			int_ind=INDEX_NO--;
+			Element el;
+			el.set_ind(int_ind);
+			Rule add_r;
+			std::vector<Element> internals;
+			internals.push_back(el);
+			for(auto cat_el : categories){
+				Element new_el;
+				new_el.set_var(cat_el.obj,cat_el.cat);
+				internals.push_back(new_el);
+			}
+			add_r.set_sentence(0/*category for Sentence*/,internals,categories);
+			work_map[int_ind]=std::vector<std::string>();
+			work_map[int_ind].push_back("SENTENCE");
+			work_map[int_ind].push_back("s"+SENTENCE_NO--); //?
+			core_meaning=work_map;
+
+			//#######################################################
 			creatable = true;
 		}
-	}
-	if(res.size()!=0){//mapping
-		std::map<int, std::vector<std::string> > work_map;
-
-		
-
-		core_meaning = work_map;
 	}
 	std::cerr << "generating score#####" << std::endl;
 

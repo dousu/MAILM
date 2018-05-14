@@ -531,3 +531,12 @@ Rule::set_sentence(
 	internal = din;
 	external = dex;
 }
+
+void
+Rule::set_sentence(
+	int dcat,
+	Element& din_el,
+	std::vector<Element>& dex
+) {
+	set_sentence(dcat,std::vector<Element>(){din_el},dex)
+}

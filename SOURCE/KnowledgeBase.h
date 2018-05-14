@@ -115,7 +115,9 @@ public:
 	static uint32_t CONTROLS;
 	static int buzz_length;
 	static int RECURSIVE_LIMIT;
-	// static int MEASURE_NO;
+	static int MEASURE_NO;
+	static int SENTENCE_NO;
+	static int INDEX_NO;
 	static int VARIABLE_NO;
 
 	static const uint32_t USE_OBLITERATION = 0x01;
@@ -128,8 +130,7 @@ public:
 
 	/*!
 	 * 知識に対して、Chunk、Merge、Replaceを実行します。
-	 * これはいずれのルールも
-	 適用不可能になるまで実行されます。
+	 * これはいずれのルールも適用不可能になるまで実行されます。
 	 */
 	bool
 		consolidate(void);

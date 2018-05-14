@@ -108,6 +108,8 @@ public:
 		set_sentence(Element& dcat, InType& din, ExType& dex);
 	void
 		set_sentence(int dcat, InType& din, ExType& dex);
+	void
+		set_sentence(int dcat, Element& din_el, ExType& dex);
 
 	// std::vector< std::vector<Element> >
 	// moph(void);
