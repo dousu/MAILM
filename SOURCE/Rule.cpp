@@ -538,6 +538,7 @@ Rule::set_sentence(
 	Element& din_el,
 	std::vector<Element>& dex
 ) {
-	Element arrEl[1] = {din_el};
-	set_sentence(dcat,std::vector<Element>(std::begin(arrEl),std::end(arrEl)),dex);
+	std::vector<Element> arrEl;
+	arrEl.push_back(din_el);
+	set_sentence(dcat,arrEl,dex);
 }
