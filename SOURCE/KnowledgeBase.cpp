@@ -7109,7 +7109,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		for (int index = 0; index < t_assignment_list.size(); index++) {
 			Element test = return_cat(external, index + 1);
 			Element trg = test;
-			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index], work_map);
+			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index]);
 		}
 		if (t_check) {
 			res = work_res;
@@ -7128,7 +7128,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		for (int index = 0; index < list.size(); index++) {
 			Element test = return_cat(external, index + 1);
 			Element trg = test;
-			lt_eq_check &= create_beat_eq(work_res, trg, list[index], work_map);
+			lt_eq_check &= create_beat_eq(work_res, trg, list[index]);
 		}
 		if (lt_eq_check) {
 			res = work_res;
