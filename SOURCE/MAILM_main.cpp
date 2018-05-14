@@ -551,13 +551,13 @@ int main(int argc, char* argv[]) {
 
 	//std::cout << std::endl << "LEARNED SEMANTICS" << std::endl << ma.kb.intention.to_s() << std::endl;
 
-	KnowledgeBase::InType inter = ma.kb.meaning_no(14);
+	/*KnowledgeBase::InType inter = ma.kb.meaning_no(14);
 	std::cout << "\nInType Test View" << std::endl;
 	KnowledgeBase::InType::iterator in_it = inter.begin();
 	for (; in_it != inter.end(); in_it++) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
-	std::cout << std::endl << std::endl;
+	std::cout << std::endl << std::endl;*/
 
 	/*Rule r_sample;
 	r_sample.internal = kb.meaning_no(14);
@@ -570,13 +570,14 @@ int main(int argc, char* argv[]) {
 	int no;
 	std::vector<int> beat_nums;
 	KnowledgeBase view_kb = ma.kb;
-	for (int i = 1; i <= labeling.size(); i++) {
+	//for (int i = 1; i <= labeling.size(); i++) {
+	for (int i = 14; i <= 14; i++) {
 		no = i;
 		beat_nums = reader.beat_map[no];
 		std::string name = labeling[no];
 		r_list.clear();
 		std::cout << "Construct " << name << ".xml" << std::endl;
-		if (ma.kb.explain(view_kb.meaning_no(no), r_list)) {
+		if (view_kb.explain(view_kb.meaning_no(no), r_list)) {
 
 			/*
 			std::cout << "Test View r_list:" << std::endl;
