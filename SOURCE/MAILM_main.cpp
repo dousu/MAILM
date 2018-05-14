@@ -551,20 +551,19 @@ int main(int argc, char* argv[]) {
 
 	//std::cout << std::endl << "LEARNED SEMANTICS" << std::endl << ma.kb.intention.to_s() << std::endl;
 
-	KnowledgeBase::InType inter = ma.kb.meaning_no(1);
-
-	/*std::cout << "\nInType Test View" << std::endl;
+	KnowledgeBase::InType inter = ma.kb.meaning_no(14);
+	std::cout << "\nInType Test View" << std::endl;
 	KnowledgeBase::InType::iterator in_it = inter.begin();
 	for (; in_it != inter.end(); in_it++) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
-	std::cout << std::endl << std::endl;*/
+	std::cout << std::endl << std::endl;
 
 	/*Rule r_sample;
-	r_sample.internal = kb.meaning_no(1);
+	r_sample.internal = kb.meaning_no(14);
 	r_sample.type = RULE_TYPE::SENTENCE;
 	r_sample.cat = 0;
-	std::cout << "TRANS TEST 01.xml" << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;*/
+	std::cout << "TRANS TEST " << labeling[14] << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;*/
 
 	std::vector<Rule> r_list;
 	std::string tree_str;
