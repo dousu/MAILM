@@ -7020,7 +7020,8 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		//初期化
 		int rand_index = MT19937::irand() % work_DB.size();
 		work_res = res;
-		DB_loc = work_DB.begin() + rand_index;
+		DB_loc = work_DB.begin();
+		std::advance(DB_loc,rand_index);
 		Rule base_rule = (*DB_loc).second;
 		work_res.push_back(base_rule);
 		//MEASUREであればビート数を合わせに行くかシンボルが入っていればビート数を合わせに行くか
@@ -7154,7 +7155,8 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 	for (DB_loc = work_DB.begin(); work_DB.size() != 0; work_DB.erase(DB_loc)) {
 		int rand_index = MT19937::irand() % work_DB.size();
 		work_res = res;
-		DB_loc = work_DB.begin() + rand_index;
+		DB_loc = work_DB.begin();
+		std::advance(DB_loc,rand_index);
 		Rule base_rule = (*DB_loc).second;
 		if (base_rule.external.size() > space_num) {
 			suc = false;

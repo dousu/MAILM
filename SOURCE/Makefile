@@ -10,7 +10,7 @@ OBJS1 = $(addprefix ${SOURCEDIR}/, $(OBJ1))
 OBJS2 = $(addprefix ${SOURCEDIR}/, $(OBJ2))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
-OPT = --std=c++14 -g -O2
+OPT = --std=c++17 -g -O2
 CXX = g++
 
 ma1: ${OBJS1}
