@@ -579,16 +579,18 @@ int main(int argc, char* argv[]) {
 		std::cout << "Construct " << name << ".xml" << std::endl;
 		if (ma.kb.explain(view_kb.meaning_no(no), r_list)) {
 
+			/*
 			std::cout << "Test View r_list:" << std::endl;
 			for (auto& r : r_list) {
 				std::cout << r.to_s() << std::endl;
 			}
-			std::cout << std::endl;
+			std::cout << std::endl;*/
 
 			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
 			std::cout << "tree fin." << std::endl;
 
 			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
+			
 			std::cout << "output fin." << std::endl;
 
 		}
@@ -597,9 +599,9 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	std::cout << "SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
+	/*std::cout << "SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
 	std::cout << ma.kb.sentenceDB.size() << std::endl;
-	std::cout << ma.kb.wordDB.size() << std::endl;
+	std::cout << ma.kb.wordDB.size() << std::endl;*/
 
 	/*std::vector<int> nums_v{ 3,4 };
 	MAILMAgent parent,child;
