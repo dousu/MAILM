@@ -30,6 +30,10 @@ XMLreader::alias_load(std::string& file_path) {
 	ia >> data;
 	alias = data.alias;
 	conv_alias = data.conv_alias;
+	index_count = data.index_count;
+	variable_count = data.variable_count;
+	category_count = data.category_count;
+	symbol_count = data.symbol_count;
 }
 
 void
@@ -103,6 +107,10 @@ XMLreader::make_init_data(std::vector<std::string>& file_paths,
 		XMLdata data;
 		data.alias = alias;
 		data.conv_alias = conv_alias;
+		data.index_count = index_count;
+		data.variable_count = variable_count;
+		data.category_count = category_count;
+		data.symbol_count = symbol_count;
 		std::ofstream of(alias_file_path.c_str(),
 			std::ios::trunc);
 		boost::archive::text_oarchive oa(of);

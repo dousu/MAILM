@@ -36,6 +36,10 @@ struct XMLdata
 {
 	std::map<std::string, std::string> alias;
 	std::map<std::string, std::string> conv_alias;
+	int variable_count;
+	int category_count;
+	int index_count;
+	int symbol_count;
 
 private:
 	friend class boost::serialization::access;

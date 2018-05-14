@@ -506,6 +506,10 @@ int main(int argc, char* argv[]) {
 	}
 	dic.load(param.DICTIONARY_FILE);
 
+	KnowledgeBase::VARIABLE_NO=reader.variable_count;
+	KnowledgeBase::INDEX_NO=reader.index_count;
+	KnowledgeBase::CATEGORY_NO=reader.category_count;
+
 	std::vector<Rule> buf;
 	std::cout << "\n****************sample test" << std::endl;
 	std::vector<std::string>::reverse_iterator input_it = inputs.rbegin();
@@ -597,7 +601,7 @@ int main(int argc, char* argv[]) {
 	std::cout << ma.kb.sentenceDB.size() << std::endl;
 	std::cout << ma.kb.wordDB.size() << std::endl;
 
-	std::vector<int> nums_v{ 3,4 };
+	/*std::vector<int> nums_v{ 3,4 };
 	MAILMAgent parent,child;
 	std::map<int, std::vector<std::string> > mm, ch_mm;
 	std::vector<Rule> parent_origin, ch_hear;
@@ -619,7 +623,7 @@ int main(int argc, char* argv[]) {
 		child.grow();
 		parent = child;
 	}
-	std::cout << parent.kb.to_s() << std::endl;
+	std::cout << parent.kb.to_s() << std::endl;*/
 
 	log.refresh_log();
 

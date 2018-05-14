@@ -6956,7 +6956,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 						int_ind=INDEX_NO--;
 						Element el,cat_el;
 						el.set_ind(int_ind);
-						cat_el.set_cat(categories.size()+1,cat_ind);
+						cat_el.set_cat(VARIABLE_NO--,cat_ind);
 						categories.push_back(cat_el);
 						Rule add_r;
 						add_r.set_noun(cat_ind,el,terminals);
