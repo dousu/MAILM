@@ -182,10 +182,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					if ((*it) == a) {
 						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
-						}
+						}*/
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 						Element new_d;
@@ -315,10 +315,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					if ((*it) == b) {
 						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
-						}
+						}*/
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 						Element new_e;
@@ -481,10 +481,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					if ((*it) == a) {
 						// std::cout << "\n****************test check46" << std::endl;
 						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
-						}
+						}*/
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 						Element new_d;
@@ -705,7 +705,7 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 		outer_list.clear();
 		while (next_pos < (int)rule.second.size()) {//最後に調べた場所がendかどうかチェック
 
-		  // std::cout << "\n****************test check32" << std::endl;
+			// std::cout << "\n****************test check32" << std::endl;
 
 			next_pos += 1;//次の位置が戻ってきたときの最後に調べた位置になる
 			if ((rule.second.begin() + next_pos) == rule.second.end()) {
@@ -734,10 +734,10 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 
 				if ((*it) == a) {
 					// target_f=true;
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+					/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
-					}
+					}*/
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 					Element new_b;
@@ -808,12 +808,13 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 					break;
 				}
 
+				//?
 
 				for (int& obj : ch_v) {
 					obj--;
 					if (obj == 0) {
 						// buffer.push_back(Prefices::RPRN);
-						outer_list.pop_back();
+						outer_list.pop_back();//?
 					}
 				}
 				boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
@@ -824,7 +825,7 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 
 			//itの位置でouter_listをリセットする
 			if (it == rule.second.end()) {
-				outer_list.clear();
+				outer_list.clear();//?
 			}
 
 			for (int o_el : outer_list) {
