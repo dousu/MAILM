@@ -182,10 +182,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					if ((*it) == a) {
 						// target_f=true;
-						/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
-						}*/
+						}
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 						Element new_d;
@@ -315,10 +315,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					if ((*it) == b) {
 						// target_f=true;
-						/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
-						}*/
+						}
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 						Element new_e;
@@ -481,10 +481,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					if ((*it) == a) {
 						// std::cout << "\n****************test check46" << std::endl;
 						// target_f=true;
-						/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
-						}*/
+						}
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 						Element new_d;
@@ -734,10 +734,10 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 
 				if ((*it) == a) {
 					// target_f=true;
-					/*if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
-					}*/
+					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
 					Element new_b;
@@ -945,14 +945,14 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 					}
 
 					//この場合はあり得ない
-					// //一番最後に追加するパターン
-					// if(insert_pos==0&&outer_c==pos){
-					//   if(size!=0){
-					//     std::cerr << "ALERT" << std::endl;
-					//   }
-					//   it = rule.second.insert(it,new_b);
-					//   break;
-					// }
+					//一番最後に追加するパターン
+					if(insert_pos==0&&outer_c==pos){
+					  if(size!=0){
+					    std::cerr << "ALERT" << std::endl;
+					  }
+					  it = rule.second.insert(it,new_b);
+					  break;
+					}
 
 					//挿入なし
 					//挿入する部分の完成
