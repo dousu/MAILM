@@ -522,11 +522,12 @@ int main(int argc, char* argv[]) {
 	std::cout << "completion to parse for rules" << std::endl;
 
 	TransRules meaning_rules;
+	KnowledgeBase::InType::iterator in_it;
 	initial_rules(reader.i_rules_str, meaning_rules);
 
 	KnowledgeBase::InType inter2 = meaning_rules[14];
 	std::cout << "\nInType Test View before learning" << std::endl;
-	KnowledgeBase::InType::iterator in_it = inter2.begin();
+	in_it = inter2.begin();
 	for (; in_it != inter2.end(); in_it++) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
@@ -561,7 +562,7 @@ int main(int argc, char* argv[]) {
 
 	KnowledgeBase::InType inter = ma.kb.meaning_no(14);
 	std::cout << "\nInType Test View" << std::endl;
-	KnowledgeBase::InType::iterator in_it = inter.begin();
+	in_it = inter.begin();
 	for (; in_it != inter.end(); in_it++) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
