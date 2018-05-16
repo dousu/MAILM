@@ -524,6 +524,14 @@ int main(int argc, char* argv[]) {
 	TransRules meaning_rules;
 	initial_rules(reader.i_rules_str, meaning_rules);
 
+	KnowledgeBase::InType inter2 = meaning_rules[14];
+	std::cout << "\nInType Test View before learning" << std::endl;
+	KnowledgeBase::InType::iterator in_it = inter2.begin();
+	for (; in_it != inter2.end(); in_it++) {
+		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
+	}
+	std::cout << std::endl << std::endl;
+
 	MAILMAgent ma;
 	TransRules i_rules;
 	// i_rules.insert(*meaning_rules.begin());
@@ -551,19 +559,19 @@ int main(int argc, char* argv[]) {
 
 	//std::cout << std::endl << "LEARNED SEMANTICS" << std::endl << ma.kb.intention.to_s() << std::endl;
 
-	/*KnowledgeBase::InType inter = ma.kb.meaning_no(14);
+	KnowledgeBase::InType inter = ma.kb.meaning_no(14);
 	std::cout << "\nInType Test View" << std::endl;
 	KnowledgeBase::InType::iterator in_it = inter.begin();
 	for (; in_it != inter.end(); in_it++) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
-	std::cout << std::endl << std::endl;*/
+	std::cout << std::endl << std::endl;
 
-	/*Rule r_sample;
-	r_sample.internal = kb.meaning_no(14);
-	r_sample.type = RULE_TYPE::SENTENCE;
-	r_sample.cat = 0;
-	std::cout << "TRANS TEST " << labeling[14] << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;*/
+	// Rule r_sample;
+	// r_sample.internal = kb.meaning_no(14);
+	// r_sample.type = RULE_TYPE::SENTENCE;
+	// r_sample.cat = 0;
+	// std::cout << "TRANS TEST " << labeling[14] << std::endl << (kb.fabricate(r_sample)).to_s() << std::endl;
 
 	std::vector<Rule> r_list;
 	std::string tree_str;
