@@ -579,8 +579,8 @@ int main(int argc, char* argv[]) {
 	int no;
 	std::vector<int> beat_nums;
 	KnowledgeBase view_kb = ma.kb;
-	//for (int i = 1; i <= labeling.size(); i++) {
-	for (int i = 14; i <= 14; i++) {
+	for (int i = 1; i <= labeling.size(); i++) {
+	// for (int i = 14; i <= 14; i++) {
 		no = i;
 		beat_nums = reader.beat_map[no];
 		std::string name = labeling[no];
