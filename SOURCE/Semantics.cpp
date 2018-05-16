@@ -161,11 +161,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					break;//次に調べる場所がendだったらbreak;
 				}
 				it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
-				//ch_vをitの位置に合わせて修正する
-				// for(int& obj : ch_v){
-				//  　obj++;//ひとつインデックスが増えているのでそれを含んでいるchはすべて増える
-				//   obj--;//最後に処理していなかった分
-				// }
 
 				//aを一回探す
 				while (it != rule.second.end()) {
@@ -946,13 +941,13 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 
 					//この場合はあり得ない
 					//一番最後に追加するパターン
-					if(insert_pos==0&&outer_c==pos){
-					  if(size!=0){
-					    std::cerr << "ALERT" << std::endl;
-					  }
-					  it = rule.second.insert(it,new_b);
-					  break;
-					}
+					// if(insert_pos==0&&outer_c==pos){
+					//   if(size!=0){
+					//     std::cerr << "ALERT" << std::endl;
+					//   }
+					//   it = rule.second.insert(it,new_b);
+					//   break;
+					// }
 
 					//挿入なし
 					//挿入する部分の完成
