@@ -208,7 +208,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					int insert_pos = 0, er_num = 0;
 					//最初はindexなのでスキップ
 					it++;
-					std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << "\"" << std::endl;
+					std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << it == rule.second.end() << "\"" << std::endl;
 					outer_c++;
 					
 					while (it != rule.second.begin() + it_id + num - er_num) {
