@@ -148,7 +148,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			it = rule.second.begin();//itをイテレータから整数へ，順番は保存されているからdの位置を調べる→ループ構造変更
 			size = d_size;
 
-			std::cout << "\n****************test check40" << std::endl;
+			// std::cout << "\n****************test check40" << std::endl;
 
 			next_pos = -1;
 			ch_v.clear();
@@ -164,7 +164,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				//aを一回探す
 				//while (it != rule.second.end()) {
 
-				std::cout << "\n****************test check42" << std::endl;
+				// std::cout << "\n****************test check42" << std::endl;
 
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
@@ -174,7 +174,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					}
 				}
 
-				std::cout << "\n****************test check43" << std::endl;
+				// std::cout << "\n****************test check43" << std::endl;
 
 				if ((*it) == a) {
 						// target_f=true;
@@ -195,7 +195,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					//aをcへ
 					(*it).obj = c.obj;
 
-					std::cout << "\n****************test check44" << std::endl;
+					// std::cout << "\n****************test check44" << std::endl;
 
 					//outerをカウントしてposになったら，
 					//rule.second.begin()からの位置insert_posを決定，
@@ -208,13 +208,13 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					int insert_pos = 0, er_num = 0;
 					//最初はindexなのでスキップ
 					it++;
-					std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+					// std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
 					outer_c++;
 					
 					while (it != rule.second.begin() + it_id + num - er_num) {
-						std::cout << "\n****************test check50" << std::endl;
+						// std::cout << "\n****************test check50" << std::endl;
 						int it_ch = (*it).ch.front();
-						std::cout << "\n****************test check46" << std::endl;
+						// std::cout << "\n****************test check46" << std::endl;
 						if (!inner_flag && outer_c == pos) {
 							inner_c = 0;
 							inner_flag = true;
@@ -223,7 +223,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 								break;
 							}
 						}
-						std::cout << "\n****************test check47" << std::endl;
+						// std::cout << "\n****************test check47" << std::endl;
 						if (inner_flag) {
 							int itr_num = (*it).ch.front();
 							for (int j = 0; j < itr_num; j++) {
@@ -240,7 +240,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							//eraseによって次の値になってるからitの移動はいらない
 						}
 						else {
-							std::cout << "\n****************test check48" << std::endl;
+							// std::cout << "\n****************test check48" << std::endl;
 							it += it_ch;
 							outer_c++;
 						}
@@ -254,7 +254,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					// 	break;
 					// }
 
-					std::cout << "\n****************test check45" << std::endl;
+					// std::cout << "\n****************test check45" << std::endl;
 
 					//挿入する部分の完成
 					new_d.set_ch(d_in_res.size() + 1);
@@ -277,7 +277,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			size = e_size;
 			it = rule.second.begin();
 
-			std::cout << "\n****************test check41" << std::endl;
+			// std::cout << "\n****************test check41" << std::endl;
 
 			//bを一回探すのを繰り返す
 			next_pos = -1;
@@ -290,121 +290,118 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					break;//次に調べる場所がendだったらbreak;
 				}
 				it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
-				//ch_vをitの位置に合わせて修正する
-				// for(int& obj : ch_v){
-				//  　obj++;//ひとつインデックスが増えているのでそれを含んでいるchはすべて増える
-				//   obj--;//最後に処理していなかった分
-				// }
 
-				//bを一回探す
-				while (it != rule.second.end()) {
-					//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
-					if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-						for (int obj : (*it).ch) {
-							ch_v.push_back(obj);
-							outer_list.push_back(it - rule.second.begin());
-						}
+				//aを一回探す
+				//while (it != rule.second.end()) {
+
+				// std::cout << "\n****************test check42" << std::endl;
+
+				//ch_vの処理,outer_list処理.
+				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
+					for (int obj : (*it).ch) {
+						ch_v.push_back(obj);
+						outer_list.push_back(it - rule.second.begin());
 					}
+				}
 
-					if ((*it) == b) {
+				// std::cout << "\n****************test check43" << std::endl;
+
+				if ((*it) == b) {
 						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
-							ch_v.push_back(1);
-							outer_list.push_back(it - rule.second.begin());
-						}
-						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
-						Element new_e;
-						new_e = e;
-						e_in_res.clear();
-
-						//bをcへ
-						(*it).obj = c.obj;
-
-						//outerをカウントしてposになったら，
-						//rule.second.begin()からの位置insert_posを決定，
-						//そしてsize分outerとそれに連なるinnerをとって
-						//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
-						//dのchを決定とともにdが含む挿入部分の完成，
-						//insert_posに挿入部分を組み込む
-						int outer_c = 0, inner_c;
-						bool inner_flag = false;
-						int insert_pos = 0, er_num = 0;
-						//最初はindexなのでスキップ
-						it++;
-						outer_c++;
-						while (it != rule.second.begin() + it_id + num - er_num) {
-							int it_ch = (*it).ch.front();
-							if (!inner_flag && outer_c == pos) {
-								inner_c = 0;
-								inner_flag = true;
-								insert_pos = it - rule.second.begin();
-								if (inner_c == size) {
-									break;
-								}
-							}
-							if (inner_flag) {
-								int itr_num = (*it).ch.front();
-								for (int j = 0; j < itr_num; j++) {
-									auto r = *it;
-									e_in_res.push_back(r);
-									it = rule.second.erase(it);
-									er_num++;
-								}
-
-								inner_c++;
-								if (inner_c == size) {
-									break;
-								}
-								//eraseによって次の値になってるからitの移動はいらない
-							}
-							else {
-								it += it_ch;
-								outer_c++;
-							}
-						}
-						//一番最後に追加するパターン
-						if (insert_pos == 0 && outer_c == pos) {
-							if (size != 0) {
-								std::cerr << "ALERT" << std::endl;
-							}
-							rule.second.insert(it, new_e);
-							break;
-						}
-
-						//挿入する部分の完成
-						new_e.set_ch(e_in_res.size() + 1);
-						e_in_res.insert(e_in_res.begin(), new_e);
-
-						//適切な位置への挿入
-						rule.second.insert(rule.second.begin() + insert_pos, e_in_res.begin(), e_in_res.end());
-
-						break;
+					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+						ch_v.push_back(1);
+						outer_list.push_back(it - rule.second.begin());
 					}
-
-
-					for (int& obj : ch_v) {
-						obj--;
-						if (obj == 0) {
-							// buffer.push_back(Prefices::RPRN);
-							outer_list.pop_back();
-						}
+					for (int o_el : outer_list) {
+						// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
-					boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
+					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
+					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+					Element new_e;
+					new_e = e;
+					e_in_res.clear();
 
+					//aをcへ
+					(*it).obj = c.obj;
+
+					// std::cout << "\n****************test check44" << std::endl;
+
+					//outerをカウントしてposになったら，
+					//rule.second.begin()からの位置insert_posを決定，
+					//そしてsize分outerとそれに連なるinnerをとって
+					//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
+					//dのchを決定とともにdが含む挿入部分の完成，
+					//insert_posに挿入部分を組み込む
+					int outer_c = 0, inner_c;
+					bool inner_flag = false;
+					int insert_pos = 0, er_num = 0;
+					//最初はindexなのでスキップ
 					it++;
-					next_pos = it - rule.second.begin();
+					// std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+					outer_c++;
+					
+					while (it != rule.second.begin() + it_id + num - er_num) {
+						// std::cout << "\n****************test check50" << std::endl;
+						int it_ch = (*it).ch.front();
+						// std::cout << "\n****************test check46" << std::endl;
+						if (!inner_flag && outer_c == pos) {
+							inner_c = 0;
+							inner_flag = true;
+							insert_pos = it - rule.second.begin();
+							if (inner_c == size) {
+								break;
+							}
+						}
+						// std::cout << "\n****************test check47" << std::endl;
+						if (inner_flag) {
+							int itr_num = (*it).ch.front();
+							for (int j = 0; j < itr_num; j++) {
+								auto r = *it;
+								e_in_res.push_back(r);
+								it = rule.second.erase(it);
+								er_num++;
+							}
+
+							inner_c++;
+							if (inner_c == size) {
+								break;
+							}
+							//eraseによって次の値になってるからitの移動はいらない
+						}
+						else {
+							// std::cout << "\n****************test check48" << std::endl;
+							it += it_ch;
+							outer_c++;
+						}
+					}
+					// //に追加するパターン
+					// if (insert_pos == 0 && outer_c == pos) {
+					// 	if (size != 0) {
+					// 		std::cerr << "ALERT" << std::endl;
+					// 	}
+					// 	rule.second.insert(it, new_d);
+					// 	break;
+					// }
+
+					// std::cout << "\n****************test check45" << std::endl;
+
+					//挿入する部分の完成
+					new_e.set_ch(e_in_res.size() + 1);
+					e_in_res.insert(e_in_res.begin(), new_e);
+
+					//適切な位置への挿入
+					rule.second.insert(rule.second.begin() + insert_pos, e_in_res.begin(), e_in_res.end());
 				}
 
-				//itの位置でouter_listをリセットする
-				if (it == rule.second.end()) {
-					outer_list.clear();
+				for (int& obj : ch_v) {
+					obj--;
+					if (obj == 0) {
+						// buffer.push_back(Prefices::RPRN);
+						outer_list.pop_back();
+					}
 				}
-
-				for (int o_el : outer_list) {
-					// std::cout << "ADDING: [" << o_el << "]" << std::endl;
-					(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
-				}
+				boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
 			}
 		}
 	}
@@ -445,146 +442,124 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			ch_v.clear();
 			outer_list.clear();
 			while (next_pos < (int)rule.second.size()) {//最後に調べた場所がendかどうかチェック
-
-			  // std::cout << "\n****************test check44" << std::endl;
-
 				next_pos += 1;//次の位置が戻ってきたときの最後に調べた位置になる
 				if ((rule.second.begin() + next_pos) == rule.second.end()) {
 					it = rule.second.end();
 					break;//次に調べる場所がendだったらbreak;
 				}
 				it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
-				//ch_vをitの位置に合わせて修正する
-				// for(int& obj : ch_v){
-				//  　obj++;//ひとつインデックスが増えているのでそれを含んでいるchはすべて増える
-				//   obj--;//最後に処理していなかった分
-				// }
 
 				//aを一回探す
-				while (it != rule.second.end()) {
-					// std::cout << "\n****************test check45" << std::endl;
-					//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
-					if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-						for (int obj : (*it).ch) {
-							ch_v.push_back(obj);
-							outer_list.push_back(it - rule.second.begin());
-						}
-					}
+				//while (it != rule.second.end()) {
 
-					if ((*it) == a) {
-						// std::cout << "\n****************test check46" << std::endl;
+				// std::cout << "\n****************test check42" << std::endl;
+
+				//ch_vの処理,outer_list処理.
+				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
+					for (int obj : (*it).ch) {
+						ch_v.push_back(obj);
+						outer_list.push_back(it - rule.second.begin());
+					}
+				}
+
+				// std::cout << "\n****************test check43" << std::endl;
+
+				if ((*it) == a) {
 						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
-							ch_v.push_back(1);
-							outer_list.push_back(it - rule.second.begin());
-						}
-						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
-						Element new_d;
-						new_d = d;
-						d_in_res.clear();
-
-						//aをcへ
-						(*it).obj = c.obj;
-
-						//outerをカウントしてposになったら，
-						//rule.second.begin()からの位置insert_posを決定，
-						//そしてsize分outerとそれに連なるinnerをとって
-						//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
-						//dのchを決定とともにdが含む挿入部分の完成，
-						//insert_posに挿入部分を組み込む
-						// std::cout << "\n****************test check48" << std::endl;
-						int outer_c = 0, inner_c;
-						bool inner_flag = false;
-						int insert_pos = 0, er_num = 0;
-						//最初はindexなのでスキップ
-						it++;
-						outer_c++;
-						while (it != rule.second.begin() + it_id + num - er_num) {
-							int it_ch = (*it).ch.front();
-							if (!inner_flag && outer_c == pos) {
-								inner_c = 0;
-								inner_flag = true;
-								insert_pos = it - rule.second.begin();
-								if (inner_c == size) {
-									break;
-								}
-							}
-							// std::cout << "\n****************test check50 inner_flag: " << inner_flag << std::endl;
-							if (inner_flag) {
-								int itr_num = (*it).ch.front();
-								for (int j = 0; j < itr_num; j++) {
-									auto r = *it;
-									// std::cout << "\n****************test check54" << std::endl;
-									d_in_res.push_back(r);
-									// std::cout << "\n****************test check55 ch.front()=" << itr_num << << std::endl;
-									it = rule.second.erase(it);
-									// std::cout << "\n****************test check56" << std::endl;
-									er_num++;
-								}
-
-								// std::cout << "\n****************test check53" << std::endl;
-
-								inner_c++;
-								if (inner_c == size) {
-									break;
-								}
-								//eraseによって次の値になってるからitの移動はいらない
-							}
-							else {
-								it += it_ch;
-								outer_c++;
-							}
-						}
-						// std::cout << "\n****************test check51" << std::endl;
-						//一番最後に追加するパターン
-						if (insert_pos == 0 && outer_c == pos) {
-							if (size != 0) {
-								std::cerr << "ALERT" << std::endl;
-							}
-							rule.second.insert(it, new_d);
-							break;
-						}
-
-						// std::cout << "\n****************test check52" << std::endl;
-
-						//挿入する部分の完成
-						new_d.set_ch(d_in_res.size() + 1);
-						d_in_res.insert(d_in_res.begin(), new_d);
-
-						//適切な位置への挿入
-						rule.second.insert(rule.second.begin() + insert_pos, d_in_res.begin(), d_in_res.end());
-
-						break;
+					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+						ch_v.push_back(1);
+						outer_list.push_back(it - rule.second.begin());
 					}
-
-					// std::cout << "\n****************test check49" << std::endl;
-
-
-					for (int& obj : ch_v) {
-						obj--;
-						if (obj == 0) {
-							// buffer.push_back(Prefices::RPRN);
-							outer_list.pop_back();
-						}
+					for (int o_el : outer_list) {
+						// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
-					boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
+					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
+					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+					Element new_d;
+					new_d = d;
+					d_in_res.clear();
 
+					//aをcへ
+					(*it).obj = c.obj;
+
+					// std::cout << "\n****************test check44" << std::endl;
+
+					//outerをカウントしてposになったら，
+					//rule.second.begin()からの位置insert_posを決定，
+					//そしてsize分outerとそれに連なるinnerをとって
+					//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
+					//dのchを決定とともにdが含む挿入部分の完成，
+					//insert_posに挿入部分を組み込む
+					int outer_c = 0, inner_c;
+					bool inner_flag = false;
+					int insert_pos = 0, er_num = 0;
+					//最初はindexなのでスキップ
 					it++;
-					next_pos = it - rule.second.begin();
+					// std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+					outer_c++;
+					
+					while (it != rule.second.begin() + it_id + num - er_num) {
+						// std::cout << "\n****************test check50" << std::endl;
+						int it_ch = (*it).ch.front();
+						// std::cout << "\n****************test check46" << std::endl;
+						if (!inner_flag && outer_c == pos) {
+							inner_c = 0;
+							inner_flag = true;
+							insert_pos = it - rule.second.begin();
+							if (inner_c == size) {
+								break;
+							}
+						}
+						// std::cout << "\n****************test check47" << std::endl;
+						if (inner_flag) {
+							int itr_num = (*it).ch.front();
+							for (int j = 0; j < itr_num; j++) {
+								auto r = *it;
+								d_in_res.push_back(r);
+								it = rule.second.erase(it);
+								er_num++;
+							}
+
+							inner_c++;
+							if (inner_c == size) {
+								break;
+							}
+							//eraseによって次の値になってるからitの移動はいらない
+						}
+						else {
+							// std::cout << "\n****************test check48" << std::endl;
+							it += it_ch;
+							outer_c++;
+						}
+					}
+					// //に追加するパターン
+					// if (insert_pos == 0 && outer_c == pos) {
+					// 	if (size != 0) {
+					// 		std::cerr << "ALERT" << std::endl;
+					// 	}
+					// 	rule.second.insert(it, new_d);
+					// 	break;
+					// }
+
+					// std::cout << "\n****************test check45" << std::endl;
+
+					//挿入する部分の完成
+					new_d.set_ch(d_in_res.size() + 1);
+					d_in_res.insert(d_in_res.begin(), new_d);
+
+					//適切な位置への挿入
+					rule.second.insert(rule.second.begin() + insert_pos, d_in_res.begin(), d_in_res.end());
 				}
 
-				// std::cout << "\n****************test check47" << std::endl;
-
-				//itの位置でouter_listをリセットする
-				if (it == rule.second.end()) {
-					outer_list.clear();
+				for (int& obj : ch_v) {
+					obj--;
+					if (obj == 0) {
+						// buffer.push_back(Prefices::RPRN);
+						outer_list.pop_back();
+					}
 				}
-
-				for (int o_el : outer_list) {
-					// std::cout << "ADDING: [" << o_el << "]" << std::endl;
-					(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
-				}
+				boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
 			}
 		}
 	}
@@ -697,134 +672,124 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 		ch_v.clear();
 		outer_list.clear();
 		while (next_pos < (int)rule.second.size()) {//最後に調べた場所がendかどうかチェック
-
-			// std::cout << "\n****************test check32" << std::endl;
-
 			next_pos += 1;//次の位置が戻ってきたときの最後に調べた位置になる
 			if ((rule.second.begin() + next_pos) == rule.second.end()) {
 				it = rule.second.end();
 				break;//次に調べる場所がendだったらbreak;
 			}
 			it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
-			//ch_vをitの位置に合わせて修正する
-			// for(int& obj : ch_v){
-			//  　obj++;//ひとつインデックスが増えているのでそれを含んでいるchはすべて増える
-			//   obj--;//最後に処理していなかった分
-			// }
 
 			//aを一回探す
-			while (it != rule.second.end()) {
+			//while (it != rule.second.end()) {
 
-				// std::cout << "CHECK: " << (*it).to_s() << std::endl;
+			// std::cout << "\n****************test check42" << std::endl;
 
-				//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
-				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-					for (int obj : (*it).ch) {
-						ch_v.push_back(obj);
-						outer_list.push_back(it - rule.second.begin());
-					}
+			//ch_vの処理,outer_list処理.
+			if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
+				for (int obj : (*it).ch) {
+					ch_v.push_back(obj);
+					outer_list.push_back(it - rule.second.begin());
 				}
+			}
 
-				if ((*it) == a) {
+			// std::cout << "\n****************test check43" << std::endl;
+
+			if ((*it) == a) {
 					// target_f=true;
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
-						ch_v.push_back(1);
-						outer_list.push_back(it - rule.second.begin());
-					}
-					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
-					Element new_b;
-					new_b = b;
-					b_in_res.clear();
-
-					//aをcへ
-					(*it).obj = c.obj;
-
-					//outerをカウントしてposになったら，
-					//rule.second.begin()からの位置insert_posを決定，
-					//そしてsize分outerとそれに連なるinnerをとって
-					//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
-					//dのchを決定とともにdが含む挿入部分の完成，
-					//insert_posに挿入部分を組み込む
-					int outer_c = 0, inner_c;
-					bool inner_flag = false;
-					int insert_pos = 0, er_num = 0;
-					//最初はindexなのでスキップ
-					it++;
-					outer_c++;
-					while (it != rule.second.begin() + it_id + num - er_num) {
-						int it_ch = (*it).ch.front();
-						if (!inner_flag && outer_c == pos) {
-							inner_c = 0;
-							inner_flag = true;
-							insert_pos = it - rule.second.begin();
-							if (inner_c == size) {
-								break;
-							}
-						}
-						if (inner_flag) {
-							int itr_num = (*it).ch.front();
-							for (int j = 0; j < itr_num; j++) {
-								auto r = *it;
-								b_in_res.push_back(r);
-								it = rule.second.erase(it);
-								er_num++;
-							}
-
-							inner_c++;
-							if (inner_c == size) {
-								break;
-							}
-							//eraseによって次の値になってるからitの移動はいらない
-						}
-						else {
-							it += it_ch;
-							outer_c++;
-						}
-					}
-					//一番最後に追加するパターン
-					if (insert_pos == 0 && outer_c == pos) {
-						if (size != 0) {
-							std::cerr << "ALERT" << std::endl;
-						}
-						it = rule.second.insert(it, new_b);
-						break;
-					}
-
-					//挿入する部分の完成
-					new_b.set_ch(b_in_res.size() + 1);
-					b_in_res.insert(b_in_res.begin(), new_b);
-
-					//適切な位置への挿入
-					it = rule.second.insert(rule.second.begin() + insert_pos, b_in_res.begin(), b_in_res.end());
-
-					break;
+				if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+					ch_v.push_back(1);
+					outer_list.push_back(it - rule.second.begin());
 				}
-
-				//?
-
-				for (int& obj : ch_v) {
-					obj--;
-					if (obj == 0) {
-						// buffer.push_back(Prefices::RPRN);
-						outer_list.pop_back();//?
-					}
+				for (int o_el : outer_list) {
+					// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+					(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 				}
-				boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
+				//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
+				int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+				Element new_b;
+				new_b = b;
+				b_in_res.clear();
 
+				//aをcへ
+				(*it).obj = c.obj;
+
+				// std::cout << "\n****************test check44" << std::endl;
+
+				//outerをカウントしてposになったら，
+				//rule.second.begin()からの位置insert_posを決定，
+				//そしてsize分outerとそれに連なるinnerをとって
+				//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
+				//dのchを決定とともにdが含む挿入部分の完成，
+				//insert_posに挿入部分を組み込む
+				int outer_c = 0, inner_c;
+				bool inner_flag = false;
+				int insert_pos = 0, er_num = 0;
+				//最初はindexなのでスキップ
 				it++;
-				next_pos = it - rule.second.begin();
+				// std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+				outer_c++;
+					
+				while (it != rule.second.begin() + it_id + num - er_num) {
+					// std::cout << "\n****************test check50" << std::endl;
+					int it_ch = (*it).ch.front();
+					// std::cout << "\n****************test check46" << std::endl;
+					if (!inner_flag && outer_c == pos) {
+						inner_c = 0;
+						inner_flag = true;
+						insert_pos = it - rule.second.begin();
+						if (inner_c == size) {
+							break;
+						}
+					}
+					// std::cout << "\n****************test check47" << std::endl;
+					if (inner_flag) {
+						int itr_num = (*it).ch.front();
+						for (int j = 0; j < itr_num; j++) {
+							auto r = *it;
+							b_in_res.push_back(r);
+							it = rule.second.erase(it);
+							er_num++;
+						}
+
+						inner_c++;
+						if (inner_c == size) {
+							break;
+						}
+						//eraseによって次の値になってるからitの移動はいらない
+					}
+					else {
+						// std::cout << "\n****************test check48" << std::endl;
+						it += it_ch;
+						outer_c++;
+					}
+				}
+				// //に追加するパターン
+				// if (insert_pos == 0 && outer_c == pos) {
+				// 	if (size != 0) {
+				// 		std::cerr << "ALERT" << std::endl;
+				// 	}
+				// 	rule.second.insert(it, new_d);
+				// 	break;
+				// }
+
+				// std::cout << "\n****************test check45" << std::endl;
+
+				//挿入する部分の完成
+				new_b.set_ch(b_in_res.size() + 1);
+				b_in_res.insert(b_in_res.begin(), new_b);
+
+				//適切な位置への挿入
+				rule.second.insert(rule.second.begin() + insert_pos, b_in_res.begin(), b_in_res.end());
 			}
 
-			//itの位置でouter_listをリセットする
-			if (it == rule.second.end()) {
-				outer_list.clear();//?
+			for (int& obj : ch_v) {
+				obj--;
+				if (obj == 0) {
+					// buffer.push_back(Prefices::RPRN);
+					outer_list.pop_back();
+				}
 			}
-
-			for (int o_el : outer_list) {
-				// std::cout << "ADDING: [" << o_el << "]" << std::endl;
-				(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
-			}
+			boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
 		}
 	}
 
