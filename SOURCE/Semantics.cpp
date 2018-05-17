@@ -167,7 +167,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					// std::cout << "\n****************test check42" << std::endl;
 
-					//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
+					//ch_vの処理,outer_list処理.
 					if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
 						for (int obj : (*it).ch) {
 							ch_v.push_back(obj);
@@ -177,9 +177,13 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					if ((*it) == a) {
 						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//ほんとはスキップすればいいんだけどテスト段階なので簡単に実装
+						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
 							ch_v.push_back(1);
 							outer_list.push_back(it - rule.second.begin());
+						}
+						for (int o_el : outer_list) {
+							// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+							(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 						}
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
@@ -238,6 +242,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 								std::cerr << "ALERT" << std::endl;
 							}
 							rule.second.insert(it, new_d);
+
 							break;
 						}
 
@@ -265,15 +270,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					next_pos = it - rule.second.begin();
 				}
 
-				//itの位置でouter_listをリセットする
-				if (it == rule.second.end()) {
-					outer_list.clear();
-				}
-
-				for (int o_el : outer_list) {
-					// std::cout << "ADDING: [" << o_el << "]" << std::endl;
-					(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
-				}
 			}
 
 			size = e_size;
