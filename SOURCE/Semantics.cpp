@@ -211,6 +211,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					outer_c++;
 					while (it != rule.second.begin() + it_id + num - er_num) {
 						int it_ch = (*it).ch.front();
+						std::cout << "\n****************test check46" << std::endl;
 						if (!inner_flag && outer_c == pos) {
 							inner_c = 0;
 							inner_flag = true;
@@ -219,6 +220,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 								break;
 							}
 						}
+						std::cout << "\n****************test check47" << std::endl;
 						if (inner_flag) {
 							int itr_num = (*it).ch.front();
 							for (int j = 0; j < itr_num; j++) {
@@ -235,6 +237,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							//eraseによって次の値になってるからitの移動はいらない
 						}
 						else {
+							std::cout << "\n****************test check48" << std::endl;
 							it += it_ch;
 							outer_c++;
 						}
