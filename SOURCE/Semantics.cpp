@@ -148,7 +148,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			it = rule.second.begin();//itをイテレータから整数へ，順番は保存されているからdの位置を調べる→ループ構造変更
 			size = d_size;
 
-			// std::cout << "\n****************test check40 ch_size=" << (*rule.second.begin()).ch.size() << std::endl;
+			std::cout << "\n****************test check40 ch_size=" << (*rule.second.begin()).ch.size() << std::endl;
 
 			next_pos = -1;
 			ch_v.clear();
@@ -235,15 +235,14 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							outer_c++;
 						}
 					}
-					//一番最後に追加するパターン
-					if (insert_pos == 0 && outer_c == pos) {
-						if (size != 0) {
-							std::cerr << "ALERT" << std::endl;
-						}
-						rule.second.insert(it, new_d);
-						it = rule.second.begin() + next_pos;
-						break;
-					}
+					// //に追加するパターン
+					// if (insert_pos == 0 && outer_c == pos) {
+					// 	if (size != 0) {
+					// 		std::cerr << "ALERT" << std::endl;
+					// 	}
+					// 	rule.second.insert(it, new_d);
+					// 	break;
+					// }
 
 					//挿入する部分の完成
 					new_d.set_ch(d_in_res.size() + 1);
@@ -266,7 +265,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			size = e_size;
 			it = rule.second.begin();
 
-			// std::cout << "\n****************test check41" << std::endl;
+			std::cout << "\n****************test check41" << std::endl;
 
 			//bを一回探すのを繰り返す
 			next_pos = -1;
