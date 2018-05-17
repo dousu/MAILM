@@ -245,14 +245,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							outer_c++;
 						}
 					}
-					// //に追加するパターン
-					// if (insert_pos == 0 && outer_c == pos) {
-					// 	if (size != 0) {
-					// 		std::cerr << "ALERT" << std::endl;
-					// 	}
-					// 	rule.second.insert(it, new_d);
-					// 	break;
-					// }
+					//最後に追加するパターン
+					if (insert_pos == 0) {
+						insert_pos = next_pos;
+					}
 
 					std::cout << "\n****************test check45" << std::endl;
 
@@ -375,14 +371,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							outer_c++;
 						}
 					}
-					// //に追加するパターン
-					// if (insert_pos == 0 && outer_c == pos) {
-					// 	if (size != 0) {
-					// 		std::cerr << "ALERT" << std::endl;
-					// 	}
-					// 	rule.second.insert(it, new_d);
-					// 	break;
-					// }
+					//最後に追加するパターン
+					if (insert_pos == 0) {
+						insert_pos = next_pos;
+					}
 
 					std::cout << "\n****************test check45b" << std::endl;
 
@@ -533,14 +525,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							outer_c++;
 						}
 					}
-					// //に追加するパターン
-					// if (insert_pos == 0 && outer_c == pos) {
-					// 	if (size != 0) {
-					// 		std::cerr << "ALERT" << std::endl;
-					// 	}
-					// 	rule.second.insert(it, new_d);
-					// 	break;
-					// }
+					//最後に追加するパターン
+					if (insert_pos == 0) {
+						insert_pos = next_pos;
+					}
 
 					std::cout << "\n****************test check45c" << std::endl;
 
@@ -763,14 +751,10 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 						outer_c++;
 					}
 				}
-				// //に追加するパターン
-				// if (insert_pos == 0 && outer_c == pos) {
-				// 	if (size != 0) {
-				// 		std::cerr << "ALERT" << std::endl;
-				// 	}
-				// 	rule.second.insert(it, new_d);
-				// 	break;
-				// }
+				//最後に追加するパターン
+				if (insert_pos == 0) {
+					insert_pos = next_pos;
+				}
 
 				// std::cout << "\n****************test check45" << std::endl;
 
