@@ -248,7 +248,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					//最後に追加するパターン
 					if (insert_pos == 0) {
 						insert_pos = next_pos;
-					}
+					}else{new_b.set_ch(b_in_res.size() + 1);}
 
 					std::cout << "\n****************test check45" << std::endl;
 
@@ -374,7 +374,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					//最後に追加するパターン
 					if (insert_pos == 0) {
 						insert_pos = next_pos;
-					}
+					}else{new_b.set_ch(b_in_res.size() + 1);}
 
 					std::cout << "\n****************test check45b" << std::endl;
 
@@ -528,7 +528,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					//最後に追加するパターン
 					if (insert_pos == 0) {
 						insert_pos = next_pos;
-					}
+					}else{new_b.set_ch(b_in_res.size() + 1);}
 
 					std::cout << "\n****************test check45c" << std::endl;
 
@@ -754,12 +754,11 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 				//最後に追加するパターン
 				if (insert_pos == 0) {
 					insert_pos = next_pos;
-				}
+				}else{new_b.set_ch(b_in_res.size() + 1);}
 
 				// std::cout << "\n****************test check45" << std::endl;
 
 				//挿入する部分の完成
-				new_b.set_ch(b_in_res.size() + 1);
 				b_in_res.insert(b_in_res.begin(), new_b);
 
 				//適切な位置への挿入
