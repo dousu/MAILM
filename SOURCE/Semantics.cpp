@@ -150,7 +150,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 			// std::cout << "\n****************test check40 ch_size=" << (*rule.second.begin()).ch.size() << std::endl;
 
-			//aを一回探すのを繰り返す
 			next_pos = -1;
 			ch_v.clear();
 			outer_list.clear();
@@ -163,114 +162,105 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
 
 				//aを一回探す
-				while (it != rule.second.end()) {
+				//while (it != rule.second.end()) {
 
-					// std::cout << "\n****************test check42" << std::endl;
+				// std::cout << "\n****************test check42" << std::endl;
 
-					//ch_vの処理,outer_list処理.
-					if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-						for (int obj : (*it).ch) {
-							ch_v.push_back(obj);
-							outer_list.push_back(it - rule.second.begin());
+				//ch_vの処理,outer_list処理.
+				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
+					for (int obj : (*it).ch) {
+						ch_v.push_back(obj);
+						outer_list.push_back(it - rule.second.begin());
+					}
+				}
+
+				if ((*it) == a) {
+						// target_f=true;
+					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+						ch_v.push_back(1);
+						outer_list.push_back(it - rule.second.begin());
+					}
+					for (int o_el : outer_list) {
+						// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
+					}
+					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
+					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+					Element new_d;
+					new_d = d;
+					d_in_res.clear();
+
+					//aをcへ
+					(*it).obj = c.obj;
+
+					//outerをカウントしてposになったら，
+					//rule.second.begin()からの位置insert_posを決定，
+					//そしてsize分outerとそれに連なるinnerをとって
+					//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
+					//dのchを決定とともにdが含む挿入部分の完成，
+					//insert_posに挿入部分を組み込む
+					int outer_c = 0, inner_c;
+					bool inner_flag = false;
+					int insert_pos = 0, er_num = 0;
+					//最初はindexなのでスキップ
+					it++;
+					outer_c++;
+					while (it != rule.second.begin() + it_id + num - er_num) {
+						int it_ch = (*it).ch.front();
+						if (!inner_flag && outer_c == pos) {
+							inner_c = 0;
+							inner_flag = true;
+							insert_pos = it - rule.second.begin();
+							if (inner_c == size) {
+								break;
+							}
+						}
+						if (inner_flag) {
+							int itr_num = (*it).ch.front();
+							for (int j = 0; j < itr_num; j++) {
+								auto r = *it;
+								d_in_res.push_back(r);
+								it = rule.second.erase(it);
+								er_num++;
+							}
+
+							inner_c++;
+							if (inner_c == size) {
+								break;
+							}
+							//eraseによって次の値になってるからitの移動はいらない
+						}
+						else {
+							it += it_ch;
+							outer_c++;
 						}
 					}
-
-					if ((*it) == a) {
-						// target_f=true;
-						if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
-							ch_v.push_back(1);
-							outer_list.push_back(it - rule.second.begin());
+					//一番最後に追加するパターン
+					if (insert_pos == 0 && outer_c == pos) {
+						if (size != 0) {
+							std::cerr << "ALERT" << std::endl;
 						}
-						for (int o_el : outer_list) {
-							// std::cout << "ADDING: [" << o_el << "]" << std::endl;
-							(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
-						}
-						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
-						next_pos=it_id + 1; //?
-						Element new_d;
-						new_d = d;
-						d_in_res.clear();
-
-						//aをcへ
-						(*it).obj = c.obj;
-
-						//outerをカウントしてposになったら，
-						//rule.second.begin()からの位置insert_posを決定，
-						//そしてsize分outerとそれに連なるinnerをとって
-						//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
-						//dのchを決定とともにdが含む挿入部分の完成，
-						//insert_posに挿入部分を組み込む
-						int outer_c = 0, inner_c;
-						bool inner_flag = false;
-						int insert_pos = 0, er_num = 0;
-						//最初はindexなのでスキップ
-						it++;
-						outer_c++;
-						while (it != rule.second.begin() + it_id + num - er_num) {
-							int it_ch = (*it).ch.front();
-							if (!inner_flag && outer_c == pos) {
-								inner_c = 0;
-								inner_flag = true;
-								insert_pos = it - rule.second.begin();
-								if (inner_c == size) {
-									break;
-								}
-							}
-							if (inner_flag) {
-								int itr_num = (*it).ch.front();
-								for (int j = 0; j < itr_num; j++) {
-									auto r = *it;
-									d_in_res.push_back(r);
-									it = rule.second.erase(it);
-									er_num++;
-								}
-
-								inner_c++;
-								if (inner_c == size) {
-									break;
-								}
-								//eraseによって次の値になってるからitの移動はいらない
-							}
-							else {
-								it += it_ch;
-								outer_c++;
-							}
-						}
-						//一番最後に追加するパターン
-						if (insert_pos == 0 && outer_c == pos) {
-							if (size != 0) {
-								std::cerr << "ALERT" << std::endl;
-							}
-							rule.second.insert(it, new_d);
-							it = rule.second.begin() + next_pos;
-							break;
-						}
-
-						//挿入する部分の完成
-						new_d.set_ch(d_in_res.size() + 1);
-						d_in_res.insert(d_in_res.begin(), new_d);
-
-						//適切な位置への挿入
-						rule.second.insert(rule.second.begin() + insert_pos, d_in_res.begin(), d_in_res.end());
+						rule.second.insert(it, new_d);
 						it = rule.second.begin() + next_pos;
 						break;
 					}
 
+					//挿入する部分の完成
+					new_d.set_ch(d_in_res.size() + 1);
+					d_in_res.insert(d_in_res.begin(), new_d);
 
-					for (int& obj : ch_v) {
-						obj--;
-						if (obj == 0) {
-							// buffer.push_back(Prefices::RPRN);
-							outer_list.pop_back();
-						}
-					}
-					boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
-
-					it++;
-					next_pos = it - rule.second.begin();
-
+					//適切な位置への挿入
+					rule.second.insert(rule.second.begin() + insert_pos, d_in_res.begin(), d_in_res.end());
 				}
+
+				for (int& obj : ch_v) {
+					obj--;
+					if (obj == 0) {
+						// buffer.push_back(Prefices::RPRN);
+						outer_list.pop_back();
+					}
+				}
+				boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
 			}
 
 			size = e_size;
