@@ -187,6 +187,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						}
 						//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 						int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+						next_pos=it_id + 1;
 						Element new_d;
 						new_d = d;
 						d_in_res.clear();
@@ -266,10 +267,10 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					}
 					boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
 
-					it++;
-					next_pos = it - rule.second.begin();
-				}
+					// it++;
+					// next_pos = it - rule.second.begin();
 
+				}
 			}
 
 			size = e_size;
