@@ -211,6 +211,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					std::cout << "\n****************test check49" << std::endl;
 					outer_c++;
 					while (it != rule.second.begin() + it_id + num - er_num) {
+						std::cout << "\n****************test check50" << std::endl;
 						int it_ch = (*it).ch.front();
 						std::cout << "\n****************test check46" << std::endl;
 						if (!inner_flag && outer_c == pos) {
