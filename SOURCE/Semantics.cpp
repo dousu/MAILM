@@ -122,11 +122,11 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 	if (type == 1) {
 		c_v = mapping[a.obj] - d_v;
 
-		// std::cerr << "c_v: " << c_v.to_s() << std::endl;
-		// std::cerr << "a_v: " << mapping[a.obj].to_s() << std::endl;
-		// std::cerr << "b_v: " << mapping[b.obj].to_s() << std::endl;
-		// std::cerr << "d_v: " << d_v.to_s() << std::endl;
-		// std::cerr << "e_v: " << e_v.to_s() << std::endl;
+		std::cerr << "c_v: " << c_v.to_s() << std::endl;
+		std::cerr << "a_v: " << mapping[a.obj].to_s() << std::endl;
+		std::cerr << "b_v: " << mapping[b.obj].to_s() << std::endl;
+		std::cerr << "d_v: " << d_v.to_s() << std::endl;
+		std::cerr << "e_v: " << e_v.to_s() << std::endl;
 
 		if (c_v != mapping[b.obj] - e_v) {
 			std::cerr << "[chunk]MATCHING ERROR [chunk semantics]" << std::endl;
@@ -183,7 +183,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						outer_list.push_back(it - rule.second.begin());
 					}
 					for (int o_el : outer_list) {
-						// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+						// std::cout << "INCREMENT: [" << o_el << "]" << std::endl;
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
