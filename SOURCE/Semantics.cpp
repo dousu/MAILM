@@ -781,19 +781,17 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 
 	// std::cerr << "Unify to a(" << a.obj << ")" << std::endl;
 
-	//ルールの変更aを取り除いてouterを1減らす
-	std::vector<Element> b_in_res;
+	//ルールの変更 aを取り除いてouterを1減らす
 	std::vector<int> outer_list;
 	std::vector<int> ch_v;
 	int next_pos;
 	int pos, size;
 	for (auto& rule : rules) {
 		std::vector<Element>::iterator it;
-		pos = 1;
-		size = 1;
-
 		//aを一回探すのを繰り返す
 		next_pos = -1;
+		ch_v.clear();
+		outer_list.clear();
 		while (next_pos < (int)rule.second.size()) {//最後に調べた場所がendかどうかチェック
 			next_pos += 1;//次の位置が戻ってきたときの最後に調べた位置になる
 			if ((rule.second.begin() + next_pos) == rule.second.end()) {
@@ -802,113 +800,32 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 			}
 			it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
 
-			ch_v.clear();
-			outer_list.clear();
-			//aを一回探す
-			while (it != rule.second.end()) {
-				//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
-				if ((*it).ch.front() != 1) {
-					ch_v.push_back((*it).ch.front());
-					outer_list.push_back(it - rule.second.begin());
-				}
+			// std::cout << "\n****************test check42" << std::endl;
 
-				if ((*it) == a) {
-					if ((*it).ch.front() == 1) {//これでaの分がpushされてないことはなくなる
-						ch_v.push_back(1);
-						outer_list.push_back(it - rule.second.begin());
-					}
-					outer_list.pop_back();//aの部分は削除するので絶対値参照したときに違う値になっているのでaの分はpop_backする
-
-					//aを削除
-					it = rule.second.erase(it);
-
-					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得//内部が始まる位置はずれる
-					b_in_res.clear();
-
-					//outerをカウントしてposになったら，
-					//rule.second.begin()からの位置insert_posを決定，
-					//そしてsize分outerとそれに連なるinnerをとって
-					//（rule.secondからは削除してほかの部分に移すeraseを使ってitの更新をしてもよい．iteratorは取っておいてない）
-					//dのchを決定とともにdが含む挿入部分の完成，
-					//insert_posに挿入部分を組み込む
-					int outer_c = 0, inner_c;
-					bool inner_flag = false;
-					int insert_pos = 0, er_num = 0;
-					//最初はindexなのでスキップ
-					it++;
-					outer_c++;
-					while (it != rule.second.begin() + it_id + num - er_num) {
-						int it_ch = (*it).ch.front();
-						if (!inner_flag && outer_c == pos) {
-							inner_c = 0;
-							inner_flag = true;
-							insert_pos = it - rule.second.begin();
-						}
-						if (inner_flag) {
-							int itr_num = (*it).ch.front();
-							for (int j = 0; j < itr_num; j++) {
-								auto r = *it;
-								b_in_res.push_back(r);
-								it = rule.second.erase(it);
-								er_num++;
-							}
-
-							inner_c++;
-							if (inner_c == size) {
-								break;
-							}
-							//eraseによって次の値になってるからitの移動はいらない
-						}
-						else {
-							it += it_ch;
-							outer_c++;
-						}
-					}
-
-					//この場合はあり得ない
-					//一番最後に追加するパターン
-					// if(insert_pos==0&&outer_c==pos){
-					//   if(size!=0){
-					//     std::cerr << "ALERT" << std::endl;
-					//   }
-					//   it = rule.second.insert(it,new_b);
-					//   break;
-					// }
-
-					//挿入なし
-					//挿入する部分の完成
-					// new_b.set_ch(b_in_res.size() + 1);
-					// b_in_res.insert(b_in_res.begin(),new_b);
-
-					//適切な位置への挿入
-					it = rule.second.insert(rule.second.begin() + insert_pos, b_in_res.begin(), b_in_res.end());
-
-					break;
-				}
-
-
-				for (int& obj : ch_v) {
-					obj--;
-					if (obj == 0) {
-						// buffer.push_back(Prefices::RPRN);
-						outer_list.pop_back();
-					}
-				}
-				boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
-
-				it++;
-				next_pos = it - rule.second.begin();
+			//ch_vの処理,outer_list処理.
+			if ((*it).ch.front() != 1) {
+				ch_v.push_back((*it).ch.front());
+				outer_list.push_back(it - rule.second.begin());
 			}
 
-			//itの位置でouter_listをリセットする
-			if (it == rule.second.end()) {
-				outer_list.clear();
+			// std::cout << "\n****************test check43" << std::endl;
+
+			if ((*it) == a) {
+				for (int o_el : outer_list) {
+					// std::cout << "ADDING: [" << o_el << "]" << std::endl;
+					(*(rule.second.begin() + o_el)).ch.front()--;//ひとつしかch持ってない想定
+				}
+				rule.second.erase(it);
+				next_pos--;
 			}
 
-			for (int o_el : outer_list) {
-				(*(rule.second.begin() + o_el)).ch.front()--;//ひとつしかch持ってない想定
+			for (int& obj : ch_v) {
+				obj--;
+				if (obj == 0) {
+					outer_list.pop_back();
+				}
 			}
+			boost::remove_erase_if(ch_v, [](int obj) { return obj == 0; });
 		}
 	}
 }
