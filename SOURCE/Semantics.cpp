@@ -122,11 +122,11 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 	if (type == 1) {
 		c_v = mapping[a.obj] - d_v;
 
-		std::cerr << "c_v: " << c_v.to_s() << std::endl;
-		std::cerr << "a_v: " << mapping[a.obj].to_s() << std::endl;
-		std::cerr << "b_v: " << mapping[b.obj].to_s() << std::endl;
-		std::cerr << "d_v: " << d_v.to_s() << std::endl;
-		std::cerr << "e_v: " << e_v.to_s() << std::endl;
+		// std::cerr << "c_v: " << c_v.to_s() << std::endl;
+		// std::cerr << "a_v: " << mapping[a.obj].to_s() << std::endl;
+		// std::cerr << "b_v: " << mapping[b.obj].to_s() << std::endl;
+		// std::cerr << "d_v: " << d_v.to_s() << std::endl;
+		// std::cerr << "e_v: " << e_v.to_s() << std::endl;
 
 		if (c_v != mapping[b.obj] - e_v) {
 			std::cerr << "[chunk]MATCHING ERROR [chunk semantics]" << std::endl;
@@ -200,13 +200,13 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					int insert_pos = 0, er_num = 0;
 					//最初はindexなのでスキップ
 					it++;
-					std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+					// std::cout << "\n****************test check49 it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
 					outer_c++;
 					
 					while (it != rule.second.begin() + it_id + num - er_num) {
-						std::cout << "\n****************test check50" << std::endl;
+						// std::cout << "\n****************test check50" << std::endl;
 						int it_ch = (*it).ch.front();
-						std::cout << "\n****************test check46" << std::endl;
+						// std::cout << "\n****************test check46" << std::endl;
 						if (!inner_flag && outer_c == pos) {
 							inner_c = 0;
 							inner_flag = true;
@@ -264,7 +264,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			size = e_size;
 			it = rule.second.begin();
 
-			std::cout << "\n****************test check41b" << std::endl;
+			// std::cout << "\n****************test check41b" << std::endl;
 
 			//bを一回探すのを繰り返す
 			next_pos = -1;
@@ -317,13 +317,13 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					int insert_pos = 0, er_num = 0;
 					//最初はindexなのでスキップ
 					it++;
-					std::cout << "\n****************test check49b it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+					// std::cout << "\n****************test check49b it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
 					outer_c++;
-					std::cout << "\n****************test check49.5b it_id=" << it - rule.second.begin() - 1 << " it=" << (it - rule.second.begin()) << " num=" << num << " er_num=" << er_num << std::endl;
+					// std::cout << "\n****************test check49.5b it_id=" << it - rule.second.begin() - 1 << " it=" << (it - rule.second.begin()) << " num=" << num << " er_num=" << er_num << std::endl;
 					while (it != rule.second.begin() + it_id + num - er_num) {
-						std::cout << "\n****************test check50b" << std::endl;
+						// std::cout << "\n****************test check50b" << std::endl;
 						int it_ch = (*it).ch.front();
-						std::cout << "\n****************test check46b" << std::endl;
+						// std::cout << "\n****************test check46b" << std::endl;
 						if (!inner_flag && outer_c == pos) {
 							inner_c = 0;
 							inner_flag = true;
@@ -462,13 +462,13 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					int insert_pos = 0, er_num = 0;
 					//最初はindexなのでスキップ
 					it++;
-					std::cout << "\n****************test check49c it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
+					// std::cout << "\n****************test check49c it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
 					outer_c++;
 					
 					while (it != rule.second.begin() + it_id + num - er_num) {
-						std::cout << "\n****************test check50c" << std::endl;
+						// std::cout << "\n****************test check50c" << std::endl;
 						int it_ch = (*it).ch.front();
-						std::cout << "\n****************test check46c" << std::endl;
+						// std::cout << "\n****************test check46c" << std::endl;
 						if (!inner_flag && outer_c == pos) {
 							inner_c = 0;
 							inner_flag = true;
@@ -530,7 +530,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 	}
 	mapping.erase(a.obj);
 	mapping.erase(b.obj);
-	std::cout << "\n****************test check2 end" << std::endl;
+	// std::cout << "\n****************test check2 end" << std::endl;
 
 	// std::cout << rules_to_s() << std::endl;
 
