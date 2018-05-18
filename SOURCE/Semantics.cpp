@@ -178,6 +178,9 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						// std::cout << "INCREMENT: [" << o_el << "]" << std::endl;
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
+					for (int& obj : ch_v) {
+						obj++;
+					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 					int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
 					Element new_d;
@@ -292,6 +295,9 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					for (int o_el : outer_list) {
 						// std::cout << "ADDING: [" << o_el << "]" << std::endl;
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
+					}
+					for (int& obj : ch_v) {
+						obj++;
 					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 					int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
@@ -435,6 +441,9 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					for (int o_el : outer_list) {
 						// std::cout << "ADDING: [" << o_el << "]" << std::endl;
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
+					}
+					for (int& obj : ch_v) {
+						obj++;
 					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 					int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
@@ -656,6 +665,9 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 				for (int o_el : outer_list) {
 					// std::cout << "ADDING: [" << o_el << "]" << std::endl;
 					(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
+				}
+				for (int& obj : ch_v) {
+					obj++;
 				}
 				//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
 				int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
