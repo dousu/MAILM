@@ -163,16 +163,14 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				//while (it != rule.second.end()) {
 
 				//ch_vの処理,outer_list処理.
-				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-					for (int obj : (*it).ch) {
-						ch_v.push_back(obj);
-						outer_list.push_back(it - rule.second.begin());
-					}
+				if ((*it).ch.front() != 1) {
+					ch_v.push_back((*it).ch.front())
+					outer_list.push_back(it - rule.second.begin());
 				}
 
 				if ((*it) == a) {
 						// target_f=true;
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+					if ((*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
 					}
@@ -280,16 +278,14 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 				//aを一回探す
 				//ch_vの処理,outer_list処理.
-				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-					for (int obj : (*it).ch) {
-						ch_v.push_back(obj);
-						outer_list.push_back(it - rule.second.begin());
-					}
+				if ((*it).ch.front() != 1) {
+					ch_v.push_back((*it).ch.front())
+					outer_list.push_back(it - rule.second.begin());
 				}
 
 				if ((*it) == b) {
 						// target_f=true;
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+					if ((*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
 					}
@@ -425,16 +421,14 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				//while (it != rule.second.end()) {
 
 				//ch_vの処理,outer_list処理.
-				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-					for (int obj : (*it).ch) {
-						ch_v.push_back(obj);
-						outer_list.push_back(it - rule.second.begin());
-					}
+				if ((*it).ch.front() != 1) {
+					ch_v.push_back((*it).ch.front())
+					outer_list.push_back(it - rule.second.begin());
 				}
 
 				if ((*it) == a) {
 						// target_f=true;
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+					if ((*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
 					}
@@ -646,18 +640,16 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 			// std::cout << "\n****************test check42" << std::endl;
 
 			//ch_vの処理,outer_list処理.
-			if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-				for (int obj : (*it).ch) {
-					ch_v.push_back(obj);
-					outer_list.push_back(it - rule.second.begin());
-				}
+			if ((*it).ch.front() != 1) {
+				ch_v.push_back((*it).ch.front())
+				outer_list.push_back(it - rule.second.begin());
 			}
 
 			// std::cout << "\n****************test check43" << std::endl;
 
 			if ((*it) == a) {
 					// target_f=true;
-				if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
+				if ((*it).ch.front() == 1) {//これがcにかわるから確実に複数入っているから1でもいれる
 					ch_v.push_back(1);
 					outer_list.push_back(it - rule.second.begin());
 				}
@@ -803,15 +795,13 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 			//aを一回探す
 			while (it != rule.second.end()) {
 				//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
-				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
-					for (int obj : (*it).ch) {
-						ch_v.push_back(obj);
-						outer_list.push_back(it - rule.second.begin());
-					}
+				if ((*it).ch.front() != 1) {
+					ch_v.push_back((*it).ch.front())
+					outer_list.push_back(it - rule.second.begin());
 				}
 
 				if ((*it) == a) {
-					if ((*it).ch.size() == 1 && (*it).ch.front() == 1) {//これでaの分がpushされてないことはなくなる
+					if ((*it).ch.front() == 1) {//これでaの分がpushされてないことはなくなる
 						ch_v.push_back(1);
 						outer_list.push_back(it - rule.second.begin());
 					}
