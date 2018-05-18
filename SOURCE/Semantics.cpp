@@ -148,8 +148,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			it = rule.second.begin();//itをイテレータから整数へ，順番は保存されているからdの位置を調べる→ループ構造変更
 			size = d_size;
 
-			std::cout << "\n****************test check40" << std::endl;
-
 			next_pos = -1;
 			ch_v.clear();
 			outer_list.clear();
@@ -164,8 +162,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				//aを一回探す
 				//while (it != rule.second.end()) {
 
-				std::cout << "\n****************test check42" << std::endl;
-
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
 					for (int obj : (*it).ch) {
@@ -173,8 +169,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						outer_list.push_back(it - rule.second.begin());
 					}
 				}
-
-				std::cout << "\n****************test check43" << std::endl;
 
 				if ((*it) == a) {
 						// target_f=true;
@@ -194,8 +188,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					//aをcへ
 					(*it).obj = c.obj;
-
-					std::cout << "\n****************test check44" << std::endl;
 
 					//outerをカウントしてposになったら，
 					//rule.second.begin()からの位置insert_posを決定，
@@ -223,7 +215,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 								break;
 							}
 						}
-						std::cout << "\n****************test check47" << std::endl;
 						if (inner_flag) {
 							int itr_num = (*it).ch.front();
 							for (int j = 0; j < itr_num; j++) {
@@ -240,7 +231,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							//eraseによって次の値になってるからitの移動はいらない
 						}
 						else {
-							std::cout << "\n****************test check48" << std::endl;
 							it += it_ch;
 							outer_c++;
 						}
@@ -253,8 +243,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					if(d_in_res.size()>0){
 						new_d.set_ch(d_in_res.size() + 1);
 					}
-
-					std::cout << "\n****************test check45" << std::endl;
 
 					//挿入する部分の完成
 					d_in_res.insert(d_in_res.begin(), new_d);
@@ -291,10 +279,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				it = rule.second.begin() + next_pos;//見つかった場所から一つ進めてまた探索
 
 				//aを一回探す
-				//while (it != rule.second.end()) {
-
-				std::cout << "\n****************test check42b" << std::endl;
-
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
 					for (int obj : (*it).ch) {
@@ -302,8 +286,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						outer_list.push_back(it - rule.second.begin());
 					}
 				}
-
-				std::cout << "\n****************test check43b" << std::endl;
 
 				if ((*it) == b) {
 						// target_f=true;
@@ -323,8 +305,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					//aをcへ
 					(*it).obj = c.obj;
-
-					std::cout << "\n****************test check44b" << std::endl;
 
 					//outerをカウントしてposになったら，
 					//rule.second.begin()からの位置insert_posを決定，
@@ -352,7 +332,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 								break;
 							}
 						}
-						std::cout << "\n****************test check47b" << std::endl;
 						if (inner_flag) {
 							int itr_num = (*it).ch.front();
 							for (int j = 0; j < itr_num; j++) {
@@ -369,7 +348,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							//eraseによって次の値になってるからitの移動はいらない
 						}
 						else {
-							std::cout << "\n****************test check48b" << std::endl;
 							it += it_ch;
 							outer_c++;
 						}
@@ -378,8 +356,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					if (insert_pos == 0) {
 						insert_pos = next_pos;
 					}
-
-					std::cout << "\n****************test check45b" << std::endl;
 
 					if(e_in_res.size()>0){
 						new_e.set_ch(e_in_res.size() + 1);
@@ -433,8 +409,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 			it = rule.second.begin();//itをイテレータから整数へ，順番は保存されているからdの位置を調べる→ループ構造変更
 			size = d_size;
 
-			std::cout << "\n****************test check43c ch_size=" << (*rule.second.begin()).ch.size() << std::endl;
-
 			//aを一回探すのを繰り返す
 			next_pos = -1;
 			ch_v.clear();
@@ -450,8 +424,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				//aを一回探す
 				//while (it != rule.second.end()) {
 
-				std::cout << "\n****************test check42c" << std::endl;
-
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.size() > 1 || (*it).ch.front() != 1) {
 					for (int obj : (*it).ch) {
@@ -459,8 +431,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						outer_list.push_back(it - rule.second.begin());
 					}
 				}
-
-				std::cout << "\n****************test check43c" << std::endl;
 
 				if ((*it) == a) {
 						// target_f=true;
@@ -480,8 +450,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 					//aをcへ
 					(*it).obj = c.obj;
-
-					std::cout << "\n****************test check44c" << std::endl;
 
 					//outerをカウントしてposになったら，
 					//rule.second.begin()からの位置insert_posを決定，
@@ -509,7 +477,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 								break;
 							}
 						}
-						std::cout << "\n****************test check47c" << std::endl;
 						if (inner_flag) {
 							int itr_num = (*it).ch.front();
 							for (int j = 0; j < itr_num; j++) {
@@ -526,7 +493,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 							//eraseによって次の値になってるからitの移動はいらない
 						}
 						else {
-							std::cout << "\n****************test check48c" << std::endl;
 							it += it_ch;
 							outer_c++;
 						}
@@ -535,8 +501,6 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					if (insert_pos == 0) {
 						insert_pos = next_pos;
 					}
-
-					std::cout << "\n****************test check45c" << std::endl;
 
 					if(d_in_res.size()>0){
 						new_d.set_ch(d_in_res.size() + 1);
