@@ -319,7 +319,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					it++;
 					std::cout << "\n****************test check49b it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
 					outer_c++;
-					
+					std::cout << "\n****************test check49.5b it_id=\"" << it - rule.second.begin() - 1 << " num=" << num << " er_num=" << er_num << std::endl;
 					while (it != rule.second.begin() + it_id + num - er_num) {
 						std::cout << "\n****************test check50b" << std::endl;
 						int it_ch = (*it).ch.front();
