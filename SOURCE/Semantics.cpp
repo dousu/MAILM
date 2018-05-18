@@ -775,6 +775,8 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 		mapping[b.obj] = b_v;
 	}
 
+	std::cerr << "Unify to a(" << a.obj << ")" << std::endl;
+
 	//ルールの変更aを取り除いてouterを1減らす
 	std::vector<Element> b_in_res;
 	std::vector<int> outer_list;
