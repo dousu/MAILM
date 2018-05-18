@@ -181,7 +181,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+					int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
 					Element new_d;
 					new_d = d;
 					d_in_res.clear();
@@ -298,7 +298,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+					int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
 					Element new_e;
 					new_e = e;
 					e_in_res.clear();
@@ -443,7 +443,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 						(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 					}
 					//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-					int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+					int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
 					Element new_d;
 					new_d = d;
 					d_in_res.clear();
@@ -666,7 +666,7 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 					(*(rule.second.begin() + o_el)).ch.front()++;//ひとつしかch持ってない想定
 				}
 				//aが見つかった時の内側の処理を行う．aのchの処理はしなくてよい．outer_listで処理するから
-				int num = (*it).ch.front(), it_id = it - rule.second.begin();//beginからの絶対値取得
+				int num = (*it).ch.front() - 1, it_id = it - rule.second.begin();//beginからの絶対値取得
 				Element new_b;
 				new_b = b;
 				b_in_res.clear();
