@@ -237,7 +237,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					}
 					//最後に追加するパターン
 					if (insert_pos == 0) {
-						insert_pos = next_pos;
+						insert_pos = next_pos + 1;
 					}
 
 					if(d_in_res.size()>0){
@@ -319,7 +319,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					it++;
 					std::cout << "\n****************test check49b it=\"" << (*(it-1)).to_s() << "(" << (*(it-1)).ch.front() << ") " << (it == rule.second.end()) << "\"" << std::endl;
 					outer_c++;
-					std::cout << "\n****************test check49.5b it_id=\"" << it - rule.second.begin() - 1 << " num=" << num << " er_num=" << er_num << std::endl;
+					std::cout << "\n****************test check49.5b it_id=" << it - rule.second.begin() - 1 << " it=" << (it - rule.second.begin()) << " num=" << num << " er_num=" << er_num << std::endl;
 					while (it != rule.second.begin() + it_id + num - er_num) {
 						std::cout << "\n****************test check50b" << std::endl;
 						int it_ch = (*it).ch.front();
@@ -354,7 +354,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					}
 					//最後に追加するパターン
 					if (insert_pos == 0) {
-						insert_pos = next_pos;
+						insert_pos = next_pos + 1;
 					}
 
 					if(e_in_res.size()>0){
@@ -499,7 +499,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 					}
 					//最後に追加するパターン
 					if (insert_pos == 0) {
-						insert_pos = next_pos;
+						insert_pos = next_pos + 1;
 					}
 
 					if(d_in_res.size()>0){
@@ -726,7 +726,7 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 				}
 				//最後に追加するパターン
 				if (insert_pos == 0) {
-					insert_pos = next_pos;
+					insert_pos = next_pos + 1;
 				}
 
 				// std::cout << "\n****************test check45" << std::endl;
