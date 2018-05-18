@@ -567,6 +567,13 @@ int main(int argc, char* argv[]) {
 		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
 	}
 	std::cout << std::endl << std::endl;
+	inter = ma.kb.meaning_no(1);
+	std::cout << "\nInType Test View2" << std::endl;
+	in_it = inter.begin();
+	for (; in_it != inter.end(); in_it++) {
+		std::cout << (*in_it).to_s() << "(" << (*in_it).ch.front() << ") ";
+	}
+	std::cout << std::endl << std::endl;
 
 	// Rule r_sample;
 	// r_sample.internal = kb.meaning_no(14);
