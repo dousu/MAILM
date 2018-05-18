@@ -164,7 +164,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.front() != 1) {
-					ch_v.push_back((*it).ch.front())
+					ch_v.push_back((*it).ch.front());
 					outer_list.push_back(it - rule.second.begin());
 				}
 
@@ -279,7 +279,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 				//aを一回探す
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.front() != 1) {
-					ch_v.push_back((*it).ch.front())
+					ch_v.push_back((*it).ch.front());
 					outer_list.push_back(it - rule.second.begin());
 				}
 
@@ -422,7 +422,7 @@ void Semantics<T>::chunk(Element a, Element b, Element c, Element d, Element e, 
 
 				//ch_vの処理,outer_list処理.
 				if ((*it).ch.front() != 1) {
-					ch_v.push_back((*it).ch.front())
+					ch_v.push_back((*it).ch.front());
 					outer_list.push_back(it - rule.second.begin());
 				}
 
@@ -641,7 +641,7 @@ void Semantics<T>::replace(Element a, Element b, Element c, int b_pos, int b_siz
 
 			//ch_vの処理,outer_list処理.
 			if ((*it).ch.front() != 1) {
-				ch_v.push_back((*it).ch.front())
+				ch_v.push_back((*it).ch.front());
 				outer_list.push_back(it - rule.second.begin());
 			}
 
@@ -796,7 +796,7 @@ void Semantics<T>::unique_unify(Element a, std::vector<Element> v_e) {
 			while (it != rule.second.end()) {
 				//ch_vの処理,outer_list処理.これはtarget_fがfalseの間だけ処理をする
 				if ((*it).ch.front() != 1) {
-					ch_v.push_back((*it).ch.front())
+					ch_v.push_back((*it).ch.front());
 					outer_list.push_back(it - rule.second.begin());
 				}
 
