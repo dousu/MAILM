@@ -615,11 +615,11 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	/*std::cout << "SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
+	std::cout << "SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
 	std::cout << ma.kb.sentenceDB.size() << std::endl;
-	std::cout << ma.kb.wordDB.size() << std::endl;*/
+	std::cout << ma.kb.wordDB.size() << std::endl;
 
-	/*std::vector<int> nums_v{ 3,4 };
+	std::vector<int> nums_v{ 3,4 };
 	MAILMAgent parent,child;
 	std::map<int, std::vector<std::string> > mm, ch_mm;
 	std::vector<Rule> parent_origin, ch_hear;
@@ -641,7 +641,7 @@ int main(int argc, char* argv[]) {
 		child.grow();
 		parent = child;
 	}
-	std::cout << parent.kb.to_s() << std::endl;*/
+	std::cout << parent.kb.to_s() << std::endl;
 
 	log.refresh_log();
 
