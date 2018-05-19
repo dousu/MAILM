@@ -6929,6 +6929,10 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			temp.erase(temp.begin() + rand_index);
 		}
 		if (temp.size() != 0) {
+			std::cerr << "Rules::=" << std::endl;
+			for(auto all : work_list){
+				std::cerr << all.to_s() << std::endl;
+			}
 			std::cerr << "#####remaping" << std::endl;
 			//writing################################################
 			//create a list of rules "res" and mapping "core_meaning"
