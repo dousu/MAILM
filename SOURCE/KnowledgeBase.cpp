@@ -6962,6 +6962,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 						add_r.set_noun(cat_ind,el,terminals);
 						work_map[el.obj]=std::vector<std::string>();
 						work_map[el.obj].push_back("MEASURE");
+						res.push_back(add_r);
 						terminals.clear();
 					}
 				}
@@ -6984,12 +6985,16 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			work_map[int_ind].push_back("SENTENCE");
 			work_map[int_ind].push_back("s"+SENTENCE_NO--); //?
 			core_meaning=work_map;
+			res.push_back(add_r);
 
 			//#######################################################
 			creatable = true;
+		}else{
+			std::cerr << "generating score##### false" << std::endl;
+			return res;
 		}
 	}
-	std::cerr << "generating score#####" << std::endl;
+	std::cerr << "generating score##### true" << std::endl;
 
 	return res;
 }
@@ -7004,6 +7009,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	//3.すべての候補を試す前にここまでくればtrueを返す．
 	// DictionaryRange item_range =DB_dic[grnd_elm.cat].equal_range(mean_elm.obj);
 	if (DB_dic.find(cat_el.cat) == DB_dic.end() && DB_dic[cat_el.cat].size() == 0) {
+		std::cerr << "creating measures##### false" << std::endl;
 		return false;
 	}
 	//条件適合
@@ -7050,7 +7056,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 			break;
 		}
 	}
-	std::cerr << "creating measures#####" << std::endl;
+	std::cerr << "creating measures##### true" << std::endl;
 	return suc;
 }
 
@@ -7068,6 +7074,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	//4.すべてtrueになったwork_resをresに追加，externalをwork_externalで上書きする．
 	//5.trueを返す．
 	if (external.size() > beat_num) {
+		std::cerr << "creating beats##### false" << std::endl;
 		return false;
 	}
 
@@ -7081,9 +7088,11 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	//categoryがない場合はサイズで判定
 	if (cat_num == 0) {
 		if (external.size() == beat_num) {
+			std::cerr << "creating beats##### true" << std::endl;
 			return true;
 		}
 		else {
+			std::cerr << "creating beats##### false" << std::endl;
 			return false;
 		}
 	}
@@ -7113,6 +7122,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		}
 		if (t_check) {
 			res = work_res;
+			std::cerr << "creating beats##### true" << std::endl;
 			return true;
 		}
 	}
@@ -7132,10 +7142,11 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		}
 		if (lt_eq_check) {
 			res = work_res;
+			std::cerr << "creating beats##### true" << std::endl;
 			return true;
 		}
 	}
-	std::cerr << "creating beats#####" << std::endl;
+	std::cerr << "creating beats##### false" << std::endl;
 	return false;
 }
 
@@ -7144,6 +7155,7 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 {
 	std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << std::endl;
 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
+		std::cerr << "creating definite beat##### true" << std::endl;
 		return false;
 	}
 
@@ -7172,7 +7184,7 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 			break;
 		}
 	}
-	std::cerr << "creating definite beat#####" << std::endl;
+	std::cerr << "creating definite beat##### " << suc << std::endl;
 	return suc;
 }
 
