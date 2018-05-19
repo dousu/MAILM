@@ -1990,61 +1990,79 @@ VALID INDEX and MEANINGS:
 #####generating score
 #####creating measures C3596/x-177 3
 #####creating beats 3
-creating measures#####
+creating beats##### true
+creating measures##### true
 #####creating measures S84312/x-178 3
+creating measures##### false
 #####creating measures C1493/x-675 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures C20570/x-972 3
 #####creating beats 3
 #####creating definite beat C61/x61 2
 #####creating beats 2
+creating beats##### false
 #####creating beats 2
-creating definite beat#####
+creating beats##### false
+creating definite beat##### 0
 #####creating definite beat C61/x61 2
 #####creating beats 2
+creating beats##### false
 #####creating beats 2
-creating definite beat#####
-creating beats#####
-creating measures#####
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+creating measures##### true
 #####creating measures C8868/x135 3
 #####creating beats 3
-creating measures#####
+creating beats##### true
+creating measures##### true
 #####creating measures S84312/x-857 3
-creating measures#####
+creating measures##### true
 #####creating measures C-920/x-920 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures C10128/x162 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures S84312/x-6 3
-creating measures#####
+creating measures##### true
 #####creating measures S84312/x-707 3
-creating measures#####
+creating measures##### true
 #####creating measures C-949/x-949 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures C83581/x1246 3
 #####creating beats 3
-creating measures#####
+creating beats##### true
+creating measures##### true
 #####creating measures C737/x-851 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures S84312/x1241 3
-creating measures#####
+creating measures##### true
 #####creating measures C-100/x-100 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures C4082/x-74 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures C20672/x476 3
 #####creating beats 3
-creating measures#####
+creating beats##### false
+creating measures##### true
 #####creating measures C3831/x-161 3
 #####creating beats 3
-creating measures#####
+creating beats##### true
+creating measures##### true
 #####creating measures C3714/x-162 3
 #####creating beats 3
-creating measures#####
+creating beats##### true
+creating measures##### true
