@@ -1989,80 +1989,1564 @@ VALID INDEX and MEANINGS:
 34
 #####generating score
 #####creating measures C3596/x-177 3
-#####creating beats 3
-creating beats##### true
-creating measures##### true
-#####creating measures S84312/x-178 3
-creating measures##### false
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
 #####creating measures C1493/x-675 3
-#####creating beats 3
+#####creating beats 2
 creating beats##### false
-creating measures##### true
+creating measures##### 0
 #####creating measures C20570/x-972 3
-#####creating beats 3
-#####creating definite beat C61/x61 2
 #####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-creating definite beat##### 0
-#####creating definite beat C61/x61 2
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-creating definite beat##### 0
-creating beats##### false
-creating measures##### true
-#####creating measures C8868/x135 3
-#####creating beats 3
+#####creating definite beat C61/x61 1
+#####creating beats 1
 creating beats##### true
-creating measures##### true
-#####creating measures S84312/x-857 3
-creating measures##### true
-#####creating measures C-920/x-920 3
-#####creating beats 3
-creating beats##### false
-creating measures##### true
-#####creating measures C10128/x162 3
-#####creating beats 3
-creating beats##### false
-creating measures##### true
-#####creating measures S84312/x-6 3
-creating measures##### true
-#####creating measures S84312/x-707 3
-creating measures##### true
-#####creating measures C-949/x-949 3
-#####creating beats 3
-creating beats##### false
-creating measures##### true
-#####creating measures C83581/x1246 3
-#####creating beats 3
+creating definite beat##### 1
 creating beats##### true
-creating measures##### true
-#####creating measures C737/x-851 3
-#####creating beats 3
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats 2
 creating beats##### false
-creating measures##### true
-#####creating measures S84312/x1241 3
-creating measures##### true
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
 #####creating measures C-100/x-100 3
-#####creating beats 3
+#####creating beats 1
 creating beats##### false
-creating measures##### true
-#####creating measures C4082/x-74 3
-#####creating beats 3
+creating measures##### 0
+#####creating measures C83581/x1246 3
+#####creating beats 0
 creating beats##### false
-creating measures##### true
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
 #####creating measures C20672/x476 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C1493/x-675 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-857 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C14136/x310 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C737/x-858 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C3596/x-177 3
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 3
+#####creating definite beat S0/x-146 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### true
+creating definite beat##### 1
+#####creating definite beat S0/x-153 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+generating score##### true
+#####generating score
+#####creating measures C3831/x-161 3
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating measures C14136/x310 3
+creating measures##### 0
+#####creating measures C20672/x476 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-857 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-6 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C4359/x-14 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x1241 3
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-857 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-857 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C4359/x-14 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C20570/x-972 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-6 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C11636/x199 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C4359/x-7 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C737/x-851 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating measures C4359/x-14 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 3
+#####creating definite beat S0/x-146 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### true
+creating definite beat##### 1
+#####creating definite beat S0/x-153 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+creating measures##### 1
+#####creating measures C737/x-858 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C10128/x162 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C737/x-858 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating measures C20570/x-972 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C4359/x-14 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C14136/x310 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C1087/x-686 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C3831/x-161 3
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C3596/x-177 3
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating measures C20570/x-972 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-100/x-100 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C20570/x-972 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats -1
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C20570/x-972 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C11636/x199 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+creating measures##### 1
+creating measures##### 1
+#####creating measures C4359/x-7 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C20570/x-972 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-973 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C3596/x-177 3
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating measures S0/x-707 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C11636/x199 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C855/x-708 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C14136/x310 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C737/x-858 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-1006 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-942/x-942 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C10128/x162 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+generating score##### true
+#####generating score
+#####creating measures S0/x-146 4
 #####creating beats 3
 creating beats##### false
-creating measures##### true
+#####creating beats 3
+creating beats##### false
+#####creating measures C-949/x-949 4
+#####creating beats 2
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-950 4
+#####creating beats 3
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 3
+#####creating definite beat C10128/x162 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C10128/x162 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+#####creating beats 2
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures S0/x-153 4
+#####creating beats 3
+#####creating definite beat C14136/x310 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C14136/x310 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+#####creating beats 3
+#####creating definite beat C11636/x199 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C11636/x199 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 2
+creating beats##### true
+creating measures##### 1
+generating score##### true
+#####generating score
+#####creating measures C-920/x-920 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-1006 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-942/x-942 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-949/x-949 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x1241 3
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-100/x-100 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 0
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating measures S0/x-857 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C10128/x162 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C737/x-858 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating measures C737/x-851 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C11636/x199 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C1087/x-686 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
 #####creating measures C3831/x-161 3
-#####creating beats 3
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating beats 1
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C20672/x476 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-100/x-100 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-6 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-942/x-942 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats -1
+creating beats##### false
+#####creating beats 2
+#####creating definite beat C10128/x162 1
+#####creating beats 1
 creating beats##### true
-creating measures##### true
-#####creating measures C3714/x-162 3
-#####creating beats 3
+creating definite beat##### 1
 creating beats##### true
-creating measures##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C4359/x-7 3
+#####creating beats -1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 0
+creating beats##### false
+#####creating measures C1493/x-675 3
+#####creating beats 2
+creating beats##### false
+creating measures##### 0
+#####creating beats 1
+creating beats##### false
+#####creating measures C-949/x-949 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating measures C-920/x-920 3
+#####creating beats 1
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### false
+#####creating beats 1
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 3
+#####creating definite beat S0/x-146 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### true
+creating definite beat##### 1
+#####creating definite beat S0/x-153 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2
+#####creating definite beat C61/x61 1
+#####creating beats 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+generating score##### true
+#####generating score
+#####creating measures S0/x-1006 4
+#####creating measures C4359/x-14 4
+#####creating beats 0
+creating beats##### false
+creating measures##### 0
+#####creating beats 2
+creating beats##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 4
+#####creating beats 3
+#####creating definite beat C61/x61 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C61/x61 2
+#####creating beats 2
+creating beats##### false
+#####creating beats 2
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-857 4
+#####creating beats 3
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 3
+creating beats##### false
+#####creating beats 2
+creating beats##### true
+creating measures##### 1
+#####creating measures C737/x-858 4
+#####creating beats 2
+creating beats##### true
+creating measures##### 1
