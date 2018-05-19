@@ -1989,189 +1989,189 @@ VALID INDEX and MEANINGS:
 34
 #####generating score
 #####creating measures C3596/x-177 3
-#####creating beats 0
+#####creating beats 0 [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C1493/x-675 3
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats 2
+#####creating beats 2 [F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  E  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  G]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
 #####creating measures C-100/x-100 3
-#####creating beats 1
+#####creating beats 1 [Cis  Ais] [Cis  G  A  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C83581/x1246 3
-#####creating beats 0
+#####creating beats 0 [Dis  Ais  B] [C  Dis  B] [Dis  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  D  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  G  Ais]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [D  E  Gis  A  B] [F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G]
 creating beats##### false
 #####creating measures C20672/x476 3
-#####creating beats 2
+#####creating beats 2 [D  Ais  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  E  G  Ais]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  D  E  Ais  B] [C  E  Fis  G  A  Ais] [C  E  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Dis  A  B]
 creating beats##### false
 #####creating measures C1493/x-675 3
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures S0/x-857 3
-#####creating beats 2
+#####creating beats 2 [D  F  G  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Dis  F  Gis] [D  F  G  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 C14136/x310 [C  Dis  Fis  G]
 #####creating definite beat C14136/x310 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  G]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C737/x-858 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Fis  A]
 creating beats##### false
 #####creating measures C3596/x-177 3
-#####creating beats 0
+#####creating beats 0 [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  A  B] [E  Fis  G] [C  Cis  D]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 S84312/x-146 S84312/x-153
 #####creating definite beat S0/x-146 2
-#####creating beats 2
+#####creating beats 2 [C  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  Fis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Fis  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A  Ais] [Cis  E  G  A  Ais]
 creating beats##### true
 creating definite beat##### 1
 #####creating definite beat S0/x-153 1
-#####creating beats 1
+#####creating beats 1 [D  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
@@ -2179,255 +2179,255 @@ creating measures##### 1
 generating score##### true
 #####generating score
 #####creating measures C3831/x-161 3
-#####creating beats 0
+#####creating beats 0 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C14136/x310 3
 creating measures##### 0
 #####creating measures C20672/x476 3
-#####creating beats 2
+#####creating beats 2 [D  Ais  B]
 creating beats##### false
 creating measures##### 0
 #####creating measures S0/x-857 3
-#####creating beats 2
+#####creating beats 2 [Cis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Gis  A  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  Dis  Ais] [Gis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [E  Fis  G] [D  E  G  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  B]
 creating beats##### false
 #####creating measures S0/x-6 3
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  G]
 creating beats##### false
 #####creating measures C4359/x-14 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Gis  B]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  D  E] [E  F] [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  Ais]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G] [C  Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  B]
 creating beats##### false
 #####creating measures S0/x1241 3
-#####creating beats -1
+#####creating beats -1 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating measures S0/x-857 3
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Gis  Ais]
 creating beats##### false
 #####creating measures S0/x-857 3
-#####creating beats 2
+#####creating beats 2 [Dis  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  Fis  G  Ais]
+creating beats##### false
+#####creating beats 2 [Dis  E]
+creating beats##### false
+#####creating beats 2 [C  Dis  Gis  Ais]
+creating beats##### false
+#####creating beats 2 [D  E]
+creating beats##### false
+#####creating beats 2 [D  G  Ais]
+creating beats##### false
+#####creating measures S0/x-857 3
+#####creating beats 2 [C  E  G]
+creating beats##### false
+#####creating beats 2 [D  F  A]
+creating beats##### false
+#####creating beats 2 [D  E  G  Ais]
 creating beats##### false
 #####creating measures C4359/x-14 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  Cis  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  A  B] [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis]
 creating beats##### false
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats 2
+#####creating beats 2 [F  G  A]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  Ais]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  Dis  E  F  G  Ais] [C  Fis  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  A]
 creating beats##### false
 #####creating measures S0/x-6 3
-#####creating beats 2
+#####creating beats 2 [F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  A  B] C11636/x199
 #####creating definite beat C11636/x199 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C4359/x-7 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  F  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  A  B] [E  Fis  G] [C  Cis  D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  F  Ais] [C  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Dis  F  Gis] [D  F  G  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E]
 creating beats##### false
 #####creating measures C737/x-851 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G] [C  Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Cis  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  E] [Cis  E]
 creating beats##### false
 #####creating measures C4359/x-14 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  G  Ais]
 creating beats##### false
 #####creating measures S0/x-1006 3
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  F  G]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 S84312/x-146 S84312/x-153
 #####creating definite beat S0/x-146 2
-#####creating beats 2
+#####creating beats 2 [C  D  E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G  B] [D  G  A]
 creating beats##### true
 creating definite beat##### 1
 #####creating definite beat S0/x-153 1
-#####creating beats 1
+#####creating beats 1 [F  Gis  A]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
@@ -2435,303 +2435,303 @@ creating measures##### 1
 creating measures##### 1
 creating measures##### 1
 #####creating measures C737/x-858 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [E  Fis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A  B]
 creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating measures S0/x-1006 3
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats -1
-creating beats##### false
-#####creating beats 0
-creating beats##### false
-#####creating beats 0
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
-creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Dis  G  Ais]
 creating beats##### false
 #####creating measures S0/x-1006 3
-#####creating beats 2
+#####creating beats 2 [D  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A  B]
+creating beats##### false
+#####creating beats -1 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### false
+#####creating beats 0 [C  D  E  Ais  B] [C  E  Fis  G  A  Ais] [C  E  Ais]
+creating beats##### false
+#####creating beats 0 [Cis  Dis] [Cis  Dis] [Cis  Dis]
+creating beats##### false
+#####creating beats 2 [D  F  G  Gis  B]
+creating beats##### false
+#####creating beats 2 [C  F  G  A]
+creating beats##### false
+#####creating beats 2 [C  Dis  G  A]
+creating beats##### false
+#####creating beats 2 [D  E  F  G]
+creating beats##### false
+#####creating measures S0/x-1006 3
+#####creating beats 2 [C  D  E  B]
+creating beats##### false
+#####creating beats 2 [Ais]
+creating beats##### false
+#####creating beats 2 [C  D  E]
+creating beats##### false
+#####creating beats 2 C10128/x162 [Dis  Fis  G  A  B]
 #####creating definite beat C10128/x162 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  G  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures C737/x-858 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats 2
+#####creating beats 2 [C  E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  B]
 creating beats##### false
 #####creating measures C4359/x-14 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 1
+#####creating beats 1 [C  Dis  Ais] [Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 C14136/x310 [C  Dis  Fis  G]
 #####creating definite beat C14136/x310 1
-#####creating beats 1
+#####creating beats 1 [D  F  Fis  G]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures C1087/x-686 3
-#####creating beats 2
+#####creating beats 2 [C  E  F  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  Gis]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  D  F  Gis] [C  F  Gis  B] [C  D  F  Gis] [C  F  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G  A  B]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [E  Fis  G] [D  E  G  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  A]
 creating beats##### false
 #####creating measures C3831/x-161 3
-#####creating beats 0
+#####creating beats 0 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats -1
+#####creating beats -1 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  Dis  Ais] [Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Dis  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  G  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  F  Ais] [C  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  G  B]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  E  F  G  A] [C  D  E  F  A] [C  D  F  A  Ais]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [Dis  G  A] [C  D  G  A] [C  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G]
 creating beats##### false
 #####creating measures C3596/x-177 3
-#####creating beats 0
+#####creating beats 0 [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats -1
+#####creating beats -1 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  A  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  F  Ais] [C  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  G  B]
 creating beats##### false
 #####creating measures C-100/x-100 3
-#####creating beats 1
+#####creating beats 1 [Cis  Ais] [Cis  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  D  E  G]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [E  F  G  A] [C  D  F  A  B] [F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A]
 creating beats##### false
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats -1
+#####creating beats -1 [C  F  Gis  B] [C  F  Gis] [C  F  Gis] [C  D  F  Gis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [rest]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  A  B] [E  Fis  G] [C  Cis  D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [Dis] [C  D  Dis  A] [C  D  Dis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  G  B]
 creating beats##### false
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G] [C  Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  A  B] C11636/x199
 #####creating definite beat C11636/x199 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
@@ -2740,184 +2740,184 @@ creating measures##### 1
 creating measures##### 1
 creating measures##### 1
 #####creating measures C4359/x-7 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  D  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  A  B]
 creating beats##### false
 #####creating measures C20570/x-972 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-973 3
-#####creating beats 2
+#####creating beats 2 [D  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  A]
 creating beats##### false
 #####creating measures C3596/x-177 3
-#####creating beats 0
+#####creating beats 0 [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [Gis  A  Ais]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [D  E  Fis  B] [Cis  D  E  Fis  Ais]
 creating beats##### false
 #####creating measures S0/x-707 3
-#####creating beats 2
+#####creating beats 2 [C  Dis  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  Gis]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [E  F  G  A] [C  D  F  A  B] [F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  Fis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  Dis  Ais] [Gis]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [Dis] [C  D  Dis  A] [C  D  Dis  A]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [Dis  G  A] [C  D  G  A] [C  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Fis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  G  A  Ais] [Fis  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Dis  E  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  A  B] C11636/x199
 #####creating definite beat C11636/x199 1
-#####creating beats 1
+#####creating beats 1 [Fis  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C855/x-708 3
-#####creating beats 1
+#####creating beats 1 [C  D  Fis  A  B] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Dis  E  G  Ais]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Dis  F  Gis] [D  F  G  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 C14136/x310 [C  Dis  Fis  G]
 #####creating definite beat C14136/x310 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  G]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures C737/x-858 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures S0/x-1006 3
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F]
 creating beats##### false
 #####creating measures C-942/x-942 3
-#####creating beats 1
+#####creating beats 1 [D  Dis  G] [Cis  D  Dis  F  Gis]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 C10128/x162 [Dis  Fis  G  A  B]
 #####creating definite beat C10128/x162 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  G  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
@@ -2925,587 +2925,587 @@ creating measures##### 1
 generating score##### true
 #####generating score
 #####creating measures S0/x-146 4
-#####creating beats 3
+#####creating beats 3 [D  F  G  A]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [E  F  G  A]
 creating beats##### false
 #####creating measures C-949/x-949 4
-#####creating beats 2
+#####creating beats 2 [Cis  F  Gis] [Cis  Fis  Gis]
 creating beats##### true
 creating measures##### 1
 #####creating measures S0/x-950 4
-#####creating beats 3
+#####creating beats 3 [C  D  E  Fis]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [E  Fis  Gis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [E  F  G  A] [C  D  F  A  B] [F]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [C]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [C  E  G  A]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 C10128/x162 [Dis  Fis  G  A  B]
 #####creating definite beat C10128/x162 2
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  A  B]
 creating beats##### false
 creating definite beat##### 0
 #####creating definite beat C10128/x162 2
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  A  B]
 creating beats##### false
 creating definite beat##### 0
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Ais] [Gis]
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures S0/x-153 4
-#####creating beats 3
+#####creating beats 3 C14136/x310 [C  Dis  Fis  G]
 #####creating definite beat C14136/x310 2
-#####creating beats 2
+#####creating beats 2 [D  F  Fis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  G]
 creating beats##### false
 creating definite beat##### 0
 #####creating definite beat C14136/x310 2
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  Fis  G]
 creating beats##### false
 creating definite beat##### 0
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [Dis  Fis  A  B] C11636/x199
 #####creating definite beat C11636/x199 2
-#####creating beats 2
+#####creating beats 2 [Fis  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  A  B]
 creating beats##### false
 creating definite beat##### 0
 #####creating definite beat C11636/x199 2
-#####creating beats 2
+#####creating beats 2 [Fis  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  A  B]
 creating beats##### false
 creating definite beat##### 0
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [C  D]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
 creating beats##### true
 creating measures##### 1
 generating score##### true
 #####generating score
 #####creating measures C-920/x-920 3
-#####creating beats 1
+#####creating beats 1 [C  F  Gis] [Dis  G  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures S0/x-1006 3
-#####creating beats 2
+#####creating beats 2 [G  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F]
 creating beats##### false
 #####creating measures C-942/x-942 3
-#####creating beats 1
+#####creating beats 1 [D  Dis  G] [Cis  D  Dis  F  Gis]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  G  A  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  A  B] [C  E  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G] [C  Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [E  Fis  G] [D  E  G  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  Fis]
 creating beats##### false
 #####creating measures C-949/x-949 3
-#####creating beats 1
+#####creating beats 1 [Cis  F  Gis] [Cis  Fis  Gis]
 creating beats##### false
 creating measures##### 0
 #####creating measures S0/x1241 3
-#####creating beats 0
+#####creating beats 0 [Dis] [C  D  Dis  A] [C  D  Dis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  B]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  B]
 creating beats##### false
 #####creating measures C-100/x-100 3
-#####creating beats 1
+#####creating beats 1 [Cis  Ais] [Cis  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 0
+#####creating beats 0 [Dis  G  A] [C  D  G  A] [C  Dis  Fis  A]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [E  F  G  A] [C  D  F  A  B] [F]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  F  Ais] [C  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Gis  A  Ais]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  A]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  A  B] [E  Fis  G] [C  Cis  D]
 creating beats##### false
 #####creating measures S0/x-857 3
-#####creating beats 2
+#####creating beats 2 [C  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Cis  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Fis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 C10128/x162 [Dis  Fis  G  A  B]
 #####creating definite beat C10128/x162 1
-#####creating beats 1
+#####creating beats 1 [C  Dis  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C737/x-858 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
 #####creating measures C737/x-851 3
-#####creating beats 1
+#####creating beats 1 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [Cis  D  E  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  Fis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Gis  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  Fis  A  B] C11636/x199
 #####creating definite beat C11636/x199 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C1087/x-686 3
-#####creating beats 2
+#####creating beats 2 [C  E  F  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [D  E]
 creating beats##### false
 #####creating measures S0/x-1006 3
-#####creating beats 1
+#####creating beats 1 [C  Dis  E  F  G  Ais] [C  Fis  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  F  Ais] [C  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G  A]
 creating beats##### false
 #####creating measures C3831/x-161 3
-#####creating beats 0
+#####creating beats 0 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  B]
 creating beats##### false
 #####creating measures S0/x-1006 3
-#####creating beats -1
+#####creating beats -1 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Dis  F  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Gis  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  B]
 creating beats##### false
 #####creating measures C20672/x476 3
-#####creating beats 2
+#####creating beats 2 [D  Ais  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [D  E  Gis  A  B] [F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  G  A  B]
 creating beats##### false
 #####creating measures C-100/x-100 3
-#####creating beats 1
+#####creating beats 1 [Cis  Ais] [Cis  G  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Gis  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [E  G  Ais  B] [C  E  G  B]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  D  E] [E  F] [C  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Fis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  Gis  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  Gis  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [D  E  Fis  B] [Cis  D  E  Fis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  F  A]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A] [C  Dis  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  Ais]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  A  B] [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  F  Ais] [C  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Ais]
 creating beats##### false
 #####creating measures S0/x-6 3
-#####creating beats 2
+#####creating beats 2 [F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  E  Fis]
 creating beats##### false
 #####creating measures C-942/x-942 3
-#####creating beats 1
+#####creating beats 1 [D  Dis  G] [Cis  D  Dis  F  Gis]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  E  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Gis  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  D  E  F  G  B]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [C  A  B] [E  Fis  G] [C  Cis  D]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  G  Ais]
 creating beats##### false
 #####creating measures S0/x-1006 3
-#####creating beats 2
+#####creating beats 2 [Gis]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  E  A  B] [C  E  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C]
 creating beats##### false
-#####creating beats -1
+#####creating beats -1 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 C10128/x162 [Dis  Fis  G  A  B]
 #####creating definite beat C10128/x162 1
-#####creating beats 1
+#####creating beats 1 [Dis  Fis  G  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures C4359/x-7 3
-#####creating beats -1
+#####creating beats -1 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  E  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  F  G]
 creating beats##### false
-#####creating beats 0
+#####creating beats 0 [E  F  G  A] [C  D  F  A  B] [F]
 creating beats##### false
 #####creating measures C1493/x-675 3
-#####creating beats 2
+#####creating beats 2 [C  D  A  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 1
+#####creating beats 1 [C  Dis  Ais] [Gis]
 creating beats##### false
 #####creating measures C-949/x-949 3
-#####creating beats 1
+#####creating beats 1 [Cis  F  Gis] [Cis  Fis  Gis]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [E  A]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [Cis  Dis  F  G] [C  Cis  Dis  G  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Dis  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Fis  A]
 creating beats##### false
 #####creating measures C-920/x-920 3
-#####creating beats 1
+#####creating beats 1 [C  F  Gis] [Dis  G  Ais]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [C  D  E  G  B]
 creating beats##### false
-#####creating beats 1
+#####creating beats 1 [C  Dis  E  F  G  Ais] [C  Fis  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  E]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 S84312/x-146 S84312/x-153
 #####creating definite beat S0/x-146 2
-#####creating beats 2
+#####creating beats 2 [C  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [E  Gis  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  E  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  A  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  Gis  Ais]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  F  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  Fis  G]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  Fis  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  D  E  Fis  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  F  G  B]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [D  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [C  G  A  Ais] [Fis  G  A  Ais]
 creating beats##### true
 creating definite beat##### 1
 #####creating definite beat S0/x-153 1
-#####creating beats 1
+#####creating beats 1 [C  A  B]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
-creating beats##### true
-creating definite beat##### 1
-creating beats##### true
-creating measures##### 1
-creating measures##### 1
-#####creating measures C20570/x-1007 3
-#####creating beats 2
-#####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
 creating measures##### 1
 creating measures##### 1
 #####creating measures C20570/x-1007 3
-#####creating beats 2
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 1
-#####creating beats 1
+#####creating beats 1 [Cis  D  Dis  F  Gis]
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 2 [D  Dis  G  Ais] C61/x61
+#####creating definite beat C61/x61 1
+#####creating beats 1 [F  G  Gis  Ais]
 creating beats##### true
 creating definite beat##### 1
 creating beats##### true
@@ -3514,39 +3514,39 @@ generating score##### true
 #####generating score
 #####creating measures S0/x-1006 4
 #####creating measures C4359/x-14 4
-#####creating beats 0
+#####creating beats 0 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
 creating beats##### false
 creating measures##### 0
-#####creating beats 2
+#####creating beats 2 [Dis  F  Gis] [D  F  G  Gis]
 creating beats##### true
 creating measures##### 1
 #####creating measures C20570/x-1007 4
-#####creating beats 3
+#####creating beats 3 [D  Dis  G  Ais] C61/x61
 #####creating definite beat C61/x61 2
-#####creating beats 2
+#####creating beats 2 [Cis  D  Dis  F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  Gis  Ais]
 creating beats##### false
 creating definite beat##### 0
 #####creating definite beat C61/x61 2
-#####creating beats 2
+#####creating beats 2 [Cis  D  Dis  F  Gis]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [F  G  Gis  Ais]
 creating beats##### false
 creating definite beat##### 0
 creating beats##### false
 creating measures##### 0
 #####creating measures S0/x-857 4
-#####creating beats 3
+#####creating beats 3 [Cis  A]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [C  E  F  A]
 creating beats##### false
-#####creating beats 3
+#####creating beats 3 [Cis  D  G  A]
 creating beats##### false
-#####creating beats 2
+#####creating beats 2 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
 creating beats##### true
 creating measures##### 1
 #####creating measures C737/x-858 4
-#####creating beats 2
+#####creating beats 2 [E  G  A  Ais] [E  F  G  Ais]
 creating beats##### true
 creating measures##### 1
