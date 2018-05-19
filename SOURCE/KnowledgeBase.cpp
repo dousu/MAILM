@@ -6913,6 +6913,9 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			work_list.push_back(base_r);
 			for (auto& ex_el : base_r.external) {
 				Element trg_el = ex_el;
+				if(ex_el.sent_type){
+					trg_el.cat = 0;
+				}
 				if (trg_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num)) || !ex_el.is_cat()) {
 					work_list.clear();
 					suc = false;
@@ -7034,14 +7037,18 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
 			//作業用external初期化
 			std::vector<Element> work_external = base_rule.external;
+			int sym_count = std::count_if(work_external.begin(),work_external.end(),[](Element& el){return el.is_sym();});
 
-			suc = create_beats(work_res, work_external, beat_num);
+			suc = create_beats(work_res, work_external, beat_num-sym_count);
 		}
 		else {//違うならば，MEASUREを探す
 			suc = true;
 			for (auto& cat_el : base_rule.external) {
 				Element trg = cat_el;
 				if(trg.is_cat()){
+					if(cat_el.sent_type){
+						trg.cat = 0;
+					}
 					suc &= create_measures(work_res, trg, beat_num);
 				}else{
 					suc = false;
@@ -7056,7 +7063,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 			break;
 		}
 	}
-	std::cerr << "creating measures##### true" << std::endl;
+	std::cerr << "creating measures##### " << suc << std::endl;
 	return suc;
 }
 
@@ -7118,6 +7125,9 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		for (int index = 0; index < t_assignment_list.size(); index++) {
 			Element test = return_cat(external, index + 1);
 			Element trg = test;
+			if(test.sent_type){
+				trg.cat = 0;
+			}
 			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index]);
 		}
 		if (t_check) {
@@ -7138,6 +7148,9 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		for (int index = 0; index < list.size(); index++) {
 			Element test = return_cat(external, index + 1);
 			Element trg = test;
+			if(test.sent_type){
+				trg.cat = 0;
+			}
 			lt_eq_check &= create_beat_eq(work_res, trg, list[index]);
 		}
 		if (lt_eq_check) {
