@@ -7092,7 +7092,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 			break;
 		}
 	}
-	std::cerr << "creating measures##### " << suc << std::endl;
+	std::cerr << "creating measures##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
 	return suc;
 }
 
@@ -7225,7 +7225,7 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 			break;
 		}
 	}
-	std::cerr << "creating definite beat##### " << suc << std::endl;
+	std::cerr << "creating definite beat##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
 	return suc;
 }
 
