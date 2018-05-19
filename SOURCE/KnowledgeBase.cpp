@@ -6947,6 +6947,25 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 				if(!onloop && intention[rule.internal.front().obj].include(cc)){
 					onloop = true;
 					terminals = rule.external;
+					measure_flag = next_category(terminals.begin(), terminals.end()) == -1 ? true:false;
+					if(measure_flag){
+						measure_flag = false;
+						onloop = false;
+						//create word rule for measure
+						int cat_ind, int_ind;
+						cat_ind=CATEGORY_NO--;
+						int_ind=INDEX_NO--;
+						Element el,cat_el;
+						el.set_ind(int_ind);
+						cat_el.set_cat(VARIABLE_NO--,cat_ind);
+						categories.push_back(cat_el);
+						Rule add_r;
+						add_r.set_noun(cat_ind,el,terminals);
+						work_map[el.obj]=std::vector<std::string>();
+						work_map[el.obj].push_back("MEASURE");
+						res.push_back(add_r);
+						terminals.clear();
+					}
 				}else if(onloop){
 					//Insert symbols of rules to "terminals"
 					int loc = next_category(terminals.begin(), terminals.end());
