@@ -6942,8 +6942,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 				if(!onloop && intention[rule.internal.front().obj].include(cc)){
 					onloop = true;
 					terminals = rule.external;
-				}
-				if(onloop){
+				}else if(onloop){
 					//Insert symbols of rules to "terminals"
 					int loc = next_category(terminals.begin(), terminals.end());
 					auto it = terminals.erase(terminals.begin() + loc);
