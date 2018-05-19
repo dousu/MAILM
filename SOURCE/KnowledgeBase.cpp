@@ -7071,7 +7071,11 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 //要素数beat_numの制約を満たすようにサイズ数を分配する
 bool
 KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num) {
-	std::cerr << "#####creating beats " << beat_num << std::endl;
+	std::cerr << "#####creating beats " << beat_num;
+	for(auto& ext_el : external){
+		std::cerr << " " << ext_el.to_s();
+	}
+	std::cerr << std::endl;
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
 	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
