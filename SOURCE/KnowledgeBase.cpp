@@ -7085,7 +7085,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		return false;
 	}
 
-	int cat_num =  = std::count_if(external.begin(),external.end(),[](Element& el){return el.is_cat();});
+	int cat_num = std::count_if(external.begin(),external.end(),[](Element& el){return el.is_cat();});
 
 	//categoryがない場合はサイズで判定
 	if (cat_num == 0) {
