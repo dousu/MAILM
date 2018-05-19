@@ -7037,9 +7037,10 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
 			//作業用external初期化
 			std::vector<Element> work_external = base_rule.external;
-			int sym_count = std::count_if(work_external.begin(),work_external.end(),[](Element& el){return el.is_sym();});
+			// int sym_count = std::count_if(work_external.begin(),work_external.end(),[](Element& el){return el.is_sym();});
 
-			suc = create_beats(work_res, work_external, beat_num-sym_count);
+			// suc = create_beats(work_res, work_external, beat_num-sym_count);
+			suc = create_beats(work_res, work_external, beat_num);
 		}
 		else {//違うならば，MEASUREを探す
 			suc = true;
