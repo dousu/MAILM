@@ -7033,7 +7033,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 //measureがひとつ以上でるようにランダムに組み立てる
 bool
 KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num) {
-	std::cerr << "#####creating measures " << cat_el.to_s() << " " << beat_num << std::endl;
+	std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " SIZE: " << res.size() << std::endl;
 	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
@@ -7069,8 +7069,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 
 			// suc = create_beats(work_res, work_external, beat_num-sym_count);
 			suc = create_beats(work_res, work_external, beat_num);
-		}
-		else {//違うならば，MEASUREを探す
+		} else {//違うならば，MEASUREを探す
 			suc = true;
 			for (auto& cat_el : base_rule.external) {
 				Element trg = cat_el;
@@ -7104,7 +7103,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	for(auto& ext_el : external){
 		std::cerr << " " << ext_el.to_s();
 	}
-	std::cerr << std::endl;
+	std::cerr << " SIZE: " << res.size() << std::endl;
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
 	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
@@ -7200,7 +7199,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 //要素数space_numの制約を満たす可能性のあるルールを選択
 bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num)
 {
-	std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << std::endl;
+	std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << " SIZE: " << res.size() << std::endl;
 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
 		std::cerr << "creating definite beat##### true" << std::endl;
 		return false;
