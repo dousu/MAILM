@@ -2052,3 +2052,1169 @@ creating measures##### 1
 #####creating beats 3 [C  D  E  Ais] [C  E  F  G  A  Ais] [C  D  E  Ais]
 creating beats##### true
 creating measures##### 1
+Rules::=
+S84312/I56644 x-177 x-178 x-179 => C3596/x-177 S84312/x-178 C3479/x-179
+C3596/I6240 => [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
+S84312/I56644 x-177 x-178 x-179 => C3596/x-177 S84312/x-178 C3479/x-179
+C3596/I6240 => [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
+S84312/I6005 => [C  D  E  Ais  B] [C  E  Fis  G  A  Ais] [C  E  Ais]
+C3479/I6123 => [C  D  E  Ais] [C  E  F  G  A  Ais] [C  D  E  Ais]
+C3479/I6123 => [C  D  E  Ais] [C  E  F  G  A  Ais] [C  D  E  Ais]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures S0/x-146 4
+#####creating beats 4 [Dis  G  Ais]
+creating beats##### false
+#####creating beats 4 [C  D  E  Fis]
+creating beats##### false
+#####creating beats 4 [C  D  E  B]
+creating beats##### false
+#####creating beats 4 [G  A]
+creating beats##### false
+#####creating beats 4 [F  G  B]
+creating beats##### false
+#####creating beats 4 [C  G]
+creating beats##### false
+#####creating beats 4 [E  A]
+creating beats##### false
+#####creating beats 4 [C  E  F  A]
+creating beats##### false
+#####creating beats 4 [E  Fis  Gis]
+creating beats##### false
+#####creating beats 4 [D  G  Ais]
+creating beats##### false
+#####creating beats 4 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-153 4
+#####creating measures C3831/x-161 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating beats 4 [C  E  A]
+creating beats##### false
+#####creating beats 4 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S84312/I91213 x-146 x-153 => S84312/x-146 S84312/x-153
+S84312/I3284 => [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+S84312/I3284 => [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C3831/x-161 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3714/x-162 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S84312/I90150 x-161 x-162 => C3831/x-161 C3714/x-162
+C3831/I6475 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C3714/I6358 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C14136/x310 3
+creating measures##### 0
+#####creating measures C83581/x1246 3
+#####creating beats 3 [Dis  Ais  B] [C  Dis  B] [Dis  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C8868/x135 3
+#####creating beats 3 [C  Cis  D  E  Ais] [C  Dis  E  F  Ais] [C  E  Fis  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C737/x-851 3
+#####creating beats 3 [E  G  A  Ais] [E  F  G  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-707 3
+#####creating beats 3 [Dis] [C  D  Dis  A] [C  D  Dis  A]
+creating beats##### true
+creating measures##### 1
+#####creating measures C855/x-708 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4359/x-14 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x1241 3
+#####creating beats 3 [C  D  E  G  B]
+creating beats##### false
+#####creating beats 3 [C  Dis  Gis]
+creating beats##### false
+#####creating beats 3 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
+creating beats##### false
+#####creating beats 3 [Cis  Dis  F  G  Ais] [Cis  Dis  G]
+creating beats##### false
+#####creating beats 3 [D  E  F]
+creating beats##### false
+#####creating beats 3 [C  D  E  F  G]
+creating beats##### false
+#####creating beats 3 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+creating beats##### false
+#####creating beats 3 [E]
+creating beats##### false
+#####creating measures C737/x-851 3
+#####creating beats 3 [E  G  A  Ais] [E  F  G  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x1241 3
+#####creating beats 3 [D  F  G  B]
+creating beats##### false
+#####creating beats 3 [E  F  G  A] [C  D  F  A  B] [F]
+creating beats##### true
+creating measures##### 1
+#####creating measures C1087/x-686 3
+#####creating beats 3 [C  E  F  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [C  Dis  G]
+creating beats##### false
+#####creating beats 3 [C  D  E  A]
+creating beats##### false
+#####creating measures C20672/x476 3
+#####creating beats 3 [D  Ais  B]
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [C  Dis  Ais] [Gis]
+creating beats##### false
+#####creating beats 3 [D  Fis  G  B]
+creating beats##### false
+#####creating beats 3 [D  E  Gis  A  B] [F  Gis]
+creating beats##### false
+#####creating beats 3 [C  A]
+creating beats##### false
+#####creating beats 3 [C  Dis  Gis  Ais]
+creating beats##### false
+#####creating beats 3 [C  E  A  B] [C  E  A]
+creating beats##### false
+#####creating measures C3831/x-161 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3714/x-162 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+creating measures##### 1
+#####creating measures C1087/x-686 3
+#####creating beats 3 [C  E  F  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C1493/x-675 3
+#####creating beats 3 [C  D  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-100/x-100 3
+#####creating beats 3 [Cis  Ais] [Cis  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures S0/x-6 3
+#####creating measures S0/x-1006 3
+#####creating beats 3 [D  G  A  B]
+creating beats##### false
+#####creating beats 3 [D  Fis  Gis  B]
+creating beats##### false
+#####creating beats 3 [F  G  A]
+creating beats##### false
+#####creating beats 3 [D  E  F  G  A]
+creating beats##### false
+#####creating beats 3 [Fis  G]
+creating beats##### false
+#####creating beats 3 [D  Fis  B]
+creating beats##### false
+#####creating measures C20570/x-972 3
+#####creating beats 3 [D  Dis  G  Ais] C61/x61
+#####creating definite beat C61/x61 2
+#####creating beats 2 [Cis  D  Dis  F  Gis]
+creating beats##### false
+#####creating beats 2 [F  G  Gis  Ais]
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C61/x61 2
+#####creating beats 2 [F  G  Gis  Ais]
+creating beats##### false
+#####creating beats 2 [Cis  D  Dis  F  Gis]
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [Gis  A  Ais]
+creating beats##### false
+#####creating beats 3 [E  G  B]
+creating beats##### false
+#####creating beats 3 [A  Ais]
+creating beats##### false
+#####creating beats 3 [C  E  G  B]
+creating beats##### false
+#####creating measures C-949/x-949 3
+#####creating beats 3 [Cis  F  Gis] [Cis  Fis  Gis]
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [D  F  G]
+creating beats##### false
+#####creating beats 3 [C  D  A]
+creating beats##### false
+#####creating beats 3 [D  E  G  Ais]
+creating beats##### false
+#####creating beats 3 [C  D  A  Ais  B]
+creating beats##### false
+#####creating beats 3 [Cis  Dis  G  Ais]
+creating beats##### false
+#####creating beats 3 [Cis  E] [Cis  E]
+creating beats##### false
+#####creating beats 3 [C  F  Gis  B] [C  F  Gis] [C  F  Gis] [C  D  F  Gis]
+creating beats##### false
+#####creating beats 3 [D  Fis  G  B]
+creating beats##### false
+#####creating beats 3 [C  A  B] [E  Fis  G] [C  Cis  D]
+creating beats##### true
+creating measures##### 1
+#####creating measures C20570/x-1007 3
+#####creating beats 3 [D  Dis  G  Ais] C61/x61
+#####creating definite beat C61/x61 2
+#####creating beats 2 [F  G  Gis  Ais]
+creating beats##### false
+#####creating beats 2 [Cis  D  Dis  F  Gis]
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C61/x61 2
+#####creating beats 2 [F  G  Gis  Ais]
+creating beats##### false
+#####creating beats 2 [Cis  D  Dis  F  Gis]
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [Dis  E]
+creating beats##### false
+#####creating beats 3 [D  F  G  A]
+creating beats##### false
+#####creating beats 3 [C  E  G  A  Ais]
+creating beats##### false
+#####creating beats 3 [E  G]
+creating beats##### false
+#####creating beats 3 [F  G  A]
+creating beats##### false
+#####creating beats 3 [C  Dis  Gis  Ais]
+creating beats##### false
+#####creating beats 3 [D  F]
+creating beats##### false
+#####creating measures S0/x1241 3
+#####creating beats 3 [G  B]
+creating beats##### false
+#####creating beats 3 [D  F  G  B]
+creating beats##### false
+#####creating beats 3 [C  Dis  Ais] [Gis]
+creating beats##### false
+#####creating beats 3 [E  Fis  Gis]
+creating beats##### false
+#####creating beats 3 [Cis  E  A]
+creating beats##### false
+#####creating beats 3 [D  E  G  B]
+creating beats##### false
+#####creating beats 3 [A  Ais]
+creating beats##### false
+#####creating beats 3 [C  E  G  A]
+creating beats##### false
+#####creating beats 3 [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A] [C  D  Dis  Fis  A]
+creating beats##### false
+#####creating beats 3 [C  E  G  Ais]
+creating beats##### false
+#####creating beats 3 [D  Fis  Gis  B]
+creating beats##### false
+#####creating beats 3 [C  G  A  B]
+creating beats##### false
+#####creating beats 3 [C  Dis  Gis  Ais]
+creating beats##### false
+#####creating beats 3 [C  Dis  Fis  A]
+creating beats##### false
+#####creating measures C-942/x-942 3
+#####creating beats 3 [D  Dis  G] [Cis  D  Dis  F  Gis]
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [Cis  E  Fis  G  Ais]
+creating beats##### false
+#####creating beats 3 [C  Gis  Ais]
+creating beats##### false
+#####creating beats 3 [Dis  G  A] [C  D  G  A] [C  Dis  Fis  A]
+creating beats##### true
+creating measures##### 1
+#####creating measures C1087/x-686 3
+#####creating beats 3 [C  E  F  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating beats 3 [E  G  B]
+creating beats##### false
+#####creating beats 3 S84312/x-146 S84312/x-153
+#####creating definite beat S0/x-146 1
+#####creating beats 1 [Cis  B]
+creating beats##### true
+creating definite beat##### 1
+#####creating definite beat S0/x-153 2
+#####creating beats 2 [D  G  B]
+creating beats##### false
+#####creating beats 2 [C  Cis  Dis  F  Gis]
+creating beats##### false
+#####creating beats 2 [E  F  A]
+creating beats##### false
+#####creating beats 2 [C  E  G  A]
+creating beats##### false
+#####creating beats 2 [D  F  G  Gis  B]
+creating beats##### false
+#####creating beats 2 [E  Fis  B]
+creating beats##### false
+#####creating beats 2 [C  D  G  B]
+creating beats##### false
+#####creating beats 2 [E  Fis]
+creating beats##### false
+#####creating beats 2 [C  D  E  Fis  A]
+creating beats##### false
+#####creating beats 2 [D]
+creating beats##### false
+#####creating beats 2 [C  D  E  F  G  A  B]
+creating beats##### false
+#####creating beats 2 [C  D  G  A  B]
+creating beats##### false
+#####creating beats 2 [C  Cis  Dis  G  Gis  Ais]
+creating beats##### false
+#####creating beats 2 [Dis  Fis  A  B] C11636/x199
+#####creating definite beat C11636/x199 1
+#####creating beats 1 [Fis  A  B]
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C4359/x-7 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-920/x-920 3
+#####creating beats 3 [C  F  Gis] [Dis  G  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C3596/x-177 3
+#####creating beats 3 [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-178 3
+#####creating beats 3 [C  D  E  B]
+creating beats##### false
+#####creating beats 3 [Ais]
+creating beats##### false
+#####creating beats 3 [C  D  E]
+creating beats##### false
+#####creating beats 3 C10128/x162 [Dis  Fis  G  A  B]
+#####creating definite beat C10128/x162 2
+#####creating beats 2 [Dis  Fis  G  A  B]
+creating beats##### false
+#####creating beats 2 [C  Dis  A  B]
+creating beats##### false
+creating definite beat##### 0
+#####creating definite beat C10128/x162 2
+#####creating beats 2 [C  Dis  A  B]
+creating beats##### false
+#####creating beats 2 [Dis  Fis  G  A  B]
+creating beats##### false
+creating definite beat##### 0
+creating beats##### false
+#####creating beats 3 [Cis  E  A]
+creating beats##### false
+#####creating beats 3 [Dis] [C  D  Dis  A] [C  D  Dis  A]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3479/x-179 3
+#####creating beats 3 [C  D  E  Ais] [C  E  F  G  A  Ais] [C  D  E  Ais]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S84312/I56644 x-177 x-178 x-179 => C3596/x-177 S84312/x-178 C3479/x-179
+C3596/I6240 => [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
+S84312/I-617 => [Dis] [C  D  Dis  A] [C  D  Dis  A]
+C3479/I6123 => [C  D  E  Ais] [C  E  F  G  A  Ais] [C  D  E  Ais]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures S0/x1241 4
+#####creating beats 4 [D  E  G  B]
+creating beats##### false
+#####creating beats 4 [D  Fis  G  B]
+creating beats##### false
+#####creating beats 4 S84312/x-146 S84312/x-153
+#####creating definite beat S0/x-146 2
+#####creating beats 2 C-100/x-100 C-101/x-101
+#####creating definite beat C-100/x-100 1
+creating definite beat##### 0
+#####creating definite beat C-101/x-101 1
+creating definite beat##### 0
+#####creating definite beat C-100/x-100 1
+creating definite beat##### 0
+#####creating definite beat C-101/x-101 1
+creating definite beat##### 0
+creating beats##### false
+#####creating beats 2 [D  G  A]
+creating beats##### false
+#####creating beats 2 [D  E  F  G  A  B]
+creating beats##### false
+#####creating beats 2 [C  G  A] [Cis  G  Ais]
+creating beats##### true
+creating definite beat##### 1
+#####creating definite beat S0/x-153 2
+#####creating beats 2 [F  G]
+creating beats##### false
+#####creating beats 2 [C  D  E  F  A]
+creating beats##### false
+#####creating beats 2 [C  D  E  F  G  A  B]
+creating beats##### false
+#####creating beats 2 [Cis  D  F  G  B]
+creating beats##### false
+#####creating beats 2 [F  G  B]
+creating beats##### false
+#####creating beats 2 [Ais  B]
+creating beats##### false
+#####creating beats 2 [D  A]
+creating beats##### false
+#####creating beats 2 [D  F  Gis  A  B]
+creating beats##### false
+#####creating beats 2 [E  G]
+creating beats##### false
+#####creating beats 2 [D  F  Gis  Ais]
+creating beats##### false
+#####creating beats 2 [C  E  G  A  B]
+creating beats##### false
+#####creating beats 2 [G  Ais]
+creating beats##### false
+#####creating beats 2 [C  D  Fis  B] [C  D  Fis  Gis  A  Ais]
+creating beats##### true
+creating definite beat##### 1
+creating beats##### true
+creating measures##### 1
+#####creating measures C1087/x-686 4
+#####creating beats 4 [C  E  F  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C83581/x1246 4
+#####creating beats 4 [Dis  Ais  B] [C  Dis  B] [Dis  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C8868/x135 4
+#####creating beats 4 [C  Cis  D  E  Ais] [C  Dis  E  F  Ais] [C  E  Fis  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4359/x-14 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures S0/x-15 4
+#####creating beats 4 [E  Fis  G] [D  E  G  Gis]
+creating beats##### false
+#####creating beats 4 [C  Dis  Gis  Ais]
+creating beats##### false
+#####creating beats 4 [Cis  D  E  A]
+creating beats##### false
+#####creating beats 4 [C  E  F  G  A]
+creating beats##### false
+#####creating beats 4 [C  D]
+creating beats##### false
+#####creating beats 4 [Gis]
+creating beats##### false
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S84312/I69565 x-14 x-15 => C4359/x-14 S84312/x-15
+C4359/I7003 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+S84312/I5781 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+#####creating measures C-1111/x-1111 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C-1112/x-1112 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I-1494 x-1111 x-1112 => C-1111/x-1111 C-1112/x-1112
+C-1111/I-1492 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C-1112/I-1493 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C-1111/x-1111 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-1105/x-1105 3
+#####creating beats 3 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais] [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-1106/x-1106 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C-1107/x-1107 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I-1487 x-1106 x-1107 => C-1106/x-1106 C-1107/x-1107
+C-1106/I-1485 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C-1107/I-1486 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C-1105/x-1105 3
+#####creating beats 3 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais] [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-1106/x-1106 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C-1107/x-1107 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I-1487 x-1106 x-1107 => C-1106/x-1106 C-1107/x-1107
+C-1106/I-1485 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C-1107/I-1486 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C-1106/x-1106 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-1105/x-1105 4
+#####creating beats 4 [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais] [C  Ais] [C  F  G  A] [C  D  E] [C  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C2/x-1108 4
+#####creating beats 4 [C  F  G  A  Ais] [C  D  E  F  A] [F  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C-1111/x-1111 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C-1112/x-1112 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I-1494 x-1111 x-1112 => C-1111/x-1111 C-1112/x-1112
+C-1111/I-1492 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C-1112/I-1493 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C-1106/x-1106 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C-1107/x-1107 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I-1487 x-1106 x-1107 => C-1106/x-1106 C-1107/x-1107
+C-1106/I-1485 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C-1107/I-1486 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+#####creating measures C4/x-1115 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1116 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I13 x-1115 x-1116 => C4/x-1115 C5/x-1116
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C4/x-1115 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C2/x-1113 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1114 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I7 x-1113 x-1114 => C2/x-1113 C3/x-1114
+C2/I2 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C3/I3 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1113 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1115 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1116 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I13 x-1115 x-1116 => C4/x-1115 C5/x-1116
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C4/x-1115 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1116 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I13 x-1115 x-1116 => C4/x-1115 C5/x-1116
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1113 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1114 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I7 x-1113 x-1114 => C2/x-1113 C3/x-1114
+C2/I2 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C3/I3 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+#####creating measures C2/x-1123 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1125 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1126 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1125 x-1126 => C4/x-1125 C5/x-1126
+C4/I4 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C5/I5 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C4/x-1125 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C2/x-1123 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1124 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I7 x-1123 x-1124 => C2/x-1123 C3/x-1124
+C2/I2 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C3/I3 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C4/x-1125 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1126 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1125 x-1126 => C4/x-1125 C5/x-1126
+C4/I4 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C5/I5 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1123 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1125 4
+#####creating beats 4 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1126 4
+#####creating beats 4 [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1125 x-1126 => C4/x-1125 C5/x-1126
+C4/I4 => [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+C5/I5 => [Cis  Gis  A] [A  B] [Fis  G] [G  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C4/x-1125 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C2/x-1123 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1124 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I7 x-1123 x-1124 => C2/x-1123 C3/x-1124
+C2/I2 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C3/I3 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+#####creating measures C2/x-1133 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1135 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1136 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1135 x-1136 => C4/x-1135 C5/x-1136
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1133 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1135 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1136 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1135 x-1136 => C4/x-1135 C5/x-1136
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1133 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1135 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1136 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1135 x-1136 => C4/x-1135 C5/x-1136
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1133 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1135 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1136 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1135 x-1136 => C4/x-1135 C5/x-1136
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1133 3
+#####creating beats 3 [C  D  Fis  A  B] [C  D  Fis  B] [C  D  Fis] [C  D  Fis  A  B]
+creating beats##### false
+creating measures##### 0
+#####creating measures C4/x-1135 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C5/x-1136 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I14 x-1135 x-1136 => C4/x-1135 C5/x-1136
+C4/I4 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C5/I5 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+#####creating measures C2/x-1143 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1144 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I5 x-1143 x-1144 => C2/x-1143 C3/x-1144
+C2/I2 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C3/I3 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1143 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1144 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I5 x-1143 x-1144 => C2/x-1143 C3/x-1144
+C2/I2 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C3/I3 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1143 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+#####generating score
+#####creating measures C2/x-1143 3
+#####creating beats 3 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### true
+creating measures##### 1
+#####creating measures C3/x-1144 3
+#####creating beats 3 [C  F  A  Ais] [C  F  A] [Cis  F  A]
+creating beats##### true
+creating measures##### 1
+Rules::=
+S/I5 x-1143 x-1144 => C2/x-1143 C3/x-1144
+C2/I2 => [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+C3/I3 => [C  F  A  Ais] [C  F  A] [Cis  F  A]
+#####remaping
+#####remaping for measures
+remaping for measures#####
+#####remaping for a sentence
+remaping for a sentence#####
+remaping#####
+generating score##### true
+#####generating score
+#####creating measures C2/x-1143 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+#####creating measures C2/x-1153 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+#####generating score
+#####creating measures C2/x-1153 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+#####generating score
+#####creating measures C2/x-1153 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+#####generating score
+#####creating measures C2/x-1153 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+#####generating score
+#####creating measures C2/x-1153 4
+#####creating beats 4 [C  D  E  F  G  Ais] [C  D  E  F  Ais] [C  E  G  A  Ais]
+creating beats##### false
+creating measures##### 0
+generating score##### false
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+#####generating score
+generating score##### false
+
+
+!!CONSOLIDATE FIN!!
+
+
+!!CONSOLIDATE FIN!!
+
+BOX
+
+
+Input BOX
+
+
+Sent DB
+
+
+Word DB
+
