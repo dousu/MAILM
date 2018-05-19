@@ -7085,12 +7085,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		return false;
 	}
 
-	int cat_num = 0;
-	std::for_each(external.begin(), external.end(), [&cat_num](Element& el) mutable {
-		if (el.is_cat()) {
-			cat_num++;
-		}
-	});
+	int cat_num =  = std::count_if(work_external.begin(),work_external.end(),[](Element& el){return el.is_cat();});
 
 	//categoryがない場合はサイズで判定
 	if (cat_num == 0) {
