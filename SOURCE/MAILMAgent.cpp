@@ -53,7 +53,7 @@ MAILMAgent::say(int beat_num, std::map<int, std::vector<std::string> >& mapping,
 }
 
 void
-MAILMAgent::hear(std::vector<Rule>& rules, std::map<int, std::vector<std::string> >& mapping) {
+MAILMAgent::hear(std::vector<Rule> rules, std::map<int, std::vector<std::string> >& mapping) {
 
 	registration(mapping);
 	kb.send_box(rules);

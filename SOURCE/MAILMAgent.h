@@ -22,7 +22,7 @@ public:
 	MAILMAgent& operator=(const MAILMAgent& dst);
 
 	std::vector<Rule> say(int beat_num, std::map<int, std::vector<std::string> >& mapping, int no);
-	void hear(std::vector<Rule>& rules, std::map<int, std::vector<std::string> >& mapping);
+	void hear(std::vector<Rule> rules, std::map<int, std::vector<std::string> >& mapping);
 
 	void registration(std::map<int, std::vector<std::string> >& core_meaning);
 
