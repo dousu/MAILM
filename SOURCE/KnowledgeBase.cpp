@@ -6929,6 +6929,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			temp.erase(temp.begin() + rand_index);
 		}
 		if (temp.size() != 0) {
+			std::cerr << "#####remaping" << std::endl;
 			//writing################################################
 			//create a list of rules "res" and mapping "core_meaning"
 			std::map<int, std::vector<std::string> > work_map;
@@ -6992,6 +6993,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 
 			//#######################################################
 			creatable = true;
+			std::cerr << "remaping#####" << std::endl;
 		}else{
 			std::cerr << "generating score##### false" << std::endl;
 			return res;
