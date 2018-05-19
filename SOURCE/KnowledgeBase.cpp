@@ -6937,6 +6937,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			std::vector<Element> terminals; //for symbols in measure
 			Conception cc; //MeasureConception
 			cc.add("MEASURE");
+			std::cerr << "#####remaping for measures" << std::endl;
 			bool measure_flag = false, onloop=false;
 			for(auto& rule : work_list){
 				if(!onloop && intention[rule.internal.front().obj].include(cc)){
@@ -6970,7 +6971,9 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 					}
 				}
 			}
+			std::cerr << "remaping for measures#####" << std::endl;
 			//rule for sentence
+			std::cerr << "#####remaping for a sentence" << std::endl;
 			int int_ind;
 			int_ind=INDEX_NO--;
 			Element el;
@@ -6989,6 +6992,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			work_map[int_ind].push_back("s"+SENTENCE_NO--); //?
 			core_meaning=work_map;
 			res.push_back(add_r);
+			std::cerr << "remaping for a sentence#####" << std::endl;
 
 			//#######################################################
 			creatable = true;
