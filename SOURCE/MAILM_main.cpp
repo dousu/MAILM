@@ -636,7 +636,7 @@ int main(int argc, char* argv[]) {
 			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
 		}
-		std::cerr << "LEARNING DATA SIZE: " << ch_hear.size() << std::endl;
+		std::cerr << "LEARNING DATA SIZE: " << ch_hear.size() << ", BUF SIZE: " << buf.size() << std::endl;
 		child.hear(ch_hear, ch_mm);
 		child.learn();
 		child.grow();
