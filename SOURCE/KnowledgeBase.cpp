@@ -7157,6 +7157,9 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 				trg.cat = 0;
 			}
 			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index]);
+			if(!t_check){
+				break;
+			}
 		}
 		if (t_check) {
 			res = work_res;
@@ -7180,6 +7183,9 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 				trg.cat = 0;
 			}
 			lt_eq_check &= create_beat_eq(work_res, trg, list[index]);
+			if(!lt_eq_check){
+				break;
+			}
 		}
 		if (lt_eq_check) {
 			res = work_res;
