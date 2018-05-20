@@ -7044,22 +7044,22 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 //measureがひとつ以上でるようにランダムに組み立てる
 bool
 KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num) {
-	std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " RES_SIZE: " << res.size() << std::endl;
+	// std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " RES_SIZE: " << res.size() << std::endl;
 	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
 	//3.すべての候補を試す前にここまでくればtrueを返す．
 	// DictionaryRange item_range =DB_dic[grnd_elm.cat].equal_range(mean_elm.obj);
 	if(res.size() > EXPRESSION_LIMIT){
-		std::cerr << "creating measures##### false" << std::endl;
+		// std::cerr << "creating measures##### false" << std::endl;
 		return false;
 	}
 	if (DB_dic.find(cat_el.cat) == DB_dic.end() && DB_dic[cat_el.cat].size() == 0) {
-		std::cerr << "creating measures##### false" << std::endl;
+		// std::cerr << "creating measures##### false" << std::endl;
 		return false;
 	}
 	
-	std::cerr << "DIC_SIZE: " << DB_dic[cat_el.cat].size() << std::endl;
+	// std::cerr << "DIC_SIZE: " << DB_dic[cat_el.cat].size() << std::endl;
 	
 	//条件適合
 	bool suc = false;
@@ -7110,7 +7110,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 			break;
 		}
 	}
-	std::cerr << "creating measures##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
+	// std::cerr << "creating measures##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
 	return suc;
 }
 
@@ -7118,13 +7118,13 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 //要素数beat_numの制約を満たすようにサイズ数を分配する
 bool
 KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& external, int beat_num) {
-	std::cerr << "#####creating beats " << beat_num;
-	for(auto& ext_el : external){
-		std::cerr << " " << ext_el.to_s();
-	}
-	std::cerr << " SIZE: " << res.size() << std::endl;
+	// std::cerr << "#####creating beats " << beat_num;
+	// for(auto& ext_el : external){
+	// 	std::cerr << " " << ext_el.to_s();
+	// }
+	// std::cerr << " SIZE: " << res.size() << std::endl;
 	if(res.size() > EXPRESSION_LIMIT){
-		std::cerr << "creating beats##### false" << std::endl;
+		// std::cerr << "creating beats##### false" << std::endl;
 		return false;
 	}
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
@@ -7136,7 +7136,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	//4.すべてtrueになったwork_resをresに追加，externalをwork_externalで上書きする．
 	//5.trueを返す．
 	if (external.size() > beat_num) {
-		std::cerr << "creating beats##### false" << std::endl;
+		// std::cerr << "creating beats##### false" << std::endl;
 		return false;
 	}
 
@@ -7145,11 +7145,11 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 	//categoryがない場合はサイズで判定
 	if (cat_num == 0) {
 		if (external.size() == beat_num) {
-			std::cerr << "creating beats##### true" << std::endl;
+			// std::cerr << "creating beats##### true" << std::endl;
 			return true;
 		}
 		else {
-			std::cerr << "creating beats##### false" << std::endl;
+			// std::cerr << "creating beats##### false" << std::endl;
 			return false;
 		}
 	}
@@ -7185,7 +7185,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		}
 		if (t_check) {
 			res = work_res;
-			std::cerr << "creating beats##### true" << std::endl;
+			// std::cerr << "creating beats##### true" << std::endl;
 			return true;
 		}
 	}
@@ -7211,20 +7211,20 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		}
 		if (lt_eq_check) {
 			res = work_res;
-			std::cerr << "creating beats##### true" << std::endl;
+			// std::cerr << "creating beats##### true" << std::endl;
 			return true;
 		}
 	}
-	std::cerr << "creating beats##### false" << std::endl;
+	// std::cerr << "creating beats##### false" << std::endl;
 	return false;
 }
 
 //要素数space_numの制約を満たす可能性のあるルールを選択
 bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num)
 {
-	std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << " SIZE: " << res.size() << std::endl;
+	// std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << " SIZE: " << res.size() << std::endl;
 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
-		std::cerr << "creating definite beat##### true" << std::endl;
+		// std::cerr << "creating definite beat##### true" << std::endl;
 		return false;
 	}
 
@@ -7253,7 +7253,7 @@ bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int sp
 			break;
 		}
 	}
-	std::cerr << "creating definite beat##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
+	// std::cerr << "creating definite beat##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
 	return suc;
 }
 
