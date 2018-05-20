@@ -12,7 +12,7 @@ bool KnowledgeBase::LOGGING_FLAG = false;
 int KnowledgeBase::ABSENT_LIMIT = 1;
 uint32_t KnowledgeBase::CONTROLS = 0x00L;
 int KnowledgeBase::buzz_length = 3;
-int KnowledgeBase::RECURSIVE_LIMIT = 3;
+int KnowledgeBase::EXPRESSION_LIMIT = 100;
 int KnowledgeBase::CATEGORY_NO= -10000;
 int KnowledgeBase::SENTENCE_NO = -10000;
 int KnowledgeBase::INDEX_NO = -10000;
@@ -6921,6 +6921,11 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 					suc = false;
 					break;
 				}
+				if(work_list.size() > EXPRESSION_LIMIT){
+					work_list.clear();
+					suc = false;
+					break;
+				}
 			}
 			if (suc) {
 				break;
@@ -7044,6 +7049,10 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
 	//3.すべての候補を試す前にここまでくればtrueを返す．
 	// DictionaryRange item_range =DB_dic[grnd_elm.cat].equal_range(mean_elm.obj);
+	if(res.size() > EXPRESSION_LIMIT){
+		std::cerr << "creating measures##### false" << std::endl;
+		return false;
+	}
 	if (DB_dic.find(cat_el.cat) == DB_dic.end() && DB_dic[cat_el.cat].size() == 0) {
 		std::cerr << "creating measures##### false" << std::endl;
 		return false;
@@ -7113,6 +7122,10 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 		std::cerr << " " << ext_el.to_s();
 	}
 	std::cerr << " SIZE: " << res.size() << std::endl;
+	if(res.size() > EXPRESSION_LIMIT){
+		std::cerr << "creating beats##### false" << std::endl;
+		return false;
+	}
 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
 	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
