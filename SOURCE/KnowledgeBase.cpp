@@ -7038,7 +7038,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 //measureがひとつ以上でるようにランダムに組み立てる
 bool
 KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat_num) {
-	std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " SIZE: " << res.size() << std::endl;
+	std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " RES_SIZE: " << res.size() << std::endl;
 	//1.cat_elに基づいてランダムにルールを選択
 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る. 
@@ -7048,6 +7048,9 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		std::cerr << "creating measures##### false" << std::endl;
 		return false;
 	}
+	
+	std::cerr << "DIC_SIZE: " << DB_dic[cat_el.cat].size() << std::endl;
+	
 	//条件適合
 	bool suc = false;
 	//失敗するかもしれないのでワーキング用のres
