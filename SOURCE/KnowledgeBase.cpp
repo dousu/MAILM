@@ -7035,8 +7035,8 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		for(auto all : res){
 			std::cerr << all.to_s() << std::endl;
 		}
+		std::cerr << "generating score##### true " << i << std::endl;
 	}
-	std::cerr << "generating score##### true " << i << std::endl;
 
 	return res;
 }
