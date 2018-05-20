@@ -12,7 +12,7 @@ bool KnowledgeBase::LOGGING_FLAG = false;
 int KnowledgeBase::ABSENT_LIMIT = 1;
 uint32_t KnowledgeBase::CONTROLS = 0x00L;
 int KnowledgeBase::buzz_length = 3;
-int KnowledgeBase::EXPRESSION_LIMIT = 10;
+int KnowledgeBase::EXPRESSION_LIMIT = 30;
 int KnowledgeBase::RECURSIVE_LIMIT = 3;
 int KnowledgeBase::CATEGORY_NO= -10000;
 int KnowledgeBase::SENTENCE_NO = -10000;
@@ -6903,14 +6903,14 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 	//3.最初にできたものをgenerateしたものとする．できなかった場合は，std::vector<Rule>()を返す.
 	{//ルールの作り替えも必要
 		int rand_index, i = 0;
-		bool creatable = false;
+		// bool creatable = false;
 		RuleDBType temp = sentenceDB;
 		std::vector<Rule> work_list;
 		for (; temp.size() != 0; i++) {
 			bool suc = true;
 			work_list.clear();
 			rand_index = MT19937::irand() % temp.size();
-			Rule base_r = temp[rand_index];
+			Rule base_r = *(temp.begin() + rand_index);
 			work_list.push_back(base_r);
 			for (auto& ex_el : base_r.external) {
 				Element trg_el = ex_el;
@@ -7025,10 +7025,10 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			std::cerr << "remaping for a sentence#####" << std::endl;
 
 			//#######################################################
-			creatable = true;
+			// creatable = true;
 			std::cerr << "remaping#####" << std::endl;
 		}else{
-			std::cerr << "generating score##### false beat_num=" << beat_num << std::endl;
+			std::cerr << "generating score##### false beat_num=" << beat_num << " " << i << std::endl;
 			return res;
 		}
 		std::cerr << "GENERATED SCORES::=" << std::endl;
@@ -7036,7 +7036,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			std::cerr << all.to_s() << std::endl;
 		}
 	}
-	std::cerr << "generating score##### true" << std::endl;
+	std::cerr << "generating score##### true " << i << std::endl;
 
 	return res;
 }
