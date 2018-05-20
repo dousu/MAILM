@@ -706,7 +706,7 @@ std::vector<std::vector<int> > KnowledgeBase::calculation_assignment(int value, 
 	else {
 		std::vector<std::vector<int> > work_result;
 		work_result = calculation_assignment(value - 1, size);
-		result.reserve(work_result.size()*size);
+		// result.reserve(work_result.size()*size);
 		for (auto& list : work_result) {
 			for (int index = 0; index < size; index++) {
 				std::vector<int> copy = list;
@@ -7044,7 +7044,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		return false;
 	}
 	//条件適合
-	bool suc;
+	bool suc = false;
 	//失敗するかもしれないのでワーキング用のres
 	std::vector<Rule> work_res;
 	//比較用Conception作成
@@ -7061,6 +7061,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 		std::advance(DB_loc,rand_index);
 		Rule base_rule = (*DB_loc).second;
 		work_res.push_back(base_rule);
+		int sym_count = std::count_if(base_rule.external.begin(),base_rule.external.end(),[](Element& el){return el.is_sym();});
 		//MEASUREであればビート数を合わせに行くかシンボルが入っていればビート数を合わせに行くか
 		if (intention[base_rule.internal.front().obj].include(cc)) {//MEASUREであればビート数を合わせに行く
 			//作業用external初期化
@@ -7069,7 +7070,7 @@ KnowledgeBase::create_measures(std::vector<Rule>& res, Element& cat_el, int beat
 
 			// suc = create_beats(work_res, work_external, beat_num-sym_count);
 			suc = create_beats(work_res, work_external, beat_num);
-		} else {//違うならば，MEASUREを探す
+		} else if(sym_count == 0){//違うならば，MEASUREを探す
 			suc = true;
 			for (auto& cat_el : base_rule.external) {
 				Element trg = cat_el;
