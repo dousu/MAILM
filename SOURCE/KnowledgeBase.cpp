@@ -6894,9 +6894,9 @@ KnowledgeBase::dic_change_ind(DicDBType& dic, int ind, int toind) {
 //3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
 //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
 std::vector<Rule>
-KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning, int no = -1) {
+KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning) {
 	std::vector<Rule> res;
-	std::cerr << "#####generating score" << std::endl;
+	std::cerr << "#####generating score beat_num=" << beat_num << std::endl;
 	//invention
 	//1.sをランダムに選ぶ. stateをbeat_numにしておく.
 	//2.要素を順番にチェック(create_measures(res,cat,beat_num))．symbolががでてくるかひとつでもfalseなら1へ戻る．symbolが出たら1へ戻る．
@@ -7028,7 +7028,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			creatable = true;
 			std::cerr << "remaping#####" << std::endl;
 		}else{
-			std::cerr << "generating score##### false" << std::endl;
+			std::cerr << "generating score##### false beat_num=" << beat_num << std::endl;
 			return res;
 		}
 		std::cerr << "GENERATED SCORES::=" << std::endl;

@@ -383,7 +383,7 @@ public:
 		dic_unify(DicDBType& dic);
 
 	std::vector<Rule>
-		generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning, int no);
+		generate_score(int beat_num, std::map<int, std::vector<std::string> >& core_meaning);
 
 	bool
 		create_measures(std::vector<Rule>& res, Element& cat_num, int beat_num);

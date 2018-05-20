@@ -632,7 +632,7 @@ int main(int argc, char* argv[]) {
 		ch_mm.clear();
 		for (int j = 0; j < 5; j++) {
 			int b_num = nums_v[MT19937::irand()%nums_v.size()];
-			parent_origin = parent.say(b_num, mm, j + 1);
+			parent_origin = parent.say(b_num, mm);
 			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
 		}
