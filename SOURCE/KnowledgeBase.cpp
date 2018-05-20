@@ -13,6 +13,7 @@ int KnowledgeBase::ABSENT_LIMIT = 1;
 uint32_t KnowledgeBase::CONTROLS = 0x00L;
 int KnowledgeBase::buzz_length = 3;
 int KnowledgeBase::EXPRESSION_LIMIT = 100;
+int KnowledgeBase::RECURSIVE_LIMIT = 3;
 int KnowledgeBase::CATEGORY_NO= -10000;
 int KnowledgeBase::SENTENCE_NO = -10000;
 int KnowledgeBase::INDEX_NO = -10000;

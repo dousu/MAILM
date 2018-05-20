@@ -115,6 +115,7 @@ public:
 	static uint32_t CONTROLS;
 	static int buzz_length;
 	static int EXPRESSION_LIMIT;
+	static int RECURSIVE_LIMIT;
 	static int CATEGORY_NO;
 	static int SENTENCE_NO;
 	static int INDEX_NO;
