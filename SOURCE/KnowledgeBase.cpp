@@ -6943,6 +6943,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			cc.add("MEASURE");
 			std::cerr << "#####remaping for measures" << std::endl;
 			bool measure_flag = false, onloop=false;
+			work_list.erase(work_list.begin()); //先頭を削る Sentenceがmeasureであるかもしれないから
 			for(auto& rule : work_list){
 				if(!onloop && intention[rule.internal.front().obj].include(cc)){
 					onloop = true;
