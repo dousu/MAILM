@@ -6929,7 +6929,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			temp.erase(temp.begin() + rand_index);
 		}
 		if (temp.size() != 0) {
-			std::cerr << "Rules::=" << std::endl;
+			std::cerr << "GENERATED Rules::=" << std::endl;
 			for(auto all : work_list){
 				std::cerr << all.to_s() << std::endl;
 			}
@@ -7023,6 +7023,10 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 		}else{
 			std::cerr << "generating score##### false" << std::endl;
 			return res;
+		}
+		std::cerr << "GENERATED SCORES::=" << std::endl;
+		for(auto all : res){
+			std::cerr << all.to_s() << std::endl;
 		}
 	}
 	std::cerr << "generating score##### true" << std::endl;

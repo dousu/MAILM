@@ -639,7 +639,8 @@ int main(int argc, char* argv[]) {
 		std::cerr << "LEARNING DATA SIZE: " << ch_hear.size() << ", BUF SIZE: " << buf.size() << std::endl;
 		child.hear(ch_hear, ch_mm);
 		child.learn();
-		std::cerr << child.kb.to_s() << std::endl;
+		std::cerr << "CHILD'S KNOWLEDGE:" << std::endl << child.kb.to_s() << std::endl;
+		std::cout << "CHILD'S SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
 		child.grow();
 		parent = child;
 	}
