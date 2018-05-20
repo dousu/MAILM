@@ -12,7 +12,7 @@ bool KnowledgeBase::LOGGING_FLAG = false;
 int KnowledgeBase::ABSENT_LIMIT = 1;
 uint32_t KnowledgeBase::CONTROLS = 0x00L;
 int KnowledgeBase::buzz_length = 3;
-int KnowledgeBase::EXPRESSION_LIMIT = 100;
+int KnowledgeBase::EXPRESSION_LIMIT = 10;
 int KnowledgeBase::RECURSIVE_LIMIT = 3;
 int KnowledgeBase::CATEGORY_NO= -10000;
 int KnowledgeBase::SENTENCE_NO = -10000;
@@ -7223,7 +7223,7 @@ KnowledgeBase::create_beats(std::vector<Rule>& res, std::vector<Element>& extern
 bool KnowledgeBase::create_beat_eq(std::vector<Rule>& res, Element& elem, int space_num)
 {
 	// std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << " SIZE: " << res.size() << std::endl;
-	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0) {
+	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0 || space_num == 0) {
 		// std::cerr << "creating definite beat##### true" << std::endl;
 		return false;
 	}
