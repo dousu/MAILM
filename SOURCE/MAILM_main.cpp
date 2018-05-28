@@ -71,11 +71,11 @@ void output_data(
 	boost::system::error_code error;
 	const bool result =
 		boost::filesystem::exists(path, error);
-	if (error) {
-		std::cout << file_path << " file not found" << std::endl;
-		std::cout << data << std::endl;
-		return;
-	}else{
+	// if (error) {
+	// 	std::cout << file_path << " file not found" << std::endl;
+	// 	std::cout << data << std::endl;
+	// 	return;
+	// }else{
 		if(result){
 			std::ofstream ofs(file_path.c_str());
 			ofs << data;
@@ -89,7 +89,7 @@ void output_data(
 			std::cout << data << std::endl;
 			return;	
 		}
-	}
+	// }
 }
 
 void registration(
