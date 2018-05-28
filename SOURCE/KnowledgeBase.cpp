@@ -7029,6 +7029,7 @@ KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::strin
 			std::cerr << "remaping#####" << std::endl;
 		}else{
 			std::cerr << "generating score##### false beat_num=" << beat_num << " " << i << std::endl;
+			res.clear();
 			return res;
 		}
 		std::cerr << "GENERATED SCORES::=" << std::endl;
