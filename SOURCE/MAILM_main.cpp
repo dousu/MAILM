@@ -63,21 +63,32 @@ load_input_data(
 
 void output_data(
 	std::string file_path,
-	std::string data
+	std::string data,
+	std::string empty
 ) {
-	//存在しない場合，中身がない場合はすぐreturn
+	//存在しない場合はすぐreturn
 	const boost::filesystem::path path(file_path.c_str());
 	boost::system::error_code error;
 	const bool result =
 		boost::filesystem::exists(path, error);
-	if (!result || error) {
+	if (error) {
 		std::cout << file_path << " file not found" << std::endl;
 		std::cout << data << std::endl;
 		return;
-	}
-	else {
-		std::ofstream ofs(file_path.c_str());
-		ofs << data;
+	}else{
+		if(result){
+			std::ofstream ofs(file_path.c_str());
+			ofs << data;
+		}else if(!result){
+			boost::filesystem::ofstream(empty.c_str());
+			boost::filesystem::copy_file(empty.c_str(),file_path);
+			std::ofstream ofs(file_path.c_str());
+			ofs << data;
+		}else {
+			std::cout << file_path << " and empty file not found" << std::endl;
+			std::cout << data << std::endl;
+			return;	
+		}
 	}
 }
 
@@ -318,6 +329,7 @@ int main(int argc, char* argv[]) {
 	std::string dic_xml_file = "./dic_xml.data";
 	std::string xml_dir = "../XML";
 	std::string xml_ext = ".xml";
+	std::string empty_dot = "../dot/empty.dot";
 	// std::string meainig_rules_file = "./meaning_rules.data";
 
 	/**************************************************
@@ -605,7 +617,7 @@ int main(int argc, char* argv[]) {
 			tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
 
-			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
+			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str,empty_dot);
 			
 			std::cout << "output fin." << std::endl;
 
@@ -639,7 +651,7 @@ int main(int argc, char* argv[]) {
 			beat_nums = std::vector<int>(b_num,parent_origin.size());
 			tree_str = make_tree_str_for_dot(parent_origin, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
-			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str);
+			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str,empty_dot);
 
 			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
@@ -669,7 +681,7 @@ int main(int argc, char* argv[]) {
 				tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
 				std::cout << "tree fin." << std::endl;
 
-				output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
+				output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str,empty_dot);
 			
 				std::cout << "output fin." << std::endl;
 
