@@ -648,11 +648,11 @@ int main(int argc, char* argv[]) {
 			parent_origin = parent.say(b_num, mm);
 
 			std::string name = std::string("generation_") + boost::lexical_cast<std::string>(i);
-			std::cout << "Utterance " << j << ":" << std::endl;
+			std::cout << "Utterance " << j+1 << ":" << std::endl;
 			beat_nums = std::vector<int>(b_num,parent_origin.size());
 			tree_str = make_tree_str_for_dot(parent_origin, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
-			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str,empty_dot);
+			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j+1) + std::string(".dot"), tree_str,empty_dot);
 
 			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
