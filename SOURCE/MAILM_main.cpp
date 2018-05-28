@@ -633,6 +633,12 @@ int main(int argc, char* argv[]) {
 		for (int j = 0; j < 5; j++) {
 			int b_num = nums_v[MT19937::irand()%nums_v.size()];
 			parent_origin = parent.say(b_num, mm);
+
+			std::cout << "Utterance " << j << ":" << std::endl;
+			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
+			std::cout << "tree fin." << std::endl;
+			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str);
+
 			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
 		}
@@ -641,6 +647,35 @@ int main(int argc, char* argv[]) {
 		child.learn();
 		std::cerr << "CHILD'S KNOWLEDGE:" << std::endl << child.kb.to_s() << std::endl;
 		std::cout << "CHILD'S SEMANTICS:" << std::endl << ma.kb.intention.to_s() << std::endl;
+		view_kb = child.kb;
+		for (int i = 1; i <= labeling.size(); i++) {
+		// for (int i = 14; i <= 14; i++) {
+			no = i;
+			beat_nums = reader.beat_map[no];
+			std::string name = labeling[no];
+			r_list.clear();
+			std::cout << "Construct " << name << ".xml" << std::endl;
+			if (view_kb.explain(view_kb.meaning_no(no), r_list)) {
+
+			/*
+			std::cout << "Test View r_list:" << std::endl;
+			for (auto& r : r_list) {
+				std::cout << r.to_s() << std::endl;
+			}
+			std::cout << std::endl;*/
+
+				tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
+				std::cout << "tree fin." << std::endl;
+
+				output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
+			
+				std::cout << "output fin." << std::endl;
+
+			}
+			else {
+				std::cout << "Can't construct" << std::endl;
+			}
+		}
 		child.grow();
 		parent = child;
 	}
