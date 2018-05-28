@@ -74,7 +74,7 @@ bool Semantics<T>::merge_equal(Element a, Element b) {
 	//   return false;
 	// }
 	//return mapping[a.obj].include(mapping[b.obj]) || mapping[b.obj].include(mapping[a.obj]); //包含関係になっていたら真
-	return mapping[a.obj].equal(mapping[b.obj]);
+	return equal(a,b);
 }
 //aがbを含んでいればreplaceできる
 template <typename T>
