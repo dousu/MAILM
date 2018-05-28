@@ -113,7 +113,7 @@ initial_rules(
 }
 
 std::string
-make_tree_str_for_dot(std::vector<Rule>& r_list, std::vector<int> beat_nums, int code_num, KnowledgeBase& kb) {
+make_tree_str_for_dot(std::vector<Rule>& r_list, std::vector<int> beat_nums, KnowledgeBase& kb) {
 	std::string begin_str("digraph sample{\n"), end_str("}");
 	std::vector<Rule>::iterator ls_it;
 	ls_it = r_list.begin();
@@ -634,10 +634,11 @@ int main(int argc, char* argv[]) {
 			int b_num = nums_v[MT19937::irand()%nums_v.size()];
 			parent_origin = parent.say(b_num, mm);
 
+			std::string name = std::string("generation_") + boost::lexical_cast<std::string>(i);
 			std::cout << "Utterance " << j << ":" << std::endl;
-			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
+			tree_str = make_tree_str_for_dot(parent_origin, b_num, view_kb);
 			std::cout << "tree fin." << std::endl;
-			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str);
+			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str);
 
 			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
