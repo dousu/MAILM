@@ -82,8 +82,7 @@ void output_data(
 			boost::filesystem::ofstream ofs(path);
 			ofs << data;
 		}else if(!result){
-			boost::filesystem::ofstream ofs_empty(empty_path);
-			boost::filesystem::copy_file(ofs_empty,path, error);
+			boost::filesystem::copy_file(empty_path,path);
 			boost::filesystem::ofstream ofs(path);
 			ofs << data;
 		}else {
