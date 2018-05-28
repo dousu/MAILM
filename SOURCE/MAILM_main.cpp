@@ -68,9 +68,11 @@ void output_data(
 ) {
 	//存在しない場合はすぐreturn
 	const boost::filesystem::path path(file_path.c_str());
+	const boost::filesystem::path empty_path(empty.c_str());
 	boost::system::error_code error;
 	const bool result =
 		boost::filesystem::exists(path, error);
+	std::cout << "OUTPUT FILE: " << path.c_str() << " EMPTY: " << empty.c_str() << std::endl;
 	// if (error) {
 	// 	std::cout << file_path << " file not found" << std::endl;
 	// 	std::cout << data << std::endl;
@@ -80,8 +82,8 @@ void output_data(
 			std::ofstream ofs(file_path.c_str());
 			ofs << data;
 		}else if(!result){
-			boost::filesystem::ofstream(empty.c_str());
-			boost::filesystem::copy_file(empty.c_str(),file_path);
+			boost::filesystem::ofstream(empty_path);
+			boost::filesystem::copy_file(empty_path,file_path);
 			std::ofstream ofs(file_path.c_str());
 			ofs << data;
 		}else {
