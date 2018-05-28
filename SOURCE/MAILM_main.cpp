@@ -602,7 +602,7 @@ int main(int argc, char* argv[]) {
 			}
 			std::cout << std::endl;*/
 
-			tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
+			tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
 
 			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
@@ -636,7 +636,8 @@ int main(int argc, char* argv[]) {
 
 			std::string name = std::string("generation_") + boost::lexical_cast<std::string>(i);
 			std::cout << "Utterance " << j << ":" << std::endl;
-			tree_str = make_tree_str_for_dot(parent_origin, b_num, view_kb);
+			beat_nums = std::vector<int>(b_num,parent_origin.size());
+			tree_str = make_tree_str_for_dot(parent_origin, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
 			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j) + std::string(".dot"), tree_str);
 
