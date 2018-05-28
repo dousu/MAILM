@@ -666,7 +666,7 @@ int main(int argc, char* argv[]) {
 			}
 			std::cout << std::endl;*/
 
-				tree_str = make_tree_str_for_dot(r_list, beat_nums, no, view_kb);
+				tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
 				std::cout << "tree fin." << std::endl;
 
 				output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
