@@ -653,7 +653,7 @@ int main(int argc, char* argv[]) {
 			beat_nums = std::vector<int>(parent_origin.size(),b_num);
 			tree = parent_origin;
 			tree.insert(tree.begin(),*parent_origin.rbegin());
-			tree.erase(tree.rbegin());
+			tree.erase(tree.end()-1);
 			tree_str = make_tree_str_for_dot(tree, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
 			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j+1) + std::string(".dot"), tree_str,empty_dot);
