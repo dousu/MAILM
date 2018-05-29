@@ -635,7 +635,7 @@ int main(int argc, char* argv[]) {
 	std::vector<int> nums_v{ 3,4 };
 	MAILMAgent parent,child;
 	std::map<int, std::vector<std::string> > mm, ch_mm;
-	std::vector<Rule> parent_origin, ch_hear;
+	std::vector<Rule> parent_origin, ch_hear, tree;
 	parent = ma;
 	for (int i = 1; i < 10; i++) {
 		child = parent.make_child();
@@ -645,12 +645,16 @@ int main(int argc, char* argv[]) {
 		ch_mm.clear();
 		for (int j = 0; j < 5; j++) {
 			int b_num = nums_v[MT19937::irand()%nums_v.size()];
+			tree.clear();
 			parent_origin = parent.say(b_num, mm);
 
 			std::string name = std::string("generation_") + boost::lexical_cast<std::string>(i);
 			std::cout << "Utterance " << j+1 << ":" << std::endl;
 			beat_nums = std::vector<int>(parent_origin.size(),b_num);
-			tree_str = make_tree_str_for_dot(parent_origin, beat_nums, view_kb);
+			tree = parent_origin;
+			tree.insert(tree.begin(),*parent_origin.rbegin());
+			tree.erase(tree.rbegin());
+			tree_str = make_tree_str_for_dot(tree, beat_nums, view_kb);
 			std::cout << "tree fin." << std::endl;
 			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j+1) + std::string(".dot"), tree_str,empty_dot);
 
