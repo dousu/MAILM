@@ -1,0 +1,45 @@
+digraph sample{
+"S" -> "[C  F  G  A  Ais]_1";
+"S" -> "[C  D  E  F  A]_1";
+"S" -> "[F  G  A  Ais]_1";
+"S" -> "C-1175_1";
+"C-1175_1" -> "[C  F  G  A  Ais]_2";
+"C-1175_1" -> "[C  D  E  F  A]_2";
+"C-1175_1" -> "[F  G  A  Ais]_2";
+"C-1175_1" -> "C-1176_1";
+"C-1176_1" -> "[C  F  G  A  Ais]_3";
+"C-1176_1" -> "[C  D  E  F  A]_3";
+"C-1176_1" -> "[F  G  A  Ais]_3";
+"C-1176_1" -> "C-1177_1";
+"C-1177_1" -> "[C  F  G  A  Ais]_4";
+"C-1177_1" -> "[C  D  E  F  A]_4";
+"C-1177_1" -> "[F  G  A  Ais]_4";
+"C-1177_1" -> "C-1178_1";
+"C-1178_1" -> "[C  F  G  A  Ais]_5";
+"C-1178_1" -> "[C  D  E  F  A]_5";
+"C-1178_1" -> "[F  G  A  Ais]_5";
+"C-1178_1" -> "C-1179_1";
+"C-1179_1" -> "[C  F  G  A  Ais]_6";
+"C-1179_1" -> "[C  D  E  F  A]_6";
+"C-1179_1" -> "[F  G  A  Ais]_6";
+"C-1179_1" -> "C-1180_1";
+"C-1180_1" -> "[C  F  G  A  Ais]_7";
+"C-1180_1" -> "[C  D  E  F  A]_7";
+"C-1180_1" -> "[F  G  A  Ais]_7";
+"C-1180_1" -> "C-1181_1";
+"C-1181_1" -> "[C  F  G  A  Ais]_8";
+"C-1181_1" -> "[C  D  E  F  A]_8";
+"C-1181_1" -> "[F  G  A  Ais]_8";
+"C-1181_1" -> "C0_1";
+
+{rank = min; "S";}
+{rank = same; "C-1175_1";}
+{rank = same; "C-1176_1";}
+{rank = same; "C-1177_1";}
+{rank = same; "C-1178_1";}
+{rank = same; "C-1179_1";}
+{rank = same; "C-1180_1";}
+{rank = same; "C-1181_1";}
+{rank = same; "C0_1";}
+{rank = same; "[C  D  E  F  A]_1"; "[C  D  E  F  A]_2"; "[C  D  E  F  A]_3"; "[C  D  E  F  A]_4"; "[C  D  E  F  A]_5"; "[C  D  E  F  A]_6"; "[C  D  E  F  A]_7"; "[C  D  E  F  A]_8"; "[C  F  G  A  Ais]_1"; "[C  F  G  A  Ais]_2"; "[C  F  G  A  Ais]_3"; "[C  F  G  A  Ais]_4"; "[C  F  G  A  Ais]_5"; "[C  F  G  A  Ais]_6"; "[C  F  G  A  Ais]_7"; "[C  F  G  A  Ais]_8"; "[F  G  A  Ais]_1"; "[F  G  A  Ais]_2"; "[F  G  A  Ais]_3"; "[F  G  A  Ais]_4"; "[F  G  A  Ais]_5"; "[F  G  A  Ais]_6"; "[F  G  A  Ais]_7"; "[F  G  A  Ais]_8";}
+}

@@ -9,9 +9,9 @@
 #define PREFICES_H_
 #include <string>
 
-/*!
- * 記号定義
- */
+ /*!
+  * 記号定義
+  */
 namespace Prefices {
 	const std::string CAT = "C";
 	const std::string VAR = "x";
@@ -29,4 +29,4 @@ namespace Prefices {
 	const std::string UNO = "_";
 }
 
-#endif /* PREFICES_H_ */
+#endif /* PREFICES_H_ */ 

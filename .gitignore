@@ -7,6 +7,13 @@
 *.o
 *.obj
 
+#Output files
+*.prm
+*.rst
+*.ave
+*.sd
+*.acc
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -114,6 +121,10 @@ ipch/
 *.vcxproj
 *.vcxproj.*
 
+# Visual Studio Code
+*.code-workspace
+*.vscode*
+
 # Guidance Automation Toolkit
 *.gpState
 
@@ -153,6 +164,7 @@ publish/
 
 # NuGet Packages Directory
 packages/
+packages.config
 
 # Windows Azure Build Output
 csx

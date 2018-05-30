@@ -18,29 +18,29 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/map.hpp>
 
-/*!
- * Kirbyモデルで使用する単語の辞書を提供します。
- 例えば、内部言語列の単語「like」や「hate」など。
- * また同時に外部言語列の文字も提供します。
- 例えば、「a,b,c,d」など。
- * この辞書を作成しなければ全てが動きません。
- *
- *
- * 辞書ファイルのフォーマットについて
- * デフォルトの辞書は以下のようになっています
- *
- \code
- * IND=admire,detest,hate,like,
- love,john,mary,pete,heather,gavin
- * SYM=a,b,d,e,f,g,h,i,j,k,l,m,n,o,
- p,q,r,t,u,v,w,y,z
- \endcode
- *
- * INDで内部言語の終端記号をカンマ区切りで並べ、
- 定義します。また、
- * SYMで外部言語の終端記号をカンマ区切りで並べ、
- 定義します。
- */
+ /*!
+  * Kirbyモデルで使用する単語の辞書を提供します。
+  例えば、内部言語列の単語「like」や「hate」など。
+  * また同時に外部言語列の文字も提供します。
+  例えば、「a,b,c,d」など。
+  * この辞書を作成しなければ全てが動きません。
+  *
+  *
+  * 辞書ファイルのフォーマットについて
+  * デフォルトの辞書は以下のようになっています
+  *
+  \code
+  * IND=admire,detest,hate,like,
+  love,john,mary,pete,heather,gavin
+  * SYM=a,b,d,e,f,g,h,i,j,k,l,m,n,o,
+  p,q,r,t,u,v,w,y,z
+  \endcode
+  *
+  * INDで内部言語の終端記号をカンマ区切りで並べ、
+  定義します。また、
+  * SYMで外部言語の終端記号をカンマ区切りで並べ、
+  定義します。
+  */
 class Dictionary {
 public:
 	typedef std::map<int, std::string> DictionaryType;
@@ -54,12 +54,12 @@ public:
 	static Dictionary copy(void);
 
 private:
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int){
-    	ar & BOOST_SERIALIZATION_NVP(symbol);
-    	ar & BOOST_SERIALIZATION_NVP(conv_symbol);
-    }
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive &ar, const unsigned int) {
+		ar & BOOST_SERIALIZATION_NVP(symbol);
+		ar & BOOST_SERIALIZATION_NVP(conv_symbol);
+	}
 };
 
 #endif /* DICTIONARY_H_ */
