@@ -1,0 +1,14 @@
+digraph sample{
+"S" -> "C-1122_1";
+"C-1122_1" -> "[C  F  G  A  Ais]_1";
+"C-1122_1" -> "[C  D  E  F  A]_1";
+"C-1122_1" -> "[F  G  A  Ais]_1";
+"S" -> "C-1123_1";
+"C-1123_1" -> "[C  F  G  A  Ais]_2";
+"C-1123_1" -> "[C  D  E  F  A]_2";
+"C-1123_1" -> "[F  G  A  Ais]_2";
+
+{rank = min; "S";}
+{rank = same; "C-1122_1"; "C-1123_1";}
+{rank = same; "[C  D  E  F  A]_1"; "[C  D  E  F  A]_2"; "[C  F  G  A  Ais]_1"; "[C  F  G  A  Ais]_2"; "[F  G  A  Ais]_1"; "[F  G  A  Ais]_2";}
+}

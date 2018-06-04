@@ -1,30 +1,21 @@
 digraph sample{
-"S" -> "[C  F  G  A  Ais]_1";
-"S" -> "[C  D  E  F  A]_1";
-"S" -> "[F  G  A  Ais]_1";
-"S" -> "C-1273_1";
-"C-1273_1" -> "[C  F  G  A  Ais]_2";
-"C-1273_1" -> "[C  D  E  F  A]_2";
-"C-1273_1" -> "[F  G  A  Ais]_2";
-"C-1273_1" -> "C-1274_1";
-"C-1274_1" -> "[C  F  G  A  Ais]_3";
-"C-1274_1" -> "[C  D  E  F  A]_3";
-"C-1274_1" -> "[F  G  A  Ais]_3";
-"C-1274_1" -> "C-1275_1";
-"C-1275_1" -> "[C  F  G  A  Ais]_4";
-"C-1275_1" -> "[C  D  E  F  A]_4";
-"C-1275_1" -> "[F  G  A  Ais]_4";
-"C-1275_1" -> "C-1276_1";
-"C-1276_1" -> "[C  F  G  A  Ais]_5";
-"C-1276_1" -> "[C  D  E  F  A]_5";
-"C-1276_1" -> "[F  G  A  Ais]_5";
-"C-1276_1" -> "C0_1";
+"S" -> "C-1269_1";
+"C-1269_1" -> "[C  Ais]_1";
+"C-1269_1" -> "[C  F  G  A]_1";
+"C-1269_1" -> "[C  D  E]_1";
+"C-1269_1" -> "[C  G  A  Ais]_1";
+"S" -> "C-1270_1";
+"C-1270_1" -> "[C  Ais]_2";
+"C-1270_1" -> "[C  F  G  A]_2";
+"C-1270_1" -> "[C  D  E]_2";
+"C-1270_1" -> "[C  G  A  Ais]_2";
+"S" -> "C-1271_1";
+"C-1271_1" -> "[C  Ais]_3";
+"C-1271_1" -> "[C  F  G  A]_3";
+"C-1271_1" -> "[C  D  E]_3";
+"C-1271_1" -> "[C  G  A  Ais]_3";
 
 {rank = min; "S";}
-{rank = same; "C-1273_1";}
-{rank = same; "C-1274_1";}
-{rank = same; "C-1275_1";}
-{rank = same; "C-1276_1";}
-{rank = same; "C0_1";}
-{rank = same; "[C  D  E  F  A]_1"; "[C  D  E  F  A]_2"; "[C  D  E  F  A]_3"; "[C  D  E  F  A]_4"; "[C  D  E  F  A]_5"; "[C  F  G  A  Ais]_1"; "[C  F  G  A  Ais]_2"; "[C  F  G  A  Ais]_3"; "[C  F  G  A  Ais]_4"; "[C  F  G  A  Ais]_5"; "[F  G  A  Ais]_1"; "[F  G  A  Ais]_2"; "[F  G  A  Ais]_3"; "[F  G  A  Ais]_4"; "[F  G  A  Ais]_5";}
+{rank = same; "C-1269_1"; "C-1270_1"; "C-1271_1";}
+{rank = same; "[C  Ais]_1"; "[C  Ais]_2"; "[C  Ais]_3"; "[C  D  E]_1"; "[C  D  E]_2"; "[C  D  E]_3"; "[C  F  G  A]_1"; "[C  F  G  A]_2"; "[C  F  G  A]_3"; "[C  G  A  Ais]_1"; "[C  G  A  Ais]_2"; "[C  G  A  Ais]_3";}
 }

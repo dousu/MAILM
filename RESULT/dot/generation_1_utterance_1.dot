@@ -1,17 +1,26 @@
 digraph sample{
-"S" -> "[C  Ais]_1";
-"S" -> "[C  F  G  A]_1";
-"S" -> "[C  D  E]_1";
-"S" -> "[C  G  A  Ais]_1";
-"S" -> "C-1106_1";
-"C-1106_1" -> "[C  Ais]_2";
-"C-1106_1" -> "[C  F  G  A]_2";
-"C-1106_1" -> "[C  D  E]_2";
-"C-1106_1" -> "[C  G  A  Ais]_2";
-"C-1106_1" -> "C0_1";
+"S" -> "C-1100_1";
+"C-1100_1" -> "[C  F  G  A  Ais]_1";
+"C-1100_1" -> "[C  D  E  F  A]_1";
+"C-1100_1" -> "[F  G  A  Ais]_1";
+"S" -> "C-1101_1";
+"C-1101_1" -> "[C  F  G  A  Ais]_2";
+"C-1101_1" -> "[C  D  E  F  A]_2";
+"C-1101_1" -> "[F  G  A  Ais]_2";
+"S" -> "C-1102_1";
+"C-1102_1" -> "[C  D  E  Ais  B]_1";
+"C-1102_1" -> "[C  E  Fis  G  A  Ais]_1";
+"C-1102_1" -> "[C  E  Ais]_1";
+"S" -> "C-1103_1";
+"C-1103_1" -> "[C  D  E  Ais]_1";
+"C-1103_1" -> "[C  E  F  G  A  Ais]_1";
+"C-1103_1" -> "[C  D  E  Ais]_2";
+"S" -> "C-1104_1";
+"C-1104_1" -> "[C  D  E  Ais]_3";
+"C-1104_1" -> "[C  E  F  G  A  Ais]_2";
+"C-1104_1" -> "[C  D  E  Ais]_4";
 
 {rank = min; "S";}
-{rank = same; "C-1106_1";}
-{rank = same; "C0_1";}
-{rank = same; "[C  Ais]_1"; "[C  Ais]_2"; "[C  D  E]_1"; "[C  D  E]_2"; "[C  F  G  A]_1"; "[C  F  G  A]_2"; "[C  G  A  Ais]_1"; "[C  G  A  Ais]_2";}
+{rank = same; "C-1100_1"; "C-1101_1"; "C-1102_1"; "C-1103_1"; "C-1104_1";}
+{rank = same; "[C  D  E  Ais  B]_1"; "[C  D  E  Ais]_1"; "[C  D  E  Ais]_2"; "[C  D  E  Ais]_3"; "[C  D  E  Ais]_4"; "[C  D  E  F  A]_1"; "[C  D  E  F  A]_2"; "[C  E  Ais]_1"; "[C  E  F  G  A  Ais]_1"; "[C  E  F  G  A  Ais]_2"; "[C  E  Fis  G  A  Ais]_1"; "[C  F  G  A  Ais]_1"; "[C  F  G  A  Ais]_2"; "[F  G  A  Ais]_1"; "[F  G  A  Ais]_2";}
 }
