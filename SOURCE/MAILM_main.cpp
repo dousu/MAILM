@@ -658,7 +658,7 @@ int main(int argc, char* argv[]) {
 			std::cout << "tree fin." << std::endl;
 			output_data(param.BASE_PATH+boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j+1) + std::string(".dot"), tree_str,empty_dot);
 
-			ch_hear.insert(ch_hear.end(), parent_origin.begin(),parent_origin.end());
+			ch_hear.insert(ch_hear.begin(), parent_origin.begin(),parent_origin.end());
 			ch_mm.insert(mm.begin(), mm.end());
 		}
 		std::cerr << "LEARNING DATA SIZE: " << ch_hear.size() << ", BUF SIZE: " << buf.size() << std::endl;
