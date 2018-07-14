@@ -1,0 +1,22 @@
+language: generic
+sudo: false
+services:
+  - docker
+matrix:
+  include:
+    - env:
+      - CXX=g++
+        DOC=dousu/ubuntu_gcc8_dev
+      install:
+        - docker pull $DOC
+    - env:
+      - CXX="clang++ -stdlib=libc++"
+        DOC=dousu/ubuntu_clang6_dev
+      install:
+        - docker pull $DOC
+script:
+  - docker run -w /tmp/MSILM -v $PWD:/tmp/MSILM -e CXX $DOC /bin/sh -c "$CXX -v && make -j test"
+notifications:
+  email:
+    on_failure: change
+    on_success: never
