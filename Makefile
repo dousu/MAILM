@@ -13,7 +13,7 @@ all: ma
 .PHONY: ma test clean
 
 ma: $(OBJS)
-	${CXX} ${CXXFLAGS} ./SOURCE/MAILM_main.cpp ${OBJS} -o ./SOURCE/mailm.exe
+	${CXX} ${CXXFLAGS} ./SOURCE/MAILM_main.cpp ${OBJS} ${LIBS} -o ./SOURCE/mailm.exe
 
 boost:
 	${CXX} ./SOURCE/boost_version.cpp -o b_ver.exe
