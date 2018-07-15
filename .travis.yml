@@ -6,12 +6,12 @@ matrix:
   include:
     - env:
       - CXX=g++
-        DOC=dousu/ubuntu_gcc8_dev
+        DOC=dousu/docker_cpp_with_boost
       install:
         - docker pull $DOC
     - env:
       - CXX="clang++ -stdlib=libc++"
-        DOC=dousu/ubuntu_clang6_dev
+        DOC=dousu/docker_cpp_with_boost
       install:
         - docker pull $DOC
 script:
