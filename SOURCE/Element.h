@@ -69,13 +69,13 @@ class AMean
 	}
 	std::string to_s() const
 	{
-		if (Dictionary::individual.find(obj) == Dictionary::individual.end())
+		if (Dictionary::symbol.find(obj) == Dictionary::symbol.end())
 		{
 			return "*";
 		}
 		else
 		{
-			return Dictionary::individual[obj];
+			return Dictionary::symbol[obj];
 		}
 	}
 };
@@ -165,7 +165,7 @@ class Symbol
 		}
 		else
 		{
-			return "[" + reader.conv_alias[Dictionary::symbol[obj]] + "]";
+			return "[" + XMLreader::conv_alias[Dictionary::symbol[obj]] + "]";
 		}
 	}
 };
@@ -176,7 +176,6 @@ class Meaning
 	AMean base;
 	std::vector<MeaningType> means;
 public:
-	Meaning() : base(), means() {}
 	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
 	Meaning(const AMean &m) : base(m), means() {}
 	Meaning(const AMean &m, const std::vector<MeaningType> &dst) : base(m), means(dst) {}
@@ -239,7 +238,7 @@ public:
 		}
 		return str;
 	}
-}
+};
 
 class LeftNonterminal
 {
