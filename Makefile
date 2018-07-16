@@ -1,4 +1,4 @@
-SRCS = $(addprefix ./SOURCE/, Semantics.cpp KirbyAgent.cpp MAILMAgent.cpp KnowledgeBase.cpp Rule.cpp Element.cpp Dictionary.cpp XMLreader.cpp XMLreader2.cpp IndexFactory.cpp Prefices.cpp LogBox.cpp MT19937.cpp Semantics.cpp MAILMParameters.cpp Parameters.cpp)
+SRCS = $(addprefix ./SOURCE/, Semantics.cpp KirbyAgent.cpp MAILMAgent.cpp KnowledgeBase.cpp Rule.cpp Element.cpp Dictionary.cpp XMLreader2.cpp IndexFactory.cpp Prefices.cpp LogBox.cpp MT19937.cpp Semantics.cpp MAILMParameters.cpp Parameters.cpp)
 DEPS = $(patsubst %.cpp,%.d,$(SRCS))
 OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 LIBS = -lboost_serialization -lboost_system -lboost_program_options -lboost_filesystem
