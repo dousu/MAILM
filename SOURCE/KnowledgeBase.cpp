@@ -729,6 +729,7 @@ Element& KnowledgeBase::return_cat(std::vector<Element>& external, int index) {
 			return elem;
 		}
 	}
+	return external.back();
 }
 
 /*
