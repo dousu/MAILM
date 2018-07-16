@@ -18,6 +18,8 @@ ma: $(OBJS)
 boost:
 	${CXX} ./SOURCE/boost_version.cpp -o b_ver.exe
 
+test: ma
+
 clean:
 	rm -f ./SOURCE/*.o ./SOURCE/*.dump ./SOURCE/*.exe ./SOURCE/*.log ./SOURCE/*.rst
 
