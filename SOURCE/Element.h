@@ -172,7 +172,7 @@ class Symbol
 
 class Meaning
 {
-	using MeaningType = std::variant<AMean, Meaning, Variable>;
+	using MeaningType = std::variant<std::monostate, AMean, Meaning, Variable>;
 	AMean base;
 	std::vector<MeaningType> means;
 public:
@@ -180,7 +180,7 @@ public:
 	Meaning(const AMean &m) : base(m), means() {}
 	Meaning(const AMean &m, const std::vector<MeaningType> &dst) : base(m), means(dst) {}
 	Meaning(std::initializer_list<MeaningType> list){
-		if((*std::begin(list)).index() != 0){
+		if((*std::begin(list)).index() != 1){
 			std::cerr << "Meaning: base element should be AMean." << std::endl;
 			exit(1);
 		}
@@ -326,22 +326,12 @@ class Element
 		element = dst.element;
 		return *this;
 	}
-	Element &operator=(const Mean &dst)
-	{
-		element = dst;
-		return *this;
-	}
-	Element &operator=(const Variable &dst)
-	{
-		element = dst;
-		return *this;
-	}
 	Element &operator=(const Symbol &dst)
 	{
 		element = dst;
 		return *this;
 	}
-	Element &operator=(const Nonterminal &dst)
+	Element &operator=(const RightNonterminal &dst)
 	{
 		element = dst;
 		return *this;
