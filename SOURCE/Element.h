@@ -15,146 +15,339 @@
 #include <algorithm>
 #include <iterator>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-
 #include "Dictionary.h"
 #include "Prefices.h"
-
 #include "XMLreader.h"
 
- /*!
-  * Elementクラスが取るタイプのインデックスを
-  定義しています。
-  */
-namespace ELEM_TYPE {
-	//!カテゴリ付き変数:外部言語の非終端記号
-	const int CAT_TYPE = 0;
-	//!シンボル:外部言語の終端記号
-	const int SYM_TYPE = 1;
-	//!変数:内部言語の非終端記号
-	const int VAR_TYPE = 2;
-	//!対象:内部言語の終端記号
-	const int IND_TYPE = 3;
+#include <variant>
+#include <cstddef>
+
+
+/*!
+ * Elementクラスが取るタイプのインデックスを定義しています。
+ */
+namespace ELEM_TYPE
+{
+enum Type
+{
+	//!意味:internal
+	MEAN_TYPE = 1,
+	//!変数:internal
+	VAR_TYPE = 2,
+	//!シンボル:external
+	SYM_TYPE = 3,
+	//!カテゴリ付き変数:external
+	CAT_TYPE = 4
+};
 }
 
 //型
 /*!
  * 内部言語と外部言語の要素を表すクラスです。
- * メンバ変数は全て数値で扱われ、インデックスで
- 表現されています。
- * このインデックスは静的メンバ変数のDictionary
- クラスインスタンスに依存します。
- *
- * なお、boost%:%:serializationに対応しています。
+ * メンバ変数は全て数値で扱われ、インデックスで表現されています。
+ * このインデックスは静的メンバ変数のDictionaryクラスインスタンスに依存します。
  */
-class Element {
 
-public:
-	//メンバ
-	//! 要素を区別するインデックスを格納しています。
-	// （例: これが「like」で、
-	// likeのインデックスが2、ならobj=2）
+class AMean
+{
 	int obj;
 
-	//!Elementがカテゴリ付き変数または変数である場合、
-	// そのカテゴリのインデックスを格納します。
-	// （例: C1/x2なら、cat=1）
-	int cat;
-
-	//! Elementのタイプを格納しています。
-	// タイプはELEM_TYPEに示されるとおりです。
-	int type;
-
-	//! PatternTypeとしてリストされるときに
-	// ELEM_TYPE::CAT_TYPEに
-	// どのELEM_TYPE::IND_TYPEのobjが入るかのリスト
-	std::vector<int> ch;
-
-	//! Sentenceかどうかを示します．
-	bool sent_type;
-
-	static Dictionary dictionary;
-	static XMLreader reader;
-
-	//コンストラクタ
-	Element();
-
-	Element(std::string);
-
-	//デストラクタ
-	//virtual ~Element();
-
-
-	//operator
-	//!等号。型が異なると偽を返します。
-	// 型が等しい場合はインデックスが等しいか比べます。
-	bool operator==(const Element& dst) const;
-	//!等号の否定です
-	bool operator!=(const Element& dst) const;
-	bool operator<(const Element& dst) const;
-
-	//!代入です
-	Element& operator =(const Element& dst);
-
-
-	//method
-	//! 変数インデックスと、カテゴリインデックスを取り、
-	// それを使ってインスタンスを
-	// カテゴリ付き変数に初期化します。
-	Element& set_cat(int var, int cat);
-	//! 変数インデックスと、カテゴリインデックス,
-	// sentence_typeを取り、
-	// それを使ってインスタンスをカテゴリ付き変数に初期化します。
-	Element& set_cat(int var, int cat, bool sent);
-	//! 変数インデックスと、
-	// カテゴリインデックスを取り、
-	// それを使ってインスタンスを変数に初期化します。
-	// 内部言語の変数は、必ず外部言語で
-	// カテゴリ付き変数として出現するので、
-	// 初期化にはそれと等しいカテゴリインデックスが必要です。
-	Element& set_var(int var, int cat);
-	//! 対象のインデックスを引数に取り、
-	// それを使ってインスタンスを内部言語の対象に初期化します。
-	Element& set_ind(int id);
-	//! 対象のインデックスを引数に取り、
-	// それを使ってインスタンスを外部言語の記号に初期化します。
-	Element& set_sym(int id);
-
-	void set_ch(int chunk);
-
-	//! インスタンスが変数ならtrueを、
-	// そうでなければfalseを返します。
-	bool is_var(void) const;
-	//! インスタンスがカテゴリ付き変数であればtrueを、
-	// そうでなければfalseを返します。
-	bool is_cat(void) const;
-	//! インスタンスが対象であればtrueを、
-	// そうでなければfalseを返します。
-	bool is_ind(void) const;
-	//! インスタンスが記号であればtrueを、
-	// そうでなければfalseを返します。
-	bool is_sym(void) const;
-
-	Element& set(int type_id, int obj_id, int sub_id, bool sent);
-
-	//! インスタンスの文字列表現をstringで返します。
-	// （例:インスタンスが、カテゴリインデックス1で、
-	// 変数インデックス2なら、"C1/x2"が返ってきます。）
-	std::string to_s(void);
-
-private:
-	// serialize
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive &ar, const unsigned int /* file_version */) {
-		ar & BOOST_SERIALIZATION_NVP(type);
-		ar & BOOST_SERIALIZATION_NVP(obj);
-		ar & BOOST_SERIALIZATION_NVP(cat);
+  public:
+	AMean(int num) : obj(num) {}
+	AMean(const AMean &dst) : obj(dst.obj) {}
+	bool operator==(const AMean &dst) const
+	{
+		return obj == dst.obj;
 	}
+	bool operator!=(const AMean &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const AMean &dst) const
+	{
+		return obj < dst.obj;
+	}
+	int get_obj_id() const
+	{
+		return obj;
+	}
+	std::string to_s() const
+	{
+		if (Dictionary::individual.find(obj) == Dictionary::individual.end())
+		{
+			return "*";
+		}
+		else
+		{
+			return Dictionary::individual[obj];
+		}
+	}
+};
 
+class Meaning;
+class Category;
+class Nonterminal;
+
+class Variable
+{
+	int obj;
+
+  public:
+	Variable(int var_num) : obj(var_num) {}
+	Variable(const Variable &dst) : obj(dst.obj) {}
+	bool operator==(const Variable &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const Variable &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Variable &dst) const
+	{
+		return obj < dst.obj;
+	}
+	int get_obj_id() const
+	{
+		return obj;
+	}
+	std::string to_s() const
+	{
+		return Prefices::VAR + std::to_string(obj);
+	}
+};
+
+class Category
+{
+	int obj;
+
+  public:
+	Category(int cat_num) : obj(cat_num) {}
+	Category(const Category &dst) : obj(dst.obj) {}
+	bool operator==(const Category &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const Category &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Category &dst) const
+	{
+		return obj < dst.obj;
+	}
+	int get_obj_id() const
+	{
+		return obj;
+	}
+	std::string to_s() const
+	{
+		return Prefices::CAT + std::to_string(obj);
+	}
+};
+
+class Symbol
+{
+	int obj;
+
+  public:
+	Symbol(int num) : obj(num) {}
+	Symbol(const Symbol &dst) : obj(dst.obj) {}
+	bool operator==(const Symbol &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const Symbol &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Symbol &dst) const
+	{
+		return obj < dst.obj;
+	}
+	std::string to_s() const
+	{
+		if (Dictionary::symbol.find(obj) == Dictionary::symbol.end())
+		{
+			return "*";
+		}
+		else
+		{
+			return Dictionary::symbol[obj];
+		}
+	}
+};
+
+class Meaning
+{
+	AMean base;
+	std::vector<Meaning> means;
+public:
+	Meaning() : base(), means() {}
+	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
+	Meaning(std::initializer_list<AMean> list){
+		base(AMean(*std::begin(list)));
+		std::for_each(++std::begin(list), std::end(list), [&means](AMean &am){means.push_back(Meaning{{am}});});
+	}
+	bool operator==(const Meaning &dst) const
+	{
+		return base == dst.base && means == dst.means;
+	}
+	bool operator!=(const Meaning &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Meaning &dst) const
+	{
+		return base < dst.base || (base == dst.base && means < dst.means);
+	}
+	Meaning & at(std::size_t i) const
+	{
+		if(i == 0){
+			std::cerr << "irregular index" << std::endl;
+			exit(1);
+		}else{
+			return means.at(i-1);
+		}
+	}
+	const AMean & get_base() const
+	{
+		return base;
+	}
+	std::string to_s() const
+	{
+		std::string str{""};
+		if(means.size() == 0){
+			return str;
+		}else{
+			if(means.size() == 1){
+				return means.first.to_s();
+			}else{
+				str += means.first.to_s();
+				means.erase(means.begin());
+			}
+			std::vector<std::string> buf;
+			std::for_each(std::begin(means), std::end(means), [&buf](AMean m){buf.push_back(m.to_s());});
+			std::ostringstream os;
+			std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<std::string>(os, ","));
+			str += Prefices::LPRN + os.str();
+			str.erase(str.end() - 1);
+			str += Prefices::RPRN;
+		}
+		return str;
+	}
+}
+
+class Nonterminal
+{
+	Category cat;
+	Meaning means;
+
+  public:
+	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {}
+	Nonterminal(const Nonterminal &dst) : cat(dst.cat), obj(dst.obj) {}
+	bool operator==(const Nonterminal &dst) const
+	{
+		return cat == dst.cat;
+	}
+	bool operator!=(const Nonterminal &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Nonterminal &dst) const
+	{
+		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
+	}
+	int get_cat_id() const
+	{
+		return cat;
+	}
+	int get_obj_id() const
+	{
+		return obj;
+	}
+	std::string to_s() const
+	{
+		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
+	}
+};
+
+class Element
+{
+	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
+	ElementType element;
+
+  public:
+	Element() : element() {}
+	Element(const Element &other) : element(other.element) {}
+	Element(const Mean &other) : element(other) {}
+	Element(const Variable &other) : element(other) {}
+	Element(const Symbol &other) : element(other) {}
+	Element(const Nonterminal &other) : element(other) {}
+	constexpr std::size_t type() const { return element.index(); }
+
+	template <typename T>
+	const T &get() const { return std::get<T>(element); }
+
+	Element &operator=(const Element &dst)
+	{
+		element = dst.element;
+		return *this;
+	}
+	Element &operator=(const Mean &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	Element &operator=(const Variable &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	Element &operator=(const Symbol &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	Element &operator=(const Nonterminal &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	bool operator==(const Element &dst) const
+	{
+		return type() == dst.type() && element == dst.element;
+	}
+	bool operator!=(const Element &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Element &dst) const
+	{
+		return type() < dst.type() || (type() == dst.type() && element < dst.element);
+	}
+	std::string to_s() const
+	{
+		std::string str("");
+		switch (type())
+		{
+		case ELEM_TYPE::MEAN_TYPE:
+			str = Mean(std::get<ELEM_TYPE::MEAN_TYPE>(element)).to_s();
+			break;
+		case ELEM_TYPE::VAR_TYPE:
+			str = Variable(std::get<ELEM_TYPE::VAR_TYPE>(element)).to_s();
+			break;
+		case ELEM_TYPE::SYM_TYPE:
+			str = Symbol(std::get<ELEM_TYPE::SYM_TYPE>(element)).to_s();
+			break;
+		case ELEM_TYPE::CAT_TYPE:
+			str = Nonterminal(std::get<ELEM_TYPE::CAT_TYPE>(element)).to_s();
+			break;
+		default:
+			str = "*";
+		}
+		return str;
+	}
 };
 
 class Conception {
