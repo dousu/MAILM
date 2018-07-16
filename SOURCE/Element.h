@@ -30,14 +30,10 @@ namespace ELEM_TYPE
 {
 enum Type
 {
-	//!意味:internal
-	MEAN_TYPE = 1,
-	//!変数:internal
-	VAR_TYPE = 2,
 	//!シンボル:external
-	SYM_TYPE = 3,
+	SYM_TYPE = 1,
 	//!カテゴリ付き変数:external
-	CAT_TYPE = 4
+	NT_TYPE = 2
 };
 }
 
@@ -83,10 +79,6 @@ class AMean
 		}
 	}
 };
-
-class Meaning;
-class Category;
-class Nonterminal;
 
 class Variable
 {
@@ -173,21 +165,28 @@ class Symbol
 		}
 		else
 		{
-			return Dictionary::symbol[obj];
+			return "[" + reader.conv_alias[Dictionary::symbol[obj]] + "]";
 		}
 	}
 };
 
 class Meaning
 {
+	using MeaningType = std::variant<AMean, Meaning, Variable>;
 	AMean base;
-	std::vector<Meaning> means;
+	std::vector<MeaningType> means;
 public:
 	Meaning() : base(), means() {}
 	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
-	Meaning(std::initializer_list<AMean> list){
+	Meaning(const AMean &m) : base(m), means() {}
+	Meaning(const AMean &m, const std::vector<MeaningType> &dst) : base(m), means(dst) {}
+	Meaning(std::initializer_list<MeaningType> list){
+		if((*std::begin(list)).index() != 0){
+			std::cerr << "Meaning: base element should be AMean." << std::endl;
+			exit(1);
+		}
 		base(AMean(*std::begin(list)));
-		std::for_each(++std::begin(list), std::end(list), [&means](AMean &am){means.push_back(Meaning{{am}});});
+		std::for_each(++std::begin(list), std::end(list), [&means](MeaningType &m){means.push_back(m);});
 	}
 	bool operator==(const Meaning &dst) const
 	{
@@ -201,7 +200,7 @@ public:
 	{
 		return base < dst.base || (base == dst.base && means < dst.means);
 	}
-	Meaning & at(std::size_t i) const
+	const Meaning & at(std::size_t i) const
 	{
 		if(i == 0){
 			std::cerr << "irregular index" << std::endl;
@@ -214,6 +213,10 @@ public:
 	{
 		return base;
 	}
+	const std::vector<MeaningType> & get_vec() const
+	{
+		return means;
+	} 
 	std::string to_s() const
 	{
 		std::string str{""};
@@ -238,52 +241,82 @@ public:
 	}
 }
 
-class Nonterminal
+class LeftNonterminal
 {
 	Category cat;
 	Meaning means;
 
   public:
-	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {}
-	Nonterminal(const Nonterminal &dst) : cat(dst.cat), obj(dst.obj) {}
-	bool operator==(const Nonterminal &dst) const
+	LeftNonterminal(Category & c, Meaning & m) : cat(c), means(m) {}
+	LeftNonterminal(const LeftNonterminal &dst) : cat(dst.cat), means(dst.means) {}
+	bool operator==(const LeftNonterminal &dst) const
 	{
-		return cat == dst.cat;
+		return cat == dst.cat && means == dst.means;
 	}
-	bool operator!=(const Nonterminal &dst) const
+	bool operator!=(const LeftNonterminal &dst) const
 	{
 		return !(*this == dst);
 	}
-	bool operator<(const Nonterminal &dst) const
+	bool operator<(const LeftNonterminal &dst) const
 	{
-		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
+		return cat < dst.cat || (cat == dst.cat && means < dst.means);
 	}
-	int get_cat_id() const
+	const Category & get_cat() const
 	{
 		return cat;
 	}
-	int get_obj_id() const
+	const Meaning get_means() const
 	{
-		return obj;
+		return means;
 	}
 	std::string to_s() const
 	{
-		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
+		return cat.to_s() + Prefices::DEL + means.to_s();
 	}
 };
+class RightNonterminal
+{
+	Category cat;
+	Variable var;
 
+  public:
+	bool operator==(const RightNonterminal &dst) const
+	{
+		return cat == dst.cat && var == dst.var;
+	}
+	bool operator!=(const RightNonterminal &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const RightNonterminal &dst) const
+	{
+		return cat < dst.cat || (cat == dst.cat && means < dst.means);
+	}
+	bool operator==(const LeftNonterminal &dst) const;
+	bool operator!=(const LeftNonterminal &dst) const;
+	const Category & get_cat() const
+	{
+		return cat;
+	}
+	const Variable get_var() const
+	{
+		return var;
+	}
+	std::string to_s() const
+	{
+		return cat.to_s() + Prefices::DEL + means.to_s();
+	}
+};
 class Element
 {
-	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
+	using ElementType = std::variant<std::monostate, Symbol, RightNonterminal>;
 	ElementType element;
 
   public:
 	Element() : element() {}
 	Element(const Element &other) : element(other.element) {}
-	Element(const Mean &other) : element(other) {}
-	Element(const Variable &other) : element(other) {}
 	Element(const Symbol &other) : element(other) {}
-	Element(const Nonterminal &other) : element(other) {}
+	Element(const RightNonterminal &other) : element(other) {}
 	constexpr std::size_t type() const { return element.index(); }
 
 	template <typename T>
@@ -316,7 +349,7 @@ class Element
 	}
 	bool operator==(const Element &dst) const
 	{
-		return type() == dst.type() && element == dst.element;
+		return element == dst.element;
 	}
 	bool operator!=(const Element &dst) const
 	{
@@ -324,24 +357,18 @@ class Element
 	}
 	bool operator<(const Element &dst) const
 	{
-		return type() < dst.type() || (type() == dst.type() && element < dst.element);
+		return element < dst.element;
 	}
 	std::string to_s() const
 	{
 		std::string str("");
 		switch (type())
 		{
-		case ELEM_TYPE::MEAN_TYPE:
-			str = Mean(std::get<ELEM_TYPE::MEAN_TYPE>(element)).to_s();
-			break;
-		case ELEM_TYPE::VAR_TYPE:
-			str = Variable(std::get<ELEM_TYPE::VAR_TYPE>(element)).to_s();
-			break;
 		case ELEM_TYPE::SYM_TYPE:
 			str = Symbol(std::get<ELEM_TYPE::SYM_TYPE>(element)).to_s();
 			break;
-		case ELEM_TYPE::CAT_TYPE:
-			str = Nonterminal(std::get<ELEM_TYPE::CAT_TYPE>(element)).to_s();
+		case ELEM_TYPE::NT_TYPE:
+			str = RightNonterminal(std::get<ELEM_TYPE::NT_TYPE>(element)).to_s();
 			break;
 		default:
 			str = "*";
@@ -353,12 +380,7 @@ class Element
 class Conception {
 public:
 	std::set<std::string> factors;
-	//コンストラクタ
 	Conception();
-
-	//デストラクタ
-	//virtual ~Conception();
-
 
 	//operator
 	//!等号。型が異なると偽を返します。
