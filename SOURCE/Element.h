@@ -172,21 +172,13 @@ class Symbol
 
 class Meaning
 {
-	using MeaningType = std::variant<std::monostate, AMean, Meaning, Variable>;
+	using MeaningType = std::variant<std::monostate, Meaning, Variable>;
 	AMean base;
 	std::vector<MeaningType> means;
 public:
 	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
 	Meaning(const AMean &m) : base(m), means() {}
 	Meaning(const AMean &m, const std::vector<MeaningType> &dst) : base(m), means(dst) {}
-	Meaning(std::initializer_list<MeaningType> list){
-		if((*std::begin(list)).index() != 1){
-			std::cerr << "Meaning: base element should be AMean." << std::endl;
-			exit(1);
-		}
-		base(AMean(*std::begin(list)));
-		std::for_each(++std::begin(list), std::end(list), [&means](MeaningType &m){means.push_back(m);});
-	}
 	bool operator==(const Meaning &dst) const
 	{
 		return base == dst.base && means == dst.means;
@@ -199,7 +191,7 @@ public:
 	{
 		return base < dst.base || (base == dst.base && means < dst.means);
 	}
-	const Meaning & at(std::size_t i) const
+	const MeaningType & at(std::size_t i) const
 	{
 		if(i == 0){
 			std::cerr << "irregular index" << std::endl;
@@ -264,7 +256,7 @@ class LeftNonterminal
 	{
 		return cat;
 	}
-	const Meaning get_means() const
+	const std::vector<MeaningType> & get_means() const
 	{
 		return means;
 	}
@@ -289,15 +281,13 @@ class RightNonterminal
 	}
 	bool operator<(const RightNonterminal &dst) const
 	{
-		return cat < dst.cat || (cat == dst.cat && means < dst.means);
+		return cat < dst.cat || (cat == dst.cat && var < dst.var);
 	}
-	bool operator==(const LeftNonterminal &dst) const;
-	bool operator!=(const LeftNonterminal &dst) const;
 	const Category & get_cat() const
 	{
 		return cat;
 	}
-	const Variable get_var() const
+	const Variable & get_var() const
 	{
 		return var;
 	}
