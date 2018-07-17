@@ -217,7 +217,7 @@ class Meaning
 	{
 		return means;
 	}
-	int &get_size() const
+	int get_size() const
 	{
 		return means.size() + 1;
 	}
