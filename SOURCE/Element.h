@@ -220,22 +220,25 @@ public:
 			return str;
 		}else{
 			if(means.size() == 1){
-				return means.front.to_s();
-			}else{
-				str += means.front.to_s();
-				means.erase(means.begin());
-			}
-			std::vector<std::string> buf;
-			std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m){
 				stringstream ss;
-				ss << std::get<m.index()>(m);
-				buf.push_back(ss.str());
-			});
-			std::ostringstream os;
-			std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<std::string>(os, ","));
-			str += Prefices::LPRN + os.str();
-			str.erase(str.end() - 1);
-			str += Prefices::RPRN;
+				ss << std::get<means.front().index()>(means.front());
+				return ss.str();
+			}else{
+				stringstream ss;
+				ss << std::get<means.front().index()>(means.front());
+				str += ss.str();
+				std::vector<std::string> buf;
+				std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m){
+					stringstream ss;
+					ss << std::get<m.index()>(m);
+					buf.push_back(ss.str());
+				});
+				std::ostringstream os;
+				std::copy(std::next(std::begin(buf)), std::end(buf), std::ostream_iterator<std::string>(os, ","));
+				str += Prefices::LPRN + os.str();
+				str.erase(str.end() - 1);
+				str += Prefices::RPRN;
+			}
 		}
 		return str;
 	}
