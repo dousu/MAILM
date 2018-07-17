@@ -237,7 +237,7 @@ class Meaning
 				std::ostringstream os;
 				std::visit([&os](auto &&arg) {
 					using T = std::decay_t<decltype(arg)>;
-					os << std::get<T>(m);
+					os << std::get<T>(arg);
 				},
 						   m);
 				buf.push_back(os.str());
