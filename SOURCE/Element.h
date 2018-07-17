@@ -213,9 +213,13 @@ class Meaning
 	{
 		return base;
 	}
-	const std::vector<MeaningType> &get_vec() const
+	const std::vector<MeaningType> &get_followings() const
 	{
 		return means;
+	}
+	int &get_size() const
+	{
+		return means.size() + 1;
 	}
 	std::string to_s() const
 	{
@@ -229,7 +233,7 @@ class Meaning
 			str += base.to_s();
 			std::vector<std::string> buf;
 			std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m) {
-				stringstream ss;
+				std::stringstream ss;
 				ss << std::get<m.index()>(m);
 				buf.push_back(ss.str());
 			});
