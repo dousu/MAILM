@@ -315,7 +315,7 @@ class RightNonterminal
 	}
 	std::string to_s() const
 	{
-		return cat.to_s() + Prefices::DEL + means.to_s();
+		return cat.to_s() + Prefices::DEL + var.to_s();
 	}
 	friend std::ostream &operator<<(std::ostream &out, RightNonterminal &obj);
 };
