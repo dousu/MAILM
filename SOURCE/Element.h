@@ -233,9 +233,9 @@ class Meaning
 			str += base.to_s();
 			std::vector<std::string> buf;
 			std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m) {
-				std::stringstream ss;
-				ss << std::get<m.index()>(m);
-				buf.push_back(ss.str());
+				std::ostringstream os;
+				os << std::get<m.index()>(m);
+				buf.push_back(os.str());
 			});
 			std::ostringstream os;
 			std::copy(std::next(std::begin(buf)), std::end(buf), std::ostream_iterator<std::string>(os, ","));
