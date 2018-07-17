@@ -23,7 +23,6 @@
 #include <cstddef>
 #include <ostream>
 
-
 /*!
  * Elementクラスが取るタイプのインデックスを定義しています。
  */
@@ -79,7 +78,7 @@ class AMean
 			return Dictionary::symbol[obj];
 		}
 	}
-	friend std::ostream & operator<<(std::ostream & out, AMean & obj);
+	friend std::ostream &operator<<(std::ostream &out, AMean &obj);
 };
 
 class Variable
@@ -109,7 +108,7 @@ class Variable
 	{
 		return Prefices::VAR + std::to_string(obj);
 	}
-	friend std::ostream & operator<<(std::ostream & out, Variable & obj);
+	friend std::ostream &operator<<(std::ostream &out, Variable &obj);
 };
 
 class Category
@@ -139,7 +138,7 @@ class Category
 	{
 		return Prefices::CAT + std::to_string(obj);
 	}
-	friend std::ostream & operator<<(std::ostream & out, Category & obj);
+	friend std::ostream &operator<<(std::ostream &out, Category &obj);
 };
 
 class Symbol
@@ -172,7 +171,7 @@ class Symbol
 			return "[" + XMLreader::conv_alias[Dictionary::symbol[obj]] + "]";
 		}
 	}
-	friend std::ostream & operator<<(std::ostream & out, Symbol & obj);
+	friend std::ostream &operator<<(std::ostream &out, Symbol &obj);
 };
 
 class Meaning
@@ -180,7 +179,8 @@ class Meaning
 	using MeaningType = std::variant<std::monostate, Meaning, Variable>;
 	AMean base;
 	std::vector<MeaningType> means;
-public:
+
+  public:
 	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
 	Meaning(const AMean &m) : base(m), means() {}
 	Meaning(const AMean &m, const std::vector<MeaningType> &dst) : base(m), means(dst) {}
@@ -196,53 +196,51 @@ public:
 	{
 		return base < dst.base || (base == dst.base && means < dst.means);
 	}
-	const MeaningType & at(std::size_t i) const
+	const MeaningType &at(std::size_t i) const
 	{
-		if(i == 0){
+		if (i == 0)
+		{
 			std::cerr << "irregular index" << std::endl;
 			exit(1);
-		}else{
-			return means.at(i-1);
+		}
+		else
+		{
+			return means.at(i - 1);
 		}
 	}
-	const AMean & get_base() const
+	const AMean &get_base() const
 	{
 		return base;
 	}
-	const std::vector<MeaningType> & get_vec() const
+	const std::vector<MeaningType> &get_vec() const
 	{
 		return means;
-	} 
+	}
 	std::string to_s() const
 	{
 		std::string str{""};
-		if(means.size() == 0){
-			return str;
-		}else{
-			if(means.size() == 1){
+		if (means.size() == 0)
+		{
+			return base.to_s();
+		}
+		else
+		{
+			str += base.to_s();
+			std::vector<std::string> buf;
+			std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m) {
 				stringstream ss;
-				ss << std::get<means.front().index()>(means.front());
-				return ss.str();
-			}else{
-				stringstream ss;
-				ss << std::get<means.front().index()>(means.front());
-				str += ss.str();
-				std::vector<std::string> buf;
-				std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m){
-					stringstream ss;
-					ss << std::get<m.index()>(m);
-					buf.push_back(ss.str());
-				});
-				std::ostringstream os;
-				std::copy(std::next(std::begin(buf)), std::end(buf), std::ostream_iterator<std::string>(os, ","));
-				str += Prefices::LPRN + os.str();
-				str.erase(str.end() - 1);
-				str += Prefices::RPRN;
-			}
+				ss << std::get<m.index()>(m);
+				buf.push_back(ss.str());
+			});
+			std::ostringstream os;
+			std::copy(std::next(std::begin(buf)), std::end(buf), std::ostream_iterator<std::string>(os, ","));
+			str += Prefices::LPRN + os.str();
+			str.erase(str.end() - 1);
+			str += Prefices::RPRN;
 		}
 		return str;
 	}
-	friend std::ostream & operator<<(std::ostream & out, Meaning & obj);
+	friend std::ostream &operator<<(std::ostream &out, Meaning &obj);
 };
 
 class LeftNonterminal
@@ -251,7 +249,7 @@ class LeftNonterminal
 	Meaning means;
 
   public:
-	LeftNonterminal(Category & c, Meaning & m) : cat(c), means(m) {}
+	LeftNonterminal(Category &c, Meaning &m) : cat(c), means(m) {}
 	LeftNonterminal(const LeftNonterminal &dst) : cat(dst.cat), means(dst.means) {}
 	bool operator==(const LeftNonterminal &dst) const
 	{
@@ -265,11 +263,11 @@ class LeftNonterminal
 	{
 		return cat < dst.cat || (cat == dst.cat && means < dst.means);
 	}
-	const Category & get_cat() const
+	const Category &get_cat() const
 	{
 		return cat;
 	}
-	const Meaning & get_means() const
+	const Meaning &get_means() const
 	{
 		return means;
 	}
@@ -277,7 +275,7 @@ class LeftNonterminal
 	{
 		return cat.to_s() + Prefices::DEL + means.to_s();
 	}
-	friend std::ostream & operator<<(std::ostream & out, LeftNonterminal & obj);
+	friend std::ostream &operator<<(std::ostream &out, LeftNonterminal &obj);
 };
 class RightNonterminal
 {
@@ -297,11 +295,11 @@ class RightNonterminal
 	{
 		return cat < dst.cat || (cat == dst.cat && var < dst.var);
 	}
-	const Category & get_cat() const
+	const Category &get_cat() const
 	{
 		return cat;
 	}
-	const Variable & get_var() const
+	const Variable &get_var() const
 	{
 		return var;
 	}
@@ -309,7 +307,7 @@ class RightNonterminal
 	{
 		return cat.to_s() + Prefices::DEL + means.to_s();
 	}
-	friend std::ostream & operator<<(std::ostream & out, RightNonterminal & obj);
+	friend std::ostream &operator<<(std::ostream &out, RightNonterminal &obj);
 };
 class Element
 {
@@ -369,33 +367,34 @@ class Element
 		}
 		return str;
 	}
-	friend std::ostream & operator<<(std::ostream & out, Element & obj);
+	friend std::ostream &operator<<(std::ostream &out, Element &obj);
 };
 
-class Conception {
-public:
+class Conception
+{
+  public:
 	std::set<std::string> factors;
 	Conception();
 
 	//operator
 	//!等号。型が異なると偽を返します。
 	// 型が等しい場合はインデックスが等しいか比べます。
-	bool operator ==(const Conception& dst) const;
+	bool operator==(const Conception &dst) const;
 	//!等号の否定です
-	bool operator !=(const Conception& dst) const;
-	Conception operator + (Conception& dst);
-	Conception operator - (Conception& dst);
+	bool operator!=(const Conception &dst) const;
+	Conception operator+(Conception &dst);
+	Conception operator-(Conception &dst);
 	//!代入
-	Conception& operator =(const Conception& dst);
-	void diff(Conception& obj, Conception& res1, Conception& res2);
-	void inter(Conception& obj, Conception& res);
-	bool include(Conception& obj);
+	Conception &operator=(const Conception &dst);
+	void diff(Conception &obj, Conception &res1, Conception &res2);
+	void inter(Conception &obj, Conception &res);
+	bool include(Conception &obj);
 
 	bool empty();
 	void clear();
 	void add(std::string str);
 	std::string to_s();
-	friend std::ostream & operator<<(std::ostream & out, Conception & obj);
+	friend std::ostream &operator<<(std::ostream &out, Conception &obj);
 };
 
 #endif /* Conception_H_ */
