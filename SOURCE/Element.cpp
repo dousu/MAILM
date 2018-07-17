@@ -1,5 +1,38 @@
 #include "Element.h"
 
+std::ostream & operator<<(std::ostream & out, AMean & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, Variable & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, Category & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, Symbol & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, Meaning & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, LeftNonterminal & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, RightNonterminal & obj){
+	out << obj.to_s();
+	return out;
+}
+std::ostream & operator<<(std::ostream & out, Element & obj){
+	out << obj.to_s();
+	return out;
+}
+
 Conception::Conception() {
 }
 

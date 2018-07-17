@@ -21,6 +21,7 @@
 
 #include <variant>
 #include <cstddef>
+#include <ostream>
 
 
 /*!
@@ -78,6 +79,7 @@ class AMean
 			return Dictionary::symbol[obj];
 		}
 	}
+	friend std::ostream & operator<<(std::ostream & out, AMean & obj);
 };
 
 class Variable
@@ -107,6 +109,7 @@ class Variable
 	{
 		return Prefices::VAR + std::to_string(obj);
 	}
+	friend std::ostream & operator<<(std::ostream & out, Variable & obj);
 };
 
 class Category
@@ -136,6 +139,7 @@ class Category
 	{
 		return Prefices::CAT + std::to_string(obj);
 	}
+	friend std::ostream & operator<<(std::ostream & out, Category & obj);
 };
 
 class Symbol
@@ -168,6 +172,7 @@ class Symbol
 			return "[" + XMLreader::conv_alias[Dictionary::symbol[obj]] + "]";
 		}
 	}
+	friend std::ostream & operator<<(std::ostream & out, Symbol & obj);
 };
 
 class Meaning
@@ -215,13 +220,17 @@ public:
 			return str;
 		}else{
 			if(means.size() == 1){
-				return means.first.to_s();
+				return means.front.to_s();
 			}else{
-				str += means.first.to_s();
+				str += means.front.to_s();
 				means.erase(means.begin());
 			}
 			std::vector<std::string> buf;
-			std::for_each(std::begin(means), std::end(means), [&buf](AMean m){buf.push_back(m.to_s());});
+			std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m){
+				stringstream ss;
+				ss << std::get<m.index()>(m);
+				buf.push_back(ss.str());
+			});
 			std::ostringstream os;
 			std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<std::string>(os, ","));
 			str += Prefices::LPRN + os.str();
@@ -230,6 +239,7 @@ public:
 		}
 		return str;
 	}
+	friend std::ostream & operator<<(std::ostream & out, Meaning & obj);
 };
 
 class LeftNonterminal
@@ -256,7 +266,7 @@ class LeftNonterminal
 	{
 		return cat;
 	}
-	const std::vector<MeaningType> & get_means() const
+	const Meaning & get_means() const
 	{
 		return means;
 	}
@@ -264,6 +274,7 @@ class LeftNonterminal
 	{
 		return cat.to_s() + Prefices::DEL + means.to_s();
 	}
+	friend std::ostream & operator<<(std::ostream & out, LeftNonterminal & obj);
 };
 class RightNonterminal
 {
@@ -295,6 +306,7 @@ class RightNonterminal
 	{
 		return cat.to_s() + Prefices::DEL + means.to_s();
 	}
+	friend std::ostream & operator<<(std::ostream & out, RightNonterminal & obj);
 };
 class Element
 {
@@ -354,6 +366,7 @@ class Element
 		}
 		return str;
 	}
+	friend std::ostream & operator<<(std::ostream & out, Element & obj);
 };
 
 class Conception {
@@ -379,6 +392,7 @@ public:
 	void clear();
 	void add(std::string str);
 	std::string to_s();
+	friend std::ostream & operator<<(std::ostream & out, Conception & obj);
 };
 
 #endif /* Conception_H_ */
