@@ -222,6 +222,11 @@ class Meaning
 	{
 		return means.size() + 1;
 	}
+	template <typename T>
+	std::string str(T obj)
+	{
+		return obj.to_s();
+	}
 	std::string to_s() const
 	{
 		std::string str{""};
@@ -233,14 +238,8 @@ class Meaning
 		{
 			str += base.to_s();
 			std::vector<std::string> buf;
-			std::for_each(std::begin(means), std::end(means), [&buf](auto &m) {
-				std::ostringstream os;
-				std::visit([&os](auto &&arg) {
-					using T = std::decay_t<decltype(arg)>;
-					os << std::get<T>(arg);
-				},
-						   m);
-				buf.push_back(os.str());
+			std::for_each(std::begin(means), std::end(means), [&](auto &m) {
+				buf.push_back(str(m));
 			});
 			std::ostringstream os;
 			std::copy(std::next(std::begin(buf)), std::end(buf), std::ostream_iterator<std::string>(os, ","));
