@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <ostream>
 #include <sstream>
+#include <type_traits>
 
 /*!
  * Elementクラスが取るタイプのインデックスを定義しています。
@@ -232,9 +233,13 @@ class Meaning
 		{
 			str += base.to_s();
 			std::vector<std::string> buf;
-			std::for_each(std::begin(means), std::end(means), [&buf](MeaningType m) {
+			std::for_each(std::begin(means), std::end(means), [&buf](auto &m) {
 				std::ostringstream os;
-				os << std::get<m.index()>(m);
+				std::visit([&os](auto &&arg) {
+					using T = std::decay_t<decltype(arg)>;
+					os << std::get<T>(m);
+				},
+						   m);
 				buf.push_back(os.str());
 			});
 			std::ostringstream os;
