@@ -22,6 +22,7 @@
 #include <variant>
 #include <cstddef>
 #include <ostream>
+#include <sstream>
 
 /*!
  * Elementクラスが取るタイプのインデックスを定義しています。
