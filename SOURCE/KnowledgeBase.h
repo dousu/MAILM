@@ -183,6 +183,8 @@ class KnowledgeBase : public KnowledgeBaseTypeDef
 
 	std::string meaning_no_to_s(int obj);
 
+	Rule at(std::size_t n) { return ruleDB[n]; }
+
   private:
 	RuleDBType chunking(Rule &src, Rule &dst);
 	bool chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules);

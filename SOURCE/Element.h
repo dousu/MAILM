@@ -306,7 +306,7 @@ class Meaning
 	}
 	Meaning removed(std::size_t n, std::size_t size) const
 	{
-		if (size > means.size() || n > 0)
+		if (size > means.size() || n == 0)
 		{
 			std::cerr << "Cannot remove" << std::endl;
 			exit(1);

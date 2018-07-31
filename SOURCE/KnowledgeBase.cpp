@@ -178,12 +178,14 @@ bool KnowledgeBase::chunk(void)
 {
 	std::shuffle(std::begin(input_box), std::end(input_box), MT19937::igen);
 	bool is_chunked;
-	auto it = std::begin(input_box);
-	while (it != std::end(input_box))
+	RuleDBType::iterator it;
+	while ((it = std::begin(input_box)) != std::end(input_box))
 	{
 		Rule r = *it;
-		it = input_box.erase(it);
+		input_box.erase(it);
 		is_chunked = chunking_loop(r, ruleDB);
+		if (!is_chunked)
+			is_chunked |= chunking_loop(r, box_buffer);
 		if (is_chunked)
 		{
 			break;
@@ -203,7 +205,7 @@ bool KnowledgeBase::chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rule
 	RuleDBType buffer;
 	bool is_chunked = false;
 	auto it = std::begin(checked_rules);
-	while (!is_chunked && it != checked_rules.end())
+	while (!is_chunked && it != std::end(checked_rules))
 	{
 		Rule r = *it;
 		buffer.clear();
@@ -470,10 +472,8 @@ KnowledgeBase::RuleDBType KnowledgeBase::chunking(Rule &src, Rule &dst)
 		int new_sent_ind_id; //意味に変更が起きるかもしれないため
 
 		//generate
-		new_sent_ind_id =
-			ind_indexer.generate();
-		new_ind_id_targ =
-			ind_indexer.generate();
+		new_sent_ind_id = ind_indexer.generate();
+		new_ind_id_targ = ind_indexer.generate();
 
 		AMean ind = AMean(new_ind_id_targ), emp, new_sent_ind = AMean(new_sent_ind_id);
 		std::vector<MeaningElement> var_vector;
@@ -482,16 +482,14 @@ KnowledgeBase::RuleDBType KnowledgeBase::chunking(Rule &src, Rule &dst)
 		std::for_each(std::begin(noun2_ex), std::end(noun2_ex), [&](SymbolElement &se) {
 			if (se.type() == ELEM_TYPE::NT_TYPE)
 			{
-				MeaningElement sel = Variable(se.get<RightNonterminal>().get_var());
-				var_vector.push_back(sel);
+				var_vector.push_back(Variable(se.get<RightNonterminal>().get_var()));
 				d_size++;
 			}
 		});
 
 		//noun
 		Rule noun(LeftNonterminal(Category{RightNonterminal(noun1_ex.front().get<RightNonterminal>()).get_cat()}, Meaning(ind, var_vector)), noun2_ex);
-
-		Rule sent{LeftNonterminal(Category{base.get_internal().get_cat()}, Meaning{new_sent_ind, sent.get_internal().get_followings()}), base.get_external()};
+		Rule sent{LeftNonterminal(Category{base.get_internal().get_cat()}, Meaning{new_sent_ind, base.get_internal().get_followings()}), base.get_external()};
 		Rule sent2;
 		if (multi_cat)
 		{
@@ -539,11 +537,11 @@ bool KnowledgeBase::merge(void)
 {
 	std::shuffle(std::begin(input_box), std::end(input_box), MT19937::igen);
 	bool is_merged;
-	auto it = std::begin(input_box);
-	while (it != std::end(input_box))
+	RuleDBType::iterator it;
+	while ((it = std::begin(input_box)) != std::end(input_box))
 	{
 		Rule r = *it;
-		it = input_box.erase(it);
+		input_box.erase(it);
 		is_merged = merging(r);
 		if (is_merged)
 		{
@@ -779,15 +777,15 @@ bool KnowledgeBase::replace(void)
 {
 	std::shuffle(std::begin(input_box), std::end(input_box), MT19937::igen);
 	bool is_replaced;
-	auto it = std::begin(input_box);
-	while (it != std::end(input_box))
+	RuleDBType::iterator it;
+	while ((it = std::begin(input_box)) != std::end(input_box))
 	{
 		if (LOGGING_FLAG)
 		{
 			LogBox::push_log("\n-->>REPLACE");
 		}
 		Rule r = *it;
-		it = input_box.erase(it);
+		input_box.erase(it);
 		is_replaced = replacing(r, input_box); //二重に処理されないように最初に行う
 		is_replaced |= replacing(r, box_buffer);
 		is_replaced |= replacing(r, ruleDB);
@@ -813,15 +811,13 @@ bool KnowledgeBase::replace(void)
 	return is_replaced;
 }
 
-bool KnowledgeBase::replacing(
-	Rule &word,
-	RuleDBType &checking_sents)
+bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
 {
 	bool is_replaced = false;
 	RuleDBType buf, swapDB;
 
 	std::for_each(std::begin(checking_sents), std::end(checking_sents), [&](Rule &r) {
-		if (word != r && r.get_external().size() < word.get_external().size() && intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base()))
+		if (word != r && r.get_external().size() > word.get_external().size() && intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base()))
 		{
 			std::vector<SymbolElement> el_vec = r.get_external();
 			auto it = std::search(std::begin(el_vec), std::end(el_vec), std::begin(word.get_external()), std::end(word.get_external()));
@@ -854,7 +850,7 @@ bool KnowledgeBase::replacing(
 				b_pos++;
 				Meaning new_meaning = r.get_internal().get_means().replaced(b_pos, b_size, Variable(new_var_id));
 
-				el_vec.erase(it, std::next(it, word.get_external().size()));
+				it = el_vec.erase(it, std::next(it, word.get_external().size()));
 				el_vec.insert(it, RightNonterminal(word.get_internal().get_cat(), Variable(new_var_id)));
 
 				Rule sent{LeftNonterminal{Category{r.get_internal().get_cat()}, new_meaning}, el_vec};

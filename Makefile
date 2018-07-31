@@ -14,6 +14,7 @@ all: ma
 
 ma: $(OBJS)
 	${CXX} ${CXXFLAGS} ./SOURCE/MAILM_main.cpp ${OBJS} ${LIBS} -o ./SOURCE/mailm.exe
+	${CXX} ${CXXFLAGS} ./SOURCE/KnwTest.cpp ${OBJS} ${LIBS} -o ./SOURCE/knwtest.exe
 
 boost:
 	${CXX} ./SOURCE/boost_version.cpp -o b_ver.exe

@@ -39,12 +39,10 @@ template <typename T>
 bool Semantics<T>::chunk_equal(const AMean &a, const AMean &b)
 {
 	T tmp_v;
-	// if(mapping[a.get_obj_id()].empty() || mapping[b.get_obj_id()].empty()){
-	//   // std::cout << mapping.size() << std::endl;
-	//   // std::cout << "a:" << mapping[a.get_obj_id()].to_s() << std::endl;
-	//   // std::cout << "b:" << mapping[b.get_obj_id()].to_s() << std::endl;
-	//   return false;
-	// }
+	if (mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty())
+	{
+		return true;
+	}
 	mapping[a].inter(mapping[b], tmp_v); //intersection
 	return !tmp_v.empty();
 }
@@ -53,12 +51,10 @@ template <typename T>
 bool Semantics<T>::merge_equal(const AMean &a, const AMean &b)
 {
 	T tmp_v;
-	// if(mapping[a.get_obj_id()].empty() || mapping[b.get_obj_id()].empty()){
-	//   // std::cout << mapping.size() << std::endl;
-	//   // std::cout << "a:" << mapping[a.get_obj_id()].to_s() << std::endl;
-	//   // std::cout << "b:" << mapping[b.get_obj_id()].to_s() << std::endl;
-	//   return false;
-	// }
+	if (mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty())
+	{
+		return true;
+	}
 	return mapping[a.get_obj_id()].include(mapping[b.get_obj_id()]) || mapping[b.get_obj_id()].include(mapping[a.get_obj_id()]); //包含関係になっていたら真
 																																 //return equal(a, b);
 }
@@ -67,12 +63,10 @@ template <typename T>
 bool Semantics<T>::replace_equal(const AMean &a, const AMean &b)
 {
 	T tmp_v;
-	// if(mapping[a.get_obj_id()].empty() || mapping[b.get_obj_id()].empty()){
-	//   // std::cout << mapping.size() << std::endl;
-	//   // std::cout << "a:" << mapping[a.get_obj_id()].to_s() << std::endl;
-	//   // std::cout << "b:" << mapping[b.get_obj_id()].to_s() << std::endl;
-	//   return false;
-	// }
+	if (mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty())
+	{
+		return true;
+	}
 	return mapping[a].include(mapping[b]);
 }
 template <typename T>

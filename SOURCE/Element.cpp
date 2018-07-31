@@ -50,14 +50,14 @@ std::ostream &operator<<(std::ostream &out, const SymbolElement &obj)
 
 Meaning Meaning::replaced(std::size_t n, std::size_t size, const MeaningElement &el) const
 {
-	if (size > means.size() || n > 0)
+	if (size > means.size() || n == 0)
 	{
 		std::cerr << "Cannot remove" << std::endl;
 		exit(1);
 	}
 	std::vector<MeaningElement> tmp = means;
-	tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n + size));
-	tmp.insert(std::next(std::begin(tmp), n - 1), el);
+	auto it = tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n - 1 + size));
+	tmp.insert(it, el);
 	return Meaning(base, tmp);
 }
 

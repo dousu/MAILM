@@ -8,8 +8,7 @@ MAILMAgent::~MAILMAgent()
 {
 }
 
-MAILMAgent &
-MAILMAgent::operator=(const MAILMAgent &dst)
+MAILMAgent &MAILMAgent::operator=(const MAILMAgent &dst)
 {
 	kb = dst.kb;
 	generation_index = dst.generation_index;
