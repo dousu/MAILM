@@ -1,0 +1,146 @@
+#include "XMLreader.h"
+#include "KnowledgeBase.h"
+
+int main(int arg, char **argv)
+{
+    std::vector<int> v(10);
+    std::iota(std::begin(v), std::end(v), 0);
+    std::for_each(std::begin(v), std::end(v), [&](int n) {
+        std::string str = Prefices::SYN + std::to_string(n);
+        std::string str2 = "[" + std::to_string(n) + "]";
+        XMLreader::alias.insert(std::map<std::string, std::string>::value_type(str, str2));
+        XMLreader::conv_alias.insert(std::map<std::string, std::string>::value_type(str2, str));
+        Dictionary::symbol.insert(std::map<int, std::string>::value_type(n, str2));
+        Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, n));
+        XMLreader::conv_str[str] = n;
+    });
+    Symbol::conv_symbol = XMLreader::conv_alias;
+    Rule buf;
+    KnowledgeBase kb;
+    std::vector<Rule> vec;
+
+    //dictionary check
+    std::cout << "Dictionary" << std::endl;
+    // std::cout << "meaning" << std::endl;
+    // auto it1 = std::begin(dic.conv_individual);
+    // for (; it1 != std::end(dic.conv_individual); it1++)
+    // {
+    //     std::cout << "\tstring: " << (*it1).first << "\tnumber: " << (*it1).second << std::endl;
+    // }
+    std::cout << "symbols" << std::endl;
+    auto it2 = std::begin(Dictionary::conv_symbol);
+    for (; it2 != std::end(Dictionary::conv_symbol); it2++)
+    {
+        std::cout << "\tstring: " << (*it2).first << "\tnumber: " << (*it2).second << std::endl;
+    }
+
+    //chunk1 test
+    std::vector<SymbolElement> s_el1{Symbol{1}, Symbol{2}, Symbol{3}},
+        s_el2{Symbol{1}, Symbol{4}, Symbol{3}};
+    // std::vector<MeaningElement> m_el1{Meaning{1}, Meaning{2}, Meaning{3}},
+    //     m_el2{Meaning{1}, Meaning{2}, Meaning{2}};
+    std::cout << "\n****************chunk1 test" << std::endl;
+    vec.push_back(Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el1));
+    vec.push_back(Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el2));
+
+    kb.send_box(vec);
+    std::cout << kb.to_s() << std::endl;
+    kb.chunk();
+    kb.send_db(kb.input_box);
+    std::cout << kb.to_s() << std::endl;
+
+    //chunk2 test
+    std::vector<SymbolElement> s_el3{Symbol{1}, Symbol{7}, Symbol{3}};
+    std::cout << "\n****************chunk2 test" << std::endl;
+    vec.clear();
+    vec.push_back(Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el3));
+    kb.send_box(vec);
+    std::cout << kb.to_s() << std::endl;
+    kb.chunk();
+    kb.send_db(kb.input_box);
+    std::cout << kb.to_s() << std::endl;
+
+    //merge test
+    std::vector<SymbolElement> s_el4{Symbol{4}};
+    std::cout << "\n****************merge test" << std::endl;
+    std::cout << "\n%%% previous" << std::endl;
+    buf = Rule(LeftNonterminal(Category{-3}, Meaning(AMean{-7})), s_el4);
+    kb.send_box(buf);
+    std::cout << kb.to_s() << std::endl;
+    kb.merge();
+    kb.send_db(kb.input_box);
+    std::cout << "\n%%% after" << std::endl;
+    std::cout << kb.to_s() << std::endl;
+
+    //replace test
+    std::vector<SymbolElement> s_el5{Symbol{3}};
+    std::cout << "\n****************replace test" << std::endl;
+    std::cout << "\n%%% previous" << std::endl;
+    buf = Rule(LeftNonterminal(Category{-4}, Meaning(AMean{-8})), s_el5);
+    kb.send_box(buf);
+    std::cout << kb.to_s() << std::endl;
+    kb.replace();
+    kb.send_db(kb.input_box);
+    std::cout << "\n%%% after" << std::endl;
+    std::cout << kb.to_s() << std::endl;
+
+    //unique test
+    std::cout << "\n****************unique test" << std::endl;
+    std::cout << "\n%%% previous" << std::endl;
+    std::cout << kb.to_s() << std::endl;
+    kb.consolidate();
+    std::cout << "\n%%% after" << std::endl;
+    std::cout << kb.to_s() << std::endl;
+
+    Rule r5 = kb.at(4);
+    Rule r7 = kb.at(6);
+    std::cout << r5 << std::endl
+              << r7 << std::endl
+              << std::boolalpha << (r5 == r7) << std::noboolalpha << std::endl;
+
+    // //consolidate test
+    // std::cout << "\n****************consolidate test" << std::endl;
+    // kb.clear();
+    // vec.clear();
+    // vec.push_back(Rule(std::string("S/like(mary,heather)->abc")));
+    // vec.push_back(Rule(std::string("S/like(mary,john)->adc")));
+    // vec.push_back(Rule(std::string("S/like(john,john)->add")));
+    // vec.push_back(Rule(std::string("C2/john->d")));
+    // vec.push_back(Rule(std::string("C4/mary->c")));
+    // kb.send_box(vec);
+
+    // std::cout << "\n%%% previous" << std::endl;
+    // std::cout << kb.to_s() << std::endl;
+    // kb.consolidate();
+    // std::cout << "\n%%% after" << std::endl;
+    // std::cout << kb.to_s() << std::endl;
+
+    // //fabricate test
+    // std::cout << "\n****************fabricate test" << std::endl;
+    // Rule input = Rule(std::string("S/like(heather,heather)->z")), output;
+    // input.external.clear();
+    // output = kb.fabricate(input);
+    // std::cout << "fabricated: " << output.to_s() << std::endl;
+    // std::cout << "\n****************end" << std::endl;
+
+    // //acceptable test
+    // std::cout << "\n****************acceptable test" << std::endl;
+    // Rule query = Rule(std::string("S/like(heather,heather)->zxy"));
+    // query.external.clear();
+    // bool accepted = kb.acceptable(query);
+    // std::cout << "Target: " << query.to_s() << std::endl
+    //           << "result: " << std::boolalpha << accepted << std::noboolalpha << std::endl;
+    // query = Rule(std::string("S/like(john,mary)->yzz"));
+    // query.external.clear();
+    // accepted = kb.acceptable(query);
+    // std::cout << "Target: " << query.to_s() << std::endl
+    //           << "result: " << std::boolalpha << accepted << std::noboolalpha << std::endl;
+    // query = Rule(std::string("S/like(mary,mary)->zyx"));
+    // query.external.clear();
+    // accepted = kb.acceptable(query);
+    // std::cout << "Target: " << query.to_s() << std::endl
+    //           << "result: " << std::boolalpha << accepted << std::noboolalpha << std::endl;
+    // std::cout << "\n****************end" << std::endl;
+
+    return 0;
+}
