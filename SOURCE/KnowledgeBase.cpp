@@ -55,6 +55,16 @@ void KnowledgeBase::clear(void)
 	intention.clear();
 }
 
+Rule KnowledgeBase::at(std::size_t n) const
+{
+	if (n >= ruleDB.size())
+	{
+		std::cerr << "no exist : KnowledgeBase::at(std::size_t)" << std::endl;
+		exit(1);
+	}
+	return ruleDB[n];
+}
+
 void KnowledgeBase::send_box(Rule &mail)
 {
 	input_box.push_back(mail);
@@ -80,7 +90,9 @@ void KnowledgeBase::send_db(RuleDBType &mails)
 template <typename T>
 void KnowledgeBase::unique(T &DB)
 {
-	std::unique(std::begin(DB), std::end(DB));
+	std::sort(std::begin(DB), std::end(DB));
+	auto it = std::unique(std::begin(DB), std::end(DB));
+	DB.erase(it, DB.end());
 }
 
 /*
@@ -855,6 +867,7 @@ bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
 
 				Rule sent{LeftNonterminal{Category{r.get_internal().get_cat()}, new_meaning}, el_vec};
 				buf.push_back(sent);
+				buf.push_back(word);
 				intention.replace(
 					r.get_internal().get_base(),
 					word.get_internal().get_base(),

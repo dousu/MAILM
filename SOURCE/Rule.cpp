@@ -245,12 +245,12 @@ bool Rule::operator!=(Rule &dst) const
 
 bool Rule::operator==(const Rule &dst) const
 {
-	return internal.get_base() == dst.internal.get_base() && external.size() == dst.external.size() && external == dst.external;
+	return internal.get_cat() == dst.internal.get_cat() && internal.get_base() == dst.internal.get_base() && external.size() == dst.external.size() && external == dst.external;
 }
 
 bool Rule::operator<(const Rule &dst) const
 {
-	return internal.get_base() < dst.internal.get_base() || (internal.get_base() == dst.internal.get_base() && external == dst.external);
+	return internal.get_cat() < dst.internal.get_cat() || (internal.get_cat() == dst.internal.get_cat() && (internal.get_base() < dst.internal.get_base() || (internal.get_base() == dst.internal.get_base() && external == dst.external)));
 }
 
 Rule &Rule::operator=(const Rule &dst)

@@ -41,7 +41,7 @@ int main(int arg, char **argv)
     //     m_el2{Meaning{1}, Meaning{2}, Meaning{2}};
     std::cout << "\n****************chunk1 test" << std::endl;
     vec.push_back(Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el1));
-    vec.push_back(Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el2));
+    vec.push_back(Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el2));
 
     kb.send_box(vec);
     std::cout << kb.to_s() << std::endl;
@@ -53,7 +53,7 @@ int main(int arg, char **argv)
     std::vector<SymbolElement> s_el3{Symbol{1}, Symbol{7}, Symbol{3}};
     std::cout << "\n****************chunk2 test" << std::endl;
     vec.clear();
-    vec.push_back(Rule(LeftNonterminal(Category{-3}, Meaning(AMean{0})), s_el3));
+    vec.push_back(Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el3));
     kb.send_box(vec);
     std::cout << kb.to_s() << std::endl;
     kb.chunk();
@@ -64,7 +64,7 @@ int main(int arg, char **argv)
     std::vector<SymbolElement> s_el4{Symbol{4}};
     std::cout << "\n****************merge test" << std::endl;
     std::cout << "\n%%% previous" << std::endl;
-    buf = Rule(LeftNonterminal(Category{-4}, Meaning(AMean{-7})), s_el4);
+    buf = Rule(LeftNonterminal(Category{-3}, Meaning(AMean{-7})), s_el4);
     kb.send_box(buf);
     std::cout << kb.to_s() << std::endl;
     kb.merge();
@@ -76,7 +76,7 @@ int main(int arg, char **argv)
     std::vector<SymbolElement> s_el5{Symbol{3}};
     std::cout << "\n****************replace test" << std::endl;
     std::cout << "\n%%% previous" << std::endl;
-    buf = Rule(LeftNonterminal(Category{-5}, Meaning(AMean{-8})), s_el5);
+    buf = Rule(LeftNonterminal(Category{-4}, Meaning(AMean{-8})), s_el5);
     kb.send_box(buf);
     std::cout << kb.to_s() << std::endl;
     kb.replace();
@@ -92,15 +92,11 @@ int main(int arg, char **argv)
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
 
-    Rule r4 = kb.at(3);
     Rule r5 = kb.at(4);
-    Rule r6 = kb.at(5);
     Rule r7 = kb.at(6);
     std::cout << r5 << std::endl
-              << r6 << std::endl
-              << std::boolalpha << (r5 == r6) << std::endl
-              << (r4 == r6) << std::endl
-              << (r7 == r6) << std::noboolalpha << std::endl;
+              << r7 << std::endl
+              << std::boolalpha << (r5 == r7) << std::noboolalpha << std::endl;
 
     // //consolidate test
     // std::cout << "\n****************consolidate test" << std::endl;
