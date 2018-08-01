@@ -56,10 +56,7 @@ void LogBox::refresh_log(void)
 	if (log.size() > 0)
 	{
 		std::ofstream ofs(log_file.c_str(), std::ios::app);
-		for (int i = 0; i < log.size(); i++)
-		{
-			ofs << log[i] << std::endl;
-		}
+		std::copy(std::begin(log), std::end(log), std::ostream_iterator<std::string>(ofs, "\n"));
 		log.clear();
 		std::vector<std::string>(log).swap(log);
 	}

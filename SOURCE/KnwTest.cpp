@@ -1,5 +1,5 @@
 #include "XMLreader.h"
-#include "KnowledgeBase.h"
+#include "Knowledge.h"
 
 int main(int arg, char **argv)
 {
@@ -16,7 +16,7 @@ int main(int arg, char **argv)
     });
     Symbol::conv_symbol = XMLreader::conv_alias;
     Rule buf;
-    KnowledgeBase kb;
+    Knowledge kb;
     std::vector<Rule> vec;
 
     //dictionary check
@@ -40,25 +40,31 @@ int main(int arg, char **argv)
     // std::vector<MeaningElement> m_el1{Meaning{1}, Meaning{2}, Meaning{3}},
     //     m_el2{Meaning{1}, Meaning{2}, Meaning{2}};
     std::cout << "\n****************chunk1 test" << std::endl;
-    vec.push_back(Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el1));
-    vec.push_back(Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el2));
-
-    kb.send_box(vec);
+    buf = Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el1);
+    vec.push_back(buf);
+    kb.send_box(buf);
+    buf = Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el2);
+    vec.push_back(buf);
+    kb.send_box(buf);
+    std::cout << "\n%%% previous" << std::endl;
     std::cout << kb.to_s() << std::endl;
     kb.chunk();
     kb.send_db(kb.input_box);
+    std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
 
     //chunk2 test
     std::vector<SymbolElement> s_el3{Symbol{1}, Symbol{7}, Symbol{3}};
     std::cout << "\n****************chunk2 test" << std::endl;
-    vec.clear();
-    vec.push_back(Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el3));
-    kb.send_box(vec);
+    buf = Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el3);
+    kb.send_box(buf);
+    std::cout << "\n%%% previous" << std::endl;
     std::cout << kb.to_s() << std::endl;
     kb.chunk();
     kb.send_db(kb.input_box);
+    std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    vec.push_back(buf);
 
     //merge test
     std::vector<SymbolElement> s_el4{Symbol{4}};
@@ -71,6 +77,7 @@ int main(int arg, char **argv)
     kb.send_db(kb.input_box);
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    vec.push_back(buf);
 
     //replace test
     std::vector<SymbolElement> s_el5{Symbol{3}};
@@ -83,6 +90,7 @@ int main(int arg, char **argv)
     kb.send_db(kb.input_box);
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    vec.push_back(buf);
 
     //unique test
     std::cout << "\n****************unique test" << std::endl;
@@ -92,28 +100,21 @@ int main(int arg, char **argv)
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
 
-    Rule r5 = kb.at(4);
-    Rule r7 = kb.at(6);
-    std::cout << r5 << std::endl
-              << r7 << std::endl
-              << std::boolalpha << (r5 == r7) << std::noboolalpha << std::endl;
+    Rule r2 = kb.at(1);
+    Rule r3 = kb.at(2);
+    std::cout << r2 << std::endl
+              << r3 << std::endl
+              << std::boolalpha << (r2.get_external() == r3.get_external()) << std::noboolalpha << std::endl;
+    vec.push_back(buf);
 
-    // //consolidate test
-    // std::cout << "\n****************consolidate test" << std::endl;
-    // kb.clear();
-    // vec.clear();
-    // vec.push_back(Rule(std::string("S/like(mary,heather)->abc")));
-    // vec.push_back(Rule(std::string("S/like(mary,john)->adc")));
-    // vec.push_back(Rule(std::string("S/like(john,john)->add")));
-    // vec.push_back(Rule(std::string("C2/john->d")));
-    // vec.push_back(Rule(std::string("C4/mary->c")));
-    // kb.send_box(vec);
-
-    // std::cout << "\n%%% previous" << std::endl;
-    // std::cout << kb.to_s() << std::endl;
-    // kb.consolidate();
-    // std::cout << "\n%%% after" << std::endl;
-    // std::cout << kb.to_s() << std::endl;
+    std::cout << "\n****************consolidate test" << std::endl;
+    kb.clear();
+    kb.send_box(vec);
+    std::cout << "\n%%% previous" << std::endl;
+    std::cout << kb.to_s() << std::endl;
+    kb.consolidate();
+    std::cout << "\n%%% after" << std::endl;
+    std::cout << kb.to_s() << std::endl;
 
     // //fabricate test
     // std::cout << "\n****************fabricate test" << std::endl;

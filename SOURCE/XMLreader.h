@@ -29,8 +29,8 @@ class XMLreader
 	static std::map<int, Meaning> i_meaning_map;	   //meaning
 	static std::map<int, std::vector<int>> i_beat_map; //for making tree
 
-	static std::map<int, std::string> labeling;					 //file name
-	static std::map<int, std::vector<std::string>> core_meaning; //semantics
+	static std::map<int, std::string> labeling;		 //file name
+	static std::map<AMean, Conception> core_meaning; //semantics
 	static std::vector<Rule> input_rules;
 	static std::map<std::string, int> conv_str; //utility tool
 

@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <iterator>
 
 /*!
   * ロギングデータを保持するクラス
@@ -13,7 +14,7 @@
   */
 class LogBox
 {
-  public:
+public:
 	static std::vector<std::string> log;
 	static std::string log_file;
 	static int log_size;
@@ -22,15 +23,11 @@ class LogBox
 	LogBox();
 	virtual ~LogBox();
 
-	static void
-		push_log(std::string);
-	static void
-	pop_log(int nth = 1);
-	static void
-	refresh_log(void);
+	static void push_log(std::string);
+	static void pop_log(int nth = 1);
+	static void refresh_log(void);
 
-	static void
-		set_filepath(std::string);
+	static void set_filepath(std::string);
 };
 
 #endif /* LOGBOX_H_ */

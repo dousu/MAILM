@@ -85,7 +85,7 @@ class AMean
 	}
 	std::string to_s() const
 	{
-		return Prefices::MES + std::to_string(obj);
+		return Prefices::MEA + std::to_string(obj);
 	}
 	friend std::ostream &operator<<(std::ostream &out, const AMean &obj);
 };
@@ -583,6 +583,7 @@ class Conception
 	std::set<std::string> factors;
 	Conception();
 	Conception(std::string);
+	Conception(const Conception &);
 
 	//operator
 	//!等号。型が異なると偽を返します。

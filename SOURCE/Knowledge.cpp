@@ -1,24 +1,24 @@
-#include "KnowledgeBase.h"
+#include "Knowledge.h"
 
-bool KnowledgeBase::LOGGING_FLAG = false;
-int KnowledgeBase::ABSENT_LIMIT = 1;
-uint32_t KnowledgeBase::CONTROLS = 0x00L;
-int KnowledgeBase::buzz_length = 3;
-int KnowledgeBase::EXPRESSION_LIMIT = 15;
-int KnowledgeBase::RECURSIVE_LIMIT = 3;
+bool Knowledge::LOGGING_FLAG = false;
+int Knowledge::ABSENT_LIMIT = 1;
+uint32_t Knowledge::CONTROLS = 0x00L;
+int Knowledge::buzz_length = 3;
+int Knowledge::EXPRESSION_LIMIT = 15;
+int Knowledge::RECURSIVE_LIMIT = 3;
 
-KnowledgeBase::KnowledgeBase()
+Knowledge::Knowledge()
 {
 	cat_indexer.index_counter = 1;
 	var_indexer.index_counter = 1;
 	ind_indexer.index_counter = 1;
 }
 
-KnowledgeBase::~KnowledgeBase()
+Knowledge::~Knowledge()
 {
 }
 
-KnowledgeBase &KnowledgeBase::operator=(const KnowledgeBase &dst)
+Knowledge &Knowledge::operator=(const Knowledge &dst)
 {
 	cat_indexer = dst.cat_indexer;
 	var_indexer = dst.var_indexer;
@@ -40,7 +40,7 @@ KnowledgeBase &KnowledgeBase::operator=(const KnowledgeBase &dst)
 	return *this;
 }
 
-void KnowledgeBase::clear(void)
+void Knowledge::clear(void)
 {
 	cat_indexer.index_counter = 1;
 	var_indexer.index_counter = 1;
@@ -55,40 +55,40 @@ void KnowledgeBase::clear(void)
 	intention.clear();
 }
 
-Rule KnowledgeBase::at(std::size_t n) const
+Rule Knowledge::at(std::size_t n) const
 {
 	if (n >= ruleDB.size())
 	{
-		std::cerr << "no exist : KnowledgeBase::at(std::size_t)" << std::endl;
+		std::cerr << "no exist : Knowledge::at(std::size_t)" << std::endl;
 		exit(1);
 	}
 	return ruleDB[n];
 }
 
-void KnowledgeBase::send_box(Rule &mail)
+void Knowledge::send_box(Rule &mail)
 {
 	input_box.push_back(mail);
 }
 
-void KnowledgeBase::send_box(RuleDBType &mails)
+void Knowledge::send_box(RuleDBType &mails)
 {
 	std::copy(std::begin(mails), std::end(mails), std::back_inserter(input_box));
 	mails.clear();
 }
 
-void KnowledgeBase::send_db(Rule &mail)
+void Knowledge::send_db(Rule &mail)
 {
 	ruleDB.push_back(mail);
 }
 
-void KnowledgeBase::send_db(RuleDBType &mails)
+void Knowledge::send_db(RuleDBType &mails)
 {
 	std::copy(std::begin(mails), std::end(mails), std::back_inserter(ruleDB));
 	mails.clear();
 }
 
 template <typename T>
-void KnowledgeBase::unique(T &DB)
+void Knowledge::unique(T &DB)
 {
 	std::sort(std::begin(DB), std::end(DB));
 	auto it = std::unique(std::begin(DB), std::end(DB));
@@ -125,7 +125,7 @@ void KnowledgeBase::unique(T &DB)
  * ・Sentenceカテゴリがwordに入る可能性はある
  */
 
-bool KnowledgeBase::consolidate(void)
+bool Knowledge::consolidate(void)
 {
 	bool flag = true;
 	std::array<int, CONSOLIDATE_TYPE::ALL_METHOD> ar, tmp;
@@ -162,7 +162,10 @@ bool KnowledgeBase::consolidate(void)
 		});
 
 		if (LOGGING_FLAG)
+		{
+			LogBox::push_log("Knowledge Size: " + std::to_string(ruleDB.size() + box_buffer.size() + input_box.size()));
 			LogBox::refresh_log();
+		}
 	}
 
 	if (LOGGING_FLAG)
@@ -186,7 +189,7 @@ bool KnowledgeBase::consolidate(void)
 	return true;
 }
 
-bool KnowledgeBase::chunk(void)
+bool Knowledge::chunk(void)
 {
 	std::shuffle(std::begin(input_box), std::end(input_box), MT19937::igen);
 	bool is_chunked;
@@ -212,7 +215,7 @@ bool KnowledgeBase::chunk(void)
 	return is_chunked;
 }
 
-bool KnowledgeBase::chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules)
+bool Knowledge::chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules)
 {
 	RuleDBType buffer;
 	bool is_chunked = false;
@@ -294,7 +297,7 @@ bool KnowledgeBase::chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rule
  # Chunkが発生した場合その瞬間に該当する規則は削除される
  #
  */
-KnowledgeBase::RuleDBType KnowledgeBase::chunking(Rule &src, Rule &dst)
+Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 {
 	//0: unchunkable
 	//1: chunk type 1
@@ -545,7 +548,7 @@ KnowledgeBase::RuleDBType KnowledgeBase::chunking(Rule &src, Rule &dst)
 	return buf;
 }
 
-bool KnowledgeBase::merge(void)
+bool Knowledge::merge(void)
 {
 	std::shuffle(std::begin(input_box), std::end(input_box), MT19937::igen);
 	bool is_merged;
@@ -569,7 +572,7 @@ bool KnowledgeBase::merge(void)
 	return is_merged;
 }
 
-bool KnowledgeBase::merging(Rule &src)
+bool Knowledge::merging(Rule &src)
 {
 	RuleDBType buf, sub_buf;
 
@@ -581,27 +584,15 @@ bool KnowledgeBase::merging(Rule &src)
 	std::set<AMean> unified_mean;
 
 	//既存単語規則の被変更カテゴリの収拾
-	collect_merge(
-		src,
-		input_box,
-		unified_cat,
-		unified_mean);
+	collect_merge(src, input_box, unified_cat, unified_mean);
 
 	//既存単語規則の被変更カテゴリの収拾
-	collect_merge(
-		src,
-		ruleDB,
-		unified_cat,
-		unified_mean);
+	collect_merge(src, ruleDB, unified_cat, unified_mean);
 
 	//未検証単語規則の被変更カテゴリの収拾
-	collect_merge(
-		src,
-		box_buffer,
-		unified_cat,
-		unified_mean);
+	collect_merge(src, box_buffer, unified_cat, unified_mean);
 
-	//被変更カテゴリの数が0ならMergeは起こらない
+	//被変更の数が0ならMergeは起こらない
 	if (unified_cat.size() == 0 && unified_mean.size() == 0)
 	{
 		return false;
@@ -666,13 +657,13 @@ bool KnowledgeBase::merging(Rule &src)
 	return true;
 }
 
-void KnowledgeBase::collect_merge(
+void Knowledge::collect_merge(
 	Rule &src,
 	RuleDBType &rule_db,
 	std::set<Category> &unified_cat,
 	std::set<AMean> &unified_mean)
 {
-	std::for_each(std::begin(ruleDB), std::end(ruleDB), [&](Rule &r) {
+	std::for_each(std::begin(rule_db), std::end(rule_db), [&](Rule &r) {
 		if (src.get_external() == r.get_external() && intention.merge_equal(src.get_internal().get_base(), r.get_internal().get_base()))
 		{
 			if (src.get_internal().get_cat() != r.get_internal().get_cat())
@@ -687,7 +678,7 @@ void KnowledgeBase::collect_merge(
 	});
 }
 
-void KnowledgeBase::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buffer, std::set<Category> &unified_cat)
+void Knowledge::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buffer, std::set<Category> &unified_cat)
 {
 	std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &r) {
 		bool is_modified = false;
@@ -709,8 +700,8 @@ void KnowledgeBase::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &
 		}
 	});
 }
-KnowledgeBase::RuleDBType
-KnowledgeBase::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Category> &unified_cat)
+Knowledge::RuleDBType
+Knowledge::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Category> &unified_cat)
 {
 	RuleDBType buf, swapDB;
 	std::for_each(std::begin(DB), std::end(DB), [&](Rule &r) {
@@ -742,7 +733,7 @@ KnowledgeBase::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set
 
 	return buf;
 }
-void KnowledgeBase::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffer, std::set<AMean> &unified_mean)
+void Knowledge::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffer, std::set<AMean> &unified_mean)
 {
 	std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &r) {
 		bool is_modified = false;
@@ -758,8 +749,8 @@ void KnowledgeBase::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &b
 	});
 }
 
-KnowledgeBase::RuleDBType
-KnowledgeBase::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<AMean> &unified_mean)
+Knowledge::RuleDBType
+Knowledge::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<AMean> &unified_mean)
 {
 	RuleDBType buf, swapDB;
 	std::for_each(std::begin(DB), std::end(DB), [&](Rule &r) {
@@ -785,7 +776,7 @@ KnowledgeBase::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<
 	return buf;
 }
 
-bool KnowledgeBase::replace(void)
+bool Knowledge::replace(void)
 {
 	std::shuffle(std::begin(input_box), std::end(input_box), MT19937::igen);
 	bool is_replaced;
@@ -798,7 +789,7 @@ bool KnowledgeBase::replace(void)
 		}
 		Rule r = *it;
 		input_box.erase(it);
-		is_replaced = replacing(r, input_box); //二重に処理されないように最初に行う
+		is_replaced = replacing(r, input_box);
 		is_replaced |= replacing(r, box_buffer);
 		is_replaced |= replacing(r, ruleDB);
 		if (is_replaced)
@@ -809,6 +800,7 @@ bool KnowledgeBase::replace(void)
 				LogBox::push_log(r.to_s());
 				LogBox::push_log("<<--REPLACE");
 			}
+			send_box(r);
 			break;
 		}
 		else
@@ -823,18 +815,20 @@ bool KnowledgeBase::replace(void)
 	return is_replaced;
 }
 
-bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
+bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 {
 	bool is_replaced = false;
 	RuleDBType buf, swapDB;
 
 	std::for_each(std::begin(checking_sents), std::end(checking_sents), [&](Rule &r) {
-		if (word != r && r.get_external().size() > word.get_external().size() && intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base()))
+		if (r.get_external().size() > word.get_external().size() && intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base()))
 		{
 			std::vector<SymbolElement> el_vec = r.get_external();
 			auto it = std::search(std::begin(el_vec), std::end(el_vec), std::begin(word.get_external()), std::end(word.get_external()));
 			if (it != std::end(el_vec))
 			{
+				std::cout << "replace: " << word << std::endl;
+				std::cout << "replaced: " << r << std::endl;
 				if (LOGGING_FLAG)
 				{
 					LogBox::push_log("REPLACE-> " + r.to_s());
@@ -867,7 +861,6 @@ bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
 
 				Rule sent{LeftNonterminal{Category{r.get_internal().get_cat()}, new_meaning}, el_vec};
 				buf.push_back(sent);
-				buf.push_back(word);
 				intention.replace(
 					r.get_internal().get_base(),
 					word.get_internal().get_base(),
@@ -897,7 +890,7 @@ bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
 }
 
 std::string
-KnowledgeBase::to_s(void)
+Knowledge::to_s(void)
 {
 	RuleDBType rule_buf;
 	std::vector<std::string> buf;
@@ -952,22 +945,22 @@ KnowledgeBase::to_s(void)
 	return os.str();
 }
 
-void KnowledgeBase::logging_on(void)
+void Knowledge::logging_on(void)
 {
 	LOGGING_FLAG = true;
 }
 
-void KnowledgeBase::logging_off(void)
+void Knowledge::logging_off(void)
 {
 	LOGGING_FLAG = false;
 }
 
-void KnowledgeBase::set_control(uint32_t FLAGS)
+void Knowledge::set_control(uint32_t FLAGS)
 {
 	CONTROLS |= FLAGS;
 }
 
-KnowledgeBase::RuleDBType KnowledgeBase::rules(void)
+Knowledge::RuleDBType Knowledge::rules(void)
 {
 	RuleDBType kb_all;
 	RuleDBType::iterator ruleDB_it;
@@ -980,35 +973,35 @@ KnowledgeBase::RuleDBType KnowledgeBase::rules(void)
 	return kb_all;
 }
 
-void KnowledgeBase::define(const AMean &a, Conception m)
+void Knowledge::define(const AMean &a, Conception &m)
 {
 	intention.store(a, m);
 }
 
-void KnowledgeBase::init_semantics_rules(TransRules &obj)
+void Knowledge::init_semantics_rules(TransRules &obj)
 {
 	intention.init_rules(obj);
 }
 
-Meaning KnowledgeBase::meaning_no(int obj)
+Meaning Knowledge::meaning_no(int obj)
 {
 	return intention.trans(obj);
 }
 
 //DBの検索を高速化するため
-void KnowledgeBase::build_word_index(void)
+void Knowledge::build_word_index(void)
 {
 	dic_add(ruleDB);
 }
 
-void KnowledgeBase::dic_add(RuleDBType &vec_r)
+void Knowledge::dic_add(RuleDBType &vec_r)
 {
 	std::for_each(std::begin(vec_r), std::end(vec_r), [&](Rule &r) {
 		dic_add(r);
 	});
 }
 
-void KnowledgeBase::dic_add(Rule &r)
+void Knowledge::dic_add(Rule &r)
 {
 	AMean m = r.get_internal().get_base();
 	Category c = r.get_internal().get_cat();
@@ -1036,17 +1029,17 @@ void KnowledgeBase::dic_add(Rule &r)
 	}
 }
 
-std::string KnowledgeBase::meaning_no_to_s(int obj)
+std::string Knowledge::meaning_no_to_s(int obj)
 {
 	return "[" + intention[obj].to_s() + "]";
 }
 
-bool KnowledgeBase::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f)
+bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f)
 {
 	return construct_grounding_rules(c, m, f, [](Rule &r) -> bool { return true; });
 }
 
-bool KnowledgeBase::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
+bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
 {
 	bool is_constructable = false;
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic) && DB_cat_amean_dic[c].find(m.get_base()) != DB_cat_amean_dic[c].end())
@@ -1082,7 +1075,7 @@ bool KnowledgeBase::construct_grounding_rules(const Category &c, Meaning m, std:
 	return is_constructable;
 }
 
-bool KnowledgeBase::all_construct_grounding_rules_width(const Category &c, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
+bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
 {
 	new_loop = true;
 	bool is_constructable = false;
@@ -1122,11 +1115,11 @@ bool KnowledgeBase::all_construct_grounding_rules_width(const Category &c, std::
 	return is_constructable;
 }
 
-// std::function<std::vector<SymbolElement> &(Meaning &)> KnowledgeBase::rule_function(Rule & r)
+// std::function<std::vector<SymbolElement> &(Meaning &)> Knowledge::rule_function(Rule & r)
 // {
 // }
 
-std::vector<SymbolElement> KnowledgeBase::construct_buzz_word()
+std::vector<SymbolElement> Knowledge::construct_buzz_word()
 {
 	int length;
 	int sym_id;
@@ -1147,7 +1140,7 @@ std::vector<SymbolElement> KnowledgeBase::construct_buzz_word()
 	return buzz;
 }
 
-bool KnowledgeBase::explain(Meaning ref, RuleDBType &res)
+bool Knowledge::explain(Meaning ref, RuleDBType &res)
 {
 	std::vector<RuleDBType> pattern_list;
 	auto range = dic_amean_range(ref.get_base());
@@ -1160,7 +1153,7 @@ bool KnowledgeBase::explain(Meaning ref, RuleDBType &res)
 	return ret;
 }
 
-Rule KnowledgeBase::fabricate(Rule &src1)
+Rule Knowledge::fabricate(Rule &src1)
 {
 	// std::vector<RuleDBType> groundable_patterns;
 	// std::map<PATTERN_TYPE, std::vector<RuleDBType>> all_patterns;
@@ -1271,7 +1264,7 @@ Rule KnowledgeBase::fabricate(Rule &src1)
 }
 
 //leftmost(upmost, index-zero-most) derivation
-void KnowledgeBase::ground_with_pattern(Rule &src, RuleDBType &pattern)
+void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern)
 {
 	//std::advanced(std::begin(basestring), length)
 	//if length equal to a size of basestring, finished this process.
@@ -1301,7 +1294,7 @@ void KnowledgeBase::ground_with_pattern(Rule &src, RuleDBType &pattern)
 	src.get_external() = vec_sel;
 }
 
-KnowledgeBase::RuleDBType KnowledgeBase::grounded_rules(Meaning ref)
+Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref)
 {
 	RuleDBType grounded_rules;
 	auto range = dic_amean_range(ref.get_base());
@@ -1316,7 +1309,7 @@ KnowledgeBase::RuleDBType KnowledgeBase::grounded_rules(Meaning ref)
 	return grounded_rules;
 }
 
-std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> KnowledgeBase::dic_cat_range(const Category &c)
+std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> Knowledge::dic_cat_range(const Category &c)
 {
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
 	{
@@ -1325,11 +1318,11 @@ std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iter
 	}
 	else
 	{
-		std::cerr << "Don't exist : KnowledgeBase::dic_cat_range" << std::endl;
+		std::cerr << "Don't exist : Knowledge::dic_cat_range" << std::endl;
 		exit(1);
 	}
 }
-std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> KnowledgeBase::dic_amean_range(const AMean &m)
+std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> Knowledge::dic_amean_range(const AMean &m)
 {
 	if (DB_amean_cat_dic.find(m) != std::end(DB_amean_cat_dic))
 	{
@@ -1338,11 +1331,11 @@ std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>
 	}
 	else
 	{
-		std::cerr << "Don't exist : KnowledgeBase::dic_amean_range" << std::endl;
+		std::cerr << "Don't exist : Knowledge::dic_amean_range" << std::endl;
 		exit(1);
 	}
 }
-std::vector<Rule> KnowledgeBase::dic_range(const Category &c, const AMean &m)
+std::vector<Rule> Knowledge::dic_range(const Category &c, const AMean &m)
 {
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
 	{
@@ -1353,14 +1346,14 @@ std::vector<Rule> KnowledgeBase::dic_range(const Category &c, const AMean &m)
 	}
 	else
 	{
-		std::cerr << "Don't exist : KnowledgeBase::dic_cat_amean_range" << std::endl;
+		std::cerr << "Don't exist : Knowledge::dic_cat_amean_range" << std::endl;
 		exit(1);
 	}
 }
 
 // //3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
 // //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
-std::vector<Rule> KnowledgeBase::generate_score(int beat_num, std::map<int, std::vector<std::string>> &core_meaning)
+std::vector<Rule> Knowledge::generate_score(int beat_num, std::map<AMean, Conception> &core_meaning)
 {
 	return std::vector<Rule>();
 }
@@ -1527,7 +1520,7 @@ std::vector<Rule> KnowledgeBase::generate_score(int beat_num, std::map<int, std:
 // 	return res;
 // }
 // //measureがひとつ以上でるようにランダムに組み立てる
-// bool KnowledgeBase::create_measures(std::vector<Rule> &res, Element &cat_el, int beat_num)
+// bool Knowledge::create_measures(std::vector<Rule> &res, Element &cat_el, int beat_num)
 // {
 // 	// std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " RES_SIZE: " << res.size() << std::endl;
 // 	//1.cat_elに基づいてランダムにルールを選択
@@ -1610,7 +1603,7 @@ std::vector<Rule> KnowledgeBase::generate_score(int beat_num, std::map<int, std:
 // }
 // //externalがbeat_numの制約を満たすかチェック
 // //要素数beat_numの制約を満たすようにサイズ数を分配する
-// bool KnowledgeBase::create_beats(std::vector<Rule> &res, std::vector<Element> &external, int beat_num)
+// bool Knowledge::create_beats(std::vector<Rule> &res, std::vector<Element> &external, int beat_num)
 // {
 // 	// std::cerr << "#####creating beats " << beat_num;
 // 	// for(auto& ext_el : external){
@@ -1722,7 +1715,7 @@ std::vector<Rule> KnowledgeBase::generate_score(int beat_num, std::map<int, std:
 // 	return false;
 // }
 // //要素数space_numの制約を満たす可能性のあるルールを選択
-// bool KnowledgeBase::create_beat_eq(std::vector<Rule> &res, Element &elem, int space_num)
+// bool Knowledge::create_beat_eq(std::vector<Rule> &res, Element &elem, int space_num)
 // {
 // 	// std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << " SIZE: " << res.size() << std::endl;
 // 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0 || space_num == 0)

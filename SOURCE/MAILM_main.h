@@ -22,12 +22,11 @@
 #include "Dictionary.h"
 #include "XMLreader.h"
 #include "LogBox.h"
-#include "KnowledgeBase.h"
+#include "Knowledge.h"
 #include "Prefices.h"
 #include "MAILMParameters.h"
-#include "MAILMAgent.h"
+#include "Agent.h"
 
-void
-    output_data(std::string, std::string);
+void output_data(std::string, std::string);
 
 #endif /* MAILM_MAIN_H */

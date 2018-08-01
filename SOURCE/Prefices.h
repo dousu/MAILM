@@ -10,7 +10,6 @@ namespace Prefices
 const std::string CAT = "C";
 const std::string VAR = "x";
 const std::string SEN = "S";
-const std::string IND = "I";
 const std::string DEL = "/";
 const std::string RPRN = ")";
 const std::string LPRN = "(";
@@ -20,6 +19,7 @@ const std::string CLN = ":";
 const std::string SYN = "T";
 const std::string DSP = "  ";
 const std::string MES = "M";
+const std::string MEA = "L";
 const std::string UNO = "_";
 } // namespace Prefices
 

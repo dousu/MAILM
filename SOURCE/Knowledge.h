@@ -1,5 +1,5 @@
-#ifndef KNOWLEDGEBASE_H_
-#define KNOWLEDGEBASE_H_
+#ifndef Knowledge_H_
+#define Knowledge_H_
 
 #include <vector>
 #include <string>
@@ -19,7 +19,7 @@
 #include "MT19937.h"
 #include "LogBox.h"
 
-class KnowledgeBaseTypeDef
+class KnowledgeTypeDef
 {
   public:
 	typedef std::vector<Rule> RuleDBType;
@@ -30,7 +30,7 @@ class KnowledgeBaseTypeDef
 /*!
  * 知識集合を表すクラスです
  */
-class KnowledgeBase : public KnowledgeBaseTypeDef
+class Knowledge : public KnowledgeTypeDef
 {
   public:
 	enum PATTERN_TYPE
@@ -73,9 +73,9 @@ class KnowledgeBase : public KnowledgeBaseTypeDef
 	static const uint32_t USE_ADDITION_OF_RANDOM_WORD = 0x03;
 	static const uint32_t ANTECEDE_COMPOSITION = 0x04;
 
-	KnowledgeBase();
-	~KnowledgeBase();
-	KnowledgeBase &operator=(const KnowledgeBase &dst);
+	Knowledge();
+	~Knowledge();
+	Knowledge &operator=(const Knowledge &dst);
 
 	/*!
 	 * 知識に対して、Chunk、Merge、Replaceを実行します。
@@ -161,7 +161,7 @@ class KnowledgeBase : public KnowledgeBaseTypeDef
 
 	RuleDBType rules(void);
 
-	void define(const AMean &n, Conception m);
+	void define(const AMean &n, Conception &m);
 
 	void init_semantics_rules(TransRules &);
 
@@ -173,7 +173,7 @@ class KnowledgeBase : public KnowledgeBaseTypeDef
 
 	void dic_add(Rule &r);
 
-	RuleDBType generate_score(int beat_num, std::map<int, std::vector<std::string>> &core_meaning);
+	RuleDBType generate_score(int beat_num, std::map<AMean, Conception> &core_meaning);
 
 	// bool create_measures(RuleDBType &res, SymbolElement &cat_num, int beat_num);
 
@@ -221,4 +221,4 @@ struct lazy
 	auto operator()() const { return std::apply(f, a); }
 };
 
-#endif /* KNOWLEDGEBASE_H_ */
+#endif /* Knowledge_H_ */

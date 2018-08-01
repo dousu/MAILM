@@ -1,8 +1,9 @@
-SRCS = $(addprefix ./SOURCE/, Semantics.cpp KirbyAgent.cpp MAILMAgent.cpp KnowledgeBase.cpp Rule.cpp Element.cpp Dictionary.cpp XMLreader.cpp IndexFactory.cpp LogBox.cpp MT19937.cpp Semantics.cpp MAILMParameters.cpp)
+SRCS = $(addprefix ./SOURCE/, Semantics.cpp Agent.cpp Knowledge.cpp Rule.cpp Element.cpp Dictionary.cpp XMLreader.cpp IndexFactory.cpp LogBox.cpp MT19937.cpp Semantics.cpp MAILMParameters.cpp)
 DEPS = $(patsubst %.cpp,%.d,$(SRCS))
 OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 LIBS = -lstdc++fs
 
+#auto configuration for the relation of dependencies (-MMD option)
 CXXFLAGS = -std=c++17 -MMD
 
 all: ma
@@ -23,5 +24,8 @@ test: ma
 
 clean:
 	rm -f ./SOURCE/*.o ./SOURCE/*.dump ./SOURCE/*.exe ./SOURCE/*.log ./SOURCE/*.rst
+
+allclean:
+	rm -f ./SOURCE/*.o ./SOURCE/*.dump ./SOURCE/*.exe ./SOURCE/*.log ./SOURCE/*.rst ./SOURCE/*.d
 
 -include $(DEPS)

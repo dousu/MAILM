@@ -232,6 +232,12 @@ void Semantics<T>::rewrite(Meaning &m, const AMean &a, const AMean &b, const AMe
 {
 	if (m.get_base() == a)
 	{
+		if (pos - 1 + size > m.get_followings().size())
+		{
+			std::cerr << m << " target:" << a << " new1:" << b << " new2:" << c << " pos:" << pos << " size:" << size << std::endl
+					  << "error size : Semantics::rewrite" << std::endl;
+			exit(1);
+		}
 		std::vector<MeaningElement> buf, means;
 		std::copy_n(std::begin(m.get_followings()), pos - 1, std::back_inserter(buf));
 		std::copy_n(std::next(std::begin(m.get_followings()), pos - 1), size, std::back_inserter(means));
@@ -290,7 +296,7 @@ std::string Semantics<T>::mapping_to_s(void)
 	{
 		if (!p.second.empty())
 		{
-			res += "{" + Prefices::IND + p.first.to_s() + Prefices::CLN + "[" + p.second.to_s() + "]},";
+			res += "{" + p.first.to_s() + Prefices::CLN + "[" + p.second.to_s() + "]},";
 		}
 	}
 	res.pop_back();

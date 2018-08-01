@@ -32,22 +32,22 @@ MAILMParameters::MAILMParameters()
 	LOG_EXT = "_log.log";
 
 	//path
-	BASE_PATH = ".";
+	BASE_PATH = "./";
 	RESULT_PATH = BASE_PATH + "RESULT/";
 
 	ProgramOption spo;
 
 	//file
-	INPUT_FILE = BASE_PATH + "/SOURCE/input.txt";
-	ALIAS_FILE = BASE_PATH + "/SOURCE/alias.data";
-	DIC_XML_FILE = BASE_PATH + "/SOURCE/dic_xml.data";
-	XML_DIR = BASE_PATH + "/XML";
+	INPUT_FILE = BASE_PATH + "SOURCE/input.txt";
+	ALIAS_FILE = BASE_PATH + "SOURCE/alias.data";
+	DIC_XML_FILE = BASE_PATH + "SOURCE/dic_xml.data";
+	XML_DIR = BASE_PATH + "XML";
 	XML_EXT = ".xml";
 	FILE_PREFIX = "MAILM_";
 
-	RESULT_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + RESULT_EXT;
-	LOG_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + LOG_EXT;
-	DICTIONARY_FILE = BASE_PATH + "/SOURCE/data.dic";
+	RESULT_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + RESULT_EXT;
+	LOG_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + LOG_EXT;
+	DICTIONARY_FILE = BASE_PATH + "SOURCE/data.dic";
 }
 
 MAILMParameters::~MAILMParameters()
@@ -96,7 +96,7 @@ void MAILMParameters::set_option(ProgramOption &po)
 
 	if (po.count("keep-random-rule"))
 	{
-		CONTROLS |= KnowledgeBase::USE_ADDITION_OF_RANDOM_WORD;
+		CONTROLS |= Knowledge::USE_ADDITION_OF_RANDOM_WORD;
 	}
 
 	if (po.count("logging"))

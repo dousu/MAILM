@@ -27,20 +27,7 @@ void output_data(std::string file_path, std::string data, std::string empty)
 	}
 }
 
-void registration(std::map<int, std::vector<std::string>> &core_meaning, KnowledgeBase &kb)
-{
-	for (auto &p_i_str_v : core_meaning)
-	{
-		Conception ss;
-		for (auto &str : p_i_str_v.second)
-		{
-			ss.add(str);
-		}
-		kb.define(p_i_str_v.first, ss);
-	}
-}
-
-std::string make_tree_str_for_dot(std::vector<Rule> &r_list, std::vector<int> beat_nums, KnowledgeBase &kb)
+std::string make_tree_str_for_dot(std::vector<Rule> &r_list, std::vector<int> beat_nums, Knowledge &kb)
 {
 	std::string begin_str("digraph sample{\n"), end_str("}");
 	std::vector<Rule>::iterator ls_it;
@@ -223,10 +210,10 @@ int main(int argc, char *argv[])
 	Dictionary dic;
 	XMLreader reader;
 	LogBox log; //for destructor
-	KnowledgeBase kb;
+	Knowledge kb;
 	MAILMParameters param;
 
-	KnowledgeBase::logging_on();
+	Knowledge::logging_on();
 	LogBox::set_filepath("./test_log.txt");
 
 	std::string xml_file = "../XML/01.xml";
@@ -284,16 +271,16 @@ int main(int argc, char *argv[])
 		}
 	}
 	reader.make_init_data(file_list);
-	// KnowledgeBase::VARIABLE_NO = reader.variable_count;
-	// KnowledgeBase::INDEX_NO = reader.index_count;
-	// KnowledgeBase::CATEGORY_NO = reader.category_count;
+	// Knowledge::VARIABLE_NO = reader.variable_count;
+	// Knowledge::INDEX_NO = reader.index_count;
+	// Knowledge::CATEGORY_NO = reader.category_count;
 
 	std::vector<Rule> inputs = reader.input_rules;
 	std::map<int, std::string> labeling = reader.labeling;
 	TransRules meaning_rules = reader.i_meaning_map;
 
 	//test
-	MAILMAgent ma;
+	Agent ma;
 	TransRules i_rules;
 	i_rules = meaning_rules;
 	ma.init_semantics(i_rules);
@@ -343,7 +330,7 @@ int main(int argc, char *argv[])
 	std::string tree_str;
 	int no;
 	std::vector<int> beat_nums;
-	KnowledgeBase view_kb = ma.kb;
+	Knowledge view_kb = ma.kb;
 	for (int i = 1; i <= labeling.size(); i++)
 	{
 		// for (int i = 14; i <= 14; i++) {
@@ -380,8 +367,8 @@ int main(int argc, char *argv[])
 	std::cout << ma.kb.ruleDB.size() << std::endl;
 
 	std::vector<int> nums_v{2, 3, 4};
-	MAILMAgent parent, child;
-	std::map<int, std::vector<std::string>> mm, ch_mm;
+	Agent parent, child;
+	std::map<AMean, Conception> mm, ch_mm;
 	std::vector<Rule> parent_origin, ch_hear, tree;
 	parent = ma;
 	for (int i = 1; i < 10; i++)

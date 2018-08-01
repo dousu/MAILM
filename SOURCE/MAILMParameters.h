@@ -16,7 +16,7 @@
 
 #include "LogBox.h"
 #include "IndexFactory.h"
-#include "KnowledgeBase.h"
+#include "Knowledge.h"
 
 struct OptionValue
 {

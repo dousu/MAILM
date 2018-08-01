@@ -5,7 +5,7 @@ std::map<std::string, std::string> XMLreader::conv_alias;
 std::map<int, Meaning> XMLreader::i_meaning_map;
 std::map<int, std::vector<int>> XMLreader::i_beat_map;
 std::map<int, std::string> XMLreader::labeling;
-std::map<int, std::vector<std::string>> XMLreader::core_meaning;
+std::map<AMean, Conception> XMLreader::core_meaning;
 std::vector<Rule> XMLreader::input_rules;
 std::map<std::string, int> XMLreader::conv_str;
 
@@ -54,9 +54,8 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 	std::vector<SymbolElement> s_ex;
 
 	s_in = Meaning(AMean(index_count));
-	core_meaning[index_count] = std::vector<std::string>();
-	core_meaning[index_count].push_back(std::string(Prefices::SEN));
-	core_meaning[index_count].push_back(std::string("s") + labeling[file_no]);
+	core_meaning[AMean(index_count)] = Conception();
+	core_meaning[AMean(index_count)].add(Prefices::SEN);
 
 	//sentenceのインデックス記録
 	flat_meaning = Meaning(AMean(index_count));
@@ -125,8 +124,8 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 							if (str.size() == 0)
 							{
 								str = std::string("rest");
-								core_meaning[index_count] = std::vector<std::string>();
-								core_meaning[index_count].push_back("rest");
+								core_meaning[AMean(index_count)] = Conception();
+								core_meaning[AMean(index_count)].add("rest");
 							}
 
 							//strのaliasの作成とword_exへの保存
@@ -155,12 +154,12 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 							{
 								Rule r(LeftNonterminal(Category(category_count), Meaning(AMean(index_count))), sub_ex);
 								buf.push_back(r);
-								if (core_meaning.find(index_count) == core_meaning.end())
+								if (core_meaning.find(AMean(index_count)) == core_meaning.end())
 								{
-									core_meaning[index_count] = std::vector<std::string>();
+									core_meaning[AMean(index_count)] = Conception();
 								}
-								core_meaning[index_count].push_back(Prefices::MES);
-								core_meaning[index_count].push_back(Prefices::CAT);
+								core_meaning[AMean(index_count)].add(Prefices::MES);
+								core_meaning[AMean(index_count)].add(Prefices::MEA);
 
 								s_in.get_followings().push_back(Variable(variable_count));
 								flat_meaning.get_followings().push_back(Meaning(AMean(index_count)));
