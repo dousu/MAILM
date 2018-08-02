@@ -90,9 +90,12 @@ void Knowledge::send_db(RuleDBType &mails)
 template <typename T>
 void Knowledge::unique(T &DB)
 {
-	std::sort(std::begin(DB), std::end(DB));
-	auto it = std::unique(std::begin(DB), std::end(DB));
-	DB.erase(it, DB.end());
+	if (DB.size() > 0)
+	{
+		std::sort(std::begin(DB), std::end(DB));
+		auto it = std::unique(std::begin(DB), std::end(DB));
+		DB.erase(it, std::end(DB));
+	}
 }
 
 /*
@@ -160,6 +163,11 @@ bool Knowledge::consolidate(void)
 				exit(1);
 			}
 		});
+		std::cout << std::endl
+				  << std::endl
+				  << "INPUT RULES***************************** " << input_box.size() << std::endl;
+		unique(input_box);
+		std::copy(std::begin(input_box), std::end(input_box), std::ostream_iterator<Rule>(std::cout, "\n"));
 
 		if (LOGGING_FLAG)
 		{
@@ -448,6 +456,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		in_pos++;
 
 		Meaning new_meaning = base.get_internal().get_means().replaced(in_pos, d_size, Variable(new_var_id));
+		new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_sent_ind_id)));
 		std::vector<SymbolElement> vec_sel;
 		std::copy_n(std::begin(base.get_external()), fmatch_length, std::back_inserter(vec_sel));
 		vec_sel.push_back(RightNonterminal(Category(new_cat_id), Variable(new_var_id)));
@@ -490,7 +499,6 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		new_sent_ind_id = ind_indexer.generate();
 		new_ind_id_targ = ind_indexer.generate();
 
-		AMean ind = AMean(new_ind_id_targ), emp, new_sent_ind = AMean(new_sent_ind_id);
 		std::vector<MeaningElement> var_vector;
 
 		//var_vector
@@ -503,12 +511,12 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		});
 
 		//noun
-		Rule noun(LeftNonterminal(Category{RightNonterminal(noun1_ex.front().get<RightNonterminal>()).get_cat()}, Meaning(ind, var_vector)), noun2_ex);
-		Rule sent{LeftNonterminal(Category{base.get_internal().get_cat()}, Meaning{new_sent_ind, base.get_internal().get_followings()}), base.get_external()};
+		Rule noun(LeftNonterminal(Category{RightNonterminal(noun1_ex.front().get<RightNonterminal>()).get_cat()}, Meaning(AMean(new_ind_id_targ), var_vector)), noun2_ex);
+		Rule sent{LeftNonterminal(Category{base.get_internal().get_cat()}, Meaning{AMean(new_sent_ind_id), base.get_internal().get_followings()}), base.get_external()};
 		Rule sent2;
 		if (multi_cat)
 		{
-			sent2 = Rule{LeftNonterminal{Category{targ.get_internal().get_cat()}, Meaning{new_sent_ind, sent.get_internal().get_followings()}}, base.get_external()};
+			sent2 = Rule{LeftNonterminal{Category{targ.get_internal().get_cat()}, Meaning{AMean(new_sent_ind_id), sent.get_internal().get_followings()}}, base.get_external()};
 		}
 		buf.push_back(sent);
 		if (multi_cat)
@@ -532,7 +540,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 			base.get_internal().get_means().get_base(),
 			sent.get_internal().get_means().get_base(),
 			noun.get_internal().get_means().get_base(),
-			emp,
+			AMean(),
 			in_pos,
 			d_size,
 			e_size,
@@ -827,8 +835,6 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 			auto it = std::search(std::begin(el_vec), std::end(el_vec), std::begin(word.get_external()), std::end(word.get_external()));
 			if (it != std::end(el_vec))
 			{
-				std::cout << "replace: " << word << std::endl;
-				std::cout << "replaced: " << r << std::endl;
 				if (LOGGING_FLAG)
 				{
 					LogBox::push_log("REPLACE-> " + r.to_s());
@@ -855,6 +861,7 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 				//Rule自体のindex分
 				b_pos++;
 				Meaning new_meaning = r.get_internal().get_means().replaced(b_pos, b_size, Variable(new_var_id));
+				new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_mean_id)));
 
 				it = el_vec.erase(it, std::next(it, word.get_external().size()));
 				el_vec.insert(it, RightNonterminal(word.get_internal().get_cat(), Variable(new_var_id)));

@@ -50,15 +50,22 @@ std::ostream &operator<<(std::ostream &out, const SymbolElement &obj)
 
 Meaning Meaning::replaced(std::size_t n, std::size_t size, const MeaningElement &el) const
 {
-	if (size > means.size() || n == 0)
+	if (size > means.size() || n < 0 || (n == 0 && (size != 1 || el.type() != MEANING_TYPE::MEANING_TYPE || el.get<Meaning>().get_followings().size() != 0)))
 	{
 		std::cerr << "Cannot remove" << std::endl;
 		exit(1);
 	}
-	std::vector<MeaningElement> tmp = means;
-	auto it = tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n - 1 + size));
-	tmp.insert(it, el);
-	return Meaning(base, tmp);
+	if (n == 0)
+	{
+		return Meaning(el.get<Meaning>().get_base(), means);
+	}
+	else
+	{
+		std::vector<MeaningElement> tmp = means;
+		auto it = tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n - 1 + size));
+		tmp.insert(it, el);
+		return Meaning(base, tmp);
+	}
 }
 
 Conception::Conception()

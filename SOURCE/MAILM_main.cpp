@@ -213,7 +213,6 @@ int main(int argc, char *argv[])
 	Knowledge kb;
 	MAILMParameters param;
 
-	Knowledge::logging_on();
 	LogBox::set_filepath("./test_log.txt");
 
 	std::string xml_file = "../XML/01.xml";
@@ -258,7 +257,11 @@ int main(int argc, char *argv[])
 	opt.parse(argc, argv);
 	param.set_option(opt);
 
-	LogBox::set_filepath(param.LOG_FILE);
+	if (param.LOGGING)
+	{
+		Knowledge::logging_on();
+		LogBox::set_filepath(param.LOG_FILE);
+	}
 	std::vector<std::string> file_list;
 
 	const std::filesystem::path path(param.XML_DIR.c_str());

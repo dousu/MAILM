@@ -24,6 +24,8 @@ class Rule
 	// Rule(char *cstr);
 	// Rule(std::string str);
 	Rule(const LeftNonterminal &lt, const std::vector<SymbolElement> &ex);
+	Rule(const Rule &o) : internal(o.internal), external(o.external) {}
+	// Rule(Rule &&o) : internal(std::move(o.internal)), external(std::move(o.external)) {}
 
 	//!operator
 	bool operator==(const Rule &dst) const;

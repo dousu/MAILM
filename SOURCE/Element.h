@@ -55,6 +55,7 @@ class AMean
 	AMean() : obj(0) {}
 	AMean(int num) : obj(num) {}
 	AMean(const AMean &dst) : obj(dst.obj) {}
+	// AMean(AMean &&o) : obj(o.obj) {}
 	bool operator==(const AMean &dst) const
 	{
 		return obj == dst.obj;
@@ -98,6 +99,7 @@ class Variable
 	Variable() : obj(0) {}
 	Variable(int var_num) : obj(var_num) {}
 	Variable(const Variable &dst) : obj(dst.obj) {}
+	// Variable(Variable &&o) : obj(o.obj) {}
 	bool operator==(const Variable &dst) const
 	{
 		return obj == dst.obj;
@@ -141,6 +143,7 @@ class Category
 	Category() : obj(0) {}
 	Category(int cat_num) : obj(cat_num) {}
 	Category(const Category &dst) : obj(dst.obj) {}
+	// Category(Category &&o) : obj(o.obj) {}
 	bool operator==(const Category &dst) const
 	{
 		return obj == dst.obj;
@@ -184,6 +187,7 @@ class Symbol
 	static std::map<std::string, std::string> conv_symbol;
 	Symbol(int num) : obj(num) {}
 	Symbol(const Symbol &dst) : obj(dst.obj) {}
+	// Symbol(Symbol &&o) : obj(o.obj) {}
 	bool operator==(const Symbol &dst) const
 	{
 		return obj == dst.obj;
@@ -232,6 +236,7 @@ class Meaning
   public:
 	Meaning() : base(), means() {}
 	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
+	// Meaning(Meaning &&o) : base(std::move(o.base)), means(std::move(o.means)) {}
 	Meaning(const AMean &m) : base(m), means() {}
 	Meaning(const AMean &m, const std::vector<MeaningElement> &dst) : base(m), means(dst) {}
 	Meaning(const AMean &m, const std::vector<Meaning> &dst) : base(m), means()
@@ -351,10 +356,14 @@ class MeaningElement
 	MeaningElement(const MeaningElement &other) : element(other.element) {}
 	MeaningElement(const Meaning &other) : element(other) {}
 	MeaningElement(const Variable &other) : element(other) {}
+	// MeaningElement(MeaningElement &&o) : element(std::move(o.element)) {}
 	constexpr std::size_t type() const { return element.index(); }
 
 	template <typename T>
 	T &get() { return std::get<T>(element); } //用途によりconstはつけない
+
+	template <typename T>
+	const T &get() const { return std::get<T>(element); }
 
 	MeaningElement &operator=(const MeaningElement &dst)
 	{
@@ -411,6 +420,7 @@ class LeftNonterminal
 	LeftNonterminal() : cat(), means() {}
 	LeftNonterminal(const Category &c, Meaning m) : cat(c), means(m) {}
 	LeftNonterminal(const LeftNonterminal &dst) : cat(dst.cat), means(dst.means) {}
+	// LeftNonterminal(LeftNonterminal &&o) : cat(std::move(o.cat)), means(std::move(o.means)) {}
 	bool operator==(const LeftNonterminal &dst) const
 	{
 		return cat == dst.cat && means == dst.means;
@@ -478,6 +488,7 @@ class RightNonterminal
 	RightNonterminal() : cat(), var() {}
 	RightNonterminal(const Category &c, const Variable &v) : cat(c), var(v) {}
 	RightNonterminal(const RightNonterminal &dst) : cat(dst.cat), var(dst.var) {}
+	// RightNonterminal(RightNonterminal &&o) : cat(std::move(o.cat)), var(std::move(o.var)) {}
 	bool operator==(const RightNonterminal &dst) const
 	{
 		return cat == dst.cat;
@@ -526,6 +537,7 @@ class SymbolElement
 	SymbolElement(const SymbolElement &other) : element(other.element) {}
 	SymbolElement(const Symbol &other) : element(other) {}
 	SymbolElement(const RightNonterminal &other) : element(other) {}
+	// SymbolElement(SymbolElement &&o) : element(std::move(o.element)) {}
 	constexpr std::size_t type() const { return element.index(); }
 
 	template <typename T>
