@@ -87,15 +87,47 @@ void Knowledge::send_db(RuleDBType &mails)
 	mails.clear();
 }
 
-template <typename T>
-void Knowledge::unique(T &DB)
+template <class FwdIt, typename Compare = std::less<>>
+void quick_sort(FwdIt first, FwdIt last, Compare cmp = Compare())
 {
-	if (DB.size() > 0)
-	{
-		std::sort(std::begin(DB), std::end(DB));
-		auto it = std::unique(std::begin(DB), std::end(DB));
-		DB.erase(it, std::end(DB));
-	}
+	auto const N = std::distance(first, last);
+	if (N <= 1)
+		return;
+	auto pivot = *std::next(first, N / 2);
+	FwdIt middle1 = std::partition(first, last, [&pivot, &cmp](const auto &elem) {
+		return cmp(elem, pivot);
+	});
+	FwdIt middle2 = std::partition(middle1, last, [&pivot, &cmp](const auto &elem) {
+		return !cmp(pivot, elem);
+	});
+	quick_sort(first, middle1, cmp); // assert(std::is_sorted(first, middle1, cmp));
+	quick_sort(middle2, last, cmp);  // assert(std::is_sorted(middle2, last, cmp));
+}
+
+template <class BiDirIt, typename Compare = std::less<>>
+void merge_sort(BiDirIt first, BiDirIt last, Compare cmp = Compare())
+{
+	auto const N = std::distance(first, last);
+	if (N <= 1)
+		return;
+	auto const middle = std::next(first, N / 2);
+	merge_sort(first, middle, cmp);				  // assert(std::is_sorted(first, middle, cmp));
+	merge_sort(middle, last, cmp);				  // assert(std::is_sorted(middle, last, cmp));
+	std::inplace_merge(first, middle, last, cmp); // assert(std::is_sorted(first, last, cmp));
+}
+
+template <typename T>
+void Knowledge::unique(std::vector<T> &vec)
+{
+	merge_sort(std::begin(vec), std::end(vec));
+	vec.erase(std::unique(std::begin(vec), std::end(vec)), std::end(vec));
+}
+
+template <typename T>
+void Knowledge::unique(std::list<T> &vec)
+{
+	quick_sort(std::begin(vec), std::end(vec));
+	vec.erase(std::unique(std::begin(vec), std::end(vec)), std::end(vec));
 }
 
 /*
@@ -163,11 +195,7 @@ bool Knowledge::consolidate(void)
 				exit(1);
 			}
 		});
-		std::cout << std::endl
-				  << std::endl
-				  << "INPUT RULES***************************** " << input_box.size() << std::endl;
 		unique(input_box);
-		std::copy(std::begin(input_box), std::end(input_box), std::ostream_iterator<Rule>(std::cout, "\n"));
 
 		if (LOGGING_FLAG)
 		{

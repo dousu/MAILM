@@ -197,7 +197,10 @@ class Knowledge : public KnowledgeTypeDef
 	bool replacing(Rule &word, RuleDBType &dst);
 
 	template <typename T>
-	void unique(T &DB);
+	void unique(std::vector<T> &);
+
+	template <typename T>
+	void unique(std::list<T> &);
 	void unify(RuleDBType &DB);
 
 	std::vector<SymbolElement> construct_buzz_word();
