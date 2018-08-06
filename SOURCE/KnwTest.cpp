@@ -35,7 +35,7 @@ int main(int arg, char **argv)
     }
 
     //chunk1 test
-    std::vector<SymbolElement> s_el1{Symbol{1}, Symbol{2}, Symbol{3}},
+    std::list<SymbolElement> s_el1{Symbol{1}, Symbol{2}, Symbol{3}},
         s_el2{Symbol{1}, Symbol{4}, Symbol{3}};
     // std::vector<MeaningElement> m_el1{Meaning{1}, Meaning{2}, Meaning{3}},
     //     m_el2{Meaning{1}, Meaning{2}, Meaning{2}};
@@ -54,7 +54,7 @@ int main(int arg, char **argv)
     std::cout << kb.to_s() << std::endl;
 
     //chunk2 test
-    std::vector<SymbolElement> s_el3{Symbol{1}, Symbol{7}, Symbol{3}};
+    std::list<SymbolElement> s_el3{Symbol{1}, Symbol{7}, Symbol{3}};
     std::cout << "\n****************chunk2 test" << std::endl;
     buf = Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el3);
     kb.send_box(buf);
@@ -67,7 +67,7 @@ int main(int arg, char **argv)
     vec.push_back(buf);
 
     //merge test
-    std::vector<SymbolElement> s_el4{Symbol{4}};
+    std::list<SymbolElement> s_el4{Symbol{4}};
     std::cout << "\n****************merge test" << std::endl;
     std::cout << "\n%%% previous" << std::endl;
     buf = Rule(LeftNonterminal(Category{-3}, Meaning(AMean{-7})), s_el4);
@@ -80,7 +80,7 @@ int main(int arg, char **argv)
     vec.push_back(buf);
 
     //replace test
-    std::vector<SymbolElement> s_el5{Symbol{3}};
+    std::list<SymbolElement> s_el5{Symbol{3}};
     std::cout << "\n****************replace test" << std::endl;
     std::cout << "\n%%% previous" << std::endl;
     buf = Rule(LeftNonterminal(Category{-4}, Meaning(AMean{-8})), s_el5);

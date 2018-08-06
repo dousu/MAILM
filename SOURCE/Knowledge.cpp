@@ -392,9 +392,9 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 
 	CHUNK_TYPE chunk_type = UNABLE;
 	Rule base, targ;
-	std::vector<SymbolElement> noun1_ex, noun2_ex;
-	std::copy(src.get_external().begin() + fmatch_length, src.get_external().end() - rmatch_length, std::back_inserter(noun1_ex));
-	std::copy(dst.get_external().begin() + fmatch_length, dst.get_external().end() - rmatch_length, std::back_inserter(noun2_ex));
+	std::list<SymbolElement> noun1_ex, noun2_ex;
+	std::copy(std::next(src.get_external().begin(), fmatch_length), std::prev(src.get_external().end(), rmatch_length), std::back_inserter(noun1_ex));
+	std::copy(std::next(dst.get_external().begin(), fmatch_length), std::prev(dst.get_external().end(), rmatch_length), std::back_inserter(noun2_ex));
 	if (noun1_ex.size() == 1 && noun1_ex.front().type() == ELEM_TYPE::NT_TYPE)
 	{
 		if (noun2_ex.size() == 1 && noun2_ex.front().type() == ELEM_TYPE::NT_TYPE)
@@ -448,7 +448,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		new_ind_id1 = ind_indexer.generate();
 		new_ind_id2 = ind_indexer.generate();
 
-		std::vector<MeaningElement> var_vector1, var_vector2;
+		std::list<MeaningElement> var_vector1, var_vector2;
 
 		std::for_each(std::begin(noun1_ex), std::end(noun1_ex), [&](SymbolElement &se) {
 			if (se.type() == ELEM_TYPE::NT_TYPE)
@@ -485,7 +485,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 
 		Meaning new_meaning = base.get_internal().get_means().replaced(in_pos, d_size, Variable(new_var_id));
 		new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_sent_ind_id)));
-		std::vector<SymbolElement> vec_sel;
+		std::list<SymbolElement> vec_sel;
 		std::copy_n(std::begin(base.get_external()), fmatch_length, std::back_inserter(vec_sel));
 		vec_sel.push_back(RightNonterminal(Category(new_cat_id), Variable(new_var_id)));
 		std::copy(std::prev(std::end(base.get_external()), rmatch_length), std::end(base.get_external()), std::back_inserter(vec_sel));
@@ -527,7 +527,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		new_sent_ind_id = ind_indexer.generate();
 		new_ind_id_targ = ind_indexer.generate();
 
-		std::vector<MeaningElement> var_vector;
+		std::list<MeaningElement> var_vector;
 
 		//var_vector
 		std::for_each(std::begin(noun2_ex), std::end(noun2_ex), [&](SymbolElement &se) {
@@ -859,7 +859,7 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 	std::for_each(std::begin(checking_sents), std::end(checking_sents), [&](Rule &r) {
 		if (r.get_external().size() > word.get_external().size() && intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base()))
 		{
-			std::vector<SymbolElement> el_vec = r.get_external();
+			std::list<SymbolElement> el_vec = r.get_external();
 			auto it = std::search(std::begin(el_vec), std::end(el_vec), std::begin(word.get_external()), std::end(word.get_external()));
 			if (it != std::end(el_vec))
 			{
@@ -924,8 +924,7 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 	return is_replaced;
 }
 
-std::string
-Knowledge::to_s(void)
+std::string Knowledge::to_s()
 {
 	RuleDBType rule_buf;
 	std::vector<std::string> buf;
@@ -1026,6 +1025,8 @@ Meaning Knowledge::meaning_no(int obj)
 //DBの検索を高速化するため
 void Knowledge::build_word_index(void)
 {
+	DB_cat_amean_dic.clear();
+	DB_amean_cat_dic.clear();
 	dic_add(ruleDB);
 }
 
@@ -1038,35 +1039,50 @@ void Knowledge::dic_add(RuleDBType &vec_r)
 
 void Knowledge::dic_add(Rule &r)
 {
-	AMean m = r.get_internal().get_base();
-	Category c = r.get_internal().get_cat();
-	if (DB_cat_amean_dic.find(c) == std::end(DB_cat_amean_dic))
+	AMean m(r.get_internal().get_base());
+	Category c(r.get_internal().get_cat());
 	{
 		std::multimap<AMean, Rule>::value_type pair({m, r});
 		DB_cat_amean_dic[c].insert(pair);
 	}
-	else
-	{
-		std::multimap<AMean, Rule> pair({{m, r}});
-		DicDBType_cat::value_type dic_pair({c, pair});
-		DB_cat_amean_dic.insert(dic_pair);
-	}
-	if (DB_amean_cat_dic.find(m) == std::end(DB_amean_cat_dic))
 	{
 		std::multimap<Category, Rule>::value_type pair({c, r});
 		DB_amean_cat_dic[m].insert(pair);
-	}
-	else
-	{
-		std::multimap<Category, Rule> pair({{c, r}});
-		DicDBType_amean::value_type dic_pair({m, pair});
-		DB_amean_cat_dic.insert(dic_pair);
 	}
 }
 
 std::string Knowledge::meaning_no_to_s(int obj)
 {
 	return "[" + intention[obj].to_s() + "]";
+}
+
+std::string Knowledge::dic_to_s()
+{
+	return "CAT->AMEAN******************************************\n" + dic_cat_to_s() + "\nAMEAN->CAT******************************************\n" + dic_amean_to_s() + "\n";
+}
+
+std::string Knowledge::dic_cat_to_s()
+{
+	//std::map<Category, std::multimap<AMean, Rule>> DB_cat_amean_dic
+	std::ostringstream os;
+	std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&](std::map<Category, std::multimap<AMean, Rule>>::value_type &mp) {
+		std::for_each(std::begin(mp.second), std::end(mp.second), [&](std::multimap<AMean, Rule>::value_type &mmp) {
+			os << mp.first << " " << mmp.first << " " << mmp.second << std::endl;
+		});
+	});
+	return os.str();
+}
+
+std::string Knowledge::dic_amean_to_s()
+{
+	//std::map<AMean, std::multimap<Category, Rule>> DB_amean_cat_dic
+	std::ostringstream os;
+	std::for_each(std::begin(DB_amean_cat_dic), std::end(DB_amean_cat_dic), [&](std::map<AMean, std::multimap<Category, Rule>>::value_type &mp) {
+		std::for_each(std::begin(mp.second), std::end(mp.second), [&](std::multimap<Category, Rule>::value_type &mmp) {
+			os << mp.first << " " << mmp.first << " " << mmp.second << std::endl;
+		});
+	});
+	return os.str();
 }
 
 bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f)
@@ -1079,22 +1095,20 @@ bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::fun
 	bool is_constructable = false;
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic) && DB_cat_amean_dic[c].find(m.get_base()) != DB_cat_amean_dic[c].end())
 	{
-		std::vector<RuleDBType> prod{{{}}};
-		// std::multimap<AMean, Rule> range = DB_cat_amean_dic[c].equal_range(m.get_base());
-		std::vector<Rule> dic_rules = dic_range(c, m.get_base());
-		std::for_each(std::begin(dic_rules), std::end(dic_rules), [&](Rule &r) {
-			if (f2(r))
+		std::vector<RuleDBType> prod;
+		std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> range_pair = dic_range(c, m.get_base());
+		std::for_each(range_pair.first, range_pair.second, [&](std::multimap<AMean, Rule>::value_type &p) {
+			if (f2(p.second))
 			{
 				bool subconst = true;
-				std::vector<RuleDBType> sub_prod{{{r}}};
+				std::vector<RuleDBType> sub_prod{{{p.second}}};
 				std::function<void(RuleDBType &)> func = [&sub_prod](RuleDBType &rules) {
 					std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
 						std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
 					});
 				};
 				int num = 1;
-				sub_prod.push_back(RuleDBType{{r}});
-				std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
+				std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
 					if (sel.type() == ELEM_TYPE::NT_TYPE)
 					{
 						subconst &= construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), m.at(num++).get<Meaning>(), func, f2);
@@ -1117,10 +1131,10 @@ bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::func
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
 	{
 		std::vector<RuleDBType> prod{{{}}};
-		std::vector<std::pair<AMean, Rule>> pairs = {std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
+		std::vector<std::pair<AMean, Rule>> pairs{std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
 		std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
 		std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
-			Rule r = p.second;
+			Rule &r = p.second;
 			if (f2(r))
 			{
 				bool subconst = true;
@@ -1154,11 +1168,11 @@ bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::func
 // {
 // }
 
-std::vector<SymbolElement> Knowledge::construct_buzz_word()
+std::list<SymbolElement> Knowledge::construct_buzz_word()
 {
 	int length;
 	int sym_id;
-	std::vector<SymbolElement> buzz;
+	std::list<SymbolElement> buzz;
 
 	length = MT19937::irand(1, buzz_length);
 	for (int i = 0; i < length; i++)
@@ -1179,13 +1193,19 @@ bool Knowledge::explain(Meaning ref, RuleDBType &res)
 {
 	std::vector<RuleDBType> pattern_list;
 	auto range = dic_amean_range(ref.get_base());
-	bool ret;
 	std::for_each(range.first, range.second, [&](auto &p) {
 		// Please check it ;; mem_fun_t. this is a converter from member function to  object.
 		construct_grounding_rules(p.first, ref, [&](RuleDBType &list) -> void { pattern_list.push_back(list); });
 	});
-	res = pattern_list[MT19937::irand(0, pattern_list.size() - 1)];
-	return ret;
+	if (pattern_list.size() > 0)
+	{
+		res = pattern_list[MT19937::irand(0, pattern_list.size() - 1)];
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 Rule Knowledge::fabricate(Rule &src1)
@@ -1303,7 +1323,7 @@ void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern)
 {
 	//std::advanced(std::begin(basestring), length)
 	//if length equal to a size of basestring, finished this process.
-	std::vector<SymbolElement> vec_sel = pattern.front().get_external();
+	std::list<SymbolElement> vec_sel = pattern.front().get_external();
 	auto p_it = std::next(std::begin(pattern));
 	std::size_t num = 0;
 	while (p_it != std::end(pattern) && num != vec_sel.size())
@@ -1335,7 +1355,7 @@ Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref)
 	auto range = dic_amean_range(ref.get_base());
 	std::for_each(range.first, range.second, [&](std::pair<Category, Rule> p) {
 		construct_grounding_rules(p.first, ref, [&](RuleDBType &list) {
-			Rule r(LeftNonterminal(Category(0), ref), std::vector<SymbolElement>());
+			Rule r(LeftNonterminal(Category(0), ref), std::list<SymbolElement>());
 			ground_with_pattern(r, list);
 			grounded_rules.push_back(r);
 		});
@@ -1370,14 +1390,12 @@ std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>
 		exit(1);
 	}
 }
-std::vector<Rule> Knowledge::dic_range(const Category &c, const AMean &m)
+std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> Knowledge::dic_range(const Category &c, const AMean &m)
 {
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
 	{
 		std::vector<Rule> res;
-		auto range = DB_cat_amean_dic[c].equal_range(m);
-		std::for_each(range.first, range.second, [&res](auto &p) { res.push_back(p.second); });
-		return res;
+		return DB_cat_amean_dic[c].equal_range(m);
 	}
 	else
 	{

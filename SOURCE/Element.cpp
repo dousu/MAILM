@@ -61,7 +61,7 @@ Meaning Meaning::replaced(std::size_t n, std::size_t size, const MeaningElement 
 	}
 	else
 	{
-		std::vector<MeaningElement> tmp = means;
+		std::list<MeaningElement> tmp = means;
 		auto it = tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n - 1 + size));
 		tmp.insert(it, el);
 		return Meaning(base, tmp);

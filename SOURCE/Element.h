@@ -17,6 +17,7 @@
 #include <ostream>
 #include <sstream>
 #include <type_traits>
+#include <list>
 
 /*!
  * Elementクラスが取るタイプのインデックスを定義しています。
@@ -52,10 +53,20 @@ class AMean
 	int obj;
 
   public:
-	AMean() : obj(0) {}
-	AMean(int num) : obj(num) {}
-	AMean(const AMean &dst) : obj(dst.obj) {}
-	// AMean(AMean &&o) : obj(o.obj) {}
+	AMean() noexcept : obj(0) {}
+	AMean(int num) noexcept : obj(num) {}
+	AMean(const AMean &dst) noexcept : obj(dst.obj) {}
+	AMean(AMean &&o) noexcept : obj(std::move(o.obj)) {}
+	AMean &operator=(AMean &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	AMean &operator=(const AMean &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
 	bool operator==(const AMean &dst) const
 	{
 		return obj == dst.obj;
@@ -80,10 +91,6 @@ class AMean
 	{
 		return !(*this < dst);
 	}
-	int get_obj_id() const
-	{
-		return obj;
-	}
 	std::string to_s() const
 	{
 		return Prefices::MEA + std::to_string(obj);
@@ -96,10 +103,20 @@ class Variable
 	int obj;
 
   public:
-	Variable() : obj(0) {}
-	Variable(int var_num) : obj(var_num) {}
-	Variable(const Variable &dst) : obj(dst.obj) {}
-	// Variable(Variable &&o) : obj(o.obj) {}
+	Variable() noexcept : obj(0) {}
+	Variable(int var_num) noexcept : obj(var_num) {}
+	Variable(const Variable &dst) noexcept : obj(dst.obj) {}
+	Variable(Variable &&o) noexcept : obj(std::move(o.obj)) {}
+	Variable &operator=(Variable &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	Variable &operator=(const Variable &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
 	bool operator==(const Variable &dst) const
 	{
 		return obj == dst.obj;
@@ -124,10 +141,6 @@ class Variable
 	{
 		return !(*this < dst);
 	}
-	int get_obj_id() const
-	{
-		return obj;
-	}
 	std::string to_s() const
 	{
 		return Prefices::VAR + std::to_string(obj);
@@ -140,10 +153,20 @@ class Category
 	int obj;
 
   public:
-	Category() : obj(0) {}
-	Category(int cat_num) : obj(cat_num) {}
-	Category(const Category &dst) : obj(dst.obj) {}
-	// Category(Category &&o) : obj(o.obj) {}
+	Category() noexcept : obj(0) {}
+	Category(int cat_num) noexcept : obj(cat_num) {}
+	Category(const Category &dst) noexcept : obj(dst.obj) {}
+	Category(Category &&o) noexcept : obj(std::move(o.obj)) {}
+	Category &operator=(Category &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	Category &operator=(const Category &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
 	bool operator==(const Category &dst) const
 	{
 		return obj == dst.obj;
@@ -168,10 +191,6 @@ class Category
 	{
 		return !(*this < dst);
 	}
-	int get_obj_id() const
-	{
-		return obj;
-	}
 	std::string to_s() const
 	{
 		return Prefices::CAT + std::to_string(obj);
@@ -185,9 +204,19 @@ class Symbol
 
   public:
 	static std::map<std::string, std::string> conv_symbol;
-	Symbol(int num) : obj(num) {}
-	Symbol(const Symbol &dst) : obj(dst.obj) {}
-	// Symbol(Symbol &&o) : obj(o.obj) {}
+	Symbol(int num) noexcept : obj(num) {}
+	Symbol(const Symbol &dst) noexcept : obj(dst.obj) {}
+	Symbol(Symbol &&o) noexcept : obj(std::move(o.obj)) {}
+	Symbol &operator=(Symbol &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	Symbol &operator=(const Symbol &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
 	bool operator==(const Symbol &dst) const
 	{
 		return obj == dst.obj;
@@ -231,21 +260,33 @@ class MeaningElement;
 class Meaning
 {
 	AMean base;
-	std::vector<MeaningElement> means;
+	std::list<MeaningElement> means;
 
   public:
-	Meaning() : base(), means() {}
-	Meaning(const Meaning &dst) : base(dst.base), means(dst.means) {}
-	// Meaning(Meaning &&o) : base(std::move(o.base)), means(std::move(o.means)) {}
-	Meaning(const AMean &m) : base(m), means() {}
-	Meaning(const AMean &m, const std::vector<MeaningElement> &dst) : base(m), means(dst) {}
-	Meaning(const AMean &m, const std::vector<Meaning> &dst) : base(m), means()
+	Meaning() noexcept : base(), means() {}
+	Meaning(const Meaning &dst) noexcept : base(dst.base), means(dst.means) {}
+	Meaning(const AMean &m) noexcept : base(m), means() {}
+	Meaning(const AMean &m, const std::list<MeaningElement> &dst) noexcept : base(m), means(dst) {}
+	Meaning(const AMean &m, const std::list<Meaning> &dst) noexcept : base(m), means()
 	{
 		std::for_each(std::begin(dst), std::end(dst), [&](auto &obj) { means.push_back(obj); });
 	}
-	Meaning(const AMean &m, const std::vector<Variable> &dst) : base(m), means()
+	Meaning(const AMean &m, const std::list<Variable> &dst) noexcept : base(m), means()
 	{
 		std::for_each(std::begin(dst), std::end(dst), [&](auto &obj) { means.push_back(obj); });
+	}
+	Meaning(Meaning &&o) noexcept : base(std::move(o.base)), means(std::move(o.means)) {}
+	Meaning &operator=(Meaning &&o) noexcept
+	{
+		base = std::move(o.base);
+		means = std::move(o.means);
+		return *this;
+	}
+	Meaning &operator=(const Meaning &o) noexcept
+	{
+		base = o.base;
+		means = o.means;
+		return *this;
 	}
 	bool operator==(const Meaning &dst) const
 	{
@@ -278,7 +319,8 @@ class Meaning
 			std::cerr << "irregular index" << std::endl;
 			exit(1);
 		}
-		return means.at(i - 1);
+		// return means.at(i - 1);
+		return *std::next(std::begin(means), i - 1);
 	}
 	const MeaningElement &at(std::size_t i) const
 	{
@@ -287,21 +329,22 @@ class Meaning
 			std::cerr << "irregular index" << std::endl;
 			exit(1);
 		}
-		return means.at(i - 1);
+		// return means.at(i - 1);
+		return *std::next(std::begin(means), i - 1);
 	}
-	AMean &get_base()
+	AMean &get_base() noexcept
 	{
 		return base;
 	}
-	const AMean &get_base() const
+	const AMean &get_base() const noexcept
 	{
 		return base;
 	}
-	std::vector<MeaningElement> &get_followings()
+	std::list<MeaningElement> &get_followings() noexcept
 	{
 		return means;
 	}
-	const std::vector<MeaningElement> &get_followings() const
+	const std::list<MeaningElement> &get_followings() const noexcept
 	{
 		return means;
 	}
@@ -316,7 +359,7 @@ class Meaning
 			std::cerr << "Cannot remove" << std::endl;
 			exit(1);
 		}
-		std::vector<MeaningElement> tmp = means;
+		std::list<MeaningElement> tmp = means;
 		tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n - 1 + size));
 		return Meaning(base, tmp);
 	}
@@ -331,7 +374,7 @@ class Meaning
 		else
 		{
 			str += base.to_s();
-			std::vector<std::string> buf;
+			std::list<std::string> buf;
 			std::for_each(std::begin(means), std::end(means), [&](auto &m) {
 				buf.push_back(m.to_s());
 			});
@@ -352,11 +395,22 @@ class MeaningElement
 	MeaningType element;
 
   public:
-	MeaningElement() : element() {}
-	MeaningElement(const MeaningElement &other) : element(other.element) {}
-	MeaningElement(const Meaning &other) : element(other) {}
-	MeaningElement(const Variable &other) : element(other) {}
-	// MeaningElement(MeaningElement &&o) : element(std::move(o.element)) {}
+	MeaningElement() noexcept : element() {}
+	MeaningElement(const MeaningElement &other) noexcept : element(other.element) {}
+	MeaningElement(const Meaning &other) noexcept : element(other) {}
+	MeaningElement(const Variable &other) noexcept : element(other) {}
+	MeaningElement(MeaningElement &&o) noexcept : element(std::move(o.element)) {}
+	MeaningElement &operator=(MeaningElement &&o) noexcept
+	{
+		element = std::move(o.element);
+		return *this;
+	}
+	MeaningElement &operator=(const MeaningElement &dst) noexcept
+	{
+		element = dst.element;
+		return *this;
+	}
+
 	constexpr std::size_t type() const { return element.index(); }
 
 	template <typename T>
@@ -365,11 +419,6 @@ class MeaningElement
 	template <typename T>
 	const T &get() const { return std::get<T>(element); }
 
-	MeaningElement &operator=(const MeaningElement &dst)
-	{
-		element = dst.element;
-		return *this;
-	}
 	MeaningElement &operator=(const Meaning &dst)
 	{
 		element = dst;
@@ -417,10 +466,22 @@ class LeftNonterminal
 	Meaning means;
 
   public:
-	LeftNonterminal() : cat(), means() {}
-	LeftNonterminal(const Category &c, Meaning m) : cat(c), means(m) {}
-	LeftNonterminal(const LeftNonterminal &dst) : cat(dst.cat), means(dst.means) {}
-	// LeftNonterminal(LeftNonterminal &&o) : cat(std::move(o.cat)), means(std::move(o.means)) {}
+	LeftNonterminal() noexcept : cat(), means() {}
+	LeftNonterminal(const Category &c, Meaning m) noexcept : cat(c), means(m) {}
+	LeftNonterminal(const LeftNonterminal &dst) noexcept : cat(dst.cat), means(dst.means) {}
+	LeftNonterminal(LeftNonterminal &&o) noexcept : cat(std::move(o.cat)), means(std::move(o.means)) {}
+	LeftNonterminal &operator=(LeftNonterminal &&o) noexcept
+	{
+		cat = std::move(o.cat);
+		means = std::move(o.means);
+		return *this;
+	}
+	LeftNonterminal &operator=(const LeftNonterminal &o) noexcept
+	{
+		cat = o.cat;
+		means = o.means;
+		return *this;
+	}
 	bool operator==(const LeftNonterminal &dst) const
 	{
 		return cat == dst.cat && means == dst.means;
@@ -465,11 +526,11 @@ class LeftNonterminal
 	{
 		return means.get_base();
 	}
-	std::vector<MeaningElement> &get_followings()
+	std::list<MeaningElement> &get_followings()
 	{
 		return means.get_followings();
 	}
-	const std::vector<MeaningElement> &get_followings() const
+	const std::list<MeaningElement> &get_followings() const
 	{
 		return means.get_followings();
 	}
@@ -485,10 +546,22 @@ class RightNonterminal
 	Variable var;
 
   public:
-	RightNonterminal() : cat(), var() {}
-	RightNonterminal(const Category &c, const Variable &v) : cat(c), var(v) {}
-	RightNonterminal(const RightNonterminal &dst) : cat(dst.cat), var(dst.var) {}
-	// RightNonterminal(RightNonterminal &&o) : cat(std::move(o.cat)), var(std::move(o.var)) {}
+	RightNonterminal() noexcept : cat(), var() {}
+	RightNonterminal(const Category &c, const Variable &v) noexcept : cat(c), var(v) {}
+	RightNonterminal(const RightNonterminal &dst) noexcept : cat(dst.cat), var(dst.var) {}
+	RightNonterminal(RightNonterminal &&o) noexcept : cat(std::move(o.cat)), var(std::move(o.var)) {}
+	RightNonterminal &operator=(RightNonterminal &&o) noexcept
+	{
+		cat = std::move(o.cat);
+		var = std::move(o.var);
+		return *this;
+	}
+	RightNonterminal &operator=(const RightNonterminal &o) noexcept
+	{
+		cat = o.cat;
+		var = o.var;
+		return *this;
+	}
 	bool operator==(const RightNonterminal &dst) const
 	{
 		return cat == dst.cat;
@@ -533,16 +606,21 @@ class SymbolElement
 	ElementType element;
 
   public:
-	SymbolElement() : element() {}
-	SymbolElement(const SymbolElement &other) : element(other.element) {}
-	SymbolElement(const Symbol &other) : element(other) {}
-	SymbolElement(const RightNonterminal &other) : element(other) {}
-	// SymbolElement(SymbolElement &&o) : element(std::move(o.element)) {}
+	SymbolElement() noexcept : element() {}
+	SymbolElement(const SymbolElement &other) noexcept : element(other.element) {}
+	SymbolElement(const Symbol &other) noexcept : element(other) {}
+	SymbolElement(const RightNonterminal &other) noexcept : element(other) {}
+	SymbolElement(SymbolElement &&o) noexcept : element(std::move(o.element)) {}
 	constexpr std::size_t type() const { return element.index(); }
 
 	template <typename T>
 	const T &get() const { return std::get<T>(element); }
 
+	SymbolElement &operator=(const SymbolElement &&dst)
+	{
+		element = std::move(dst.element);
+		return *this;
+	}
 	SymbolElement &operator=(const SymbolElement &dst)
 	{
 		element = dst.element;

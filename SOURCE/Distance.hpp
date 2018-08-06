@@ -5,6 +5,7 @@
 #include <valarray>
 #include <cstdlib>
 #include <iostream>
+#include <list>
 
 /*!
  * Distance
@@ -21,7 +22,7 @@ class MatrixExp
 
   public:
 	MatrixExp(const int r, const int c) : row(r), col(c), data(r * c){};
-	T &operator()(const int i, const int j)
+	T &operator()(const int i, const int j) const
 	{
 		if (0 <= i && i < row && 0 <= j && j < col)
 		{
@@ -33,8 +34,8 @@ class MatrixExp
 			exit(1);
 		}
 	};
-	const int &size1() { return row; };
-	const int &size2() { return col; };
+	const int &size1() const { return row; };
+	const int &size2() const { return col; };
 };
 
 /*!
@@ -42,16 +43,12 @@ class MatrixExp
  * 返値は引数に渡されるVectorインスタンスの要素数で割られるため、0~1の値を取ります。
  * 値が大きければ距離は離れていて、小さければ距離が近いと言う意味になります。計算量はO((n*m)^(1/2))
  */
-template <class E>
-double levenstein(const std::vector<E> ex1, const std::vector<E> ex2);
 /*!
  * Vectorインスタンスの要素数で割らないため，値は0~無限(入力依存)となるLevenstein距離
  */
 template <class E>
 int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2)
 {
-
-	// boost::numeric::ublas::matrix<int> matrix(0, 0);
 	int cost_delta, cost1, cost2, cost3, cost;
 
 	if (ex1.size() == 0 && ex2.size() != 0)
@@ -64,7 +61,6 @@ int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2)
 	const int row_size = ex1.size() + 1;
 	const int col_size = ex2.size() + 1;
 
-	// matrix.resize(row_size, col_size);
 	MatrixExp<int> matrix(row_size, col_size);
 
 	for (int j = 0; j < col_size; j++)
@@ -104,6 +100,68 @@ int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2)
 
 template <class E>
 double levenstein(const std::vector<E> ex1, const std::vector<E> ex2)
+{
+
+	double dist2 = static_cast<double>(levenstein2<E>(ex1, ex2));
+	int len = std::max(ex1.size(), ex2.size());
+
+	return dist2 / (static_cast<double>(len));
+}
+
+template <class E>
+int levenstein2(const std::list<E> ex1, const std::list<E> ex2)
+{
+	int cost_delta, cost1, cost2, cost3, cost;
+
+	if (ex1.size() == 0 && ex2.size() != 0)
+		return ex2.size();
+	if (ex1.size() != 0 && ex2.size() == 0)
+		return ex1.size();
+	if (ex1.size() == 0 && ex2.size() == 0)
+		return 0;
+
+	const int row_size = ex1.size() + 1;
+	const int col_size = ex2.size() + 1;
+
+	MatrixExp<int> matrix(row_size, col_size);
+
+	for (int j = 0; j < col_size; j++)
+	{
+		matrix(0, j) = j;
+	}
+	for (int i = 0; i < row_size; i++)
+	{
+		matrix(i, 0) = i;
+	}
+
+	for (int index_ex1 = 0; index_ex1 < ex1.size(); index_ex1++)
+	{
+		for (int index_ex2 = 0; index_ex2 < ex2.size(); index_ex2++)
+		{
+
+			//入れ替えコスト1で計算
+			cost_delta = ex1[index_ex1] == ex2[index_ex2] ? 0 : 1;
+
+			int x, y;
+			y = index_ex1 + 1;
+			x = index_ex2 + 1;
+			cost1 = matrix(y - 1, x) + 1;
+			cost2 = matrix(y, x - 1) + 1;
+			cost3 = matrix(y - 1, x - 1) + cost_delta;
+
+			cost = cost1;
+			cost = cost2 < cost ? cost2 : cost;
+			cost = cost3 < cost ? cost3 : cost;
+
+			matrix(y, x) = cost;
+		}
+	}
+
+	return matrix(matrix.size1() - 1, matrix.size2() - 1);
+}
+
+template <class E>
+double levenstein(const std::list<E> ex1, const std::list<E> ex2)
 {
 
 	double dist2 = static_cast<double>(levenstein2<E>(ex1, ex2));

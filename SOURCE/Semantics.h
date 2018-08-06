@@ -54,9 +54,9 @@ std::string set_str(std::set<T> s)
 	std::ostringstream os;
 	os << "{";
 	std::for_each(std::begin(s), std::end(s), [&](T obj) { os << obj << " "; });
-	os << "}";
 	std::string res = os.str();
 	res.pop_back();
+	res += "}";
 	return res;
 };
 } // namespace SemanticsUtil

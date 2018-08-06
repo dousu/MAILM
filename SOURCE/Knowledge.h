@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstddef>
+#include <list>
 
 #include "Rule.h"
 #include "Semantics.h"
@@ -183,6 +184,8 @@ class Knowledge : public KnowledgeTypeDef
 
 	std::string meaning_no_to_s(int obj);
 
+	std::string dic_to_s();
+
 	Rule at(std::size_t) const;
 
   private:
@@ -203,7 +206,7 @@ class Knowledge : public KnowledgeTypeDef
 	void unique(std::list<T> &);
 	void unify(RuleDBType &DB);
 
-	std::vector<SymbolElement> construct_buzz_word();
+	std::list<SymbolElement> construct_buzz_word();
 	bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f);
 	bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	bool new_loop;
@@ -211,8 +214,10 @@ class Knowledge : public KnowledgeTypeDef
 	bool all_construct_grounding_rules_width(const Category &c, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
 	std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> dic_amean_range(const AMean &c);
-	std::vector<Rule> dic_range(const Category &c, const AMean &m);
+	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);
 	// std::function<std::vector<SymbolElement> &(Meaning &)> rule_function(Rule &);
+	std::string dic_cat_to_s();
+	std::string dic_amean_to_s();
 };
 
 template <class F, class... A>

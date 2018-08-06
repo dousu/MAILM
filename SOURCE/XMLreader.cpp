@@ -37,7 +37,6 @@ void XMLreader::make_init_data(std::vector<std::string> &file_paths)
 
 void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 {
-	std::cerr << file_path << std::endl;
 	boost::property_tree::ptree pt;
 	boost::property_tree::read_xml(file_path.c_str(), pt);
 
@@ -51,7 +50,7 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 	std::string path1 = "score";
 	int measure_num, met_num, p_num = 0, met_max;
 	Meaning s_in, flat_meaning;
-	std::vector<SymbolElement> s_ex;
+	std::list<SymbolElement> s_ex;
 
 	s_in = Meaning(AMean(index_count));
 	core_meaning[AMean(index_count)] = Conception();
@@ -96,7 +95,7 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 
 				if (p_fl)
 				{
-					std::vector<SymbolElement> sub_ex;
+					std::list<SymbolElement> sub_ex;
 					//metric番号の初期化
 					met_num = 1;
 					//入っているべきmetricの数を取得

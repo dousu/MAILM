@@ -6,6 +6,7 @@
 #include <iostream>
 #include <functional>
 #include <variant>
+#include <list>
 
 #include "Distance.hpp"
 #include "Element.h"
@@ -15,22 +16,21 @@
 class Rule
 {
 	//member
-	LeftNonterminal internal;			 //内部
-	std::vector<SymbolElement> external; //外部言語列
+	LeftNonterminal internal;		   //内部
+	std::list<SymbolElement> external; //外部言語列
 
   public:
 	//constructor
-	Rule();
-	// Rule(char *cstr);
-	// Rule(std::string str);
-	Rule(const LeftNonterminal &lt, const std::vector<SymbolElement> &ex);
-	Rule(const Rule &o) : internal(o.internal), external(o.external) {}
-	// Rule(Rule &&o) : internal(std::move(o.internal)), external(std::move(o.external)) {}
+	Rule() noexcept;
+	Rule(const LeftNonterminal &lt, const std::list<SymbolElement> &ex) noexcept;
+	Rule(const Rule &o) noexcept : internal(o.internal), external(o.external) {}
+	Rule(Rule &&o) noexcept : internal(std::move(o.internal)), external(std::move(o.external)) {}
 
 	//!operator
+	Rule &operator=(Rule &&o) noexcept;
+	Rule &operator=(const Rule &o) noexcept;
 	bool operator==(const Rule &dst) const;
 	bool operator!=(Rule &dst) const;
-	Rule &operator=(const Rule &dst);
 	bool operator<(const Rule &dst) const;
 
 	int size() const { return external.size(); };
@@ -38,11 +38,11 @@ class Rule
 	bool is_noun(Semantics<Conception> &s) const;
 	bool is_sentence(Semantics<Conception> &s) const;
 	bool is_measure(Semantics<Conception> &s) const;
-	void set_rule(LeftNonterminal &nt, std::vector<SymbolElement> &ex);
+	void set_rule(LeftNonterminal &nt, std::list<SymbolElement> &ex);
 	LeftNonterminal &get_internal() { return internal; }
 	const LeftNonterminal &get_internal() const { return internal; }
-	std::vector<SymbolElement> &get_external() { return external; }
-	const std::vector<SymbolElement> &get_external() const { return external; }
+	std::list<SymbolElement> &get_external() { return external; }
+	const std::list<SymbolElement> &get_external() const { return external; }
 	friend std::ostream &operator<<(std::ostream &out, const Rule &obj);
 };
 

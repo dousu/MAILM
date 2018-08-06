@@ -39,7 +39,7 @@ template <typename T>
 bool Semantics<T>::chunk_equal(const AMean &a, const AMean &b)
 {
 	T tmp_v;
-	if (mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty())
+	if (mapping[a].empty() && mapping[b].empty())
 	{
 		return true;
 	}
@@ -51,19 +51,19 @@ template <typename T>
 bool Semantics<T>::merge_equal(const AMean &a, const AMean &b)
 {
 	T tmp_v;
-	if (mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty())
+	if (mapping[a].empty() && mapping[b].empty())
 	{
 		return true;
 	}
-	return mapping[a.get_obj_id()].include(mapping[b.get_obj_id()]) || mapping[b.get_obj_id()].include(mapping[a.get_obj_id()]); //包含関係になっていたら真
-																																 //return equal(a, b);
+	return mapping[a].include(mapping[b]) || mapping[b].include(mapping[a]); //包含関係になっていたら真
+																			 //return equal(a, b);
 }
 //aがbを含んでいればreplaceできる
 template <typename T>
 bool Semantics<T>::replace_equal(const AMean &a, const AMean &b)
 {
 	T tmp_v;
-	if (mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty())
+	if (mapping[a].empty() && mapping[b].empty())
 	{
 		return true;
 	}
@@ -136,7 +136,7 @@ void Semantics<T>::merge(const AMean &a, const AMean &b, const AMean &c)
 	mapping[c] = c_v;
 	//mapping.count(a)!=0で分岐
 	//a=>c, b=>c
-	// std::vector<int> new_tr_a, new_tr_b;
+	// std::list<int> new_tr_a, new_tr_b;
 	if (a == c)
 	{
 		if (b == c)
@@ -238,7 +238,7 @@ void Semantics<T>::rewrite(Meaning &m, const AMean &a, const AMean &b, const AMe
 					  << "error size : Semantics::rewrite" << std::endl;
 			exit(1);
 		}
-		std::vector<MeaningElement> buf, means;
+		std::list<MeaningElement> buf, means;
 		std::copy_n(std::begin(m.get_followings()), pos - 1, std::back_inserter(buf));
 		std::copy_n(std::next(std::begin(m.get_followings()), pos - 1), size, std::back_inserter(means));
 		buf.push_back(Meaning(c, means));
