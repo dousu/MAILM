@@ -1,12 +1,6 @@
-/*
- * Element.h
- *
- *  Created on: 2016/11/22
- *      Author: Hiroki Sudo
- */
-
 #ifndef ELEMENT_H_
 #define ELEMENT_H_
+
 #include <iostream>
 #include <map>
 #include <string>
@@ -15,176 +9,691 @@
 #include <algorithm>
 #include <iterator>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-
 #include "Dictionary.h"
 #include "Prefices.h"
 
-#include "XMLreader.h"
+#include <variant>
+#include <cstddef>
+#include <ostream>
+#include <sstream>
+#include <type_traits>
+#include <list>
 
- /*!
-  * Elementクラスが取るタイプのインデックスを
-  定義しています。
-  */
-namespace ELEM_TYPE {
-	//!カテゴリ付き変数:外部言語の非終端記号
-	const int CAT_TYPE = 0;
-	//!シンボル:外部言語の終端記号
-	const int SYM_TYPE = 1;
-	//!変数:内部言語の非終端記号
-	const int VAR_TYPE = 2;
-	//!対象:内部言語の終端記号
-	const int IND_TYPE = 3;
-}
+/*!
+ * Elementクラスが取るタイプのインデックスを定義しています。
+ */
+namespace ELEM_TYPE
+{
+enum Type
+{
+	//!カテゴリ付き変数:external
+	NT_TYPE = 0,
+	//!シンボル:external
+	SYM_TYPE
+};
+} // namespace ELEM_TYPE
+namespace MEANING_TYPE
+{
+enum Type
+{
+	MEANING_TYPE = 0,
+	VAR_TYPE
+};
+} // namespace MEANING_TYPE
 
 //型
 /*!
  * 内部言語と外部言語の要素を表すクラスです。
- * メンバ変数は全て数値で扱われ、インデックスで
- 表現されています。
- * このインデックスは静的メンバ変数のDictionary
- クラスインスタンスに依存します。
- *
- * なお、boost%:%:serializationに対応しています。
+ * メンバ変数は全て数値で扱われ、インデックスで表現されています。
+ * このインデックスは静的メンバ変数のDictionaryクラスインスタンスに依存します。
  */
-class Element {
 
-public:
-	//メンバ
-	//! 要素を区別するインデックスを格納しています。
-	// （例: これが「like」で、
-	// likeのインデックスが2、ならobj=2）
+class AMean
+{
 	int obj;
 
-	//!Elementがカテゴリ付き変数または変数である場合、
-	// そのカテゴリのインデックスを格納します。
-	// （例: C1/x2なら、cat=1）
-	int cat;
-
-	//! Elementのタイプを格納しています。
-	// タイプはELEM_TYPEに示されるとおりです。
-	int type;
-
-	//! PatternTypeとしてリストされるときに
-	// ELEM_TYPE::CAT_TYPEに
-	// どのELEM_TYPE::IND_TYPEのobjが入るかのリスト
-	std::vector<int> ch;
-
-	//! Sentenceかどうかを示します．
-	bool sent_type;
-
-	static Dictionary dictionary;
-	static XMLreader reader;
-
-	//コンストラクタ
-	Element();
-
-	Element(std::string);
-
-	//デストラクタ
-	//virtual ~Element();
-
-
-	//operator
-	//!等号。型が異なると偽を返します。
-	// 型が等しい場合はインデックスが等しいか比べます。
-	bool operator==(const Element& dst) const;
-	//!等号の否定です
-	bool operator!=(const Element& dst) const;
-	bool operator<(const Element& dst) const;
-
-	//!代入です
-	Element& operator =(const Element& dst);
-
-
-	//method
-	//! 変数インデックスと、カテゴリインデックスを取り、
-	// それを使ってインスタンスを
-	// カテゴリ付き変数に初期化します。
-	Element& set_cat(int var, int cat);
-	//! 変数インデックスと、カテゴリインデックス,
-	// sentence_typeを取り、
-	// それを使ってインスタンスをカテゴリ付き変数に初期化します。
-	Element& set_cat(int var, int cat, bool sent);
-	//! 変数インデックスと、
-	// カテゴリインデックスを取り、
-	// それを使ってインスタンスを変数に初期化します。
-	// 内部言語の変数は、必ず外部言語で
-	// カテゴリ付き変数として出現するので、
-	// 初期化にはそれと等しいカテゴリインデックスが必要です。
-	Element& set_var(int var, int cat);
-	//! 対象のインデックスを引数に取り、
-	// それを使ってインスタンスを内部言語の対象に初期化します。
-	Element& set_ind(int id);
-	//! 対象のインデックスを引数に取り、
-	// それを使ってインスタンスを外部言語の記号に初期化します。
-	Element& set_sym(int id);
-
-	void set_ch(int chunk);
-
-	//! インスタンスが変数ならtrueを、
-	// そうでなければfalseを返します。
-	bool is_var(void) const;
-	//! インスタンスがカテゴリ付き変数であればtrueを、
-	// そうでなければfalseを返します。
-	bool is_cat(void) const;
-	//! インスタンスが対象であればtrueを、
-	// そうでなければfalseを返します。
-	bool is_ind(void) const;
-	//! インスタンスが記号であればtrueを、
-	// そうでなければfalseを返します。
-	bool is_sym(void) const;
-
-	Element& set(int type_id, int obj_id, int sub_id, bool sent);
-
-	//! インスタンスの文字列表現をstringで返します。
-	// （例:インスタンスが、カテゴリインデックス1で、
-	// 変数インデックス2なら、"C1/x2"が返ってきます。）
-	std::string to_s(void);
-
-private:
-	// serialize
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive &ar, const unsigned int /* file_version */) {
-		ar & BOOST_SERIALIZATION_NVP(type);
-		ar & BOOST_SERIALIZATION_NVP(obj);
-		ar & BOOST_SERIALIZATION_NVP(cat);
+  public:
+	AMean() noexcept : obj(0) {}
+	AMean(int num) noexcept : obj(num) {}
+	AMean(const AMean &dst) noexcept : obj(dst.obj) {}
+	AMean(AMean &&o) noexcept : obj(std::move(o.obj)) {}
+	AMean &operator=(AMean &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
 	}
-
+	AMean &operator=(const AMean &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
+	bool operator==(const AMean &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const AMean &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const AMean &dst) const
+	{
+		return obj < dst.obj;
+	}
+	bool operator>(const AMean &dst) const
+	{
+		return obj > dst.obj;
+	}
+	bool operator<=(const AMean &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const AMean &dst) const
+	{
+		return !(*this < dst);
+	}
+	std::string to_s() const
+	{
+		return Prefices::MEA + std::to_string(obj);
+	}
+	friend std::ostream &operator<<(std::ostream &out, const AMean &obj);
 };
 
-class Conception {
-public:
+class Variable
+{
+	int obj;
+
+  public:
+	Variable() noexcept : obj(0) {}
+	Variable(int var_num) noexcept : obj(var_num) {}
+	Variable(const Variable &dst) noexcept : obj(dst.obj) {}
+	Variable(Variable &&o) noexcept : obj(std::move(o.obj)) {}
+	Variable &operator=(Variable &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	Variable &operator=(const Variable &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
+	bool operator==(const Variable &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const Variable &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Variable &dst) const
+	{
+		return obj < dst.obj;
+	}
+	bool operator>(const Variable &dst) const
+	{
+		return obj > dst.obj;
+	}
+	bool operator<=(const Variable &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const Variable &dst) const
+	{
+		return !(*this < dst);
+	}
+	std::string to_s() const
+	{
+		return Prefices::VAR + std::to_string(obj);
+	}
+	friend std::ostream &operator<<(std::ostream &out, const Variable &obj);
+};
+
+class Category
+{
+	int obj;
+
+  public:
+	Category() noexcept : obj(0) {}
+	Category(int cat_num) noexcept : obj(cat_num) {}
+	Category(const Category &dst) noexcept : obj(dst.obj) {}
+	Category(Category &&o) noexcept : obj(std::move(o.obj)) {}
+	Category &operator=(Category &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	Category &operator=(const Category &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
+	bool operator==(const Category &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const Category &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Category &dst) const
+	{
+		return obj < dst.obj;
+	}
+	bool operator>(const Category &dst) const
+	{
+		return obj > dst.obj;
+	}
+	bool operator<=(const Category &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const Category &dst) const
+	{
+		return !(*this < dst);
+	}
+	std::string to_s() const
+	{
+		return Prefices::CAT + std::to_string(obj);
+	}
+	friend std::ostream &operator<<(std::ostream &out, const Category &obj);
+};
+
+class Symbol
+{
+	int obj;
+
+  public:
+	static std::map<std::string, std::string> conv_symbol;
+	Symbol(int num) noexcept : obj(num) {}
+	Symbol(const Symbol &dst) noexcept : obj(dst.obj) {}
+	Symbol(Symbol &&o) noexcept : obj(std::move(o.obj)) {}
+	Symbol &operator=(Symbol &&o) noexcept
+	{
+		obj = std::move(o.obj);
+		return *this;
+	}
+	Symbol &operator=(const Symbol &o) noexcept
+	{
+		obj = o.obj;
+		return *this;
+	}
+	bool operator==(const Symbol &dst) const
+	{
+		return obj == dst.obj;
+	}
+	bool operator!=(const Symbol &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Symbol &dst) const
+	{
+		return obj < dst.obj;
+	}
+	bool operator>(const Symbol &dst) const
+	{
+		return obj > dst.obj;
+	}
+	bool operator<=(const Symbol &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const Symbol &dst) const
+	{
+		return !(*this < dst);
+	}
+	std::string to_s() const
+	{
+		if (Dictionary::symbol.find(obj) == Dictionary::symbol.end())
+		{
+			return "*";
+		}
+		else
+		{
+			return "[" + conv_symbol[Dictionary::symbol[obj]] + "]";
+		}
+	}
+	friend std::ostream &operator<<(std::ostream &out, const Symbol &obj);
+};
+
+class MeaningElement;
+
+class Meaning
+{
+	AMean base;
+	std::list<MeaningElement> means;
+
+  public:
+	Meaning() noexcept : base(), means() {}
+	Meaning(const Meaning &dst) noexcept : base(dst.base), means(dst.means) {}
+	Meaning(const AMean &m) noexcept : base(m), means() {}
+	Meaning(const AMean &m, const std::list<MeaningElement> &dst) noexcept : base(m), means(dst) {}
+	Meaning(const AMean &m, const std::list<Meaning> &dst) noexcept : base(m), means()
+	{
+		std::for_each(std::begin(dst), std::end(dst), [&](auto &obj) { means.push_back(obj); });
+	}
+	Meaning(const AMean &m, const std::list<Variable> &dst) noexcept : base(m), means()
+	{
+		std::for_each(std::begin(dst), std::end(dst), [&](auto &obj) { means.push_back(obj); });
+	}
+	Meaning(Meaning &&o) noexcept : base(std::move(o.base)), means(std::move(o.means)) {}
+	Meaning &operator=(Meaning &&o) noexcept
+	{
+		base = std::move(o.base);
+		means = std::move(o.means);
+		return *this;
+	}
+	Meaning &operator=(const Meaning &o) noexcept
+	{
+		base = o.base;
+		means = o.means;
+		return *this;
+	}
+	bool operator==(const Meaning &dst) const
+	{
+		return base == dst.base && means == dst.means;
+	}
+	bool operator!=(const Meaning &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const Meaning &dst) const
+	{
+		return base < dst.base || (base == dst.base && means < dst.means);
+	}
+	bool operator>(const Meaning &dst) const
+	{
+		return base > dst.base || (base == dst.base && means > dst.means);
+	}
+	bool operator<=(const Meaning &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const Meaning &dst) const
+	{
+		return !(*this < dst);
+	}
+	MeaningElement &at(std::size_t i)
+	{
+		if (i < 1)
+		{
+			std::cerr << "irregular index" << std::endl;
+			exit(1);
+		}
+		// return means.at(i - 1);
+		return *std::next(std::begin(means), i - 1);
+	}
+	const MeaningElement &at(std::size_t i) const
+	{
+		if (i < 1)
+		{
+			std::cerr << "irregular index" << std::endl;
+			exit(1);
+		}
+		// return means.at(i - 1);
+		return *std::next(std::begin(means), i - 1);
+	}
+	AMean &get_base() noexcept
+	{
+		return base;
+	}
+	const AMean &get_base() const noexcept
+	{
+		return base;
+	}
+	std::list<MeaningElement> &get_followings() noexcept
+	{
+		return means;
+	}
+	const std::list<MeaningElement> &get_followings() const noexcept
+	{
+		return means;
+	}
+	int get_size() const
+	{
+		return means.size() + 1;
+	}
+	Meaning removed(std::size_t n, std::size_t size) const
+	{
+		if (size > means.size() || n == 0)
+		{
+			std::cerr << "Cannot remove" << std::endl;
+			exit(1);
+		}
+		std::list<MeaningElement> tmp = means;
+		tmp.erase(std::next(std::begin(tmp), n - 1), std::next(std::begin(tmp), n - 1 + size));
+		return Meaning(base, tmp);
+	}
+	Meaning replaced(std::size_t n, std::size_t size, const MeaningElement &el) const;
+	std::string to_s() const
+	{
+		std::string str{""};
+		if (means.size() == 0)
+		{
+			str = base.to_s();
+		}
+		else
+		{
+			str += base.to_s();
+			std::list<std::string> buf;
+			std::for_each(std::begin(means), std::end(means), [&](auto &m) {
+				buf.push_back(m.to_s());
+			});
+			std::ostringstream os;
+			std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<std::string>(os, ","));
+			str += Prefices::LPRN + os.str();
+			str.erase(str.end() - 1);
+			str += Prefices::RPRN;
+		}
+		return str;
+	}
+	friend std::ostream &operator<<(std::ostream &out, const Meaning &obj);
+};
+
+class MeaningElement
+{
+	using MeaningType = std::variant<Meaning, Variable>;
+	MeaningType element;
+
+  public:
+	MeaningElement() noexcept : element() {}
+	MeaningElement(const MeaningElement &other) noexcept : element(other.element) {}
+	MeaningElement(const Meaning &other) noexcept : element(other) {}
+	MeaningElement(const Variable &other) noexcept : element(other) {}
+	MeaningElement(MeaningElement &&o) noexcept : element(std::move(o.element)) {}
+	MeaningElement &operator=(MeaningElement &&o) noexcept
+	{
+		element = std::move(o.element);
+		return *this;
+	}
+	MeaningElement &operator=(const MeaningElement &dst) noexcept
+	{
+		element = dst.element;
+		return *this;
+	}
+
+	constexpr std::size_t type() const { return element.index(); }
+
+	template <typename T>
+	T &get() { return std::get<T>(element); } //用途によりconstはつけない
+
+	template <typename T>
+	const T &get() const { return std::get<T>(element); }
+
+	MeaningElement &operator=(const Meaning &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	MeaningElement &operator=(const Variable &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	bool operator==(const MeaningElement &dst) const
+	{
+		return element == dst.element;
+	}
+	bool operator!=(const MeaningElement &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const MeaningElement &dst) const
+	{
+		return element < dst.element;
+	}
+	bool operator>(const MeaningElement &dst) const
+	{
+		return element > dst.element;
+	}
+	bool operator<=(const MeaningElement &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const MeaningElement &dst) const
+	{
+		return !(*this < dst);
+	}
+	std::string to_s() const
+	{
+		return std::visit([](auto &&arg) { return arg.to_s(); }, element);
+	}
+	friend std::ostream &operator<<(std::ostream &out, const MeaningElement &obj);
+};
+
+class LeftNonterminal
+{
+	Category cat;
+	Meaning means;
+
+  public:
+	LeftNonterminal() noexcept : cat(), means() {}
+	LeftNonterminal(const Category &c, Meaning m) noexcept : cat(c), means(m) {}
+	LeftNonterminal(const LeftNonterminal &dst) noexcept : cat(dst.cat), means(dst.means) {}
+	LeftNonterminal(LeftNonterminal &&o) noexcept : cat(std::move(o.cat)), means(std::move(o.means)) {}
+	LeftNonterminal &operator=(LeftNonterminal &&o) noexcept
+	{
+		cat = std::move(o.cat);
+		means = std::move(o.means);
+		return *this;
+	}
+	LeftNonterminal &operator=(const LeftNonterminal &o) noexcept
+	{
+		cat = o.cat;
+		means = o.means;
+		return *this;
+	}
+	bool operator==(const LeftNonterminal &dst) const
+	{
+		return cat == dst.cat && means == dst.means;
+	}
+	bool operator!=(const LeftNonterminal &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const LeftNonterminal &dst) const
+	{
+		return cat < dst.cat || (cat == dst.cat && means < dst.means);
+	}
+	bool operator>(const LeftNonterminal &dst) const
+	{
+		return cat > dst.cat || (cat == dst.cat && means > dst.means);
+	}
+	bool operator<=(const LeftNonterminal &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const LeftNonterminal &dst) const
+	{
+		return !(*this < dst);
+	}
+	const Category &get_cat() const
+	{
+		return cat;
+	}
+	Meaning &get_means()
+	{
+		return means;
+	}
+	const Meaning &get_means() const
+	{
+		return means;
+	}
+	AMean &get_base()
+	{
+		return means.get_base();
+	}
+	const AMean &get_base() const
+	{
+		return means.get_base();
+	}
+	std::list<MeaningElement> &get_followings()
+	{
+		return means.get_followings();
+	}
+	const std::list<MeaningElement> &get_followings() const
+	{
+		return means.get_followings();
+	}
+	std::string to_s() const
+	{
+		return cat.to_s() + Prefices::DEL + means.to_s();
+	}
+	friend std::ostream &operator<<(std::ostream &out, const LeftNonterminal &obj);
+};
+class RightNonterminal
+{
+	Category cat;
+	Variable var;
+
+  public:
+	RightNonterminal() noexcept : cat(), var() {}
+	RightNonterminal(const Category &c, const Variable &v) noexcept : cat(c), var(v) {}
+	RightNonterminal(const RightNonterminal &dst) noexcept : cat(dst.cat), var(dst.var) {}
+	RightNonterminal(RightNonterminal &&o) noexcept : cat(std::move(o.cat)), var(std::move(o.var)) {}
+	RightNonterminal &operator=(RightNonterminal &&o) noexcept
+	{
+		cat = std::move(o.cat);
+		var = std::move(o.var);
+		return *this;
+	}
+	RightNonterminal &operator=(const RightNonterminal &o) noexcept
+	{
+		cat = o.cat;
+		var = o.var;
+		return *this;
+	}
+	bool operator==(const RightNonterminal &dst) const
+	{
+		return cat == dst.cat;
+	}
+	bool operator!=(const RightNonterminal &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const RightNonterminal &dst) const
+	{
+		return cat < dst.cat;
+	}
+	bool operator>(const RightNonterminal &dst) const
+	{
+		return cat > dst.cat;
+	}
+	bool operator<=(const RightNonterminal &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const RightNonterminal &dst) const
+	{
+		return !(*this < dst);
+	}
+	const Category &get_cat() const
+	{
+		return cat;
+	}
+	const Variable &get_var() const
+	{
+		return var;
+	}
+	std::string to_s() const
+	{
+		return cat.to_s() + Prefices::DEL + var.to_s();
+	}
+	friend std::ostream &operator<<(std::ostream &out, const RightNonterminal &obj);
+};
+class SymbolElement
+{
+	using ElementType = std::variant<RightNonterminal, Symbol>;
+	ElementType element;
+
+  public:
+	SymbolElement() noexcept : element() {}
+	SymbolElement(const SymbolElement &other) noexcept : element(other.element) {}
+	SymbolElement(const Symbol &other) noexcept : element(other) {}
+	SymbolElement(const RightNonterminal &other) noexcept : element(other) {}
+	SymbolElement(SymbolElement &&o) noexcept : element(std::move(o.element)) {}
+	constexpr std::size_t type() const { return element.index(); }
+
+	template <typename T>
+	const T &get() const { return std::get<T>(element); }
+
+	SymbolElement &operator=(const SymbolElement &&dst)
+	{
+		element = std::move(dst.element);
+		return *this;
+	}
+	SymbolElement &operator=(const SymbolElement &dst)
+	{
+		element = dst.element;
+		return *this;
+	}
+	SymbolElement &operator=(const Symbol &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	SymbolElement &operator=(const RightNonterminal &dst)
+	{
+		element = dst;
+		return *this;
+	}
+	bool operator==(const SymbolElement &dst) const
+	{
+		return element == dst.element;
+	}
+	bool operator!=(const SymbolElement &dst) const
+	{
+		return !(*this == dst);
+	}
+	bool operator<(const SymbolElement &dst) const
+	{
+		return element < dst.element;
+	}
+	bool operator>(const SymbolElement &dst) const
+	{
+		return element > dst.element;
+	}
+	bool operator<=(const SymbolElement &dst) const
+	{
+		return !(*this > dst);
+	}
+	bool operator>=(const SymbolElement &dst) const
+	{
+		return !(*this < dst);
+	}
+	std::string to_s() const
+	{
+		return std::visit([](auto &&arg) { return arg.to_s(); }, element);
+	}
+	friend std::ostream &operator<<(std::ostream &out, const SymbolElement &obj);
+};
+
+class Conception
+{
+  public:
 	std::set<std::string> factors;
-	//コンストラクタ
 	Conception();
-
-	//デストラクタ
-	//virtual ~Conception();
-
+	Conception(std::string);
+	Conception(const Conception &);
 
 	//operator
 	//!等号。型が異なると偽を返します。
 	// 型が等しい場合はインデックスが等しいか比べます。
-	bool operator ==(const Conception& dst) const;
+	bool operator==(const Conception &dst) const;
 	//!等号の否定です
-	bool operator !=(const Conception& dst) const;
-	Conception operator + (Conception& dst);
-	Conception operator - (Conception& dst);
+	bool operator!=(const Conception &dst) const;
+	Conception operator+(Conception &dst);
+	Conception operator-(Conception &dst);
 	//!代入
-	Conception& operator =(const Conception& dst);
-	void diff(Conception& obj, Conception& res1, Conception& res2);
-	void inter(Conception& obj, Conception& res);
-	bool include(Conception& obj);
+	Conception &operator=(const Conception &dst);
+	void diff(Conception &obj, Conception &res1, Conception &res2) const;
+	void inter(Conception &obj, Conception &res) const;
+	bool include(Conception &obj) const;
 
 	bool empty();
 	void clear();
 	void add(std::string str);
-	std::string to_s();
+	std::string to_s() const;
+	friend std::ostream &operator<<(std::ostream &out, const Conception &obj);
 };
 
 #endif /* Conception_H_ */

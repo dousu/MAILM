@@ -1,185 +1,227 @@
-/*
- * MAILMParameters.cpp
- *
- *  Created on: 2017/10/25
- *      Author: hiroki
- */
-
 #include "MAILMParameters.h"
 
-MAILMParameters::MAILMParameters() {
-	INPUT_FILE = "./input.txt";
-	ALIAS_FILE = "./alias.data";
-	DIC_XML_FILE = "./dic_xml.data";
-	XML_DIR = "../XML";
+MAILMParameters::MAILMParameters()
+{
+	//experiment parameters
+	MAX_GENERATIONS = 10;
+	RANDOM_SEED = 101010; //
+
+	CONTROLS = 0x0;
+	buzz_length = 3;
+
+	//Execution Values
+	UTTERANCES = 10;
+	Generation_Counter = 0; //
+
+	//system parameters
+	LOGGING = false;
+	// PROGRESS = false;
+	ANALYZE = false;
+
+	//file parameters
+	//file prefix
+	FILE_PREFIX = "MAILM";
+	time_t now = std::time(nullptr);
+	struct tm *stm = localtime(&now);
+	char s[100];
+	strftime(s, 100, "%Yy%mm%dd%Hh%Mm%Ss", stm);
+	DATE_STR = Prefices::UNO + std::string(s);
+
+	//file extentions
+	RESULT_EXT = "_result.rst";
+	LOG_EXT = "_log.log";
+
+	//path
+	BASE_PATH = "./";
+	RESULT_PATH = BASE_PATH + "RESULT/";
+
+	ProgramOption spo;
+
+	//file
+	INPUT_FILE = BASE_PATH + "SOURCE/input.txt";
+	ALIAS_FILE = BASE_PATH + "SOURCE/alias.data";
+	DIC_XML_FILE = BASE_PATH + "SOURCE/dic_xml.data";
+	XML_DIR = BASE_PATH + "XML";
 	XML_EXT = ".xml";
 	FILE_PREFIX = "MAILM_";
 
-	SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
-	RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-	RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
-	LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
-	DICTIONARY_FILE = "./data.dic";
-	BASE_PATH = "../RESULT/";
+	RESULT_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + RESULT_EXT;
+	LOG_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + LOG_EXT;
+	DICTIONARY_FILE = BASE_PATH + "SOURCE/data.dic";
 }
 
-MAILMParameters::~MAILMParameters() {
+MAILMParameters::~MAILMParameters()
+{
 	// TODO Auto-generated destructor stub
 }
 
-void
-MAILMParameters::set_option(boost::program_options::variables_map& vm) {
-	Parameters::set_option(vm);
+void MAILMParameters::set_option(ProgramOption &po)
+{
+	spo = po;
 
-	//if (vm.count("linked-matrix")) {
-	//  LINKED_MSTRIX = true;
-	//  LINKED_MSTRIX_PATH = vm["linked-matrix"].as<std::string>();
-	//}
-	if (vm.count("input-file")) {
-		INPUT_FILE = vm["input-file"].as<std::string>();
+	if (po.count("prefix"))
+	{
+		FILE_PREFIX = po.get<std::string>("prefix");
 	}
 
-	if (vm.count("alias-file")) {
-		ALIAS_FILE = vm["alias-file"].as<std::string>();
+	if (po.count("path"))
+	{
+		BASE_PATH = (po.get<std::string>("path"));
 	}
 
-	if (vm.count("dic-xml-file")) {
-		DIC_XML_FILE = vm["dic-xml-file"].as<std::string>();
+	if (po.count("random-seed"))
+	{
+		RANDOM_SEED = po.get<int>("random-seed");
 	}
 
-	if (vm.count("xml-dir")) {
-		XML_DIR = vm["xml-dir"].as<std::string>();
+	if (po.count("generations"))
+	{
+		MAX_GENERATIONS = po.get<int>("generations");
 	}
 
-	if (vm.count("xml-ext")) {
-		XML_EXT = vm["xml-ext"].as<std::string>();
+	if (po.count("utterances"))
+	{
+		PER_UTTERANCES = po.get<double>("utterances");
 	}
 
-	//必ずprefixの変更後に行うこと
-	SAVE_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + STATE_EXT);
-	RESULT_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + RESULT_EXT);
-	RESUME_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + STATE_EXT);
-	LOG_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + LOG_EXT);
+	if (po.count("analyze"))
+	{
+		ANALYZE = po.get<bool>("analyze");
+	}
+
+	if (po.count("dictionary"))
+	{
+		DICTIONARY_FILE = po.get<std::string>("dictionary");
+	}
+
+	if (po.count("keep-random-rule"))
+	{
+		CONTROLS |= Knowledge::USE_ADDITION_OF_RANDOM_WORD;
+	}
+
+	if (po.count("logging"))
+	{
+		LOGGING = po.get<bool>("logging");
+	}
+	RESULT_PATH = BASE_PATH + "RESULT/";
+	if (ANALYZE && po.count("prefix"))
+		RESULT_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + RESULT_EXT;
+	if (LOGGING && po.count("prefix"))
+		LOG_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + LOG_EXT;
+	if (po.count("dictionary") || po.count("prefix"))
+		DICTIONARY_FILE = BASE_PATH + Prefices::DEL + DICTIONARY_FILE;
 }
 
-std::string
-MAILMParameters::to_s(void) {
-	std::string param1, param2;
+std::string MAILMParameters::to_s()
+{
 	std::vector<std::string> bag;
-	param1 = Parameters::to_s();
-	bag.push_back(param1);
-
-	//if (svm.count("contact")) {
-	//  bag.push_back("--contact");
-	//  bag.push_back(
-	//      boost::lexical_cast<std::string>(svm["contact"].as<double>()));
-	//}
-
-	//if (svm.count("neighbor")) {
-	//  bag.push_back("--contact");
-	//  bag.push_back(
-	//      boost::lexical_cast<std::string>(svm["neighbor"].as<double>()));
-	//}
-
-	//if (svm.count("convert")) {
-	//  bag.push_back("--convert");
-	//  std::vector<std::string> buf;
-	//  buf = svm["convert"].as<std::vector<std::string> >();
-
-	//  bag.push_back(buf[0]);
-	//  bag.push_back(buf[1]);
-	//}
-
-	//if (svm.count("igraph")) {
-	//  bag.push_back("--igraph");
-	//  bag.push_back(svm["igraph"].as<std::string>());
-	//}
-
-	//if (svm.count("agents")) {
-	//  bag.push_back("--agents");
-	//  bag.push_back(boost::lexical_cast<std::string>(svm["agents"].as<int>()));
-	//}
-
-	//if (svm.count("linked-matrix")) {
-	//  bag.push_back("--linked-matrix");
-	//  bag.push_back(svm["linked-matrix"].as<std::string>());
-	//}
-	if (svm.count("delete-rule-length")) {
-		bag.push_back("--delete-rule-length");
-		bag.push_back(
-			boost::lexical_cast<std::string>(svm["delete-rule-length"].as<int>()));
+	if (spo.count("prefix"))
+	{
+		bag.push_back("--prefix");
+		bag.push_back(spo.get<std::string>("prefix"));
 	}
 
-	//if (svm.count("threads")) {
-	//  bag.push_back(boost::lexical_cast<std::string>(svm["threads"].as<int>()));
-	//}
-
-	if (svm.count("minimum-utter")) {
-		bag.push_back("--minimum-utter");
-	}
-	if (svm.count("index")) {
-		bag.push_back("--index");
+	if (spo.count("path"))
+	{
+		bag.push_back("--path");
+		bag.push_back(spo.get<std::string>("path"));
 	}
 
-	if (svm.count("interspace-analysis")) {
-		bag.push_back("--interspace-analysis " + boost::lexical_cast<std::string>(svm["interspace-analysis"].as<int>()));
-	}
-	if (svm.count("interspace-logging")) {
-		bag.push_back("--interspace-logging " + boost::lexical_cast<std::string>(svm["interspace-logging"].as<int>()));
-	}
-
-	if (svm.count("max-listening-length")) {
-		bag.push_back("--max-listening-length " + boost::lexical_cast<std::string>(svm["max-listening-length"].as<int>()));
+	if (spo.count("random-seed"))
+	{
+		bag.push_back("--random-seed");
+		bag.push_back(std::to_string(spo.get<int>("random-seed")));
 	}
 
-	if (svm.count("multiple-meanings")) {
-		bag.push_back("--multiple-meanings " + boost::lexical_cast<std::string>(svm["multiple-meanings"].as<int>()));
+	if (spo.count("generations"))
+	{
+		bag.push_back("--generations");
+		bag.push_back(std::to_string(spo.get<int>("generations")));
 	}
 
-	if (svm.count("term")) {
-		bag.push_back("--term " + boost::lexical_cast<std::string>(svm["term"].as<double>()));
+	if (spo.count("utterances"))
+	{
+		bag.push_back("--utterances");
+		bag.push_back(std::to_string(spo.get<double>("utteranes")));
 	}
 
-	if (svm.count("window")) {
-		bag.push_back("--window " + boost::lexical_cast<std::string>(svm["window"].as<int>()));
+	if (spo.count("analyze"))
+	{
+		bag.push_back("--analyze");
+		bag.push_back(std::to_string(spo.get<bool>("analyze")));
 	}
 
-	if (svm.count("symmetry")) {
-		bag.push_back("--symmetry ");
+	if (spo.count("dictionary"))
+	{
+		bag.push_back("--dictionary");
+		bag.push_back(spo.get<std::string>("dictionary"));
 	}
 
-	if (svm.count("mutual-exclusivity")) {
-		bag.push_back("--mutual-exclusivity ");
+	if (spo.count("keep-random-rule"))
+	{
+		bag.push_back("--keep-random-rule");
+		bag.push_back(std::to_string(spo.get<bool>("keep-random-rule")));
 	}
 
-	if (svm.count("exception")) {
-		bag.push_back("--exception ");
+	if (spo.count("logging"))
+	{
+		bag.push_back("--logging");
+		bag.push_back(std::to_string(spo.get<bool>("logging")));
 	}
+	std::ostringstream os;
+	std::copy(std::begin(bag), std::end(bag), std::ostream_iterator<std::string>(os, " "));
+	return os.str();
+}
 
-	if (svm.count("omission-A")) {
-		bag.push_back("--omission-A ");
-	}
+std::string MAILMParameters::to_all_s(void)
+{
+	std::ostringstream ss;
+	//  int MAX_GENERATIONS;
+	ss << "MAX_GENERATIONS = " << MAX_GENERATIONS << std::endl;
+	//  double PER_UTTERANCES; //
+	ss << "PER_UTTERANCES = " << PER_UTTERANCES << std::endl;
+	//  int RANDOM_SEED;       //
+	ss << "RANDOM_SEED = " << RANDOM_SEED << std::endl;
+	//  uint32_t CONTROLS;
+	ss << "CONTROLS = " << CONTROLS << std::endl;
+	//  int buzz_length;
+	ss << "buzz_length = " << buzz_length << std::endl;
+	//  int UTTERANCES;
+	ss << "UTTERANCES = " << UTTERANCES << std::endl;
+	//  uint32_t Generation_Counter; //
+	ss << "Generation_Counter = " << Generation_Counter << std::endl;
+	//  bool LOGGING;
+	ss << "LOGGING = " << std::boolalpha << LOGGING << std::noboolalpha << std::endl;
+	//  bool PROGRESS;
+	// ss << "PROGRESS = " << PROGRESS << std::endl;
+	//  bool ANALYZE;
+	ss << "ANALYZE = " << std::boolalpha << ANALYZE << std::noboolalpha << std::endl;
+	//  std::string DICTIONARY_FILE;
+	ss << "DICTIONARY_FILE = " << DICTIONARY_FILE << std::endl;
+	//  std::string FILE_PREFIX;
+	ss << "FILE_PREFIX = " << FILE_PREFIX << std::endl;
+	//  std::string DATE_STR;
+	ss << "DATE_STR = " << DATE_STR << std::endl;
+	//  std::string RESULT_EXT;
+	ss << "RESULT_EXT = " << RESULT_EXT << std::endl;
+	//  std::string LOG_EXT;
+	ss << "LOG_EXT = " << LOG_EXT << std::endl;
+	//  std::string BASE_PATH;
+	ss << "BASE_PATH = " << BASE_PATH << std::endl;
+	//  std::string LOG_FILE;
+	ss << "LOG_FILE = " << LOG_FILE << std::endl;
+	//  std::string RESULT_FILE;
+	ss << "RESULT_FILE = " << RESULT_FILE << std::endl;
+	// std::string INPUT_FILE;
+	ss << "INPUT_FILE = " << INPUT_FILE << std::endl;
+	// std::string ALIAS_FILE;
+	ss << "ALIAS_FILE = " << ALIAS_FILE << std::endl;
+	// std::string DIC_XML_FILE;
+	ss << "DIC_XML_FILE = " << DIC_XML_FILE << std::endl;
+	// std::string XML_DIR;
+	ss << "XML_DIR = " << XML_DIR << std::endl;
+	// std::string XML_EXT;
+	ss << "XML_EXT = " << XML_EXT << std::endl;
 
-	if (svm.count("omission-B")) {
-		bag.push_back("--omission-B ");
-	}
-
-	if (svm.count("omission-C")) {
-		bag.push_back("--omission-C ");
-	}
-
-	if (svm.count("omission-D")) {
-		bag.push_back("--omission-D ");
-	}
-
-	if (svm.count("accuracy-meaning")) {
-		bag.push_back("--accuracy-meaning ");
-	}
-
-	//if (svm.count("once-parent-test")) {
-	//  bag.push_back("--once-parent-test");
-	//}
-
-
-	return boost::algorithm::join(bag, " ");
+	return ss.str();
 }
