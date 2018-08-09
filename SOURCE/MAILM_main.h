@@ -12,6 +12,7 @@
 #include <climits>
 #include <cfloat>
 #include <filesystem>
+#include <queue>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim.hpp>

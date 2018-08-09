@@ -15,6 +15,7 @@ const std::string RPRN = ")";
 const std::string LPRN = "(";
 const std::string CNM = ",";
 const std::string ARW = "=>";
+const std::string DOTARW = "->";
 const std::string CLN = ":";
 const std::string SYN = "T";
 const std::string DSP = "  ";

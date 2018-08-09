@@ -1,196 +1,74 @@
 #include "MAILM_main.h"
 
-void output_data(std::string file_path, std::string data)
+void output_data_trunc(std::string file_path, std::string data)
 {
 	//存在しない場合はすぐreturn
 	const std::filesystem::path path(file_path.c_str());
-	std::error_code error;
-	const bool result = std::filesystem::exists(path, error);
-	std::cout << "OUTPUT FILE: " << path.c_str() << std::endl;
-	if (result)
-	{
-		std::ofstream ofs(path);
-		ofs << data;
-	}
-	else
-	{
-		std::cout << file_path << " and empty file not found" << std::endl;
-		std::cout << data << std::endl;
-		return;
-	}
+	std::cout << "OUTPUT FILE: " << path << std::endl;
+	std::ofstream ofs(path, std::ios_base::trunc);
+	ofs << data;
 }
 
 std::string make_tree_str_for_dot(std::vector<Rule> &r_list, std::vector<int> beat_nums, Knowledge &kb)
 {
-	std::string begin_str("digraph sample{\n"), end_str("}");
-	std::vector<Rule>::iterator ls_it;
-	ls_it = r_list.begin();
-	std::map<Category, int> memo;
-	std::map<std::string, int> memo2;
-	std::vector<std::pair<std::string, int>> stack;
-	std::vector<std::vector<std::string>> vis;
-	int val = 0;
-	std::multimap<int, std::string> r_int_to_str;
-	std::map<std::string, int> r_str_to_int;
-	std::vector<std::string> smp, code_v;
-	int vis_index = 0;
-	std::string top;
-	{
-		memo.clear();
-		memo2.clear();
-		stack.clear();
-		vis.clear();
-		vis.push_back(std::vector<std::string>());
-		r_int_to_str.clear();
-		r_str_to_int.clear();
-		smp.clear();
-		code_v.clear();
-		top = std::string("\"") + Prefices::SEN + std::string("\"");
-		stack.push_back(std::pair<std::string, int>(top, 0));
-		r_int_to_str.insert(std::multimap<int, std::string>::value_type(0, top));
-		r_str_to_int.insert(std::map<std::string, int>::value_type(top, 0));
-		for (; ls_it != r_list.end(); ls_it++)
+	std::ostringstream os;
+	std::queue<std::string> q;
+	std::map<Category, std::size_t> cat_num;
+	std::map<Symbol, std::size_t> sym_num;
+	std::map<std::string, std::size_t> rank_map;
+	std::map<int, std::list<std::string>> rank_list;
+	std::list<std::string> sym_list;
+	std::string start;
+	std::for_each(std::begin(r_list), std::end(r_list), [&](Rule &r) {
+		if (q.size() == 0)
 		{
-			std::string frm = stack.front().first;
-			std::string head;
-			if (ls_it != r_list.begin())
+			start = r.get_internal().get_cat().to_s() + "(1)";
+			rank_map[start] = 0;
+			q.push(start);
+			cat_num.insert(std::make_pair(r.get_internal().get_cat(), 2));
+		}
+		std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
+			if (sel.type() == ELEM_TYPE::NT_TYPE)
 			{
-				if (memo.find((*ls_it).get_internal().get_cat()) == memo.end())
+				if (cat_num.find(sel.get<RightNonterminal>().get_cat()) == std::end(cat_num))
 				{
-					memo.insert(std::map<Category, int>::value_type((*ls_it).get_internal().get_cat(), 1));
+					cat_num.insert(std::make_pair(sel.get<RightNonterminal>().get_cat(), 1));
 				}
-				else
-				{
-					memo[(*ls_it).get_internal().get_cat()] += 1;
-				}
-				head = std::string("\"") + Prefices::CAT + (*ls_it).get_internal().get_cat().to_s() + Prefices::UNO + std::to_string(memo[(*ls_it).get_internal().get_cat()]) /*+ std::string("\\n") + Prefices::IND + std::to_string((*ls_it).internal.front().obj) + std::string("\\n") + kb.meaning_no_to_s((*ls_it).internal.front().obj)*/ + std::string("\"");
-				smp.push_back(frm + std::string(" -> ") + head);
-				stack.front().second--;
-				if (stack.front().second == 0)
-				{
-					stack.erase(stack.begin());
-				}
-				r_int_to_str.insert(std::multimap<int, std::string>::value_type(r_str_to_int[frm] + 1, head));
-				r_str_to_int.insert(std::map<std::string, int>::value_type(head, r_str_to_int[frm] + 1));
-				stack.insert(stack.begin(), std::pair<std::string, int>(head, 0));
+				std::string s = sel.get<RightNonterminal>().get_cat().to_s() + "(" + std::to_string(cat_num[sel.get<RightNonterminal>().get_cat()]) + ")";
+				q.push(s);
+				rank_map[s] = rank_map[q.front()] + 1;
+				rank_list[rank_map[s]].push_back(s);
+				os << std::quoted(q.front()) << Prefices::DOTARW << std::quoted(sel.get<RightNonterminal>().get_cat().to_s() + "(" + std::to_string(cat_num[sel.get<RightNonterminal>().get_cat()]++) + ")") << std::endl;
 			}
 			else
 			{
-				head = frm;
-			}
-
-			std::vector<std::string> mini_stack;
-			std::list<SymbolElement>::iterator g_ex_it = (*ls_it).get_external().begin();
-			for (; g_ex_it != (*ls_it).get_external().end(); g_ex_it++)
-			{
-				if ((*g_ex_it).type() == ELEM_TYPE::NT_TYPE)
+				if (sym_num.find(sel.get<Symbol>()) == std::end(sym_num))
 				{
-					stack.front().second++;
-					// if(memo.find((*g_ex_it).cat) == memo.end()){
-					//     memo.insert(std::map<int,int>::value_type((*g_ex_it).cat,1));
-					// }else{
-					//     memo[(*g_ex_it).cat] += 1;
-					// }
-
-					// mini_stack.push_back(std::string("\"") + std::to_string(memo[(*g_ex_it).cat]) + std::string(" ")　+ Prefices::CAT + std::to_string((*g_ex_it).cat) + std::string("\""));
-					// mini_stack.push_back(Prefices::CAT + std::to_string((*g_ex_it).cat) + Prefices::UNO + std::to_string(memo[(*g_ex_it).cat]));
-
-					// r_int_to_str.insert(std::multimap<int,std::string>::value_type(r_str_to_int[frm] + 1,mini_stack.back()));
-					// r_str_to_int.insert(std::map<std::string,int>::value_type(mini_stack.back(),r_str_to_int[frm] + 1));
-
-					// smp.push_back(frm + std::string(" -> ") + mini_stack.back());
+					sym_num.insert(std::make_pair(sel.get<Symbol>(), 1));
 				}
-				else
-				{
-					if (memo2.find((*g_ex_it).to_s()) == memo2.end())
-					{
-						memo2.insert(std::map<std::string, int>::value_type((*g_ex_it).to_s(), 1));
-					}
-					else
-					{
-						memo2[(*g_ex_it).to_s()] += 1;
-					}
-
-					std::string terminal_str;
-					terminal_str = std::string("\"") + (*g_ex_it).to_s() + Prefices::UNO + std::to_string(memo2[(*g_ex_it).to_s()]) + std::string("\"");
-
-					{
-						if (vis[vis_index].size() == beat_nums[vis_index])
-						{
-							vis_index += 1;
-							std::vector<std::string> emp_vis_el;
-							vis.push_back(emp_vis_el);
-						}
-						vis[vis_index].push_back(terminal_str);
-					}
-
-					smp.push_back(head + std::string(" -> ") + terminal_str);
-				}
+				std::string s = sel.get<Symbol>().to_s() + "(" + std::to_string(sym_num[sel.get<Symbol>()]) + ")";
+				// rank_list[rank_map[q.front()] + 1].push_back(s);
+				sym_list.push_back(s);
+				os << std::quoted(q.front()) << Prefices::DOTARW << std::quoted(sel.get<Symbol>().to_s() + "(" + std::to_string(sym_num[sel.get<Symbol>()]++) + ")") << std::endl;
 			}
-			if (stack.front().second == 0)
-			{
-				stack.erase(stack.begin());
-			}
-			// stack.insert(stack.begin(),mini_stack.begin(),mini_stack.end());
-		}
-	}
+		});
+		q.pop();
+	});
 
-	//rankルール生成
-
-	//レベルの最大値検索
-	int upper_bound = 0;
-	std::multimap<int, std::string>::iterator itr = r_int_to_str.begin();
-	upper_bound = (*itr).first;
-	while ((itr = r_int_to_str.upper_bound((*itr).first)) != r_int_to_str.end())
-	{
-		upper_bound = (*itr).first;
-	}
-
-	//terminal symbolのrank生成(仮としてmemo2)
-	std::string t_rank;
-	std::map<std::string, int>::iterator str_to_int_it;
-	t_rank = std::string("{rank = same;");
-	str_to_int_it = memo2.begin();
-	for (; str_to_int_it != memo2.end(); str_to_int_it++)
-	{
-		for (int i = 1; i <= (*str_to_int_it).second; i++)
-		{
-			t_rank += (std::string(" \"") + (*str_to_int_it).first + Prefices::UNO + std::to_string(i) + std::string("\";"));
-		}
-	}
-	t_rank += std::string("}");
-
-	//start symbol
-	std::vector<std::string> nt_ranks;
-	nt_ranks.push_back(std::string("{rank = min; ") + top + std::string(";}"));
-
-	//non-terminal symbol
-	for (int i = 1; i <= upper_bound; i++)
-	{
-		auto ra = r_int_to_str.equal_range(i);
-		std::string nt_rank("{rank = same;");
-		while (ra.first != ra.second)
-		{
-			nt_rank += (std::string(" ") + (*ra.first).second + std::string(";"));
-			ra.first++;
-		}
-		nt_rank += std::string("}");
-		nt_ranks.push_back(nt_rank);
-	}
-
-	//smp処理
-	std::string tmp = begin_str;
-	tmp += boost::algorithm::join(smp, ";\n");
-	tmp += std::string(";\n");
-	//tmp += c_rank;
-	tmp += std::string("\n");
-	tmp += boost::algorithm::join(nt_ranks, "\n");
-	tmp += std::string("\n");
-	tmp += t_rank;
-	tmp += std::string("\n");
-	tmp += end_str;
-
-	return tmp;
+	os << "{rank = min; " << std::quoted(start) << ";}" << std::endl;
+	std::for_each(std::begin(rank_list), std::end(rank_list), [&](auto &p) {
+		os << "{rank = same;";
+		std::for_each(std::begin(p.second), std::end(p.second), [&](std::string &s) {
+			os << " " << std::quoted(s) << ";";
+		});
+		os << "}" << std::endl;
+	});
+	os << "{rank = same;";
+	std::for_each(std::begin(sym_list), std::end(sym_list), [&](std::string &s) {
+		os << " " << std::quoted(s) << ";";
+	});
+	os << "}" << std::endl;
+	return "digraph sample{\n" + os.str() + "}";
 }
 
 int main(int argc, char *argv[])
@@ -246,15 +124,13 @@ int main(int argc, char *argv[])
 	}
 	std::vector<std::string> file_list;
 
-	const std::filesystem::path path(param.XML_DIR.c_str());
-	BOOST_FOREACH (const std::filesystem::path &p,
-				   std::make_pair(std::filesystem::directory_iterator(path), std::filesystem::directory_iterator()))
-	{
-		if (!std::filesystem::is_directory(p) && (p.extension()).generic_string() == param.XML_EXT)
+	const std::filesystem::path path(param.XML_DIR);
+	std::for_each(std::filesystem::directory_iterator(path), std::filesystem::directory_iterator(), [&](const std::filesystem::directory_entry &p) {
+		if (!p.is_directory() && (p.path().extension()).generic_string() == param.XML_EXT)
 		{
-			file_list.push_back(param.XML_DIR + "/" + p.filename().generic_string());
+			file_list.push_back(p.path().generic_string());
 		}
-	}
+	});
 	reader.make_init_data(file_list);
 	// Knowledge::VARIABLE_NO = reader.variable_count;
 	// Knowledge::INDEX_NO = reader.index_count;
@@ -311,9 +187,9 @@ int main(int argc, char *argv[])
 		{
 			std::cout << "explain: true" << std::endl;
 			tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
-			std::cout << "made tree graph (dot file)" << std::endl;
+			std::cout << "made tree graph as a dot file" << std::endl;
 
-			output_data(param.RESULT_PATH + boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
+			output_data_trunc(param.RESULT_PATH + boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
 
 			std::cout << "output fin." << std::endl;
 		}
@@ -382,7 +258,7 @@ int main(int argc, char *argv[])
 					tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
 					std::cout << "tree fin." << std::endl;
 
-					output_data(param.BASE_PATH + boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
+					output_data_trunc(param.BASE_PATH + boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
 
 					std::cout << "output fin." << std::endl;
 				}
