@@ -1312,6 +1312,8 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
 {
 	std::vector<RuleDBType> res;
 	bool sentence;
+	std::for_each(std::begin(ruleDB), std::end(ruleDB), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
+	std::cout << "ruleDB sentence: " << sentence << std::endl;
 	std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
 		std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
 			std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
