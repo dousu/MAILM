@@ -33,21 +33,21 @@ MAILMParameters::MAILMParameters()
 
 	//path
 	BASE_PATH = "./";
-	RESULT_PATH = BASE_PATH + "RESULT/";
+	RESULT_PATH = BASE_PATH + "Result/";
 
 	ProgramOption spo;
 
 	//file
-	INPUT_FILE = BASE_PATH + "SOURCE/input.txt";
-	ALIAS_FILE = BASE_PATH + "SOURCE/alias.data";
-	DIC_XML_FILE = BASE_PATH + "SOURCE/dic_xml.data";
+	INPUT_FILE = BASE_PATH + "Sources/input.txt";
+	ALIAS_FILE = BASE_PATH + "Sources/alias.data";
+	DIC_XML_FILE = BASE_PATH + "Sources/dic_xml.data";
 	XML_DIR = BASE_PATH + "XML";
 	XML_EXT = ".xml";
 	FILE_PREFIX = "MAILM_";
 
 	RESULT_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + RESULT_EXT;
 	LOG_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + LOG_EXT;
-	DICTIONARY_FILE = BASE_PATH + "SOURCE/data.dic";
+	DICTIONARY_FILE = BASE_PATH + "Sources/data.dic";
 }
 
 MAILMParameters::~MAILMParameters()

@@ -177,17 +177,17 @@ bool Knowledge::consolidate(void)
 			{
 			case CONSOLIDATE_TYPE::CHUNK:
 			{
-				flag |= chunk();
+				flag = flag || chunk();
 				break;
 			}
 			case CONSOLIDATE_TYPE::MERGE:
 			{
-				flag |= merge();
+				flag = flag || merge();
 				break;
 			}
 			case CONSOLIDATE_TYPE::REPLACE:
 			{
-				flag |= replace();
+				flag = flag || replace();
 				break;
 			}
 			default:
@@ -236,7 +236,7 @@ bool Knowledge::chunk(void)
 		input_box.erase(it);
 		is_chunked = chunking_loop(r, ruleDB);
 		if (!is_chunked)
-			is_chunked |= chunking_loop(r, box_buffer);
+			is_chunked = is_chunked || chunking_loop(r, box_buffer);
 		if (is_chunked)
 		{
 			break;
@@ -721,13 +721,13 @@ void Knowledge::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buff
 		if (unified_cat.find(r.get_internal().get_cat()) != std::end(unified_cat))
 		{
 			r.get_internal() = LeftNonterminal{Category{base_cat}, r.get_internal().get_means()};
-			is_modified |= true;
+			is_modified = is_modified || true;
 		}
 		std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
 			if (sel.type() == ELEM_TYPE::NT_TYPE && unified_cat.find(sel.get<RightNonterminal>().get_cat()) != std::end(unified_cat))
 			{
 				sel = RightNonterminal{Category{base_cat}, sel.get<RightNonterminal>().get_var()};
-				is_modified |= true;
+				is_modified = true;
 			}
 		});
 		if (is_modified && LOGGING_FLAG)
@@ -745,13 +745,13 @@ Knowledge::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Cat
 		if (unified_cat.find(r.get_internal().get_cat()) != std::end(unified_cat))
 		{
 			r.get_internal() = LeftNonterminal{Category{base_cat}, r.get_internal().get_means()};
-			is_modified |= true;
+			is_modified = true;
 		}
 		std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
 			if (sel.type() == ELEM_TYPE::NT_TYPE && unified_cat.find(sel.get<RightNonterminal>().get_cat()) != std::end(unified_cat))
 			{
 				sel = RightNonterminal{Category{base_cat}, sel.get<RightNonterminal>().get_var()};
-				is_modified |= true;
+				is_modified = true;
 			}
 		});
 		if (is_modified)
@@ -776,7 +776,7 @@ void Knowledge::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffe
 		if (unified_mean.find(r.get_internal().get_base()) != std::end(unified_mean))
 		{
 			r.get_internal() = LeftNonterminal{r.get_internal().get_cat(), Meaning{AMean{base_mean}, r.get_internal().get_followings()}};
-			is_modified |= true;
+			is_modified = true;
 		}
 		if (is_modified && LOGGING_FLAG)
 		{
@@ -794,7 +794,7 @@ Knowledge::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<AMea
 		if (unified_mean.find(r.get_internal().get_base()) != std::end(unified_mean))
 		{
 			r.get_internal() = LeftNonterminal{r.get_internal().get_cat(), Meaning{AMean{base_mean}, r.get_internal().get_followings()}};
-			is_modified |= true;
+			is_modified = true;
 		}
 		if (is_modified)
 		{
@@ -826,8 +826,8 @@ bool Knowledge::replace(void)
 		Rule r = *it;
 		input_box.erase(it);
 		is_replaced = replacing(r, input_box);
-		is_replaced |= replacing(r, box_buffer);
-		is_replaced |= replacing(r, ruleDB);
+		is_replaced = is_replaced || replacing(r, box_buffer);
+		is_replaced = is_replaced || replacing(r, ruleDB);
 		if (is_replaced)
 		{
 			if (LOGGING_FLAG)
@@ -906,7 +906,7 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 				{
 					LogBox::push_log("REPLACE<- " + sent.to_s());
 				}
-				is_replaced |= true;
+				is_replaced = true;
 			}
 			else
 			{
@@ -1111,12 +1111,12 @@ bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::fun
 				std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
 					if (sel.type() == ELEM_TYPE::NT_TYPE)
 					{
-						subconst &= construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), m.at(num++).get<Meaning>(), func, f2);
+						subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), m.at(num++).get<Meaning>(), func, f2);
 					}
 				});
 				if (subconst)
 					std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
-				is_constructable |= subconst;
+				is_constructable = is_constructable || subconst;
 			}
 		});
 		std::for_each(std::begin(prod), std::end(prod), f1);
@@ -1124,43 +1124,55 @@ bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::fun
 	return is_constructable;
 }
 
-bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
+bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
 {
-	new_loop = true;
 	bool is_constructable = false;
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
 	{
-		std::vector<RuleDBType> prod{{{}}};
+		bool first = true;
+		product_loop = true;
+		std::vector<RuleDBType> prod;
 		std::vector<std::pair<AMean, Rule>> pairs{std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
 		std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
 		std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
-			Rule &r = p.second;
-			if (f2(r))
+			if (f2(p.second))
 			{
 				bool subconst = true;
-				std::vector<RuleDBType> sub_prod{{{r}}};
-				std::function<void(RuleDBType &)> func = [&sub_prod](RuleDBType &rules) {
+				std::vector<RuleDBType> sub_prod{{{p.second}}};
+				std::function<void(RuleDBType &)> func = [&sub_prod, &f0](RuleDBType &rules) {
 					std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
 						std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
 					});
 				};
-				int num = 1;
-				sub_prod.push_back(RuleDBType{{r}});
-				std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
+				std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
 					if (sel.type() == ELEM_TYPE::NT_TYPE)
 					{
-						subconst &= all_construct_grounding_rules_width(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), func, f2);
+						subconst = subconst && all_construct_grounding_rules_width(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
 					}
 				});
 				if (subconst)
+				{
 					std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
-				new_loop = false;
-				is_constructable |= subconst;
+					product_loop = false;
+					first = first || false;
+				}
+				else
+				{
+					if (first)
+						product_loop = true;
+					else
+						product_loop = false;
+				}
+				is_constructable = is_constructable || subconst;
 			}
 		});
 		std::for_each(std::begin(prod), std::end(prod), f1);
+		was_constructable = is_constructable = f0(prod);
 	}
-	was_constructable = is_constructable;
+	else
+	{
+		was_constructable = is_constructable;
+	}
 	return is_constructable;
 }
 
@@ -1208,6 +1220,120 @@ bool Knowledge::explain(Meaning ref, RuleDBType &res)
 	}
 }
 
+//leftmost(upmost, index-zero-most) derivation
+void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern)
+{
+	//std::advanced(std::begin(basestring), length)
+	//if the length is equal to a size of basestring, finished this process.
+	std::list<SymbolElement> vec_sel = pattern.front().get_external();
+	auto p_it = std::next(std::begin(pattern));
+	std::size_t num = 0;
+	while (p_it != std::end(pattern) && num != vec_sel.size())
+	{
+		auto sel_it = std::begin(vec_sel);
+		std::advance(sel_it, num);
+		if ((*sel_it).type() == ELEM_TYPE::NT_TYPE)
+		{
+			sel_it = vec_sel.erase(sel_it);
+			vec_sel.insert(sel_it, std::begin((*p_it).get_external()), std::begin((*p_it).get_external()));
+			p_it++;
+		}
+		else
+		{
+			num++;
+		}
+	}
+	if (p_it != std::end(pattern))
+	{
+		std::cerr << "Error in ground with pattern" << std::endl;
+		exit(1);
+	}
+	src.get_external() = vec_sel;
+}
+
+Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref)
+{
+	RuleDBType grounded_rules;
+	auto range = dic_amean_range(ref.get_base());
+	std::for_each(range.first, range.second, [&](std::pair<Category, Rule> p) {
+		construct_grounding_rules(p.first, ref, [&](RuleDBType &list) {
+			Rule r(LeftNonterminal(Category(0), ref), std::list<SymbolElement>());
+			ground_with_pattern(r, list);
+			grounded_rules.push_back(r);
+		});
+	});
+
+	return grounded_rules;
+}
+
+std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> Knowledge::dic_cat_range(const Category &c)
+{
+	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
+	{
+		std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> p = {std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
+		return p;
+	}
+	else
+	{
+		std::cerr << "Don't exist : Knowledge::dic_cat_range" << std::endl;
+		exit(1);
+	}
+}
+std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> Knowledge::dic_amean_range(const AMean &m)
+{
+	if (DB_amean_cat_dic.find(m) != std::end(DB_amean_cat_dic))
+	{
+		std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> p = {std::begin(DB_amean_cat_dic[m]), std::end(DB_amean_cat_dic[m])};
+		return p;
+	}
+	else
+	{
+		std::cerr << "Don't exist : Knowledge::dic_amean_range" << std::endl;
+		exit(1);
+	}
+}
+std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> Knowledge::dic_range(const Category &c, const AMean &m)
+{
+	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
+	{
+		std::vector<Rule> res;
+		return DB_cat_amean_dic[c].equal_range(m);
+	}
+	else
+	{
+		std::cerr << "Don't exist : Knowledge::dic_cat_amean_range" << std::endl;
+		exit(1);
+	}
+}
+
+// //3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
+// //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
+std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning)
+{
+	std::vector<RuleDBType> res;
+	bool sentence;
+	std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
+		std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
+			std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
+		});
+		return true;
+	};
+	std::function<void(RuleDBType &)> f1 = [&](RuleDBType rules) {
+		bool has_sentence = false;
+		std::for_each(std::begin(rules), std::end(rules), [&](Rule &r) { has_sentence = sentence || r.is_sentence(intention); });
+		if (has_sentence)
+			res.push_back(rules);
+	};
+	std::function<bool(Rule &)> f2 = [&](Rule &r) {
+		return product_loop || !sentence;
+	};
+	std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&](auto &p) {
+		sentence = false;
+		all_construct_grounding_rules_width(p.first, f0, f1, f2);
+	});
+	std::cout << "Number of generated score: " << res.size() << std::endl;
+	return res[MT19937::irand(0, res.size() - 1)];
+}
 Rule Knowledge::fabricate(Rule &src1)
 {
 	// std::vector<RuleDBType> groundable_patterns;
@@ -1317,491 +1443,3 @@ Rule Knowledge::fabricate(Rule &src1)
 	// }
 	return src;
 }
-
-//leftmost(upmost, index-zero-most) derivation
-void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern)
-{
-	//std::advanced(std::begin(basestring), length)
-	//if length equal to a size of basestring, finished this process.
-	std::list<SymbolElement> vec_sel = pattern.front().get_external();
-	auto p_it = std::next(std::begin(pattern));
-	std::size_t num = 0;
-	while (p_it != std::end(pattern) && num != vec_sel.size())
-	{
-		auto sel_it = std::begin(vec_sel);
-		std::advance(sel_it, num);
-		if ((*sel_it).type() == ELEM_TYPE::NT_TYPE)
-		{
-			sel_it = vec_sel.erase(sel_it);
-			vec_sel.insert(sel_it, std::begin((*p_it).get_external()), std::begin((*p_it).get_external()));
-			p_it++;
-		}
-		else
-		{
-			num++;
-		}
-	}
-	if (p_it != std::end(pattern))
-	{
-		std::cerr << "Error in ground with pattern" << std::endl;
-		exit(1);
-	}
-	src.get_external() = vec_sel;
-}
-
-Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref)
-{
-	RuleDBType grounded_rules;
-	auto range = dic_amean_range(ref.get_base());
-	std::for_each(range.first, range.second, [&](std::pair<Category, Rule> p) {
-		construct_grounding_rules(p.first, ref, [&](RuleDBType &list) {
-			Rule r(LeftNonterminal(Category(0), ref), std::list<SymbolElement>());
-			ground_with_pattern(r, list);
-			grounded_rules.push_back(r);
-		});
-	});
-
-	return grounded_rules;
-}
-
-std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> Knowledge::dic_cat_range(const Category &c)
-{
-	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
-	{
-		std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> p = {std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
-		return p;
-	}
-	else
-	{
-		std::cerr << "Don't exist : Knowledge::dic_cat_range" << std::endl;
-		exit(1);
-	}
-}
-std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> Knowledge::dic_amean_range(const AMean &m)
-{
-	if (DB_amean_cat_dic.find(m) != std::end(DB_amean_cat_dic))
-	{
-		std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> p = {std::begin(DB_amean_cat_dic[m]), std::end(DB_amean_cat_dic[m])};
-		return p;
-	}
-	else
-	{
-		std::cerr << "Don't exist : Knowledge::dic_amean_range" << std::endl;
-		exit(1);
-	}
-}
-std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> Knowledge::dic_range(const Category &c, const AMean &m)
-{
-	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
-	{
-		std::vector<Rule> res;
-		return DB_cat_amean_dic[c].equal_range(m);
-	}
-	else
-	{
-		std::cerr << "Don't exist : Knowledge::dic_cat_amean_range" << std::endl;
-		exit(1);
-	}
-}
-
-// //3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
-// //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
-std::vector<Rule> Knowledge::generate_score(int beat_num, std::map<AMean, Conception> &core_meaning)
-{
-	return std::vector<Rule>();
-}
-// {
-// 	std::vector<Rule> res;
-// 	std::cerr << "#####generating score beat_num=" << beat_num << std::endl;
-// 	//invention
-// 	//1.sをランダムに選ぶ. stateをbeat_numにしておく.
-// 	//2.要素を順番にチェック(create_measures(res,cat,beat_num))．symbolががでてくるかひとつでもfalseなら1へ戻る．symbolが出たら1へ戻る．
-// 	//3.最初にできたものをgenerateしたものとする．できなかった場合は，std::vector<Rule>()を返す.
-// 	{ //ルールの作り替えも必要
-// 		int rand_index, i = 0;
-// 		// bool creatable = false;
-// 		RuleDBType temp = sentenceDB;
-// 		std::vector<Rule> work_list;
-// 		for (; temp.size() != 0; i++)
-// 		{
-// 			bool suc = true;
-// 			work_list.clear();
-// 			rand_index = MT19937::irand() % temp.size();
-// 			Rule base_r = *(temp.begin() + rand_index);
-// 			work_list.push_back(base_r);
-// 			for (auto &ex_el : base_r.external)
-// 			{
-// 				Element trg_el = ex_el;
-// 				if (ex_el.sent_type)
-// 				{
-// 					trg_el.cat = 0;
-// 				}
-// 				if (trg_el.is_sym() || (ex_el.is_cat() && !create_measures(work_list, trg_el, beat_num)) || !ex_el.is_cat())
-// 				{
-// 					work_list.clear();
-// 					suc = false;
-// 					break;
-// 				}
-// 				if (work_list.size() > EXPRESSION_LIMIT)
-// 				{
-// 					work_list.clear();
-// 					suc = false;
-// 					break;
-// 				}
-// 			}
-// 			if (suc)
-// 			{
-// 				break;
-// 			}
-// 			temp.erase(temp.begin() + rand_index);
-// 		}
-// 		if (temp.size() != 0)
-// 		{
-// 			std::cerr << "GENERATED Rules::=" << std::endl;
-// 			for (auto all : work_list)
-// 			{
-// 				std::cerr << all.to_s() << std::endl;
-// 			}
-// 			std::cerr << "#####remaping" << std::endl;
-// 			//writing################################################
-// 			//create a list of rules "res" and mapping "core_meaning"
-// 			std::map<int, std::vector<std::string>> work_map;
-// 			std::vector<Element> categories; //for sentence
-// 			std::vector<Element> terminals;  //for symbols in measure
-// 			Conception cc;					 //MeasureConception
-// 			cc.add("MEASURE");
-// 			std::cerr << "#####remaping for measures" << std::endl;
-// 			bool measure_flag = false, onloop = false;
-// 			work_list.erase(work_list.begin()); //先頭を削る Sentenceがmeasureであるかもしれないから
-// 			for (auto &rule : work_list)
-// 			{
-// 				if (!onloop && intention[rule.internal.front().obj].include(cc))
-// 				{
-// 					onloop = true;
-// 					terminals = rule.external;
-// 					measure_flag = next_category(terminals.begin(), terminals.end()) == -1 ? true : false;
-// 					if (measure_flag)
-// 					{
-// 						measure_flag = false;
-// 						onloop = false;
-// 						//create word rule for measure
-// 						int cat_ind, int_ind;
-// 						cat_ind = CATEGORY_NO--;
-// 						int_ind = INDEX_NO--;
-// 						Element el, cat_el;
-// 						el.set_ind(int_ind);
-// 						cat_el.set_cat(VARIABLE_NO--, cat_ind);
-// 						categories.push_back(cat_el);
-// 						Rule add_r;
-// 						add_r.set_noun(cat_ind, el, terminals);
-// 						work_map[el.obj] = std::vector<std::string>();
-// 						work_map[el.obj].push_back("MEASURE");
-// 						res.push_back(add_r);
-// 						terminals.clear();
-// 					}
-// 				}
-// 				else if (onloop)
-// 				{
-// 					//Insert symbols of rules to "terminals"
-// 					int loc = next_category(terminals.begin(), terminals.end());
-// 					auto it = terminals.erase(terminals.begin() + loc);
-// 					terminals.insert(it, rule.external.begin(), rule.external.end());
-// 					//If "terminals" don't include any categories,
-// 					//"measure_flag" becomes true.
-// 					measure_flag = next_category(terminals.begin(), terminals.end()) == -1 ? true : false;
-// 					if (measure_flag)
-// 					{
-// 						measure_flag = false;
-// 						onloop = false;
-// 						//create word rule for measure
-// 						int cat_ind, int_ind;
-// 						cat_ind = CATEGORY_NO--;
-// 						int_ind = INDEX_NO--;
-// 						Element el, cat_el;
-// 						el.set_ind(int_ind);
-// 						cat_el.set_cat(VARIABLE_NO--, cat_ind);
-// 						categories.push_back(cat_el);
-// 						Rule add_r;
-// 						add_r.set_noun(cat_ind, el, terminals);
-// 						work_map[el.obj] = std::vector<std::string>();
-// 						work_map[el.obj].push_back("MEASURE");
-// 						res.push_back(add_r);
-// 						terminals.clear();
-// 					}
-// 				}
-// 			}
-// 			std::cerr << "remaping for measures#####" << std::endl;
-// 			//rule for sentence
-// 			std::cerr << "#####remaping for a sentence" << std::endl;
-// 			int int_ind;
-// 			int_ind = INDEX_NO--;
-// 			Element el;
-// 			el.set_ind(int_ind);
-// 			Rule add_r;
-// 			std::vector<Element> internals;
-// 			internals.push_back(el);
-// 			for (auto cat_el : categories)
-// 			{
-// 				Element new_el;
-// 				new_el.set_var(cat_el.obj, cat_el.cat);
-// 				internals.push_back(new_el);
-// 			}
-// 			add_r.set_sentence(0, internals, categories);
-// 			work_map[int_ind] = std::vector<std::string>();
-// 			work_map[int_ind].push_back("SENTENCE");
-// 			work_map[int_ind].push_back("s" + SENTENCE_NO--); //?
-// 			core_meaning = work_map;
-// 			res.push_back(add_r);
-// 			std::cerr << "remaping for a sentence#####" << std::endl;
-// 			//#######################################################
-// 			// creatable = true;
-// 			std::cerr << "remaping#####" << std::endl;
-// 		}
-// 		else
-// 		{
-// 			std::cerr << "generating score##### false beat_num=" << beat_num << " " << i << std::endl;
-// 			res.clear();
-// 			return res;
-// 		}
-// 		std::cerr << "GENERATED SCORES::=" << std::endl;
-// 		for (auto all : res)
-// 		{
-// 			std::cerr << all.to_s() << std::endl;
-// 		}
-// 		std::cerr << "generating score##### true " << i << std::endl;
-// 	}
-// 	return res;
-// }
-// //measureがひとつ以上でるようにランダムに組み立てる
-// bool Knowledge::create_measures(std::vector<Rule> &res, Element &cat_el, int beat_num)
-// {
-// 	// std::cerr << "#####creating measures " << cat_el.to_s() << " beat=" << beat_num << " RES_SIZE: " << res.size() << std::endl;
-// 	//1.cat_elに基づいてランダムにルールを選択
-// 	//2.measureであればそのルールのexternalをチェック（create_beats(res,external,beat_num)）．falseであれば1へ戻る.
-// 	//2.measureでなければ各要素をcreate_measures(res,cat,beat_num)でチェック．symbolがでてくるか一つでもfalseであれば1へ戻る.
-// 	//3.すべての候補を試す前にここまでくればtrueを返す．
-// 	// DictionaryRange item_range =DB_dic[grnd_elm.cat].equal_range(mean_elm.obj);
-// 	if (res.size() > EXPRESSION_LIMIT)
-// 	{
-// 		// std::cerr << "creating measures##### false" << std::endl;
-// 		return false;
-// 	}
-// 	if (DB_dic.find(cat_el.cat) == DB_dic.end() && DB_dic[cat_el.cat].size() == 0)
-// 	{
-// 		// std::cerr << "creating measures##### false" << std::endl;
-// 		return false;
-// 	}
-// 	// std::cerr << "DIC_SIZE: " << DB_dic[cat_el.cat].size() << std::endl;
-// 	//条件適合
-// 	bool suc = false;
-// 	//失敗するかもしれないのでワーキング用のres
-// 	std::vector<Rule> work_res;
-// 	//比較用Conception作成
-// 	Conception cc;
-// 	cc.add("MEASURE");
-// 	//std::for_eachはキャプチャがめんどくさいのでforイテレーション
-// 	std::multimap<int, Rule> work_DB = DB_dic[cat_el.cat];
-// 	std::multimap<int, Rule>::iterator DB_loc;
-// 	for (DB_loc = work_DB.begin(); work_DB.size() != 0; work_DB.erase(DB_loc))
-// 	{
-// 		//初期化
-// 		int rand_index = MT19937::irand() % work_DB.size();
-// 		work_res = res;
-// 		DB_loc = work_DB.begin();
-// 		std::advance(DB_loc, rand_index);
-// 		Rule base_rule = (*DB_loc).second;
-// 		work_res.push_back(base_rule);
-// 		int sym_count = std::count_if(base_rule.external.begin(), base_rule.external.end(), [](Element &el) { return el.is_sym(); });
-// 		//MEASUREであればビート数を合わせに行くかシンボルが入っていればビート数を合わせに行くか
-// 		if (intention[base_rule.internal.front().obj].include(cc))
-// 		{ //MEASUREであればビート数を合わせに行く
-// 			//作業用external初期化
-// 			std::vector<Element> work_external = base_rule.external;
-// 			// int sym_count = std::count_if(work_external.begin(),work_external.end(),[](Element& el){return el.is_sym();});
-// 			// suc = create_beats(work_res, work_external, beat_num-sym_count);
-// 			suc = create_beats(work_res, work_external, beat_num);
-// 		}
-// 		else if (sym_count == 0)
-// 		{ //違うならば，MEASUREを探す
-// 			suc = true;
-// 			for (auto &cat_el : base_rule.external)
-// 			{
-// 				Element trg = cat_el;
-// 				if (trg.is_cat())
-// 				{
-// 					if (cat_el.sent_type)
-// 					{
-// 						trg.cat = 0;
-// 					}
-// 					suc &= create_measures(work_res, trg, beat_num);
-// 				}
-// 				else
-// 				{
-// 					suc = false;
-// 				}
-// 				if (!suc)
-// 				{
-// 					break;
-// 				}
-// 			}
-// 		}
-// 		if (suc)
-// 		{
-// 			res = work_res;
-// 			break;
-// 		}
-// 	}
-// 	// std::cerr << "creating measures##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
-// 	return suc;
-// }
-// //externalがbeat_numの制約を満たすかチェック
-// //要素数beat_numの制約を満たすようにサイズ数を分配する
-// bool Knowledge::create_beats(std::vector<Rule> &res, std::vector<Element> &external, int beat_num)
-// {
-// 	// std::cerr << "#####creating beats " << beat_num;
-// 	// for(auto& ext_el : external){
-// 	// 	std::cerr << " " << ext_el.to_s();
-// 	// }
-// 	// std::cerr << " SIZE: " << res.size() << std::endl;
-// 	if (res.size() > EXPRESSION_LIMIT)
-// 	{
-// 		// std::cerr << "creating beats##### false" << std::endl;
-// 		return false;
-// 	}
-// 	//1.externalのサイズがbeat_num以下でなければfalseを返す．
-// 	//2.externalのcategoryの数を数えてcreate_beat_ltに渡せる数を計算する．
-// 	//3.externalの各categoryでcreate_beat_lt(work_res, work_external, num), create_beat_eq(work_res, work_external, num)を使ってexternalのサイズをbeat_numにする．
-// 	//3.1.beat_numの分配方法を計算する．
-// 	//3.2.各分配方法をランダムに選択してすべてのcreate_beat_lt, create_beat_eqがtrueになるか試行する．
-// 	//3.3.すべてfalseであればfalseを返す．
-// 	//4.すべてtrueになったwork_resをresに追加，externalをwork_externalで上書きする．
-// 	//5.trueを返す．
-// 	if (external.size() > beat_num)
-// 	{
-// 		// std::cerr << "creating beats##### false" << std::endl;
-// 		return false;
-// 	}
-// 	int cat_num = std::count_if(external.begin(), external.end(), [](Element &el) { return el.is_cat(); });
-// 	//categoryがない場合はサイズで判定
-// 	if (cat_num == 0)
-// 	{
-// 		if (external.size() == beat_num)
-// 		{
-// 			// std::cerr << "creating beats##### true" << std::endl;
-// 			return true;
-// 		}
-// 		else
-// 		{
-// 			// std::cerr << "creating beats##### false" << std::endl;
-// 			return false;
-// 		}
-// 	}
-// 	int lt_num = beat_num - (external.size() - cat_num);
-// 	std::vector<int> t_assignment_list; //なるべく等分配での割り当て
-// 	//t_assignmentの計算
-// 	t_assignment_list.reserve(cat_num);
-// 	for (int i = 0; i < cat_num; i++)
-// 	{
-// 		t_assignment_list.emplace_back(int(lt_num / cat_num));
-// 		if (i < (lt_num % cat_num))
-// 		{
-// 			t_assignment_list[i]++;
-// 		}
-// 	}
-// 	std::shuffle(t_assignment_list.begin(), t_assignment_list.end(), MT19937::_irand.engine());
-// 	//t_assignment_listを使ったeqでの探索
-// 	//うまくいった場合はtrueを返す．
-// 	{
-// 		bool t_check = true;
-// 		std::vector<Rule> work_res = res;
-// 		for (int index = 0; index < t_assignment_list.size(); index++)
-// 		{
-// 			Element test = return_cat(external, index + 1);
-// 			Element trg = test;
-// 			if (test.sent_type)
-// 			{
-// 				trg.cat = 0;
-// 			}
-// 			t_check &= create_beat_eq(work_res, trg, t_assignment_list[index]);
-// 			if (!t_check)
-// 			{
-// 				break;
-// 			}
-// 		}
-// 		if (t_check)
-// 		{
-// 			res = work_res;
-// 			// std::cerr << "creating beats##### true" << std::endl;
-// 			return true;
-// 		}
-// 	}
-// 	std::vector<std::vector<int>> assignment_list, task_list; //文字数の割り当て，lt,eqの割り当て
-// 	//assignment_listの計算
-// 	assignment_list = calculation_assignment(lt_num, cat_num);
-// 	//eqによる網羅探索
-// 	for (auto &list : assignment_list)
-// 	{
-// 		bool lt_eq_check = true;
-// 		std::vector<Rule> work_res = res;
-// 		for (int index = 0; index < list.size(); index++)
-// 		{
-// 			Element test = return_cat(external, index + 1);
-// 			Element trg = test;
-// 			if (test.sent_type)
-// 			{
-// 				trg.cat = 0;
-// 			}
-// 			lt_eq_check &= create_beat_eq(work_res, trg, list[index]);
-// 			if (!lt_eq_check)
-// 			{
-// 				break;
-// 			}
-// 		}
-// 		if (lt_eq_check)
-// 		{
-// 			res = work_res;
-// 			// std::cerr << "creating beats##### true" << std::endl;
-// 			return true;
-// 		}
-// 	}
-// 	// std::cerr << "creating beats##### false" << std::endl;
-// 	return false;
-// }
-// //要素数space_numの制約を満たす可能性のあるルールを選択
-// bool Knowledge::create_beat_eq(std::vector<Rule> &res, Element &elem, int space_num)
-// {
-// 	// std::cerr << "#####creating definite beat " << elem.to_s() << " " << space_num << " SIZE: " << res.size() << std::endl;
-// 	if (DB_dic.find(elem.cat) == DB_dic.end() && DB_dic[elem.cat].size() == 0 || space_num == 0)
-// 	{
-// 		// std::cerr << "creating definite beat##### true" << std::endl;
-// 		return false;
-// 	}
-// 	bool suc;
-// 	std::vector<Rule> work_res;
-// 	std::multimap<int, Rule> work_DB = DB_dic[elem.cat];
-// 	std::multimap<int, Rule>::iterator DB_loc;
-// 	for (DB_loc = work_DB.begin(); work_DB.size() != 0; work_DB.erase(DB_loc))
-// 	{
-// 		int rand_index = MT19937::irand() % work_DB.size();
-// 		work_res = res;
-// 		DB_loc = work_DB.begin();
-// 		std::advance(DB_loc, rand_index);
-// 		Rule base_rule = (*DB_loc).second;
-// 		if (base_rule.external.size() > space_num)
-// 		{
-// 			suc = false;
-// 			continue;
-// 		}
-// 		//初期化
-// 		work_res = res;
-// 		work_res.push_back(base_rule);
-// 		suc = create_beats(work_res, base_rule.external, space_num);
-// 		if (suc)
-// 		{
-// 			res = work_res;
-// 			break;
-// 		}
-// 	}
-// 	// std::cerr << "creating definite beat##### " << std::boolalpha << suc << std::noboolalpha << std::endl;
-// 	return suc;
-// }

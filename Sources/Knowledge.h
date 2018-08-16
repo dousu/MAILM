@@ -174,7 +174,7 @@ class Knowledge : public KnowledgeTypeDef
 
 	void dic_add(Rule &r);
 
-	RuleDBType generate_score(int beat_num, std::map<AMean, Conception> &core_meaning);
+	RuleDBType generate_score(std::map<AMean, Conception> &core_meaning);
 
 	// bool create_measures(RuleDBType &res, SymbolElement &cat_num, int beat_num);
 
@@ -209,9 +209,9 @@ class Knowledge : public KnowledgeTypeDef
 	std::list<SymbolElement> construct_buzz_word();
 	bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f);
 	bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
-	bool new_loop;
+	bool product_loop;
 	bool was_constructable;
-	bool all_construct_grounding_rules_width(const Category &c, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
+	bool all_construct_grounding_rules_width(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
 	std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> dic_amean_range(const AMean &c);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);

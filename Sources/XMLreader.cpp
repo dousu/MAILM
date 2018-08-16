@@ -87,7 +87,7 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
 					if (period_t.first == "period" && (period_t.second.get_optional<int>((std::string("<xmlattr>.number")).c_str())).get() == p_num)
 					{
 						//合致するperiodがあればこのmetricを検査
-						loop |= true;
+						loop = true;
 						p_fl = true;
 						break;
 					}

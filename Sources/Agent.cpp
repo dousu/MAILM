@@ -32,11 +32,11 @@ Agent::grow()
 }
 
 std::vector<Rule>
-Agent::say(int beat_num, std::map<AMean, Conception> &mapping)
+Agent::say(std::map<AMean, Conception> &mapping)
 {
 	try
 	{
-		std::vector<Rule> res = kb.generate_score(beat_num, mapping);
+		std::vector<Rule> res = kb.generate_score(mapping);
 		return res;
 	}
 	catch (...)

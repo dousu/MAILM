@@ -28,7 +28,7 @@ class Agent
 
 	Agent &operator=(const Agent &dst);
 
-	std::vector<Rule> say(int beat_num, std::map<AMean, Conception> &mapping);
+	std::vector<Rule> say(std::map<AMean, Conception> &mapping);
 	void hear(std::vector<Rule> rules, std::map<AMean, Conception> mapping);
 
 	void registration(std::map<AMean, Conception> &core_meaning);
