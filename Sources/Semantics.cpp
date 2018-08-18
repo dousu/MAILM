@@ -57,7 +57,7 @@ bool Semantics<T>::replace_equal(const AMean &a, const AMean &b) const
 	return mapping.at(a).include(mapping.at(b));
 }
 template <typename T>
-T &Semantics<T>::get(const AMean &n)
+T Semantics<T>::get(const AMean &n)
 {
 	return mapping[n];
 }

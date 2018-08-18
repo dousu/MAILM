@@ -26,7 +26,7 @@ class Semantics
 	}
 
 	void store(const AMean &a, T v);
-	T &get(const AMean &n);
+	T get(const AMean &n);
 	bool equal(const AMean &a, const AMean &b) const;
 	bool chunk_equal(const AMean &a, const AMean &b) const;
 	bool merge_equal(const AMean &a, const AMean &b) const;

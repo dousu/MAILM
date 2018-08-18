@@ -19,6 +19,7 @@
 #include "IndexFactory.h"
 #include "MT19937.h"
 #include "LogBox.h"
+#include "XMLreader.h"
 
 class KnowledgeTypeDef
 {
@@ -61,6 +62,9 @@ class Knowledge : public KnowledgeTypeDef
 	RuleDBType ruleDB;
 
 	Semantics<Conception> intention;
+
+	int ut_index;
+	int ut_category;
 
 	static bool LOGGING_FLAG;
 	static int ABSENT_LIMIT;

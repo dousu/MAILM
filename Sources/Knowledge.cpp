@@ -1343,7 +1343,9 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
 		bool has_sentence = false;
 		std::for_each(std::begin(rules), std::end(rules), [&](Rule &r) { has_sentence = has_sentence || r.is_sentence(intention); });
 		if (has_sentence)
+		{
 			res.push_back(rules);
+		}
 	};
 	std::function<bool(Rule &)> f2 = [&](Rule &r) {
 		if (!sentence)
@@ -1363,7 +1365,14 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
 		all_construct_grounding_rules(p.first, f0, f1, f2);
 	});
 	std::cout << "Number of generated score: " << res.size() << std::endl;
-	return res[MT19937::irand(0, res.size() - 1)];
+	RuleDBType rdb = res[MT19937::irand(0, res.size() - 1)];
+	std::for_each(std::begin(rdb), std::end(rdb), [&](Rule &r) {
+		AMean am{ut_index--};
+		Category ca{ut_category--};
+		core_meaning[am] = intention.get(r.get_internal().get_base());
+		r = Rule{LeftNonterminal{ca, Meaning{am, r.get_internal().get_followings()}}, r.get_external()};
+	});
+	return rdb;
 }
 Rule Knowledge::fabricate(Rule &src1)
 {

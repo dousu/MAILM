@@ -34,7 +34,7 @@ class Rule
 	bool operator<(const Rule &dst) const;
 
 	int size() const { return external.size(); };
-	std::string to_s();
+	std::string to_s() const;
 	bool is_noun(Semantics<Conception> &s) const;
 	bool is_sentence(Semantics<Conception> &s) const;
 	bool is_measure(Semantics<Conception> &s) const;

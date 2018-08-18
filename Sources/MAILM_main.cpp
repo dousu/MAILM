@@ -165,45 +165,68 @@ int main(int argc, char *argv[])
 	// Knowledge::INDEX_NO = reader.index_count;
 	// Knowledge::CATEGORY_NO = reader.category_count;
 
-	std::vector<Rule> inputs = XMLreader::input_rules;
-	TransRules meaning_rules = XMLreader::i_meaning_map;
-
 	//test
-	Agent ma;
-	ma.init_semantics(meaning_rules);
-	ma.hear(inputs, XMLreader::core_meaning);
-	std::cout << "\n%%% initial state" << std::endl;
-	std::cout << ma.to_s() << std::endl;
-	std::cout << "start learning" << std::endl;
-	ma.learn();
-	std::cout << "finish learning" << std::endl;
-	std::cout << "learned" << std::endl;
-	ma.grow();
-	std::cout << "\n%%% after learning" << std::endl;
-	std::cout << ma.to_s() << std::endl;
-
+	Agent parent;
+	parent.init_semantics(XMLreader::i_meaning_map);
+	parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
+	parent.learn();
+	parent.grow();
 	if (param.LOGGING)
 	{
-		log.push_log(ma.kb.to_s());
-		log.push_log(ma.kb.dic_to_s());
+		log.push_log("******************PARENT");
+		log.push_log(parent.kb.to_s());
+		log.push_log(parent.kb.dic_to_s());
 	}
-
-	log.refresh_log();
-
-	evaluate_knowledge(ma.kb, param);
-
-	std::map<AMean, Conception> m;
-	std::vector<Rule> utter = ma.say(m);
-	std::cout << "\n%%%Utterance Test" << std::endl;
-	std::copy(std::begin(utter), std::end(utter), std::ostream_iterator<Rule>(std::cout, "\n"));
-	if (utter.size() != 0)
+	for (int g = 0; g < param.MAX_GENERATIONS; g++)
 	{
-		output_data_trunc(param.RESULT_PATH + "dot/test_utter.dot", make_tree_str_for_dot(utter));
-		std::cout << "output fin." << std::endl;
-	}
-	else
-	{
-		std::cout << "no utterance" << std::endl;
+		std::cout << std::endl
+				  << "Generation " << g + 1 << std::endl;
+		std::vector<Rule> inputs = XMLreader::input_rules;
+		std::map<AMean, Conception> cmap = XMLreader::core_meaning;
+		for (int u = 0; u < param.UTTERANCES; u++)
+		{
+			std::cout << std::endl
+					  << "Utterance " << u + 1 << std::endl;
+			std::map<AMean, Conception> cmap_say;
+			std::vector<Rule> utter = parent.say(cmap_say);
+			std::copy(std::begin(utter), std::end(utter), std::ostream_iterator<Rule>(std::cout, "\n"));
+			if (utter.size() != 0)
+			{
+				output_data_trunc(param.RESULT_PATH + "dot/test_utter.dot", make_tree_str_for_dot(utter));
+				std::cout << "output fin." << std::endl;
+			}
+			else
+			{
+				std::cout << "no utterance" << std::endl;
+			}
+			cmap.merge(cmap_say);
+			inputs.insert(std::end(inputs), std::begin(utter), std::end(utter));
+		}
+		Agent ma;
+		ma.init_semantics(XMLreader::i_meaning_map);
+		ma.hear(inputs, cmap);
+		std::cout << "\n%%% initial state" << std::endl;
+		std::cout << ma.to_s() << std::endl;
+		std::cout << "start learning" << std::endl;
+		ma.learn();
+		std::cout << "finish learning" << std::endl;
+		std::cout << "learned" << std::endl;
+		ma.grow();
+		std::cout << "\n%%% after learning" << std::endl;
+		std::cout << ma.to_s() << std::endl;
+
+		if (param.LOGGING)
+		{
+			log.push_log("******************AGENT " + std::to_string(ma.generation_index));
+			log.push_log(ma.kb.to_s());
+			log.push_log(ma.kb.dic_to_s());
+		}
+
+		log.refresh_log();
+
+		evaluate_knowledge(ma.kb, param);
+		ma.grow();
+		parent = ma;
 	}
 
 	// {
