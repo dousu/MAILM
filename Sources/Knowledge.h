@@ -162,7 +162,7 @@ class Knowledge : public KnowledgeTypeDef
 
 	RuleDBType rules(void);
 
-	void define(const AMean &n, Conception &m);
+	void define(const AMean &n, const Conception &m);
 
 	void init_semantics_rules(TransRules &);
 
@@ -211,7 +211,7 @@ class Knowledge : public KnowledgeTypeDef
 	bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	bool product_loop;
 	bool was_constructable;
-	bool all_construct_grounding_rules_width(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
+	bool all_construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
 	std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> dic_amean_range(const AMean &c);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);

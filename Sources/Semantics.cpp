@@ -13,64 +13,56 @@ void Semantics<T>::store(const AMean &a, T v)
 	}
 }
 template <typename T>
-bool Semantics<T>::equal(const AMean &a, const AMean &b)
+bool Semantics<T>::equal(const AMean &a, const AMean &b) const
 {
-	if (mapping[a].empty() || mapping[b].empty())
+	if (mapping.at(a).empty() || mapping.at(b).empty())
 	{
-		// std::cout << mapping.size() << std::endl;
-		// std::cout << "a:" << mapping[a.get_obj_id()].to_s() << std::endl;
-		// std::cout << "b:" << mapping[b.get_obj_id()].to_s() << std::endl;
-		// if(mapping[a.get_obj_id()].empty() && mapping[b.get_obj_id()].empty()){
-		//   return false;
-		// }
 		//両方emptyでもfalse
 		return false;
 	}
-	return mapping[a] == mapping[b];
+	return mapping.at(a) == mapping.at(b);
+}
+//共通部分があればchunkできる
+template <typename T>
+bool Semantics<T>::chunk_equal(const AMean &a, const AMean &b) const
+{
+	T tmp_v;
+	if (mapping.at(a).empty() && mapping.at(b).empty())
+	{
+		return true;
+	}
+	mapping.at(a).inter(mapping.at(b), tmp_v); //intersection
+	return !tmp_v.empty();
+}
+//aがbを含んでいればmergeできる
+template <typename T>
+bool Semantics<T>::merge_equal(const AMean &a, const AMean &b) const
+{
+	T tmp_v;
+	if (mapping.at(a).empty() && mapping.at(b).empty())
+	{
+		return true;
+	}
+	return mapping.at(a).include(mapping.at(b)) || mapping.at(b).include(mapping.at(a)); //a includes b or b includes a?
+}
+//aがbを含んでいればreplaceできる
+template <typename T>
+bool Semantics<T>::replace_equal(const AMean &a, const AMean &b) const
+{
+	T tmp_v;
+	if (mapping.at(a).empty() && mapping.at(b).empty())
+	{
+		return true;
+	}
+	return mapping.at(a).include(mapping.at(b));
 }
 template <typename T>
 T &Semantics<T>::get(const AMean &n)
 {
 	return mapping[n];
 }
-
-//共通部分があればchunkできる
 template <typename T>
-bool Semantics<T>::chunk_equal(const AMean &a, const AMean &b)
-{
-	T tmp_v;
-	if (mapping[a].empty() && mapping[b].empty())
-	{
-		return true;
-	}
-	mapping[a].inter(mapping[b], tmp_v); //intersection
-	return !tmp_v.empty();
-}
-//aがbを含んでいればmergeできる
-template <typename T>
-bool Semantics<T>::merge_equal(const AMean &a, const AMean &b)
-{
-	T tmp_v;
-	if (mapping[a].empty() && mapping[b].empty())
-	{
-		return true;
-	}
-	return mapping[a].include(mapping[b]) || mapping[b].include(mapping[a]); //包含関係になっていたら真
-																			 //return equal(a, b);
-}
-//aがbを含んでいればreplaceできる
-template <typename T>
-bool Semantics<T>::replace_equal(const AMean &a, const AMean &b)
-{
-	T tmp_v;
-	if (mapping[a].empty() && mapping[b].empty())
-	{
-		return true;
-	}
-	return mapping[a].include(mapping[b]);
-}
-template <typename T>
-void Semantics<T>::chunk(const AMean &a, const AMean &b, const AMean &c, const AMean &d, const AMean &e, int pos, int d_size, int e_size, int type)
+void Semantics<T>::chunk(const AMean &a, const AMean &b, const AMean &c, const AMean &c2, const AMean &d, const AMean &e, int pos, int d_size, int e_size, int type)
 {
 	//type 1ならeにAMeanが入ってきているはず
 	T c_v, d_v, e_v, null_v;
@@ -85,6 +77,10 @@ void Semantics<T>::chunk(const AMean &a, const AMean &b, const AMean &c, const A
 			exit(1);
 		}
 		mapping[c] = c_v;
+		if (c2 != AMean())
+		{
+			mapping[c2] = c_v;
+		}
 		mapping[d] = d_v;
 		mapping[e] = e_v;
 		std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
@@ -100,7 +96,7 @@ void Semantics<T>::chunk(const AMean &a, const AMean &b, const AMean &c, const A
 			if (c_v != mapping[b] - e_v)
 			{
 				std::cerr << "[chunk2]MATCHING ERROR [chunk2 semantics]" << std::endl;
-				throw "[chunk2]MATCHING ERROR [chunk2 semantics]";
+				exit(1);
 			}
 			mapping[c] = c_v;
 			mapping[d] = d_v;
@@ -110,6 +106,10 @@ void Semantics<T>::chunk(const AMean &a, const AMean &b, const AMean &c, const A
 			c_v = mapping[b];
 			mapping[c] = c_v;
 			mapping[d] = d_v;
+		}
+		if (c2 != AMean())
+		{
+			mapping[c2] = c_v;
 		}
 		//b=>c
 		std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
@@ -123,80 +123,37 @@ void Semantics<T>::chunk(const AMean &a, const AMean &b, const AMean &c, const A
 	else
 	{
 		std::cerr << "UNKNOWN chunk TYPE" << std::endl;
-		throw "UNKNOWN chunk TYPE";
+		exit(1);
 	}
 	mapping.erase(a);
 	mapping.erase(b);
 }
 template <typename T>
-void Semantics<T>::merge(const AMean &a, const AMean &b, const AMean &c)
+void Semantics<T>::merge(const AMean &a, const std::set<AMean> &b_vec, const AMean &c)
 {
-	T c_v;
-	c_v = mapping[a] + mapping[b];
-	mapping[c] = c_v;
-	//mapping.count(a)!=0で分岐
-	//a=>c, b=>c
-	// std::list<int> new_tr_a, new_tr_b;
-	if (a == c)
-	{
-		if (b == c)
-		{   //a==c, b==c
-			//nop
+	//cが同じだから違うbによってcが上書きされる
+	mapping[c] = T();
+	std::for_each(std::begin(b_vec), std::end(b_vec), [&](const AMean &b) {
+		if (a == c || b == c)
+		{
+			std::cerr << "[merge in semantics] exception" << std::endl;
+			exit(1);
 		}
-		else
-		{ //b->c
-			std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
-				rewrite(m.second, b, c);
-			});
-			if (merge_list.count(c) == 0)
-			{
-				merge_list.insert(std::make_pair(c, std::set<AMean>{{b}}));
-			}
-			else
-			{
-				merge_list[c].insert(b);
-			}
+		T c_v;
+		c_v = mapping[a] + mapping[b];
+		mapping[c] = mapping[c] + c_v;
+
+		//a->c,b->c
+		std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
+			rewrite(m.second, a, c);
+		});
+		std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
+			rewrite(m.second, b, c);
+		});
+		if (a != b)
 			mapping.erase(b);
-		}
-	}
-	else
-	{
-		if (b == c)
-		{ //a->c
-			std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
-				rewrite(m.second, a, c);
-			});
-			if (merge_list.count(c) == 0)
-			{
-				merge_list.insert(std::make_pair(c, std::set<AMean>{{a}}));
-			}
-			else
-			{
-				merge_list[c].insert(a);
-			}
-			mapping.erase(a);
-		}
-		else
-		{ //a->c,b->c
-			std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
-				rewrite(m.second, a, c);
-			});
-			std::for_each(std::begin(rules), std::end(rules), [&](auto &m) {
-				rewrite(m.second, b, c);
-			});
-			if (merge_list.count(c) == 0)
-			{
-				merge_list.insert(std::make_pair(c, std::set<AMean>{{a, b}}));
-			}
-			else
-			{
-				merge_list[c].insert(a);
-				merge_list[c].insert(b);
-			}
-			mapping.erase(a);
-			mapping.erase(b);
-		}
-	}
+	});
+	mapping.erase(a);
 }
 template <typename T>
 void Semantics<T>::replace(const AMean &a, const AMean &b, const AMean &c, int b_pos, int b_size)
@@ -268,7 +225,6 @@ std::string Semantics<T>::to_s(void)
 {
 	std::string res("###Semantics static information###\n");
 	res += rules_to_s();
-	res += merge_list_to_s();
 	res += mapping_to_s();
 	return res;
 }
@@ -281,14 +237,6 @@ std::string Semantics<T>::rules_to_s(void)
 	return os.str();
 }
 template <typename T>
-std::string Semantics<T>::merge_list_to_s(void)
-{
-	std::ostringstream os;
-	os << "MERGE LIST:" << std::endl;
-	std::for_each(std::begin(merge_list), std::end(merge_list), [&os](auto &&l) { os << l.first << " -- " << SemanticsUtil::set_str(l.second) << std::endl; });
-	return os.str();
-}
-template <typename T>
 std::string Semantics<T>::mapping_to_s(void)
 {
 	std::string res("VALID INDEX and MEANINGS:\n");
@@ -297,6 +245,10 @@ std::string Semantics<T>::mapping_to_s(void)
 		if (!p.second.empty())
 		{
 			res += "{" + p.first.to_s() + Prefices::CLN + "[" + p.second.to_s() + "]},";
+		}
+		else
+		{
+			res += "{" + p.first.to_s() + "[]},";
 		}
 	}
 	res.pop_back();
@@ -308,6 +260,3 @@ void Semantics<T>::init_rules(TransRules &obj)
 {
 	rules = obj;
 }
-
-//明示的な実在化
-template class Semantics<Conception>;

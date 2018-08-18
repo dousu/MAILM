@@ -46,24 +46,29 @@ int main(int arg, char **argv)
     buf = Rule(LeftNonterminal(Category{-1}, Meaning(AMean{0})), s_el2);
     vec.push_back(buf);
     kb.send_box(buf);
+    kb.define(AMean{0}, Conception(Prefices::SEN));
     std::cout << "\n%%% previous" << std::endl;
     std::cout << kb.to_s() << std::endl;
     kb.chunk();
     kb.send_db(kb.input_box);
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    std::cout << kb.intention.mapping_to_s() << std::endl;
 
     //chunk2 test
     std::list<SymbolElement> s_el3{Symbol{1}, Symbol{7}, Symbol{3}};
     std::cout << "\n****************chunk2 test" << std::endl;
-    buf = Rule(LeftNonterminal(Category{-2}, Meaning(AMean{0})), s_el3);
+    buf = Rule(LeftNonterminal(Category{-2}, Meaning(AMean{1})), s_el3);
     kb.send_box(buf);
+    kb.define(AMean{1}, Conception(Prefices::SEN));
+    kb.define(AMean{-2}, Conception());
     std::cout << "\n%%% previous" << std::endl;
     std::cout << kb.to_s() << std::endl;
     kb.chunk();
     kb.send_db(kb.input_box);
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    std::cout << kb.intention.mapping_to_s() << std::endl;
     vec.push_back(buf);
 
     //merge test
@@ -72,11 +77,13 @@ int main(int arg, char **argv)
     std::cout << "\n%%% previous" << std::endl;
     buf = Rule(LeftNonterminal(Category{-3}, Meaning(AMean{-7})), s_el4);
     kb.send_box(buf);
+    kb.define(AMean{-7}, Conception());
     std::cout << kb.to_s() << std::endl;
     kb.merge();
     kb.send_db(kb.input_box);
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    std::cout << kb.intention.mapping_to_s() << std::endl;
     vec.push_back(buf);
 
     //replace test
@@ -85,11 +92,13 @@ int main(int arg, char **argv)
     std::cout << "\n%%% previous" << std::endl;
     buf = Rule(LeftNonterminal(Category{-4}, Meaning(AMean{-8})), s_el5);
     kb.send_box(buf);
+    kb.define(AMean{-8}, Conception(Prefices::MES));
     std::cout << kb.to_s() << std::endl;
     kb.replace();
     kb.send_db(kb.input_box);
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    std::cout << kb.intention.mapping_to_s() << std::endl;
     vec.push_back(buf);
 
     //unique test
@@ -99,49 +108,34 @@ int main(int arg, char **argv)
     kb.consolidate();
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
+    std::cout << kb.intention.mapping_to_s() << std::endl;
 
     Rule r2 = kb.at(1);
     Rule r3 = kb.at(2);
     std::cout << r2 << std::endl
               << r3 << std::endl
               << std::boolalpha << (r2.get_external() == r3.get_external()) << std::noboolalpha << std::endl;
-    vec.push_back(buf);
 
     std::cout << "\n****************consolidate test" << std::endl;
+    TransRules tr;
     kb.clear();
     kb.send_box(vec);
+    Conception c1(Prefices::SEN);
+    c1.add(Prefices::MES);
+    kb.define(AMean{0}, Conception(Prefices::SEN));
+    kb.define(AMean{1}, c1);
+    kb.define(AMean{-7}, Conception(Prefices::MES));
+    kb.define(AMean{-8}, Conception(Prefices::MES));
+    tr[0] = Meaning(AMean{0});
+    tr[1] = Meaning(AMean{1});
+    kb.init_semantics_rules(tr);
     std::cout << "\n%%% previous" << std::endl;
     std::cout << kb.to_s() << std::endl;
     kb.consolidate();
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
-
-    // //fabricate test
-    // std::cout << "\n****************fabricate test" << std::endl;
-    // Rule input = Rule(std::string("S/like(heather,heather)->z")), output;
-    // input.external.clear();
-    // output = kb.fabricate(input);
-    // std::cout << "fabricated: " << output.to_s() << std::endl;
-    // std::cout << "\n****************end" << std::endl;
-
-    // //acceptable test
-    // std::cout << "\n****************acceptable test" << std::endl;
-    // Rule query = Rule(std::string("S/like(heather,heather)->zxy"));
-    // query.external.clear();
-    // bool accepted = kb.acceptable(query);
-    // std::cout << "Target: " << query.to_s() << std::endl
-    //           << "result: " << std::boolalpha << accepted << std::noboolalpha << std::endl;
-    // query = Rule(std::string("S/like(john,mary)->yzz"));
-    // query.external.clear();
-    // accepted = kb.acceptable(query);
-    // std::cout << "Target: " << query.to_s() << std::endl
-    //           << "result: " << std::boolalpha << accepted << std::noboolalpha << std::endl;
-    // query = Rule(std::string("S/like(mary,mary)->zyx"));
-    // query.external.clear();
-    // accepted = kb.acceptable(query);
-    // std::cout << "Target: " << query.to_s() << std::endl
-    //           << "result: " << std::boolalpha << accepted << std::noboolalpha << std::endl;
-    // std::cout << "\n****************end" << std::endl;
+    std::cout << kb.intention.mapping_to_s() << std::endl;
+    std::cout << kb.intention.rules_to_s() << std::endl;
 
     return 0;
 }

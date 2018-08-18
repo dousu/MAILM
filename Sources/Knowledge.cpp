@@ -162,6 +162,8 @@ void Knowledge::unique(std::list<T> &vec)
 
 bool Knowledge::consolidate(void)
 {
+	// std::cout << intention.mapping_to_s() << std::endl;
+	// std::cout << intention.rules_to_s() << std::endl;
 	bool flag = true;
 	std::array<int, CONSOLIDATE_TYPE::ALL_METHOD> ar, tmp;
 	std::iota(std::begin(ar), std::end(ar), 0);
@@ -177,17 +179,20 @@ bool Knowledge::consolidate(void)
 			{
 			case CONSOLIDATE_TYPE::CHUNK:
 			{
-				flag = flag || chunk();
+				flag = chunk() || flag;
 				break;
 			}
 			case CONSOLIDATE_TYPE::MERGE:
 			{
-				flag = flag || merge();
+				if (flag = merge() || flag)
+				{
+					unique(input_box);
+				}
 				break;
 			}
 			case CONSOLIDATE_TYPE::REPLACE:
 			{
-				flag = flag || replace();
+				flag = replace() || flag;
 				break;
 			}
 			default:
@@ -195,7 +200,6 @@ bool Knowledge::consolidate(void)
 				exit(1);
 			}
 		});
-		unique(input_box);
 
 		if (LOGGING_FLAG)
 		{
@@ -435,16 +439,18 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 	{
 	case TYPE1: //type3も含む
 	{
-		int new_cat_id;		 //汎化用category
-		int new_var_id;		 //sentのvariable
-		int new_sent_ind_id; //sent,sent2のid
-		int new_ind_id1;	 //noun1のid
-		int new_ind_id2;	 //noun2のid
+		int new_cat_id;		  //汎化用category
+		int new_var_id;		  //sentのvariable
+		int new_sent_ind_id1; //sentのid
+		int new_sent_ind_id2; //sent2のid
+		int new_ind_id1;	  //noun1のid
+		int new_ind_id2;	  //noun2のid
 
 		//generate
 		new_cat_id = cat_indexer.generate();
 		new_var_id = var_indexer.generate();
-		new_sent_ind_id = ind_indexer.generate();
+		new_sent_ind_id1 = ind_indexer.generate();
+		new_sent_ind_id2 = ind_indexer.generate();
 		new_ind_id1 = ind_indexer.generate();
 		new_ind_id2 = ind_indexer.generate();
 
@@ -484,7 +490,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		in_pos++;
 
 		Meaning new_meaning = base.get_internal().get_means().replaced(in_pos, d_size, Variable(new_var_id));
-		new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_sent_ind_id)));
+		new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_sent_ind_id1)));
 		std::list<SymbolElement> vec_sel;
 		std::copy_n(std::begin(base.get_external()), fmatch_length, std::back_inserter(vec_sel));
 		vec_sel.push_back(RightNonterminal(Category(new_cat_id), Variable(new_var_id)));
@@ -494,7 +500,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 		Rule sent2;
 		if (multi_cat)
 		{
-			sent2 = Rule{LeftNonterminal{Category{targ.get_internal().get_cat()}, new_meaning}, vec_sel};
+			sent2 = Rule{LeftNonterminal{Category{targ.get_internal().get_cat()}, new_meaning.replaced(0, 1, Meaning(AMean(new_sent_ind_id2)))}, vec_sel};
 		}
 		buf.push_back(sent);
 		if (multi_cat)
@@ -508,6 +514,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 			base.get_internal().get_means().get_base(),
 			targ.get_internal().get_means().get_base(),
 			sent.get_internal().get_means().get_base(),
+			sent2.get_internal().get_means().get_base(),
 			noun1.get_internal().get_means().get_base(),
 			noun2.get_internal().get_means().get_base(),
 			in_pos,
@@ -520,11 +527,13 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 
 	case TYPE2:
 	{
-		int new_ind_id_targ; //新nounのため
-		int new_sent_ind_id; //意味に変更が起きるかもしれないため
+		int new_ind_id_targ; //nounのため
+		int new_sent_ind_id1;
+		int new_sent_ind_id2;
 
 		//generate
-		new_sent_ind_id = ind_indexer.generate();
+		new_sent_ind_id1 = ind_indexer.generate();
+		new_sent_ind_id2 = ind_indexer.generate();
 		new_ind_id_targ = ind_indexer.generate();
 
 		std::list<MeaningElement> var_vector;
@@ -540,11 +549,11 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 
 		//noun
 		Rule noun(LeftNonterminal(Category{RightNonterminal(noun1_ex.front().get<RightNonterminal>()).get_cat()}, Meaning(AMean(new_ind_id_targ), var_vector)), noun2_ex);
-		Rule sent{LeftNonterminal(Category{base.get_internal().get_cat()}, Meaning{AMean(new_sent_ind_id), base.get_internal().get_followings()}), base.get_external()};
+		Rule sent{LeftNonterminal(Category{base.get_internal().get_cat()}, Meaning{AMean(new_sent_ind_id1), base.get_internal().get_followings()}), base.get_external()};
 		Rule sent2;
 		if (multi_cat)
 		{
-			sent2 = Rule{LeftNonterminal{Category{targ.get_internal().get_cat()}, Meaning{AMean(new_sent_ind_id), sent.get_internal().get_followings()}}, base.get_external()};
+			sent2 = Rule{LeftNonterminal{Category{targ.get_internal().get_cat()}, Meaning{AMean(new_sent_ind_id2), sent.get_internal().get_followings()}}, base.get_external()};
 		}
 		buf.push_back(sent);
 		if (multi_cat)
@@ -567,6 +576,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst)
 			targ.get_internal().get_means().get_base(),
 			base.get_internal().get_means().get_base(),
 			sent.get_internal().get_means().get_base(),
+			sent2.get_internal().get_means().get_base(),
 			noun.get_internal().get_means().get_base(),
 			AMean(),
 			in_pos,
@@ -660,9 +670,7 @@ bool Knowledge::merging(Rule &src)
 	std::copy(std::begin(sub_buf), std::end(sub_buf), std::back_inserter(buf));
 	sub_buf.clear();
 
-	std::for_each(std::begin(unified_mean), std::end(unified_mean), [&](AMean m) {
-		intention.merge(src.get_internal().get_base(), m, base_mean);
-	});
+	intention.merge(src.get_internal().get_base(), unified_mean, base_mean);
 
 	if (LOGGING_FLAG)
 		LogBox::push_log("CAT processed about MEAN " + src.to_s());
@@ -717,6 +725,7 @@ void Knowledge::collect_merge(
 void Knowledge::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buffer, std::set<Category> &unified_cat)
 {
 	std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &r) {
+		Rule tmp = r;
 		bool is_modified = false;
 		if (unified_cat.find(r.get_internal().get_cat()) != std::end(unified_cat))
 		{
@@ -732,7 +741,8 @@ void Knowledge::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buff
 		});
 		if (is_modified && LOGGING_FLAG)
 		{
-			LogBox::push_log("MERGE<- " + r.to_s());
+			LogBox::push_log("CAT MERGE-> " + tmp.to_s());
+			LogBox::push_log("CAT MERGE<- " + r.to_s());
 		}
 	});
 }
@@ -741,6 +751,7 @@ Knowledge::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Cat
 {
 	RuleDBType buf, swapDB;
 	std::for_each(std::begin(DB), std::end(DB), [&](Rule &r) {
+		Rule tmp = r;
 		bool is_modified = false;
 		if (unified_cat.find(r.get_internal().get_cat()) != std::end(unified_cat))
 		{
@@ -757,7 +768,10 @@ Knowledge::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Cat
 		if (is_modified)
 		{
 			if (LOGGING_FLAG)
-				LogBox::push_log("MERGE<- " + r.to_s());
+			{
+				LogBox::push_log("CAT MERGE-> " + tmp.to_s());
+				LogBox::push_log("CAT MERGE<- " + r.to_s());
+			}
 			buf.push_back(r);
 		}
 		else
@@ -772,6 +786,7 @@ Knowledge::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Cat
 void Knowledge::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffer, std::set<AMean> &unified_mean)
 {
 	std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &r) {
+		Rule tmp = r;
 		bool is_modified = false;
 		if (unified_mean.find(r.get_internal().get_base()) != std::end(unified_mean))
 		{
@@ -780,7 +795,8 @@ void Knowledge::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffe
 		}
 		if (is_modified && LOGGING_FLAG)
 		{
-			LogBox::push_log("MERGE<- " + r.to_s());
+			LogBox::push_log("MEAN MERGE-> " + tmp.to_s());
+			LogBox::push_log("MEAN MERGE<- " + r.to_s());
 		}
 	});
 }
@@ -790,6 +806,7 @@ Knowledge::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<AMea
 {
 	RuleDBType buf, swapDB;
 	std::for_each(std::begin(DB), std::end(DB), [&](Rule &r) {
+		Rule tmp = r;
 		bool is_modified = false;
 		if (unified_mean.find(r.get_internal().get_base()) != std::end(unified_mean))
 		{
@@ -799,7 +816,10 @@ Knowledge::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<AMea
 		if (is_modified)
 		{
 			if (LOGGING_FLAG)
-				LogBox::push_log("MERGE<- " + r.to_s());
+			{
+				LogBox::push_log("MEAN MERGE-> " + tmp.to_s());
+				LogBox::push_log("MEAN MERGE<- " + r.to_s());
+			}
 			buf.push_back(r);
 		}
 		else
@@ -842,7 +862,7 @@ bool Knowledge::replace(void)
 		else
 		{
 			if (LOGGING_FLAG)
-				LogBox::pop_log();
+				LogBox::pop_log(1);
 			box_buffer.push_back(r);
 		}
 	}
@@ -1007,7 +1027,7 @@ Knowledge::RuleDBType Knowledge::rules(void)
 	return kb_all;
 }
 
-void Knowledge::define(const AMean &a, Conception &m)
+void Knowledge::define(const AMean &a, const Conception &m)
 {
 	intention.store(a, m);
 }
@@ -1124,7 +1144,7 @@ bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::fun
 	return is_constructable;
 }
 
-bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
+bool Knowledge::all_construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2)
 {
 	bool is_constructable = false;
 	if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic))
@@ -1147,7 +1167,7 @@ bool Knowledge::all_construct_grounding_rules_width(const Category &c, std::func
 				std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
 					if (sel.type() == ELEM_TYPE::NT_TYPE)
 					{
-						subconst = subconst && all_construct_grounding_rules_width(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
+						subconst = subconst && all_construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
 					}
 				});
 				if (subconst)
@@ -1310,28 +1330,37 @@ std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iter
 // //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
 std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning)
 {
+	std::cout << intention.mapping_to_s() << std::endl;
 	std::vector<RuleDBType> res;
 	bool sentence;
-	std::for_each(std::begin(ruleDB), std::end(ruleDB), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
-	std::cout << "ruleDB sentence: " << sentence << std::endl;
 	std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
-		std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
-			std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
-		});
+		// std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
+		// 	std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
+		// });
 		return true;
 	};
 	std::function<void(RuleDBType &)> f1 = [&](RuleDBType rules) {
 		bool has_sentence = false;
-		std::for_each(std::begin(rules), std::end(rules), [&](Rule &r) { has_sentence = sentence || r.is_sentence(intention); });
+		std::for_each(std::begin(rules), std::end(rules), [&](Rule &r) { has_sentence = has_sentence || r.is_sentence(intention); });
 		if (has_sentence)
 			res.push_back(rules);
 	};
 	std::function<bool(Rule &)> f2 = [&](Rule &r) {
-		return product_loop || !sentence;
+		if (!sentence)
+		{
+			sentence = r.is_sentence(intention);
+			// return product_loop || !sentence;
+			return sentence;
+		}
+		else
+		{
+			return product_loop;
+		}
+		// return product_loop || !sentence; //return product_loop
 	};
 	std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&](auto &p) {
 		sentence = false;
-		all_construct_grounding_rules_width(p.first, f0, f1, f2);
+		all_construct_grounding_rules(p.first, f0, f1, f2);
 	});
 	std::cout << "Number of generated score: " << res.size() << std::endl;
 	return res[MT19937::irand(0, res.size() - 1)];

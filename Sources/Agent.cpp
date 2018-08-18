@@ -26,7 +26,7 @@ Agent &
 Agent::grow()
 {
 
-	kb.consolidate();
+	// kb.consolidate();
 
 	return *this;
 }
