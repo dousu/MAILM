@@ -65,6 +65,11 @@ Rule Knowledge::at(std::size_t n) const
 	return ruleDB[n];
 }
 
+std::size_t Knowledge::size() const
+{
+	return ruleDB.size();
+}
+
 void Knowledge::send_box(Rule &mail)
 {
 	input_box.push_back(mail);
@@ -184,7 +189,7 @@ bool Knowledge::consolidate(void)
 			}
 			case CONSOLIDATE_TYPE::MERGE:
 			{
-				if (flag = merge() || flag)
+				if ((flag = merge() || flag))
 				{
 					unique(input_box);
 				}
@@ -203,13 +208,15 @@ bool Knowledge::consolidate(void)
 
 		if (LOGGING_FLAG)
 		{
-			LogBox::push_log("Knowledge Size: " + std::to_string(ruleDB.size() + box_buffer.size() + input_box.size()));
 			LogBox::refresh_log();
 		}
 	}
 
 	if (LOGGING_FLAG)
+	{
 		LogBox::push_log("\n\n!!CONSOLIDATE FIN!!");
+		LogBox::push_log("Knowledge Size: " + std::to_string(ruleDB.size() + box_buffer.size() + input_box.size()));
+	}
 
 	send_db(input_box);
 	unique(ruleDB);
@@ -946,56 +953,19 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents)
 
 std::string Knowledge::to_s()
 {
-	RuleDBType rule_buf;
-	std::vector<std::string> buf;
-	RuleDBType::iterator it;
-	std::string sbuf;
-	int count;
-
-	rule_buf.clear();
-	sbuf = std::string("\nBOX\n");
-	buf.push_back(sbuf);
-	rule_buf = box_buffer;
-	//	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
-	count = 0;
-	it = rule_buf.begin();
-	while (it != rule_buf.end())
-	{
-		count++;
-		buf.push_back(std::to_string(count) + std::string(": ") + (*it).to_s());
-		it++;
-	}
-
-	rule_buf.clear();
-	sbuf = std::string("\nInput BOX\n");
-	buf.push_back(sbuf);
-	rule_buf = input_box;
-	//	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
-	count = 0;
-	it = rule_buf.begin();
-	while (it != rule_buf.end())
-	{
-		count++;
-		buf.push_back(std::to_string(count) + std::string(": ") + (*it).to_s());
-		it++;
-	}
-
-	rule_buf.clear();
-	sbuf = std::string("\nRule DB\n");
-	buf.push_back(sbuf);
-	rule_buf = ruleDB;
-	//	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
-	count = 0;
-	it = rule_buf.begin();
-	while (it != rule_buf.end())
-	{
-		count++;
-		buf.push_back(std::to_string(count) + std::string(": ") + (*it).to_s());
-		it++;
-	}
-
 	std::ostringstream os;
-	std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<std::string>(os, "\n"));
+	os << "Learning buffer" << std::endl
+	   << std::endl;
+	std::copy(std::begin(box_buffer), std::end(box_buffer), std::ostream_iterator<Rule>(os, "\n"));
+	os << "Input box" << std::endl
+	   << std::endl;
+	std::copy(std::begin(input_box), std::end(input_box), std::ostream_iterator<Rule>(os, "\n"));
+	os << "Rule DB" << std::endl
+	   << std::endl;
+	std::copy(std::begin(ruleDB), std::end(ruleDB), std::ostream_iterator<Rule>(os, "\n"));
+
+	os << intention.mapping_to_s();
+
 	return os.str();
 }
 
@@ -1330,7 +1300,6 @@ std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iter
 // //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
 std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning)
 {
-	std::cout << intention.mapping_to_s() << std::endl;
 	std::vector<RuleDBType> res;
 	bool sentence;
 	std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
@@ -1367,10 +1336,11 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
 	std::cout << "Number of generated score: " << res.size() << std::endl;
 	RuleDBType rdb = res[MT19937::irand(0, res.size() - 1)];
 	std::for_each(std::begin(rdb), std::end(rdb), [&](Rule &r) {
-		AMean am{ut_index--};
-		Category ca{ut_category--};
-		core_meaning[am] = intention.get(r.get_internal().get_base());
-		r = Rule{LeftNonterminal{ca, Meaning{am, r.get_internal().get_followings()}}, r.get_external()};
+		// AMean am{ut_index--};
+		// Category ca{ut_category--};
+		// core_meaning[am] = intention.get(r.get_internal().get_base());
+		// r = Rule{LeftNonterminal{ca, Meaning{am, r.get_internal().get_followings()}}, r.get_external()};
+		core_meaning[r.get_internal().get_base()] = intention.get(r.get_internal().get_base());
 	});
 	return rdb;
 }

@@ -180,17 +180,13 @@ class Knowledge : public KnowledgeTypeDef
 
 	RuleDBType generate_score(std::map<AMean, Conception> &core_meaning);
 
-	// bool create_measures(RuleDBType &res, SymbolElement &cat_num, int beat_num);
-
-	// bool create_beats(RuleDBType &res, std::vector<SymbolElement> &external, int beat_num);
-
-	// bool create_beat_eq(RuleDBType &res, SymbolElement &elem, int space_num);
-
 	std::string meaning_no_to_s(int obj);
 
 	std::string dic_to_s();
 
 	Rule at(std::size_t) const;
+
+	std::size_t size() const;
 
   private:
 	RuleDBType chunking(Rule &src, Rule &dst);

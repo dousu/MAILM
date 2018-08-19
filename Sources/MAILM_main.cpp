@@ -8,70 +8,86 @@ void output_data_trunc(std::string file_path, std::string data)
 	std::ofstream ofs(path, std::ios_base::trunc);
 	ofs << data;
 }
-
 std::string make_tree_str_for_dot(std::vector<Rule> &r_list)
 {
+	std::set<std::string> syms;
 	std::ostringstream os;
-	std::queue<std::string> q;
-	std::map<Category, std::size_t> cat_num;
-	std::map<Symbol, std::size_t> sym_num;
-	std::map<std::string, std::size_t> rank_map;
-	std::map<int, std::list<std::string>> rank_list;
-	std::list<std::string> sym_list;
-	std::string start;
-	std::for_each(std::begin(r_list), std::end(r_list), [&](Rule &r) {
-		if (q.size() == 0)
-		{
-			start = r.get_internal().get_cat().to_s() + "(1)";
-			rank_map[start] = 0;
-			q.push(start);
-			cat_num.insert(std::make_pair(r.get_internal().get_cat(), 2));
-		}
-		std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
-			if (sel.type() == ELEM_TYPE::NT_TYPE)
+	std::list<Rule> r_list_1;
+	std::copy(std::begin(r_list), std::end(r_list), std::back_inserter(r_list_1));
+	std::map<std::variant<AMean, Symbol>, int> index_table;
+	std::multimap<int, std::string> rank_table;
+	std::function<void(int, const Rule &)> make_tree_str_for_dot_2;
+	make_tree_str_for_dot_2 = [&](int level, const auto &rule) {
+		std::list<std::string> o_list;
+		int j = index_table[rule.get_internal().get_base()]++;
+		rank_table.insert(std::make_pair(level, rule.get_internal().get_base().to_s() + "(" + std::to_string(j) + ")"));
+		auto make_tree_str_for_dot_3 = [&](const auto &sel) {
+			switch (sel.type())
 			{
-				if (cat_num.find(sel.get<RightNonterminal>().get_cat()) == std::end(cat_num))
-				{
-					cat_num.insert(std::make_pair(sel.get<RightNonterminal>().get_cat(), 1));
-				}
-				std::string s = sel.get<RightNonterminal>().get_cat().to_s() + "(" + std::to_string(cat_num[sel.get<RightNonterminal>().get_cat()]) + ")";
-				q.push(s);
-				rank_map[s] = rank_map[q.front()] + 1;
-				rank_list[rank_map[s]].push_back(s);
-				os << std::quoted(q.front()) << Prefices::DOTARW << std::quoted(sel.get<RightNonterminal>().get_cat().to_s() + "(" + std::to_string(cat_num[sel.get<RightNonterminal>().get_cat()]++) + ")") << std::endl;
-			}
-			else
+			case ELEM_TYPE::NT_TYPE:
 			{
-				if (sym_num.find(sel.get<Symbol>()) == std::end(sym_num))
+				auto it = std::find_if(std::begin(r_list_1), std::end(r_list_1), [&sel](const auto &a) {
+					return sel.template get<RightNonterminal>().get_cat() == a.get_internal().get_cat();
+				});
+				if (it == std::end(r_list_1))
 				{
-					sym_num.insert(std::make_pair(sel.get<Symbol>(), 1));
+					std::cerr << "Irregular rule set" << std::endl;
+					exit(1);
 				}
-				std::string s = sel.get<Symbol>().to_s() + "(" + std::to_string(sym_num[sel.get<Symbol>()]) + ")";
-				// rank_list[rank_map[q.front()] + 1].push_back(s);
-				sym_list.push_back(s);
-				os << std::quoted(q.front()) << Prefices::DOTARW << std::quoted(sel.get<Symbol>().to_s() + "(" + std::to_string(sym_num[sel.get<Symbol>()]++) + ")") << std::endl;
+				int i = index_table[it->get_internal().get_base()];
+				o_list.push_back(it->get_internal().get_base().to_s() + "(" + std::to_string(i) + ")");
+				auto rule_1 = *it;
+				r_list_1.erase(it);
+				make_tree_str_for_dot_2(level + 1, rule_1);
 			}
+			break;
+			case ELEM_TYPE::SYM_TYPE:
+			{
+				int i = index_table[sel.template get<Symbol>()]++;
+				syms.insert(sel.template get<Symbol>().to_s() + "(" + std::to_string(i) + ")");
+				o_list.push_back(sel.template get<Symbol>().to_s() + "(" + std::to_string(i) + ")");
+			}
+			break;
+			}
+		};
+		std::for_each(std::begin(rule.get_external()), std::end(rule.get_external()), make_tree_str_for_dot_3);
+		std::for_each(std::begin(o_list), std::end(o_list), [&](auto p) {
+			os << std::quoted(rule.get_internal().get_base().to_s() + "(" + std::to_string(j) + ")") << Prefices::DOTARW << std::quoted(p) << std::endl;
 		});
-		q.pop();
-	});
+	};
+	auto item = r_list_1.front();
+	r_list_1.erase(std::begin(r_list_1));
+	make_tree_str_for_dot_2(0, item);
+	os << "{rank = min; " << std::quoted(item.get_internal().get_base().to_s() + "(0)") << "}" << std::endl;
 
-	os << "{rank = min; " << std::quoted(start) << ";}" << std::endl;
-	std::for_each(std::begin(rank_list), std::end(rank_list), [&](auto &p) {
+	int max = 0;
+	std::multimap<int, std::string>::iterator rank_it;
+	do
+	{
+		max++;
 		os << "{rank = same;";
-		std::for_each(std::begin(p.second), std::end(p.second), [&](std::string &s) {
-			os << " " << std::quoted(s) << ";";
-		});
+		auto r = rank_table.equal_range(max);
+		std::for_each(r.first, r.second, [&](auto &p) { os << " " << std::quoted(p.second) << ";"; });
 		os << "}" << std::endl;
-	});
-	os << "{rank = same;";
-	std::for_each(std::begin(sym_list), std::end(sym_list), [&](std::string &s) {
+	} while ((rank_it = rank_table.upper_bound(max)) != std::end(rank_table));
+
+	os << "{rank = max;";
+	std::for_each(std::begin(syms), std::end(syms), [&](auto &s) {
 		os << " " << std::quoted(s) << ";";
 	});
 	os << "}" << std::endl;
 	return "digraph sample{\n" + os.str() + "}";
 }
 
-void evaluate_knowledge(Knowledge &kb, MAILMParameters &param)
+void static_assessment(Knowledge &kb, std::string out)
+{
+	std::cout << "static assessment file: " << out << std::endl;
+	std::ostringstream os;
+	os << "SIZE = " << kb.size() << std::endl;
+	output_data_trunc(out, os.str());
+}
+
+void tree_assessment(Knowledge &kb, std::string out)
 {
 	std::vector<std::string> t_list;
 	std::vector<std::string>::iterator t_it;
@@ -93,7 +109,7 @@ void evaluate_knowledge(Knowledge &kb, MAILMParameters &param)
 			tree_str = make_tree_str_for_dot(r_list);
 			std::cout << "made tree graph as a dot file" << std::endl;
 
-			output_data_trunc(param.RESULT_PATH + "dot/" + name + ".dot", tree_str);
+			output_data_trunc(out + name + ".dot", tree_str);
 
 			std::cout << "output fin." << std::endl;
 		}
@@ -102,6 +118,12 @@ void evaluate_knowledge(Knowledge &kb, MAILMParameters &param)
 			std::cout << "Can't construct" << std::endl;
 		}
 	}
+}
+
+void evaluate_knowledge(Agent &ma, MAILMParameters &param)
+{
+	static_assessment(ma.kb, param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + Prefices::UNO + std::to_string(ma.generation_index) + param.RESULT_EXT);
+	tree_assessment(ma.kb, param.RESULT_PATH + "dot/");
 }
 
 int main(int argc, char *argv[])
@@ -171,6 +193,7 @@ int main(int argc, char *argv[])
 	parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
 	parent.learn();
 	parent.grow();
+	evaluate_knowledge(parent, param);
 	if (param.LOGGING)
 	{
 		log.push_log("******************PARENT");
@@ -224,83 +247,10 @@ int main(int argc, char *argv[])
 
 		log.refresh_log();
 
-		evaluate_knowledge(ma.kb, param);
 		ma.grow();
+		evaluate_knowledge(ma, param);
 		parent = ma;
 	}
-
-	// {
-	// 	std::cout << "SEMANTICS:" << std::endl
-	// 			  << ma.kb.intention.to_s() << std::endl;
-	// 	std::cout << ma.kb.ruleDB.size() << std::endl;
-
-	// 	std::vector<int> nums_v{2, 3, 4};
-	// 	Agent parent, child;
-	// 	std::map<AMean, Conception> mm, ch_mm;
-	// 	std::vector<Rule> parent_origin, ch_hear, tree;
-	// 	parent = ma;
-	// 	for (int i = 1; i < 10; i++)
-	// 	{
-	// 		child = parent.make_child();
-	// 		child.init_semantics(meaning_rules);
-	// 		ch_hear = inputs;
-	// 		// mm.clear();
-	// 		// ch_mm.clear();
-	// 		// for (int j = 0; j < 5; j++)
-	// 		// {
-	// 		// 	int b_num = nums_v[MT19937::irand() % nums_v.size()];
-	// 		// 	tree.clear();
-	// 		// 	parent_origin = parent.say(b_num, mm);
-
-	// 		// 	std::string name = std::string("generation_") + boost::lexical_cast<std::string>(i);
-	// 		// 	std::cout << "Utterance " << j + 1 << ":" << std::endl;
-	// 		// 	beat_nums = std::vector<int>(parent_origin.size(), b_num);
-	// 		// 	tree = parent_origin;
-	// 		// 	tree.insert(tree.begin(), *parent_origin.rbegin());
-	// 		// 	tree.erase(tree.end() - 1);
-	// 		// 	tree_str = make_tree_str_for_dot(tree, beat_nums, view_kb);
-	// 		// 	std::cout << "tree fin." << std::endl;
-	// 		// 	output_data(param.BASE_PATH + boost::lexical_cast<std::string>("dot/") + name + std::string("_utterance_") + boost::lexical_cast<std::string>(j + 1) + std::string(".dot"), tree_str, empty_dot);
-
-	// 		// 	ch_hear.insert(ch_hear.begin(), parent_origin.begin(), parent_origin.end());
-	// 		// 	ch_mm.insert(mm.begin(), mm.end());
-	// 		// }
-	// 		std::cerr << "LEARNING DATA SIZE: " << ch_hear.size() << ", BUF SIZE: " << inputs.size() << std::endl;
-	// 		child.hear(ch_hear, ch_mm);
-	// 		child.learn();
-	// 		std::cerr << "CHILD'S KNOWLEDGE:" << std::endl
-	// 				  << child.kb.to_s() << std::endl;
-	// 		std::cout << "CHILD'S SEMANTICS:" << std::endl
-	// 				  << ma.kb.intention.to_s() << std::endl;
-	// 		view_kb = child.kb;
-	// 		for (int i = 1; i <= labeling.size(); i++)
-	// 		{
-	// 			// for (int i = 14; i <= 14; i++) {
-	// 			no = i;
-	// 			beat_nums = reader.i_beat_map[no];
-	// 			std::string name = labeling[no];
-	// 			r_list.clear();
-	// 			std::cout << "Construct " << name << ".xml" << std::endl;
-	// 			if (view_kb.explain(view_kb.meaning_no(no), r_list))
-	// 			{
-	// 				std::cout << "explain true" << std::endl;
-	// 				tree_str = make_tree_str_for_dot(r_list, beat_nums, view_kb);
-	// 				std::cout << "tree fin." << std::endl;
-
-	// 				output_data_trunc(param.BASE_PATH + boost::lexical_cast<std::string>("dot/") + name + std::string(".dot"), tree_str);
-
-	// 				std::cout << "output fin." << std::endl;
-	// 			}
-	// 			else
-	// 			{
-	// 				std::cout << "Can't construct" << std::endl;
-	// 			}
-	// 		}
-	// 		child.grow();
-	// 		parent = child;
-	// 	}
-	// 	std::cout << parent.kb.to_s() << std::endl;
-	// }
 
 	log.refresh_log();
 
