@@ -1067,7 +1067,7 @@ std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iter
 
 // //3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
 // //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
-std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning) {
+std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning, RuleDBType &base) {
   std::vector<RuleDBType> res;
   bool sentence;
   std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
@@ -1099,6 +1099,7 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   });
   std::cout << "Number of generated score: " << res.size() << std::endl;
   RuleDBType rdb0 = res[MT19937::irand(0, res.size() - 1)], rdb;
+  base = rdb0;
 
   int index = 0;
   std::function<void(Rule &, int)> func1;

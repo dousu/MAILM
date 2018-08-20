@@ -23,9 +23,9 @@ Agent &Agent::grow() {
   return *this;
 }
 
-std::vector<Rule> Agent::say(std::map<AMean, Conception> &mapping) {
+std::vector<Rule> Agent::say(std::map<AMean, Conception> &mapping, std::vector<Rule> &base) {
   try {
-    std::vector<Rule> res = kb.generate_score(mapping);
+    std::vector<Rule> res = kb.generate_score(mapping, base);
     return res;
   } catch (...) {
     LogBox::refresh_log();

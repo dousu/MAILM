@@ -185,11 +185,12 @@ int main(int argc, char *argv[]) {
     for (int u = 0; u < param.UTTERANCES; u++) {
       std::cout << std::endl << "Utterance " << u + 1 << std::endl;
       std::map<AMean, Conception> cmap_say;
-      std::vector<Rule> utter = parent.say(cmap_say);
+      std::vector<Rule> base;
+      std::vector<Rule> utter = parent.say(cmap_say, base);
       std::copy(std::begin(utter), std::end(utter), std::ostream_iterator<Rule>(std::cout, "\n"));
       if (utter.size() != 0) {
         output_data_trunc(param.RESULT_PATH + "dot/generation" + std::to_string(g) + "_utter" + std::to_string(u) + ".dot",
-                          make_tree_str_for_dot(utter));
+                          make_tree_str_for_dot(base));
         std::cout << "output fin." << std::endl;
       } else {
         std::cout << "no utterance" << std::endl;
