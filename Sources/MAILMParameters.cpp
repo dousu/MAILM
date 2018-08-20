@@ -25,7 +25,7 @@ MAILMParameters::MAILMParameters()
 	struct tm *stm = localtime(&now);
 	char s[100];
 	strftime(s, 100, "%Yy%mm%dd%Hh%Mm%Ss", stm);
-	DATE_STR = Prefices::UNO + std::string(s);
+	DATE_STR = std::string(s);
 
 	//file extentions
 	RESULT_EXT = "_result.rst";
@@ -103,7 +103,7 @@ void MAILMParameters::set_option(ProgramOption &po)
 	{
 		LOGGING = po.get<bool>("logging");
 	}
-	RESULT_PATH = BASE_PATH + "RESULT/";
+	RESULT_PATH = BASE_PATH + "Result/";
 	if (ANALYZE && po.count("prefix"))
 		RESULT_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + RESULT_EXT;
 	if (LOGGING && po.count("prefix"))

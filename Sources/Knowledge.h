@@ -19,6 +19,7 @@
 #include "IndexFactory.h"
 #include "MT19937.h"
 #include "LogBox.h"
+#include "XMLreader.h"
 
 class KnowledgeTypeDef
 {
@@ -61,6 +62,9 @@ class Knowledge : public KnowledgeTypeDef
 	RuleDBType ruleDB;
 
 	Semantics<Conception> intention;
+
+	int ut_index;
+	int ut_category;
 
 	static bool LOGGING_FLAG;
 	static int ABSENT_LIMIT;
@@ -162,7 +166,7 @@ class Knowledge : public KnowledgeTypeDef
 
 	RuleDBType rules(void);
 
-	void define(const AMean &n, Conception &m);
+	void define(const AMean &n, const Conception &m);
 
 	void init_semantics_rules(TransRules &);
 
@@ -176,17 +180,13 @@ class Knowledge : public KnowledgeTypeDef
 
 	RuleDBType generate_score(std::map<AMean, Conception> &core_meaning);
 
-	// bool create_measures(RuleDBType &res, SymbolElement &cat_num, int beat_num);
-
-	// bool create_beats(RuleDBType &res, std::vector<SymbolElement> &external, int beat_num);
-
-	// bool create_beat_eq(RuleDBType &res, SymbolElement &elem, int space_num);
-
 	std::string meaning_no_to_s(int obj);
 
 	std::string dic_to_s();
 
 	Rule at(std::size_t) const;
+
+	std::size_t size() const;
 
   private:
 	RuleDBType chunking(Rule &src, Rule &dst);
@@ -211,7 +211,7 @@ class Knowledge : public KnowledgeTypeDef
 	bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	bool product_loop;
 	bool was_constructable;
-	bool all_construct_grounding_rules_width(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
+	bool all_construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
 	std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> dic_amean_range(const AMean &c);
 	std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);

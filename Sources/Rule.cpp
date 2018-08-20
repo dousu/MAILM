@@ -60,11 +60,14 @@ bool Rule::is_measure(Semantics<Conception> &s) const
 	return s.get(internal.get_base()).include(c);
 }
 
-std::string Rule::to_s()
+std::string Rule::to_s() const
 {
+	std::string str;
 	std::ostringstream os;
 	std::copy(std::begin(external), std::end(external), std::ostream_iterator<SymbolElement>(os, " "));
-	return internal.to_s() + Prefices::ARW + os.str();
+	str = os.str();
+	str.pop_back();
+	return internal.to_s() + Prefices::ARW + str;
 }
 
 void Rule::set_rule(LeftNonterminal &nt, std::list<SymbolElement> &ex)
@@ -74,9 +77,6 @@ void Rule::set_rule(LeftNonterminal &nt, std::list<SymbolElement> &ex)
 }
 std::ostream &operator<<(std::ostream &out, const Rule &obj)
 {
-	std::ostringstream os;
-	std::list<SymbolElement> sel_vec = obj.get_external();
-	std::copy(std::begin(sel_vec), std::end(sel_vec), std::ostream_iterator<SymbolElement>(os, " "));
-	out << obj.get_internal() << Prefices::ARW << os.str();
+	out << obj.to_s();
 	return out;
 }

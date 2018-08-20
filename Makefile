@@ -23,9 +23,6 @@ boost:
 test: ma
 
 clean:
-	rm -f ./Sources/*.o ./Sources/*.dump ./Sources/*.exe ./Sources/*.log ./Sources/*.rst
-
-allclean:
-	rm -f ./Sources/*.o ./Sources/*.dump ./Sources/*.exe ./Sources/*.log ./Sources/*.rst ./sources/*.d
+	rm -f ./Sources/*.o ./Sources/*.dump ./Sources/*.exe ./Sources/*.log ./Sources/*.rst ./Sources/*.d ./exe/*.exe ./exe/*.d
 
 -include $(DEPS)

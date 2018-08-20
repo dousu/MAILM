@@ -8,16 +8,15 @@
 #include <unordered_set>
 #include <algorithm>
 #include <iterator>
-
-#include "Dictionary.h"
-#include "Prefices.h"
-
 #include <variant>
 #include <cstddef>
 #include <ostream>
 #include <sstream>
 #include <type_traits>
 #include <list>
+
+#include "Dictionary.h"
+#include "Prefices.h"
 
 /*!
  * Elementクラスが取るタイプのインデックスを定義しています。
@@ -671,29 +670,92 @@ class Conception
 {
   public:
 	std::set<std::string> factors;
-	Conception();
-	Conception(std::string);
-	Conception(const Conception &);
+	Conception() noexcept {}
+	Conception(std::string str) noexcept : factors{{str}} {}
+	Conception(const Conception &dst) noexcept : factors(dst.factors) {}
+	Conception(Conception &&dst) noexcept : factors(std::move(dst.factors)) {}
 
 	//operator
 	//!等号。型が異なると偽を返します。
 	// 型が等しい場合はインデックスが等しいか比べます。
-	bool operator==(const Conception &dst) const;
+	bool operator==(const Conception &dst) const
+	{
+		return factors == dst.factors;
+	}
 	//!等号の否定です
-	bool operator!=(const Conception &dst) const;
-	Conception operator+(Conception &dst);
-	Conception operator-(Conception &dst);
+	bool operator!=(const Conception &dst) const
+	{
+		return !(*this == dst);
+	}
+	Conception operator+(const Conception &dst) const
+	{
+		Conception trg;
+		trg.factors = factors;
+		trg.factors.insert(std::begin(dst.factors), std::end(dst.factors));
+		return trg;
+	}
+	Conception operator-(const Conception &dst) const
+	{
+		Conception trg;
+		std::set_difference(std::begin(factors), std::end(factors), std::begin(dst.factors), std::end(dst.factors), std::inserter(trg.factors, std::begin(trg.factors)));
+		return trg;
+	}
 	//!代入
-	Conception &operator=(const Conception &dst);
-	void diff(Conception &obj, Conception &res1, Conception &res2) const;
-	void inter(Conception &obj, Conception &res) const;
-	bool include(Conception &obj) const;
-
-	bool empty();
-	void clear();
-	void add(std::string str);
-	std::string to_s() const;
+	Conception &operator=(const Conception &dst) noexcept
+	{
+		factors = dst.factors;
+		return *this;
+	}
+	Conception &operator=(Conception &&dst) noexcept
+	{
+		factors = std::move(dst.factors);
+		return *this;
+	}
+	void diff(const Conception &obj, Conception &res1, Conception &res2) const
+	{
+		res1.clear();
+		res2.clear();
+		std::set_difference(std::begin(factors), std::end(factors), std::begin(obj.factors), std::end(obj.factors), std::inserter(res1.factors, std::begin(res1.factors)));
+		std::set_difference(std::begin(obj.factors), std::end(obj.factors), std::begin(factors), std::end(factors), std::inserter(res2.factors, std::begin(res2.factors)));
+	}
+	void inter(const Conception &obj, Conception &res) const
+	{
+		res.clear();
+		std::set_intersection(std::begin(factors), std::end(factors), std::begin(obj.factors), std::end(obj.factors), std::inserter(res.factors, std::begin(res.factors)));
+	}
+	bool include(const Conception &obj) const
+	{
+		return std::includes(std::begin(factors), std::end(factors), std::begin(obj.factors), std::end(obj.factors));
+	}
+	bool empty() const noexcept
+	{
+		return factors.size() == 0 || factors.count("") == factors.size();
+	}
+	void clear()
+	{
+		factors.clear();
+	}
+	void add(std::string str)
+	{
+		factors.insert(str);
+	}
+	std::string to_s() const
+	{
+		if (!empty())
+		{
+			std::string str;
+			std::ostringstream os;
+			std::copy(std::begin(factors), std::end(factors), std::ostream_iterator<std::string>(os, " "));
+			str = os.str();
+			str.pop_back();
+			return str;
+		}
+		else
+		{
+			return "";
+		}
+	}
 	friend std::ostream &operator<<(std::ostream &out, const Conception &obj);
 };
 
-#endif /* Conception_H_ */
+#endif /* ELEMENT_H_ */
