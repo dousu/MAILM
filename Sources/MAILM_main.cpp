@@ -188,7 +188,8 @@ int main(int argc, char *argv[]) {
       std::vector<Rule> utter = parent.say(cmap_say);
       std::copy(std::begin(utter), std::end(utter), std::ostream_iterator<Rule>(std::cout, "\n"));
       if (utter.size() != 0) {
-        output_data_trunc(param.RESULT_PATH + "dot/test_utter.dot", make_tree_str_for_dot(utter));
+        output_data_trunc(param.RESULT_PATH + "dot/generation" + std::to_string(g) + "_utter" + std::to_string(u) + ".dot",
+                          make_tree_str_for_dot(utter));
         std::cout << "output fin." << std::endl;
       } else {
         std::cout << "no utterance" << std::endl;
