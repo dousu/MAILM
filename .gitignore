@@ -9,7 +9,6 @@
 
 #Output files
 *.prm
-*.rst
 *.ave
 *.sd
 *.acc
