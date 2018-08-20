@@ -1109,8 +1109,8 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
     Category ca{cat};
     core_meaning[am] = intention.get(r0.get_internal().get_base());
     rdb.push_back(Rule{LeftNonterminal{ca, Meaning{am, r0.get_internal().get_followings()}}, r0.get_external()});
-    std::cerr << "RDB size: " << rdb.size() << " index: " << index << std::endl;
-    Rule &r = rdb[index++];  //
+    // std::cerr << "RDB size: " << rdb.size() << " index: " << index << std::endl;
+    Rule &r = rdb[index++];
     std::list<SymbolElement> sel_vec;
     std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
       if (sel.type() == ELEM_TYPE::NT_TYPE) {
@@ -1130,7 +1130,6 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
         sel_vec.push_back(sel);
       }
     });
-    std::cerr << "fin" << std::endl;
     r = Rule{r.get_internal(), sel_vec};
   };
   // std::cout << "base" << std::endl;
