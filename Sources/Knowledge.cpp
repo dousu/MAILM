@@ -1103,15 +1103,12 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   int index = 0;
   std::function<void(Rule &, int)> func1;
   func1 = [&](Rule &r0, int cat) {
-    // std::cout << "Rule: " << r0 << std::endl;
-    // std::copy(std::begin(rdb0), std::end(rdb0), std::ostream_iterator<Rule>(std::cout, "\n"));
+    int loc = index++;
     AMean am{ut_index--};
     Category ca{cat};
     core_meaning[am] = intention.get(r0.get_internal().get_base());
     rdb.push_back(Rule{LeftNonterminal{ca, Meaning{am, r0.get_internal().get_followings()}}, r0.get_external()});
-    // std::cerr << "RDB size: " << rdb.size() << " index: " << index << std::endl;
-    Rule &r = rdb[index++];
-    std::list<SymbolElement> sel_vec;
+    Rule r = rdb[loc];
     std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
       if (sel.type() == ELEM_TYPE::NT_TYPE) {
         auto it = std::find_if(std::begin(rdb0), std::end(rdb0),
@@ -1122,21 +1119,17 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
           std::cerr << "Irregular rule set" << std::endl;
           exit(1);
         }
-        sel_vec.push_back(RightNonterminal{Category(ut_category--), sel.template get<RightNonterminal>().get_var()});
+        sel = RightNonterminal{Category(ut_category), sel.template get<RightNonterminal>().get_var()};
         auto r2 = *it;
         rdb0.erase(it);
         func1(r2, ut_category--);
-      } else {
-        sel_vec.push_back(sel);
       }
     });
-    r = Rule{r.get_internal(), sel_vec};
+    rdb[loc] = r;
   };
-  // std::cout << "base" << std::endl;
-  // std::copy(std::begin(rdb0), std::end(rdb0), std::ostream_iterator<Rule>(std::cout, "\n"));
-  auto r0 = rdb0.front();
+  auto r_base = rdb0.front();
   rdb0.erase(std::begin(rdb0));
-  func1(r0, ut_category--);
+  func1(r_base, ut_category--);
   return rdb;
 }
 Rule Knowledge::fabricate(Rule &src1) {
