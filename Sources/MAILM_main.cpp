@@ -3,8 +3,15 @@
 void output_data_trunc(std::string file_path, std::string data) {
   //存在しない場合はすぐreturn
   const std::filesystem::path path(file_path.c_str());
-  std::cout << "Output file: " << path << std::endl;
-  std::ofstream ofs(path, std::ios_base::trunc);
+  std::cout << "Output file(trunc mdoe): " << path << std::endl;
+  std::ofstream ofs(path, std::ios_base::out | std::ios_base::trunc);
+  ofs << data;
+}
+void output_data_app(std::string file_path, std::string data) {
+  //存在しない場合はすぐreturn
+  const std::filesystem::path path(file_path.c_str());
+  std::cout << "Output file(app mode): " << path << std::endl;
+  std::ofstream ofs(path, std::ios_base::in | std::ios_base::out | std::ios_base::app);
   ofs << data;
 }
 std::string make_tree_str_for_dot(std::vector<Rule> &r_list) {
@@ -69,14 +76,14 @@ std::string make_tree_str_for_dot(std::vector<Rule> &r_list) {
   return "digraph sample{\n" + os.str() + "}";
 }
 
-void static_assessment(Knowledge &kb, std::string out) {
+void static_assessment(Agent &ma, std::string out) {
   std::cout << "static assessment file: " << out << std::endl;
   std::ostringstream os;
-  os << "SIZE = " << kb.size() << std::endl;
-  output_data_trunc(out, os.str());
+  os << "Generation(" << ma.generation_index << ")" << std::endl << "Size = " << ma.kb.size() << std::endl;
+  output_data_app(out, os.str());
 }
 
-void tree_assessment(Knowledge &kb, std::string out) {
+void tree_assessment(Agent &ma, std::string out) {
   std::vector<std::string> t_list;
   std::vector<std::string>::iterator t_it;
 
@@ -90,7 +97,7 @@ void tree_assessment(Knowledge &kb, std::string out) {
     std::string name = XMLreader::labeling[no];
     r_list.clear();
     std::cout << "Construct " << name << ".xml" << std::endl;
-    if (kb.explain(kb.meaning_no(no), r_list)) {
+    if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
       std::cout << "explain: true" << std::endl;
       tree_str = make_tree_str_for_dot(r_list);
       std::cout << "made tree graph as a dot file" << std::endl;
@@ -105,9 +112,8 @@ void tree_assessment(Knowledge &kb, std::string out) {
 }
 
 void evaluate_knowledge(Agent &ma, MAILMParameters &param) {
-  static_assessment(ma.kb, param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + Prefices::UNO +
-                               std::to_string(ma.generation_index) + param.RESULT_EXT);
-  tree_assessment(ma.kb, param.RESULT_PATH + "dot/");
+  static_assessment(ma, param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + param.RESULT_EXT);
+  tree_assessment(ma, param.RESULT_PATH + "dot/");
 }
 
 int main(int argc, char *argv[]) {

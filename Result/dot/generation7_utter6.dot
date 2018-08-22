@@ -1,0 +1,16 @@
+digraph sample{
+"L1179(0)"->"[C  D  Dis  Fis  A](0)"
+"L1179(0)"->"[C  D  Dis  Fis  A](1)"
+"L1179(0)"->"[C  D  Dis  Fis  A](2)"
+"L1179(0)"->"[C  D  Dis  Fis  A](3)"
+"L3762(0)"->"[D  E  A  B](0)"
+"L5231(0)"->"L1179(0)"
+"L5231(0)"->"L3762(0)"
+"L2987(0)"->"[C  E](0)"
+"L5269(0)"->"L5231(0)"
+"L5269(0)"->"L2987(0)"
+{rank = min; "L5269(0)"}
+{rank = same; "L5231(0)"; "L2987(0)";}
+{rank = same; "L1179(0)"; "L3762(0)";}
+{rank = max; "[C  D  Dis  Fis  A](0)"; "[C  D  Dis  Fis  A](1)"; "[C  D  Dis  Fis  A](2)"; "[C  D  Dis  Fis  A](3)"; "[C  E](0)"; "[D  E  A  B](0)";}
+}

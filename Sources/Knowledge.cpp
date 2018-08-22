@@ -822,9 +822,11 @@ void Knowledge::define(const AMean &a, const Conception &m) { intention.store(a,
 
 void Knowledge::init_semantics_rules(TransRules &obj) { intention.init_rules(obj); }
 
-Meaning Knowledge::meaning_no(int obj) { return intention.trans(obj); }
+Meaning Knowledge::meaning_no(int obj) {
+  // std::cout << "Meaning No. " << obj << ": " << intention.trans(obj) << std::endl;
+  return intention.trans(obj);
+}
 
-// DBの検索を高速化するため
 void Knowledge::build_word_index(void) {
   DB_cat_amean_dic.clear();
   DB_amean_cat_dic.clear();
@@ -885,12 +887,45 @@ bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::fun
 
 bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1,
                                           std::function<bool(Rule &)> f2) {
-  return all_construct_grounding_rules(c, [](std::vector<RuleDBType> &rdb_vec) { return true; }, f1,
-                                       [&](Rule &r) { return r.get_internal().get_base() == m.get_base() && f2; });
+  // bool is_constructable = false;
+  // if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic) && DB_cat_amean_dic[c].find(m.get_base()) != DB_cat_amean_dic[c].end()) {
+  //   std::vector<RuleDBType> prod;
+  //   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> range_pair = dic_range(c, m.get_base());
+  //   std::for_each(range_pair.first, range_pair.second, [&](std::multimap<AMean, Rule>::value_type &p) {
+  //     if (f2(p.second)) {
+  //       bool subconst = true;
+  //       std::vector<RuleDBType> sub_prod{{{p.second}}};
+  //       std::function<void(RuleDBType &)> func = [&sub_prod](RuleDBType &rules) {
+  //         std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
+  //           std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
+  //         });
+  //       };
+  //       int num = 1;
+  //       std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
+  //         if (sel.type() == ELEM_TYPE::NT_TYPE) {
+  //           subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(),
+  //                                                            m.at(num++).get<Meaning>(), func, f2);
+  //         }
+  //       });
+  //       if (subconst) std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
+  //       is_constructable = is_constructable || subconst;
+  //     }
+  //   });
+  //   std::for_each(std::begin(prod), std::end(prod), f1);
+  // }
+  // return is_constructable;
+  std::size_t index = 0, i;
+  AMean ref = m.flat((i = index++));
+  return construct_grounding_rules(c, [](std::vector<RuleDBType> &rdb_vec) { return true; }, f1,
+                                   [&](Rule &r) {
+                                     bool b = r.get_internal().get_base() == ref && f2(r) && product_loop;
+                                     if (b) ref = m.flat((i = index++));
+                                     return b;
+                                   });
 }
 
-bool Knowledge::all_construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0,
-                                              std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2) {
+bool Knowledge::construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0,
+                                          std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2) {
   bool is_constructable = false;
   if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
     bool first = true;
@@ -909,7 +944,7 @@ bool Knowledge::all_construct_grounding_rules(const Category &c, std::function<b
         };
         std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
           if (subconst && sel.type() == ELEM_TYPE::NT_TYPE)
-            subconst = subconst && all_construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
+            subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
         });
         if (subconst) {
           std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
@@ -949,12 +984,16 @@ std::list<SymbolElement> Knowledge::construct_buzz_word() {
 }
 
 bool Knowledge::explain(Meaning ref, RuleDBType &res) {
+  // std::cout << "explain" << std::endl << ref << std::endl;
+  // AMean test;
+  // std::size_t index = 0, i;
+  // while ((test = ref.flat((i = index++))) != AMean()) {
+  //   std::cout << index - 1 << ": " << test << std::endl;
+  // }
   std::vector<RuleDBType> pattern_list;
   auto range = dic_amean_range(ref.get_base());
-  std::for_each(range.first, range.second, [&](auto &p) {
-    // Please check it ;; mem_fun_t. this is a converter from member function to  object.
-    construct_grounding_rules(p.first, ref, [&](RuleDBType &list) -> void { pattern_list.push_back(list); });
-  });
+  std::for_each(range.first, range.second,
+                [&](auto &p) { construct_grounding_rules(p.first, ref, [&](RuleDBType &list) -> void { pattern_list.push_back(list); }); });
   if (pattern_list.size() > 0) {
     res = pattern_list[MT19937::irand(0, pattern_list.size() - 1)];
     return true;
@@ -1061,7 +1100,7 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   };
   std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&](auto &p) {
     sentence = false;
-    all_construct_grounding_rules(p.first, f0, f1, f2);
+    construct_grounding_rules(p.first, f0, f1, f2);
   });
   std::cout << "Number of generated score: " << res.size() << std::endl;
 

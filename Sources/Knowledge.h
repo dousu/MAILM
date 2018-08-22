@@ -193,8 +193,8 @@ class Knowledge : public KnowledgeTypeDef {
   bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f);
   bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
   bool product_loop;
-  bool all_construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0,
-                                     std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
+  bool construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1,
+                                 std::function<bool(Rule &)> f2);
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
   std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> dic_amean_range(const AMean &c);
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);
