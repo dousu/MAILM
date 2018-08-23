@@ -102,7 +102,7 @@ void tree_assessment(Agent &ma, std::string out) {
       tree_str = make_tree_str_for_dot(r_list);
       std::cout << "made tree graph as a dot file" << std::endl;
 
-      output_data_trunc(out + name + ".dot", tree_str);
+      output_data_trunc(out + "generation" + std::to_string(ma.generation_index) + Prefices::UNO + name + ".dot", tree_str);
 
       std::cout << "output fin." << std::endl;
     } else {
@@ -112,8 +112,8 @@ void tree_assessment(Agent &ma, std::string out) {
 }
 
 void evaluate_knowledge(Agent &ma, MAILMParameters &param) {
-  static_assessment(ma, param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + param.RESULT_EXT);
-  tree_assessment(ma, param.RESULT_PATH + "dot/");
+  static_assessment(ma, param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + ".d/" + "static" + param.RESULT_EXT);
+  tree_assessment(ma, param.RESULT_PATH + "dot/" + param.FILE_PREFIX + param.DATE_STR + ".d/");
 }
 
 int main(int argc, char *argv[]) {
@@ -133,11 +133,10 @@ int main(int argc, char *argv[]) {
   opt.add_option()("help,h", "Description")
       /*ランダムシード*/
       ("random-seed", ProgramOption::value<int>(), "Random seed (101010)")
-
       /*実験世代数*/
       ("generations", ProgramOption::value<int>(), "Max generation number (100)")
       /*発話回数*/
-      ("utterances", ProgramOption::value<double>(), "Uttering ratio for meaning space (0.5/[0-1])")
+      ("utterances", ProgramOption::value<int>(), "Uttering ratio for meaning space (25)")
       /*ロギング*/
       ("logging", "Logging")
       /*分析*/
@@ -178,7 +177,21 @@ int main(int argc, char *argv[]) {
   parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
   parent.learn();
   parent.grow();
-  if (param.ANALYZE) evaluate_knowledge(parent, param);
+  if (param.ANALYZE) {
+    {
+      std::filesystem::path p(param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + ".d/");
+      if (!std::filesystem::exists(p)) {
+        std::filesystem::create_directory(p);
+      }
+    }
+    {
+      std::filesystem::path p(param.RESULT_PATH + "dot/" + param.FILE_PREFIX + param.DATE_STR + ".d/");
+      if (!std::filesystem::exists(p)) {
+        std::filesystem::create_directory(p);
+      }
+    }
+    evaluate_knowledge(parent, param);
+  }
   if (param.LOGGING) {
     log.push_log("******************PARENT");
     log.push_log(parent.kb.to_s());
@@ -195,7 +208,8 @@ int main(int argc, char *argv[]) {
       std::vector<Rule> utter = parent.say(cmap_say, base);
       std::copy(std::begin(utter), std::end(utter), std::ostream_iterator<Rule>(std::cout, "\n"));
       if (utter.size() != 0) {
-        output_data_trunc(param.RESULT_PATH + "dot/generation" + std::to_string(g) + "_utter" + std::to_string(u) + ".dot",
+        output_data_trunc(param.RESULT_PATH + "dot/" + param.FILE_PREFIX + param.DATE_STR + ".d/" + "generation" + std::to_string(g) +
+                              "_utter" + std::to_string(u + 1) + ".dot",
                           make_tree_str_for_dot(base));
         std::cout << "output fin." << std::endl;
       } else {
