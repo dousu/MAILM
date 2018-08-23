@@ -58,7 +58,6 @@ dkms.conf
 # Intermediate products
 *.data
 *.out
-*.txt
 
 #emacs
 *~
