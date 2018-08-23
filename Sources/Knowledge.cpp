@@ -822,9 +822,11 @@ void Knowledge::define(const AMean &a, const Conception &m) { intention.store(a,
 
 void Knowledge::init_semantics_rules(TransRules &obj) { intention.init_rules(obj); }
 
-Meaning Knowledge::meaning_no(int obj) { return intention.trans(obj); }
+Meaning Knowledge::meaning_no(int obj) {
+  // std::cout << "Meaning No. " << obj << ": " << intention.trans(obj) << std::endl;
+  return intention.trans(obj);
+}
 
-// DBの検索を高速化するため
 void Knowledge::build_word_index(void) {
   DB_cat_amean_dic.clear();
   DB_amean_cat_dic.clear();
@@ -885,37 +887,45 @@ bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::fun
 
 bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1,
                                           std::function<bool(Rule &)> f2) {
-  bool is_constructable = false;
-  if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic) && DB_cat_amean_dic[c].find(m.get_base()) != DB_cat_amean_dic[c].end()) {
-    std::vector<RuleDBType> prod;
-    std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> range_pair = dic_range(c, m.get_base());
-    std::for_each(range_pair.first, range_pair.second, [&](std::multimap<AMean, Rule>::value_type &p) {
-      if (f2(p.second)) {
-        bool subconst = true;
-        std::vector<RuleDBType> sub_prod{{{p.second}}};
-        std::function<void(RuleDBType &)> func = [&sub_prod](RuleDBType &rules) {
-          std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
-            std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
-          });
-        };
-        int num = 1;
-        std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
-          if (sel.type() == ELEM_TYPE::NT_TYPE) {
-            subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(),
-                                                             m.at(num++).get<Meaning>(), func, f2);
-          }
-        });
-        if (subconst) std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
-        is_constructable = is_constructable || subconst;
-      }
-    });
-    std::for_each(std::begin(prod), std::end(prod), f1);
-  }
-  return is_constructable;
+  // bool is_constructable = false;
+  // if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic) && DB_cat_amean_dic[c].find(m.get_base()) != DB_cat_amean_dic[c].end()) {
+  //   std::vector<RuleDBType> prod;
+  //   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> range_pair = dic_range(c, m.get_base());
+  //   std::for_each(range_pair.first, range_pair.second, [&](std::multimap<AMean, Rule>::value_type &p) {
+  //     if (f2(p.second)) {
+  //       bool subconst = true;
+  //       std::vector<RuleDBType> sub_prod{{{p.second}}};
+  //       std::function<void(RuleDBType &)> func = [&sub_prod](RuleDBType &rules) {
+  //         std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
+  //           std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
+  //         });
+  //       };
+  //       int num = 1;
+  //       std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
+  //         if (sel.type() == ELEM_TYPE::NT_TYPE) {
+  //           subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(),
+  //                                                            m.at(num++).get<Meaning>(), func, f2);
+  //         }
+  //       });
+  //       if (subconst) std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
+  //       is_constructable = is_constructable || subconst;
+  //     }
+  //   });
+  //   std::for_each(std::begin(prod), std::end(prod), f1);
+  // }
+  // return is_constructable;
+  std::size_t index = 0, i;
+  AMean ref = m.flat((i = index++));
+  return construct_grounding_rules(c, [](std::vector<RuleDBType> &rdb_vec) { return true; }, f1,
+                                   [&](Rule &r) {
+                                     bool b = r.get_internal().get_base() == ref && f2(r) && product_loop;
+                                     if (b) ref = m.flat((i = index++));
+                                     return b;
+                                   });
 }
 
-bool Knowledge::all_construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0,
-                                              std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2) {
+bool Knowledge::construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0,
+                                          std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2) {
   bool is_constructable = false;
   if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
     bool first = true;
@@ -933,14 +943,13 @@ bool Knowledge::all_construct_grounding_rules(const Category &c, std::function<b
           });
         };
         std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
-          if (sel.type() == ELEM_TYPE::NT_TYPE) {
-            subconst = subconst && all_construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
-          }
+          if (subconst && sel.type() == ELEM_TYPE::NT_TYPE)
+            subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
         });
         if (subconst) {
           std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
           product_loop = false;
-          first = first || false;
+          first = false;
         } else {
           if (first)
             product_loop = true;
@@ -951,16 +960,10 @@ bool Knowledge::all_construct_grounding_rules(const Category &c, std::function<b
       }
     });
     std::for_each(std::begin(prod), std::end(prod), f1);
-    was_constructable = is_constructable = f0(prod);
-  } else {
-    was_constructable = is_constructable;
+    is_constructable = is_constructable ? f0(prod) : false;
   }
   return is_constructable;
 }
-
-// std::function<std::vector<SymbolElement> &(Meaning &)> Knowledge::rule_function(Rule & r)
-// {
-// }
 
 std::list<SymbolElement> Knowledge::construct_buzz_word() {
   int length;
@@ -981,12 +984,16 @@ std::list<SymbolElement> Knowledge::construct_buzz_word() {
 }
 
 bool Knowledge::explain(Meaning ref, RuleDBType &res) {
+  // std::cout << "explain" << std::endl << ref << std::endl;
+  // AMean test;
+  // std::size_t index = 0, i;
+  // while ((test = ref.flat((i = index++))) != AMean()) {
+  //   std::cout << index - 1 << ": " << test << std::endl;
+  // }
   std::vector<RuleDBType> pattern_list;
   auto range = dic_amean_range(ref.get_base());
-  std::for_each(range.first, range.second, [&](auto &p) {
-    // Please check it ;; mem_fun_t. this is a converter from member function to  object.
-    construct_grounding_rules(p.first, ref, [&](RuleDBType &list) -> void { pattern_list.push_back(list); });
-  });
+  std::for_each(range.first, range.second,
+                [&](auto &p) { construct_grounding_rules(p.first, ref, [&](RuleDBType &list) -> void { pattern_list.push_back(list); }); });
   if (pattern_list.size() > 0) {
     res = pattern_list[MT19937::irand(0, pattern_list.size() - 1)];
     return true;
@@ -1065,9 +1072,7 @@ std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iter
   }
 }
 
-// //3つの流れ（invent based on conditions, remap meaning for music score, make concepts for transfer）
-// //XMLreader::index_count,XMLreader::category_countを使って意味とカテゴリのobjを変更する．
-std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning) {
+std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning, RuleDBType &base) {
   std::vector<RuleDBType> res;
   bool sentence;
   std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
@@ -1095,11 +1100,12 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   };
   std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&](auto &p) {
     sentence = false;
-    all_construct_grounding_rules(p.first, f0, f1, f2);
+    construct_grounding_rules(p.first, f0, f1, f2);
   });
   std::cout << "Number of generated score: " << res.size() << std::endl;
-  RuleDBType rdb0 = res[MT19937::irand(0, res.size() - 1)], rdb;
 
+  RuleDBType rdb0 = res[MT19937::irand(0, res.size() - 1)], rdb;
+  base = rdb0;
   int index = 0;
   std::function<void(Rule &, int)> func1;
   func1 = [&](Rule &r0, int cat) {
@@ -1131,112 +1137,4 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   rdb0.erase(std::begin(rdb0));
   func1(r_base, ut_category--);
   return rdb;
-}
-Rule Knowledge::fabricate(Rule &src1) {
-  // std::vector<RuleDBType> groundable_patterns;
-  // std::map<PATTERN_TYPE, std::vector<RuleDBType>> all_patterns;
-  Rule src;
-
-  // //pattern作成
-  // all_patterns = construct_grounding_patterns(src);
-
-  // if (LOGGING_FLAG)
-  // {
-  // 	LogBox::push_log("\n-->>FABRICATE1:");
-  // }
-
-  // if (all_patterns[COMPLETE].size() != 0)
-  // {
-  // 	RuleDBType target_pattern = all_patterns[COMPLETE][MT19937::irand(0, all_patterns[COMPLETE].size() - 1)];
-
-  // 	if (LOGGING_FLAG)
-  // 	{
-  // 		std::ostringstream os;
-
-  // 		LogBox::push_log("**CONSTRUCT");
-  // 		LogBox::push_log("***->>USED_RULES");
-  // 		std::copy(std::begin(target_pattern), std::end(target_pattern), std::ostream_iterator<Rule>(os, " "));
-  // 		LogBox::push_log(os.str());
-  // 		LogBox::push_log("***<<-USED_RULES");
-  // 	}
-
-  // 	ground_with_pattern(src, target_pattern);
-  // }
-  // else if (all_patterns[ABSOLUTE].size() != 0)
-  // {
-  // 	if (LOGGING_FLAG)
-  // 	{
-  // 		LogBox::push_log("**ABSOLUTE");
-  // 	}
-
-  // 	src = all_patterns[ABSOLUTE][MT19937::irand(0, all_patterns[ABSOLUTE].size() - 1)].front();
-  // }
-  // else if (all_patterns[SEMICOMPLETE].size() != 0)
-  // {
-  // 	RuleDBType target_pattern = all_patterns[SEMICOMPLETE][MT19937::irand(0, all_patterns[SEMICOMPLETE].size() - 1)];
-  // 	if (LOGGING_FLAG)
-  // 	{
-  // 		std::ostringstream os;
-
-  // 		LogBox::push_log("**SEMI CONSTRUCT");
-  // 		LogBox::push_log("***->>USED_RULES");
-  // 		std::copy(std::begin(use_pattern), std::end(use_pattern), std::ostream_iterator<Rule>(os, " "));
-  // 		LogBox::push_log(os.str());
-  // 		LogBox::push_log("***<<-USED_RULES");
-  // 	}
-  // 	std::for_each(std::begin(target_pattern), std::end(target_pattern), [&](Rule &r) {
-  // 		if (r.is_noun(intention) && r.get_external().size())
-  // 		{
-  // 			std::vector<SymbolElement> buzz = construct_buzz_word();
-  // 			r = Rule(r.get_internal(), buzz);
-  // 			if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD)
-  // 			{
-  // 				Rule keep_word;
-  // 				keep_word = r;
-  // 				send_db(keep_word);
-  // 				dic_add(DB_dic, keep_word);
-  // 				if (LOGGING_FLAG)
-  // 				{
-  // 					LogBox::push_log("***->>KEPT THE COMP_RULE");
-  // 					LogBox::push_log(keep_word.to_s());
-  // 					LogBox::push_log("***<<-KEPT THE COMP_RULE");
-  // 				}
-  // 			}
-  // 			if (LOGGING_FLAG)
-  // 			{
-  // 				LogBox::push_log("***->>COMP_RULE");
-  // 				LogBox::push_log(r.to_s());
-  // 				LogBox::push_log("***<<-COMP_RULE");
-  // 			}
-  // 		}
-  // 	});
-
-  // 	ground_with_pattern(src, target_pattern);
-  // }
-  // else
-  // {
-  // 	if (LOGGING_FLAG)
-  // 	{
-  // 		LogBox::push_log("**RANDOM");
-  // 	}
-
-  // 	std::vector<SymbolElement> ex = construct_buzz_word();
-  // 	src.get_external().swap(ex);
-
-  // 	if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD)
-  // 	{
-  // 		send_db(src);
-  // 		if (LOGGING_FLAG)
-  // 		{
-  // 			LogBox::push_log("**KEPT THE RULE");
-  // 		}
-  // 	}
-  // }
-  // if (LOGGING_FLAG)
-  // {
-  // 	LogBox::push_log("**OUTPUT");
-  // 	LogBox::push_log(src.to_s());
-  // 	LogBox::push_log("<<--FABRICATE");
-  // }
-  return src;
 }
