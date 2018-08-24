@@ -47,3 +47,6 @@ rubyによる実行ユーティリティを使うことで，複数スレッド�
 例：
 
         ruby exe_count.rb ../RESULT --keep-random-rule --analyze --logging --generation 100 --accuracy-meaning --ucsymmetry
+
+#using sofware
+- yhirose/cpp-peglib
