@@ -1,0 +1,9 @@
+digraph sample{
+"L3752(0)"->"[C  Cis  Dis  Gis](0)"
+"L2289(0)"->"[C  E  F  G](0)"
+"L5411(0)"->"L3752(0)"
+"L5411(0)"->"L2289(0)"
+{rank = min; "L5411(0)"}
+{rank = same; "L3752(0)"; "L2289(0)";}
+{rank = max; "[C  Cis  Dis  Gis](0)"; "[C  E  F  G](0)";}
+}

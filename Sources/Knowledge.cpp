@@ -148,7 +148,7 @@ bool Knowledge::consolidate(void) {
     flag = false;
     tmp = ar;
     std::shuffle(std::begin(tmp), std::end(tmp), MT19937::igen);
-    std::for_each(std::begin(tmp), std::end(tmp), [&](int i) {
+    std::for_each(std::begin(tmp), std::end(tmp), [this, &flag](int i) {
       switch (i) {
         case CONSOLIDATE_TYPE::CHUNK: {
           flag = chunk() || flag;
@@ -233,7 +233,7 @@ bool Knowledge::chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules) {
         LogBox::push_log(unchecked_sent.to_s());
         LogBox::push_log(r.to_s());
         LogBox::push_log("**TO");
-        std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &temp) { LogBox::push_log(temp.to_s()); });
+        std::for_each(std::begin(buffer), std::end(buffer), [](Rule &temp) { LogBox::push_log(temp.to_s()); });
         LogBox::push_log("<<--CHUNK");
       }
       send_box(buffer);
@@ -386,7 +386,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
 
       std::list<MeaningElement> var_vector1, var_vector2;
 
-      std::for_each(std::begin(noun1_ex), std::end(noun1_ex), [&](SymbolElement &se) {
+      std::for_each(std::begin(noun1_ex), std::end(noun1_ex), [&d_size, &var_vector1](SymbolElement &se) {
         if (se.type() == ELEM_TYPE::NT_TYPE) {
           MeaningElement mel = se.get<RightNonterminal>().get_var();
           var_vector1.push_back(mel);
@@ -394,7 +394,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
         }
       });
 
-      std::for_each(std::begin(noun2_ex), std::end(noun2_ex), [&](SymbolElement &se) {
+      std::for_each(std::begin(noun2_ex), std::end(noun2_ex), [&e_size, &var_vector2](SymbolElement &se) {
         if (se.type() == ELEM_TYPE::NT_TYPE) {
           MeaningElement mel = se.get<RightNonterminal>().get_var();
           var_vector2.push_back(mel);
@@ -408,11 +408,12 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
       Rule noun2(LeftNonterminal(Category(new_cat_id), Meaning(AMean(new_ind_id2), var_vector2)), noun2_ex);
 
       // insertポジション計算
-      std::for_each(std::begin(targ.get_external()), std::next(std::begin(targ.get_external()), fmatch_length), [&](SymbolElement &sel) {
-        if (sel.type() == ELEM_TYPE::NT_TYPE) {
-          in_pos++;
-        }
-      });
+      std::for_each(std::begin(targ.get_external()), std::next(std::begin(targ.get_external()), fmatch_length),
+                    [&in_pos](SymbolElement &sel) {
+                      if (sel.type() == ELEM_TYPE::NT_TYPE) {
+                        in_pos++;
+                      }
+                    });
       // Rule自体のindex分
       in_pos++;
 
@@ -457,7 +458,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
       std::list<MeaningElement> var_vector;
 
       // var_vector
-      std::for_each(std::begin(noun2_ex), std::end(noun2_ex), [&](SymbolElement &se) {
+      std::for_each(std::begin(noun2_ex), std::end(noun2_ex), [&d_size, &var_vector](SymbolElement &se) {
         if (se.type() == ELEM_TYPE::NT_TYPE) {
           var_vector.push_back(Variable(se.get<RightNonterminal>().get_var()));
           d_size++;
@@ -484,11 +485,12 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
       buf.push_back(noun);
 
       // insertポジション計算
-      std::for_each(std::begin(targ.get_external()), std::next(std::begin(targ.get_external()), fmatch_length), [&](SymbolElement &sel) {
-        if (sel.type() == ELEM_TYPE::NT_TYPE) {
-          in_pos++;
-        }
-      });
+      std::for_each(std::begin(targ.get_external()), std::next(std::begin(targ.get_external()), fmatch_length),
+                    [&in_pos](SymbolElement &sel) {
+                      if (sel.type() == ELEM_TYPE::NT_TYPE) {
+                        in_pos++;
+                      }
+                    });
       // Rule自体のindex分
       in_pos++;
 
@@ -598,7 +600,7 @@ bool Knowledge::merging(Rule &src) {
 }
 
 void Knowledge::collect_merge(Rule &src, RuleDBType &rule_db, std::set<Category> &unified_cat, std::set<AMean> &unified_mean) {
-  std::for_each(std::begin(rule_db), std::end(rule_db), [&](Rule &r) {
+  std::for_each(std::begin(rule_db), std::end(rule_db), [this, &src, &unified_cat, &unified_mean](Rule &r) {
     if (src.get_external() == r.get_external() && intention.merge_equal(src.get_internal().get_base(), r.get_internal().get_base())) {
       if (src.get_internal().get_cat() != r.get_internal().get_cat()) {
         unified_cat.insert(Category{r.get_internal().get_cat()});
@@ -611,14 +613,14 @@ void Knowledge::collect_merge(Rule &src, RuleDBType &rule_db, std::set<Category>
 }
 
 void Knowledge::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buffer, std::set<Category> &unified_cat) {
-  std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &r) {
+  std::for_each(std::begin(buffer), std::end(buffer), [&base_cat, &unified_cat](Rule &r) {
     Rule tmp = r;
     bool is_modified = false;
     if (unified_cat.find(r.get_internal().get_cat()) != std::end(unified_cat)) {
       r.get_internal() = LeftNonterminal{Category{base_cat}, r.get_internal().get_means()};
       is_modified = is_modified || true;
     }
-    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
+    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&base_cat, &unified_cat, &is_modified](SymbolElement &sel) {
       if (sel.type() == ELEM_TYPE::NT_TYPE && unified_cat.find(sel.get<RightNonterminal>().get_cat()) != std::end(unified_cat)) {
         sel = RightNonterminal{Category{base_cat}, sel.get<RightNonterminal>().get_var()};
         is_modified = true;
@@ -632,14 +634,14 @@ void Knowledge::merge_cat_proc_buffer(const Category &base_cat, RuleDBType &buff
 }
 Knowledge::RuleDBType Knowledge::merge_cat_proc(const Category &base_cat, RuleDBType &DB, std::set<Category> &unified_cat) {
   RuleDBType buf, swapDB;
-  std::for_each(std::begin(DB), std::end(DB), [&](Rule &r) {
+  std::for_each(std::begin(DB), std::end(DB), [&base_cat, &unified_cat, &buf, &swapDB](Rule &r) {
     Rule tmp = r;
     bool is_modified = false;
     if (unified_cat.find(r.get_internal().get_cat()) != std::end(unified_cat)) {
       r.get_internal() = LeftNonterminal{Category{base_cat}, r.get_internal().get_means()};
       is_modified = true;
     }
-    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
+    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&base_cat, &unified_cat, &is_modified](SymbolElement &sel) {
       if (sel.type() == ELEM_TYPE::NT_TYPE && unified_cat.find(sel.get<RightNonterminal>().get_cat()) != std::end(unified_cat)) {
         sel = RightNonterminal{Category{base_cat}, sel.get<RightNonterminal>().get_var()};
         is_modified = true;
@@ -660,7 +662,7 @@ Knowledge::RuleDBType Knowledge::merge_cat_proc(const Category &base_cat, RuleDB
   return buf;
 }
 void Knowledge::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffer, std::set<AMean> &unified_mean) {
-  std::for_each(std::begin(buffer), std::end(buffer), [&](Rule &r) {
+  std::for_each(std::begin(buffer), std::end(buffer), [&base_mean, &unified_mean](Rule &r) {
     Rule tmp = r;
     bool is_modified = false;
     if (unified_mean.find(r.get_internal().get_base()) != std::end(unified_mean)) {
@@ -676,7 +678,7 @@ void Knowledge::merge_mean_proc_buffer(const AMean &base_mean, RuleDBType &buffe
 
 Knowledge::RuleDBType Knowledge::merge_mean_proc(const AMean &base_mean, RuleDBType &DB, std::set<AMean> &unified_mean) {
   RuleDBType buf, swapDB;
-  std::for_each(std::begin(DB), std::end(DB), [&](Rule &r) {
+  std::for_each(std::begin(DB), std::end(DB), [&base_mean, &unified_mean, &buf, &swapDB](Rule &r) {
     Rule tmp = r;
     bool is_modified = false;
     if (unified_mean.find(r.get_internal().get_base()) != std::end(unified_mean)) {
@@ -733,7 +735,7 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents) {
   bool is_replaced = false;
   RuleDBType buf, swapDB;
 
-  std::for_each(std::begin(checking_sents), std::end(checking_sents), [&](Rule &r) {
+  std::for_each(std::begin(checking_sents), std::end(checking_sents), [this, &word, &is_replaced, &buf, &swapDB](Rule &r) {
     if (r.get_external().size() > word.get_external().size() &&
         intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base())) {
       std::list<SymbolElement> el_vec = r.get_external();
@@ -834,7 +836,7 @@ void Knowledge::build_word_index(void) {
 }
 
 void Knowledge::dic_add(RuleDBType &vec_r) {
-  std::for_each(std::begin(vec_r), std::end(vec_r), [&](Rule &r) { dic_add(r); });
+  std::for_each(std::begin(vec_r), std::end(vec_r), [this](Rule &r) { dic_add(r); });
 }
 
 void Knowledge::dic_add(Rule &r) {
@@ -861,9 +863,10 @@ std::string Knowledge::dic_cat_to_s() {
   // std::map<Category, std::multimap<AMean, Rule>> DB_cat_amean_dic
   std::ostringstream os;
   std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic),
-                [&](std::map<Category, std::multimap<AMean, Rule>>::value_type &mp) {
-                  std::for_each(std::begin(mp.second), std::end(mp.second), [&](std::multimap<AMean, Rule>::value_type &mmp) {
-                    os << mp.first << " " << mmp.first << " " << mmp.second << std::endl;
+                [&os](std::map<Category, std::multimap<AMean, Rule>>::value_type &mp) {
+                  std::string base = mp.first.to_s();
+                  std::for_each(std::begin(mp.second), std::end(mp.second), [&os, &base](std::multimap<AMean, Rule>::value_type &mmp) {
+                    os << base << " " << mmp.first << " " << mmp.second << std::endl;
                   });
                 });
   return os.str();
@@ -873,96 +876,13 @@ std::string Knowledge::dic_amean_to_s() {
   // std::map<AMean, std::multimap<Category, Rule>> DB_amean_cat_dic
   std::ostringstream os;
   std::for_each(std::begin(DB_amean_cat_dic), std::end(DB_amean_cat_dic),
-                [&](std::map<AMean, std::multimap<Category, Rule>>::value_type &mp) {
-                  std::for_each(std::begin(mp.second), std::end(mp.second), [&](std::multimap<Category, Rule>::value_type &mmp) {
-                    os << mp.first << " " << mmp.first << " " << mmp.second << std::endl;
+                [&os](std::map<AMean, std::multimap<Category, Rule>>::value_type &mp) {
+                  std::string base = mp.first.to_s();
+                  std::for_each(std::begin(mp.second), std::end(mp.second), [&os, &base](std::multimap<Category, Rule>::value_type &mmp) {
+                    os << base << " " << mmp.first << " " << mmp.second << std::endl;
                   });
                 });
   return os.str();
-}
-
-bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f) {
-  return construct_grounding_rules(c, m, f, [](Rule &r) -> bool { return true; });
-}
-
-bool Knowledge::construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1,
-                                          std::function<bool(Rule &)> f2) {
-  // bool is_constructable = false;
-  // if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic) && DB_cat_amean_dic[c].find(m.get_base()) != DB_cat_amean_dic[c].end()) {
-  //   std::vector<RuleDBType> prod;
-  //   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> range_pair = dic_range(c, m.get_base());
-  //   std::for_each(range_pair.first, range_pair.second, [&](std::multimap<AMean, Rule>::value_type &p) {
-  //     if (f2(p.second)) {
-  //       bool subconst = true;
-  //       std::vector<RuleDBType> sub_prod{{{p.second}}};
-  //       std::function<void(RuleDBType &)> func = [&sub_prod](RuleDBType &rules) {
-  //         std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
-  //           std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
-  //         });
-  //       };
-  //       int num = 1;
-  //       std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
-  //         if (sel.type() == ELEM_TYPE::NT_TYPE) {
-  //           subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(),
-  //                                                            m.at(num++).get<Meaning>(), func, f2);
-  //         }
-  //       });
-  //       if (subconst) std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
-  //       is_constructable = is_constructable || subconst;
-  //     }
-  //   });
-  //   std::for_each(std::begin(prod), std::end(prod), f1);
-  // }
-  // return is_constructable;
-  std::size_t index = 0, i;
-  AMean ref = m.flat((i = index++));
-  return construct_grounding_rules(c, [](std::vector<RuleDBType> &rdb_vec) { return true; }, f1,
-                                   [&](Rule &r) {
-                                     bool b = r.get_internal().get_base() == ref && f2(r) && product_loop;
-                                     if (b) ref = m.flat((i = index++));
-                                     return b;
-                                   });
-}
-
-bool Knowledge::construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0,
-                                          std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2) {
-  bool is_constructable = false;
-  if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
-    bool first = true;
-    product_loop = true;
-    std::vector<RuleDBType> prod;
-    std::vector<std::pair<AMean, Rule>> pairs{std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
-    std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
-    std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
-      if (f2(p.second)) {
-        bool subconst = true;
-        std::vector<RuleDBType> sub_prod{{{p.second}}};
-        std::function<void(RuleDBType &)> func = [&sub_prod, &f0](RuleDBType &rules) {
-          std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
-            std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
-          });
-        };
-        std::for_each(std::begin(p.second.get_external()), std::end(p.second.get_external()), [&](SymbolElement &sel) {
-          if (subconst && sel.type() == ELEM_TYPE::NT_TYPE)
-            subconst = subconst && construct_grounding_rules(RightNonterminal(sel.get<RightNonterminal>()).get_cat(), f0, func, f2);
-        });
-        if (subconst) {
-          std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
-          product_loop = false;
-          first = false;
-        } else {
-          if (first)
-            product_loop = true;
-          else
-            product_loop = false;
-        }
-        is_constructable = is_constructable || subconst;
-      }
-    });
-    std::for_each(std::begin(prod), std::end(prod), f1);
-    is_constructable = is_constructable ? f0(prod) : false;
-  }
-  return is_constructable;
 }
 
 std::list<SymbolElement> Knowledge::construct_buzz_word() {
@@ -984,16 +904,12 @@ std::list<SymbolElement> Knowledge::construct_buzz_word() {
 }
 
 bool Knowledge::explain(Meaning ref, RuleDBType &res) {
-  // std::cout << "explain" << std::endl << ref << std::endl;
-  // AMean test;
-  // std::size_t index = 0, i;
-  // while ((test = ref.flat((i = index++))) != AMean()) {
-  //   std::cout << index - 1 << ": " << test << std::endl;
-  // }
   std::vector<RuleDBType> pattern_list;
   auto range = dic_amean_range(ref.get_base());
-  std::for_each(range.first, range.second,
-                [&](auto &p) { construct_grounding_rules(p.first, ref, [&](RuleDBType &list) -> void { pattern_list.push_back(list); }); });
+  std::for_each(range.first, range.second, [this, &pattern_list, &ref](auto &p) {
+    std::function<void(RuleDBType & list)> f1 = [&pattern_list](RuleDBType &list) -> void { pattern_list.push_back(list); };
+    construct_groundable_rules(p.first, ref, f1);
+  });
   if (pattern_list.size() > 0) {
     res = pattern_list[MT19937::irand(0, pattern_list.size() - 1)];
     return true;
@@ -1030,12 +946,13 @@ void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern) {
 Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref) {
   RuleDBType grounded_rules;
   auto range = dic_amean_range(ref.get_base());
-  std::for_each(range.first, range.second, [&](std::pair<Category, Rule> p) {
-    construct_grounding_rules(p.first, ref, [&](RuleDBType &list) {
+  std::for_each(range.first, range.second, [this, &ref, &grounded_rules](std::pair<Category, Rule> p) {
+    std::function<void(RuleDBType & list)> f1 = [this, &ref, &grounded_rules](RuleDBType &list) {
       Rule r(LeftNonterminal(Category(0), ref), std::list<SymbolElement>());
       ground_with_pattern(r, list);
       grounded_rules.push_back(r);
-    });
+    };
+    construct_groundable_rules(p.first, ref, f1);
   });
 
   return grounded_rules;
@@ -1075,20 +992,21 @@ std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iter
 std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_meaning, RuleDBType &base) {
   std::vector<RuleDBType> res;
   bool sentence;
-  std::function<bool(std::vector<RuleDBType> &)> f0 = [&](std::vector<RuleDBType> &rules) {
+  std::function<bool(std::vector<RuleDBType> &)> f0 = [](std::vector<RuleDBType> &rules) {
     // std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
     // 	std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
     // });
     return true;
   };
-  std::function<void(RuleDBType &)> f1 = [&](RuleDBType rules) {
+  std::function<void(RuleDBType &)> f1 = [this, &res](RuleDBType rules) {
     bool has_sentence = false;
-    std::for_each(std::begin(rules), std::end(rules), [&](Rule &r) { has_sentence = has_sentence || r.is_sentence(intention); });
+    std::for_each(std::begin(rules), std::end(rules),
+                  [this, &has_sentence](Rule &r) { has_sentence = has_sentence || r.is_sentence(intention); });
     if (has_sentence) {
       res.push_back(rules);
     }
   };
-  std::function<bool(Rule &)> f2 = [&](Rule &r) {
+  std::function<bool(Rule &)> f2 = [this, &sentence](Rule &r) {
     if (!sentence) {
       sentence = r.is_sentence(intention);
       // return product_loop || !sentence;
@@ -1098,9 +1016,9 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
     }
     // return product_loop || !sentence; //return product_loop
   };
-  std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&](auto &p) {
+  std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [this, &f0, &f1, &f2, &sentence](auto &p) {
     sentence = false;
-    construct_grounding_rules(p.first, f0, f1, f2);
+    construct_groundable_rules(p.first, f0, f1, f2);
   });
   std::cout << "Number of generated score: " << res.size() << std::endl;
 
@@ -1108,17 +1026,17 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   base = rdb0;
   int index = 0;
   std::function<void(Rule &, int)> func1;
-  func1 = [&](Rule &r0, int cat) {
+  func1 = [this, &core_meaning, &func1, &rdb, &rdb0, &index](Rule &r0, int cat) {
     int loc = index++;
     AMean am{ut_index--};
     Category ca{cat};
     core_meaning[am] = intention.get(r0.get_internal().get_base());
     rdb.push_back(Rule{LeftNonterminal{ca, Meaning{am, r0.get_internal().get_followings()}}, r0.get_external()});
     Rule r = rdb[loc];
-    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [&](SymbolElement &sel) {
+    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [this, &r0, &r, &func1, &rdb0](SymbolElement &sel) {
       if (sel.type() == ELEM_TYPE::NT_TYPE) {
         auto it = std::find_if(std::begin(rdb0), std::end(rdb0),
-                               [&](Rule &r1) { return r1.get_internal().get_cat() == sel.template get<RightNonterminal>().get_cat(); });
+                               [&sel](Rule &r1) { return r1.get_internal().get_cat() == sel.template get<RightNonterminal>().get_cat(); });
         if (it == std::end(rdb0)) {
           std::cerr << "Error Rule: " << r0 << " changed: " << r << std::endl;
           std::copy(std::begin(rdb0), std::end(rdb0), std::ostream_iterator<Rule>(std::cerr, "\n"));
@@ -1137,4 +1055,82 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   rdb0.erase(std::begin(rdb0));
   func1(r_base, ut_category--);
   return rdb;
+}
+
+bool Knowledge::construct_groundable_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> &f) {
+  std::function<bool(Rule &)> f2 = [](Rule &r) -> bool { return true; };
+  return construct_groundable_rules(c, m, f, f2);
+}
+
+bool Knowledge::construct_groundable_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> &f1,
+                                           std::function<bool(Rule &)> &f2) {
+  std::size_t index = 0;
+  std::list<AMean> ref;
+  m.flat_list(ref);
+  auto it = std::begin(ref);
+  auto it_end = std::end(ref);
+  std::function<bool(std::vector<RuleDBType> &)> f0 = [](std::vector<RuleDBType> &rdb_vec) -> bool { return true; };
+  std::function<bool(Rule &)> f2_1 = [this, &m, &f2, &index, &it, &it_end](Rule &r) -> bool {
+    bool b = it != it_end && r.get_internal().get_base() == *it && f2(r) && product_loop;
+    if (b) it++;
+    return b;
+  };
+  return construct_groundable_rules(c, f0, f1, f2_1);
+}
+
+bool Knowledge::construct_groundable_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> &f0,
+                                           std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2) {
+  bool is_constructable = false;
+  if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
+    bool first = true;
+    product_loop = true;
+    std::vector<RuleDBType> prod;
+    std::vector<std::pair<AMean, Rule>> pairs{std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
+    std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
+    std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
+      if (f2(p.second)) {
+        std::vector<RuleDBType> sub_prod{{{p.second}}};
+        std::function<void(RuleDBType &)> f1_1 = [&sub_prod, &f0](RuleDBType &rules) {
+          std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
+            std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
+          });
+        };
+        std::function<bool(const Category &, const std::any &)> func = [this, &f0, &f1_1, &f2](const Category &c, const std::any &a) {
+          return construct_groundable_rules(c, f0, f1_1, f2);
+        };
+        bool subconst = construct_groundable_rules_1(p.second, sub_prod, func);
+        if (subconst) {
+          std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
+          product_loop = false;
+          first = false;
+        } else {
+          if (first)
+            product_loop = true;
+          else
+            product_loop = false;
+        }
+        is_constructable = is_constructable || subconst;
+      }
+    });
+    std::for_each(std::begin(prod), std::end(prod), f1);
+    is_constructable = is_constructable ? f0(prod) : false;
+  }
+  return is_constructable;
+}
+
+bool Knowledge::construct_groundable_rules_1(Rule &base, std::vector<RuleDBType> &prod,
+                                             std::function<bool(const Category &, const std::any &)> &func) {
+  bool constructable = true;
+  std::for_each(std::begin(base.get_external()), std::end(base.get_external()), [&func, &constructable](SymbolElement &sel) {
+    if (constructable && sel.type() == ELEM_TYPE::NT_TYPE)
+      constructable = constructable && func(sel.template get<RightNonterminal>().get_cat(), 0);
+  });
+  return constructable;
+}
+
+bool Knowledge::construct_parsed_rules(std::list<SymbolElement> &str) { return true; }
+void Knowledge::bottom_up_construction(std::list<SymbolElement> &str, ParseLink &pl) {
+  std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
+  std::set<SymbolElement> str_set{std::begin(str), std::end(str)};
+  pl.add(ruleDB_ref, str_set, str.size());
 }

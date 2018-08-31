@@ -2,6 +2,7 @@
 #define Knowledge_H_
 
 #include <algorithm>
+#include <any>
 #include <climits>
 #include <cstddef>
 #include <cstdlib>
@@ -21,6 +22,121 @@
 #include "Semantics.h"
 #include "XMLreader.h"
 
+class ParseLink {
+  struct ParseNode {
+    Rule r;
+    std::list<std::reference_wrapper<SymbolElement>> str;
+    std::vector<std::reference_wrapper<ParseNode>> next;
+    ParseNode() : r(), str(), next() {}
+    ParseNode(Rule r) : r(r), str(), next() {}
+  };
+  std::list<ParseNode> dic;
+  std::list<std::reference_wrapper<ParseNode>> search_dic;
+  std::list<std::reference_wrapper<ParseNode>>::iterator search_it;
+
+ public:
+  ParseLink() : dic() {}
+  void expansion(std::vector<Rule> &rules, ParseNode &node) {
+    rules.push_back(node.r);
+    if (node.next.size() == 0) {
+      return;
+    } else {
+      std::for_each(std::begin(node.next), std::end(node.next), [this, &rules](ParseNode &p) { expansion(rules, p); });
+    }
+  }
+  bool search_init(std::list<SymbolElement> sel_vec) {
+    search_dic.clear();
+    // search_dic holds parse-nodes which has forward matching str with sel_vec
+
+    search_it = std::begin(search_dic);
+    return true;
+  }
+  void search() { search_it = std::begin(search_dic); }
+  bool search_next(std::list<std::reference_wrapper<ParseNode>>::iterator &it) {
+    if (search_it != std::end(search_dic)) {
+      it = search_it++;
+      return true;
+    } else {
+      return false;
+    }
+  }
+  void add(std::list<std::reference_wrapper<Rule>> rules, std::set<SymbolElement> &ref, std::size_t limit) {
+    dic.clear();
+    bool b = false;
+    std::list<std::reference_wrapper<Rule>> rules_sym;
+    std::list<std::reference_wrapper<Rule>> rules_nt;
+    std::for_each(std::begin(rules), std::end(rules), [this, &rules_sym, &rules_nt](Rule &r) {
+      if (std::find_if(std::begin(r.get_external()), std::end(r.get_external()),
+                       [](SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == std::end(r.get_external())) {
+        rules_sym.push_back(r);
+      } else {
+        rules_nt.push_back(r);
+      }
+    });
+    std::cout << "sym loop" << std::endl;
+    std::for_each(std::begin(rules_sym), std::end(rules_sym), [this, &ref, &limit, &b](Rule &r) { b = b || add(r, ref, limit); });
+    while (b) {
+      std::cout << "nt loop" << std::endl;
+      b = false;
+      std::for_each(std::begin(rules_nt), std::end(rules_nt), [this, &ref, &limit, &b](Rule &r) { b = b || add(r, ref, limit); });
+    }
+  }
+
+ private:
+  bool add(Rule &r, std::set<SymbolElement> &ref, std::size_t limit) {
+    std::list<ParseNode> box{{ParseNode(r)}};
+    bool b;
+    std::set<SymbolElement> set_r;
+    std::copy_if(std::begin(r.get_external()), std::end(r.get_external()), std::inserter(set_r, std::begin(set_r)),
+                 [](SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; });
+    b = std::includes(std::begin(ref), std::end(ref), std::begin(set_r), std::end(set_r));
+    if (!b) return b;
+    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [this, &r, &limit, &box, &b](SymbolElement &sel) {
+      switch (sel.type()) {
+        case ELEM_TYPE::NT_TYPE: {
+          if (b) {
+            std::list<ParseNode> subbox;
+            std::for_each(std::begin(dic), std::end(dic), [&r, &limit, &subbox, &sel, &box, &b](ParseNode &p) {
+              if (r.get_internal().get_base() != p.r.get_internal().get_base() &&
+                  sel.template get<RightNonterminal>().get_cat() == p.r.get_internal().get_cat()) {
+                std::for_each(std::begin(box), std::end(box), [&limit, &subbox, &p](ParseNode box_p) {
+                  if (p.str.size() + (box_p.str.size()) <= limit) {
+                    box_p.next.push_back(p);
+                    box_p.str.insert(std::end(box_p.str), std::begin(p.str), std::end(p.str));
+                    std::copy(std::begin(p.str), std::end(p.str), std::back_inserter(box_p.str));
+                    subbox.push_back(box_p);
+                  }
+                });
+              }
+            });
+            if (subbox.size() != 0) {
+              b = false;
+              box.swap(subbox);
+            }
+          }
+        } break;
+        case ELEM_TYPE::SYM_TYPE: {
+          if (b) {
+            std::list<ParseNode> subbox;
+            std::for_each(std::begin(box), std::end(box), [&limit, &subbox, &sel, &b](ParseNode &box_p) {
+              if (box_p.str.size() + 1 <= limit) {
+                box_p.str.push_back(sel);
+                subbox.push_back(box_p);
+              }
+            });
+            if (subbox.size() != 0)
+              box.swap(subbox);
+            else
+              b = false;
+          }
+        } break;
+      }
+    });
+    if (b) std::copy(std::begin(box), std::end(box), std::back_inserter(dic));
+    return b;
+  }
+};
+
 class KnowledgeTypeDef {
  public:
   typedef std::vector<Rule> RuleDBType;
@@ -36,20 +152,10 @@ class Knowledge : public KnowledgeTypeDef {
   enum PATTERN_TYPE { ABSOLUTE, COMPLETE, SEMICOMPLETE, RANDOM, NUM_SORT };
   enum CONSOLIDATE_TYPE { CHUNK = 0, MERGE, REPLACE, ALL_METHOD };
 
-  IndexFactory cat_indexer;
-  IndexFactory var_indexer;
-  IndexFactory ind_indexer;
-  RuleDBType input_box;
-  RuleDBType box_buffer;
-  DicDBType_cat DB_cat_amean_dic;
-  DicDBType_amean DB_amean_cat_dic;
-
-  RuleDBType ruleDB;
-
-  Semantics<Conception> intention;
-
   int ut_index;
   int ut_category;
+  RuleDBType input_box;
+  Semantics<Conception> intention;
 
   static bool LOGGING_FLAG;
   static int ABSENT_LIMIT;
@@ -172,6 +278,16 @@ class Knowledge : public KnowledgeTypeDef {
   std::size_t size() const;
 
  private:
+  IndexFactory cat_indexer;
+  IndexFactory var_indexer;
+  IndexFactory ind_indexer;
+  RuleDBType box_buffer;
+  DicDBType_cat DB_cat_amean_dic;
+  DicDBType_amean DB_amean_cat_dic;
+  RuleDBType ruleDB;
+  std::map<std::list<SymbolElement>, RuleDBType> strDic;
+  ParseLink parse_info;
+
   RuleDBType chunking(Rule &src, Rule &dst);
   bool chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules);
   bool merging(Rule &src);
@@ -190,24 +306,24 @@ class Knowledge : public KnowledgeTypeDef {
   void unify(RuleDBType &DB);
 
   std::list<SymbolElement> construct_buzz_word();
-  bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f);
-  bool construct_grounding_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> f1, std::function<bool(Rule &)> f2);
+  bool construct_groundable_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> &f);
+  bool construct_groundable_rules(const Category &c, Meaning m, std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2);
   bool product_loop;
-  bool construct_grounding_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> f0, std::function<void(RuleDBType &)> f1,
-                                 std::function<bool(Rule &)> f2);
+  bool construct_groundable_rules(const Category &c, std::function<bool(std::vector<RuleDBType> &)> &f0,
+                                  std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2);
+  bool construct_groundable_rules_1(Rule &base, std::vector<RuleDBType> &prod,
+                                    std::function<bool(const Category &, const std::any &)> &func);
+  bool construct_parsed_rules(std::list<SymbolElement> &str);
+
+ public:
+  void bottom_up_construction(std::list<SymbolElement> &str, ParseLink &pl);
+
+ private:
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
   std::pair<std::multimap<Category, Rule>::iterator, std::multimap<Category, Rule>::iterator> dic_amean_range(const AMean &c);
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);
   std::string dic_cat_to_s();
   std::string dic_amean_to_s();
-};
-
-template <class F, class... A>
-struct lazy {
-  F f;
-  std::tuple<A...> a;
-  lazy(F f, A... a) : f(f), a(a...) {}
-  auto operator()() const { return std::apply(f, a); }
 };
 
 #endif /* Knowledge_H_ */

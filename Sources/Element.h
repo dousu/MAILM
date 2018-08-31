@@ -230,8 +230,24 @@ class Meaning {
     str += Prefices::RPRN;
     return str;
   }
-  AMean flat(std::size_t &ind);
+  void flat(std::size_t ind, AMean &res) {
+    std::size_t i = ind;
+    res = AMean();
+    flat_1(i, res);
+  }
+  void flat_arr(std::vector<AMean> &res) {
+    res.clear();
+    flat_arr_1(res);
+  }
+  void flat_list(std::list<AMean> &res) {
+    res.clear();
+    flat_list_1(res);
+  }
 
+ private:
+  void flat_1(std::size_t &ind, AMean &res);
+  void flat_arr_1(std::vector<AMean> &res);
+  void flat_list_1(std::list<AMean> &res);
   friend std::ostream &operator<<(std::ostream &out, const Meaning &obj);
 };
 

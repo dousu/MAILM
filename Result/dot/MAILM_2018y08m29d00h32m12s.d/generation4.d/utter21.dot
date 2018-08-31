@@ -1,0 +1,35 @@
+digraph sample{
+"L1602(0)"->"[C  D  Dis  Fis  A](0)"
+"L1602(0)"->"[C  D  Dis  Fis  A](1)"
+"L1602(0)"->"[C  D  Dis  Fis  A](2)"
+"L1602(0)"->"[C  D  Dis  Fis  A](3)"
+"L3821(0)"->"[Cis  E  A](0)"
+"L3124(0)"->"[C  Dis  F  G  A](0)"
+"L3124(0)"->"[C  Dis  F  G  A](1)"
+"L3124(0)"->"[C  Dis  F  G  A](2)"
+"L3124(0)"->"[C  Dis  F  G  A](3)"
+"L2590(0)"->"[C  Gis  Ais](0)"
+"L1602(1)"->"[C  D  Dis  Fis  A](4)"
+"L1602(1)"->"[C  D  Dis  Fis  A](5)"
+"L1602(1)"->"[C  D  Dis  Fis  A](6)"
+"L1602(1)"->"[C  D  Dis  Fis  A](7)"
+"L4999(0)"->"[D  F  G  A](0)"
+"L3124(1)"->"[C  Dis  F  G  A](4)"
+"L3124(1)"->"[C  Dis  F  G  A](5)"
+"L3124(1)"->"[C  Dis  F  G  A](6)"
+"L3124(1)"->"[C  Dis  F  G  A](7)"
+"L5160(0)"->"L1602(0)"
+"L5160(0)"->"L3821(0)"
+"L5160(0)"->"L3124(0)"
+"L5160(0)"->"L2590(0)"
+"L5160(0)"->"L1602(1)"
+"L5160(0)"->"L4999(0)"
+"L5160(0)"->"L3124(1)"
+"L-1675(0)"->"[C  Cis  Dis  Gis  Ais](0)"
+"L4812(0)"->"L5160(0)"
+"L4812(0)"->"L-1675(0)"
+{rank = min; "L4812(0)"}
+{rank = same; "L5160(0)"; "L-1675(0)";}
+{rank = same; "L1602(0)"; "L3821(0)"; "L3124(0)"; "L2590(0)"; "L1602(1)"; "L4999(0)"; "L3124(1)";}
+{rank = max; "[C  Cis  Dis  Gis  Ais](0)"; "[C  D  Dis  Fis  A](0)"; "[C  D  Dis  Fis  A](1)"; "[C  D  Dis  Fis  A](2)"; "[C  D  Dis  Fis  A](3)"; "[C  D  Dis  Fis  A](4)"; "[C  D  Dis  Fis  A](5)"; "[C  D  Dis  Fis  A](6)"; "[C  D  Dis  Fis  A](7)"; "[C  Dis  F  G  A](0)"; "[C  Dis  F  G  A](1)"; "[C  Dis  F  G  A](2)"; "[C  Dis  F  G  A](3)"; "[C  Dis  F  G  A](4)"; "[C  Dis  F  G  A](5)"; "[C  Dis  F  G  A](6)"; "[C  Dis  F  G  A](7)"; "[C  Gis  Ais](0)"; "[Cis  E  A](0)"; "[D  F  G  A](0)";}
+}

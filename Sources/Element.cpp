@@ -57,19 +57,44 @@ Meaning Meaning::replaced(std::size_t n, std::size_t size, const MeaningElement 
   return Meaning(base, tmp);
 }
 
-AMean Meaning::flat(std::size_t &ind) {
-  if (ind == 0) return get_base();
+void Meaning::flat_1(std::size_t &ind, AMean &res) {
+  if (ind == 0) {
+    res = get_base();
+    return;
+  }
   ind--;
-  AMean res;
-  std::for_each(std::begin(means), std::end(means), [&](MeaningElement &m) {
+  std::for_each(std::begin(means), std::end(means), [&res, &ind](MeaningElement &m) {
     if (m.type() == MEANING_TYPE::MEANING_TYPE) {
       if (res == AMean()) {
-        res = m.template get<Meaning>().flat(ind);
+        m.template get<Meaning>().flat_1(ind, res);
       }
     } else {
-      std::cerr << "Error in Meaning::flat(std::size_t&)" << std::endl;
+      std::cerr << "Error in Meaning::flat_1(std::size_t&, AMean&)" << std::endl;
       exit(1);
     }
   });
-  return res;
+}
+
+void Meaning::flat_arr_1(std::vector<AMean> &res) {
+  res.push_back(get_base());
+  std::for_each(std::begin(means), std::end(means), [&res](MeaningElement &m) {
+    if (m.type() == MEANING_TYPE::MEANING_TYPE) {
+      m.template get<Meaning>().flat_arr_1(res);
+    } else {
+      std::cerr << "Error in Meaning::flat_arr_1(std::vector<AMean>&)" << std::endl;
+      exit(1);
+    }
+  });
+}
+
+void Meaning::flat_list_1(std::list<AMean> &res) {
+  res.push_back(get_base());
+  std::for_each(std::begin(means), std::end(means), [&res](MeaningElement &m) {
+    if (m.type() == MEANING_TYPE::MEANING_TYPE) {
+      m.template get<Meaning>().flat_list_1(res);
+    } else {
+      std::cerr << "Error in Meaning::flat_arr_1(std::vector<AMean>&)" << std::endl;
+      exit(1);
+    }
+  });
 }

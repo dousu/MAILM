@@ -97,12 +97,22 @@ void tree_assessment(Agent &ma, std::string out) {
     std::string name = XMLreader::labeling[no];
     r_list.clear();
     std::cout << "Construct " << name << ".xml" << std::endl;
+    // test
+    ParseLink pl;
+    std::list<SymbolElement> sel_vec{{Symbol{1}, Symbol{2}, Symbol{1}, Symbol{2}}};
+    ma.kb.bottom_up_construction(sel_vec, pl);
+    //
     if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
       std::cout << "explain: true" << std::endl;
       tree_str = make_tree_str_for_dot(r_list);
       std::cout << "made tree graph as a dot file" << std::endl;
 
-      output_data_trunc(out + "generation" + std::to_string(ma.generation_index) + Prefices::UNO + name + ".dot", tree_str);
+      std::filesystem::path p(out + "generation" + std::to_string(ma.generation_index) + ".d/");
+      if (!std::filesystem::exists(p)) {
+        std::filesystem::create_directory(p);
+      }
+
+      output_data_trunc(p.string() + name + ".dot", tree_str);
 
       std::cout << "output fin." << std::endl;
     } else {
@@ -209,7 +219,7 @@ int main(int argc, char *argv[]) {
       std::copy(std::begin(utter), std::end(utter), std::ostream_iterator<Rule>(std::cout, "\n"));
       if (utter.size() != 0) {
         output_data_trunc(param.RESULT_PATH + "dot/" + param.FILE_PREFIX + param.DATE_STR + ".d/" + "generation" + std::to_string(g) +
-                              "_utter" + std::to_string(u + 1) + ".dot",
+                              ".d/utter" + std::to_string(u + 1) + ".dot",
                           make_tree_str_for_dot(base));
         std::cout << "output fin." << std::endl;
       } else {

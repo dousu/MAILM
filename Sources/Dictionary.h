@@ -1,14 +1,14 @@
 #ifndef DICTIONARY_H_
 #define DICTIONARY_H_
-#include <map>
-#include <string>
-#include <vector>
-#include <fstream>
 #include <algorithm>
-#include <regex>
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <iterator>
+#include <map>
+#include <regex>
+#include <string>
+#include <vector>
 
 /*!
  * Kirbyモデルで使用する単語の辞書を提供します。例えば、内部言語列の単語「like」や「hate」など。
@@ -27,11 +27,8 @@
  * INDで内部言語の終端記号をカンマ区切りで並べ、定義します。また、
  * SYMで外部言語の終端記号をカンマ区切りで並べ、定義します。
  *
- * なお、boost/serializationに対応しています
  */
-class Dictionary
-{
-public:
+struct Dictionary {
   typedef std::map<int, std::string> DictionaryType;
 
   static std::map<int, std::string> symbol;
