@@ -26,9 +26,12 @@ class ParseLink {
   struct ParseNode {
     Rule r;
     std::list<std::reference_wrapper<SymbolElement>> str;
+    std::set<AMean> record;
     std::vector<std::reference_wrapper<ParseNode>> next;
-    ParseNode() : r(), str(), next() {}
-    ParseNode(Rule r) : r(r), str(), next() {}
+    ParseNode() : r(), str(), record(), next() {}
+    ParseNode(Rule &r, AMean &m) : r(r), str(), record({m}), next() {}
+    ParseNode(const ParseNode &dst) : r(dst.r), str(dst.str), record(dst.record), next(dst.next) {}
+    // bool operator<(const ParseNode &dst) { return r < dst.r || (r == dst.r && record < dst.record); }
   };
   std::list<ParseNode> dic;
   std::list<std::reference_wrapper<ParseNode>> search_dic;
@@ -36,6 +39,7 @@ class ParseLink {
 
  public:
   ParseLink() : dic() {}
+  std::size_t get_dic_size() { return dic.size(); }
   void expansion(std::vector<Rule> &rules, ParseNode &node) {
     rules.push_back(node.r);
     if (node.next.size() == 0) {
@@ -73,46 +77,53 @@ class ParseLink {
         rules_nt.push_back(r);
       }
     });
-    std::cout << "sym loop" << std::endl;
-    std::for_each(std::begin(rules_sym), std::end(rules_sym), [this, &ref, &limit, &b](Rule &r) { b = b || add(r, ref, limit); });
+    std::for_each(std::begin(rules_sym), std::end(rules_sym), [this, &ref, &limit, &b](Rule &r) { b = add(r, ref, limit) || b; });
+    // std::cout << "sym loop" << std::endl;
+    // std::for_each(std::begin(dic), std::end(dic), [](ParseNode &p) { std::cout << p.r << std::endl; });
     while (b) {
-      std::cout << "nt loop" << std::endl;
       b = false;
-      std::for_each(std::begin(rules_nt), std::end(rules_nt), [this, &ref, &limit, &b](Rule &r) { b = b || add(r, ref, limit); });
+      std::for_each(std::begin(rules_nt), std::end(rules_nt), [this, &ref, &limit, &b](Rule &r) { b = add(r, ref, limit) || b; });
+      // std::cout << "nt loop " << dic.size() << std::endl;
+      // std::for_each(std::begin(dic), std::end(dic), [](ParseNode &p) {
+      //   std::cout << p.r << " " << p.str.size() << " ";
+      //   std::for_each(std::begin(p.str), std::end(p.str), [](SymbolElement &sel) { std::cout << " " << sel; });
+      //   std::cout << std::endl;
+      // });
     }
   }
 
  private:
   bool add(Rule &r, std::set<SymbolElement> &ref, std::size_t limit) {
-    std::list<ParseNode> box{{ParseNode(r)}};
+    std::list<ParseNode> box{{ParseNode(r, r.get_internal().get_base())}};
     bool b;
+    std::list<std::reference_wrapper<ParseNode>> used;
     std::set<SymbolElement> set_r;
     std::copy_if(std::begin(r.get_external()), std::end(r.get_external()), std::inserter(set_r, std::begin(set_r)),
                  [](SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; });
     b = std::includes(std::begin(ref), std::end(ref), std::begin(set_r), std::end(set_r));
     if (!b) return b;
-    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [this, &r, &limit, &box, &b](SymbolElement &sel) {
+    std::for_each(std::begin(r.get_external()), std::end(r.get_external()), [this, &r, &limit, &box, &b, &used](SymbolElement &sel) {
       switch (sel.type()) {
         case ELEM_TYPE::NT_TYPE: {
           if (b) {
             std::list<ParseNode> subbox;
-            std::for_each(std::begin(dic), std::end(dic), [&r, &limit, &subbox, &sel, &box, &b](ParseNode &p) {
-              if (r.get_internal().get_base() != p.r.get_internal().get_base() &&
+            std::for_each(std::begin(dic), std::end(dic), [&r, &limit, &subbox, &sel, &box, &used](ParseNode &p) {
+              if (std::find(std::begin(p.record), std::end(p.record), r.get_internal().get_base()) == std::end(p.record) &&
                   sel.template get<RightNonterminal>().get_cat() == p.r.get_internal().get_cat()) {
-                std::for_each(std::begin(box), std::end(box), [&limit, &subbox, &p](ParseNode box_p) {
+                std::for_each(std::begin(box), std::end(box), [&limit, &subbox, &p, &used](ParseNode box_p) {
                   if (p.str.size() + (box_p.str.size()) <= limit) {
                     box_p.next.push_back(p);
-                    box_p.str.insert(std::end(box_p.str), std::begin(p.str), std::end(p.str));
                     std::copy(std::begin(p.str), std::end(p.str), std::back_inserter(box_p.str));
                     subbox.push_back(box_p);
+                    /*if (std::find(std::begin(used), std::end(used), p) == std::end(used))*/ used.push_back(p);
                   }
                 });
               }
             });
-            if (subbox.size() != 0) {
-              b = false;
+            if (subbox.size() != 0)
               box.swap(subbox);
-            }
+            else
+              b = false;
           }
         } break;
         case ELEM_TYPE::SYM_TYPE: {
@@ -132,7 +143,10 @@ class ParseLink {
         } break;
       }
     });
-    if (b) std::copy(std::begin(box), std::end(box), std::back_inserter(dic));
+    if (b) {
+      std::copy(std::begin(box), std::end(box), std::back_inserter(dic));
+      std::for_each(std::begin(used), std::end(used), [&r](ParseNode &p) { p.record.insert(r.get_internal().get_base()); });
+    }
     return b;
   }
 };

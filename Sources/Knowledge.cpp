@@ -920,8 +920,8 @@ bool Knowledge::explain(Meaning ref, RuleDBType &res) {
 
 // leftmost(upmost, index-zero-most) derivation
 void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern) {
-  // std::advanced(std::begin(basestring), length)
-  // if the length is equal to a size of basestring, finished this process.
+  // std::cout << "explained rule: " << src.get_internal() << " pattern size: " << pattern.size() << std::endl;
+  // std::copy(std::begin(pattern), std::end(pattern), std::ostream_iterator<Rule>(std::cout, "\n"));
   std::list<SymbolElement> vec_sel = pattern.front().get_external();
   auto p_it = std::next(std::begin(pattern));
   std::size_t num = 0;
@@ -930,7 +930,7 @@ void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern) {
     std::advance(sel_it, num);
     if ((*sel_it).type() == ELEM_TYPE::NT_TYPE) {
       sel_it = vec_sel.erase(sel_it);
-      vec_sel.insert(sel_it, std::begin((*p_it).get_external()), std::begin((*p_it).get_external()));
+      vec_sel.insert(sel_it, std::begin((*p_it).get_external()), std::end((*p_it).get_external()));
       p_it++;
     } else {
       num++;

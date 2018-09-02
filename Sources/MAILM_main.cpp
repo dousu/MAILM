@@ -99,8 +99,27 @@ void tree_assessment(Agent &ma, std::string out) {
     std::cout << "Construct " << name << ".xml" << std::endl;
     // test
     ParseLink pl;
-    std::list<SymbolElement> sel_vec{{Symbol{1}, Symbol{2}, Symbol{1}, Symbol{2}}};
+    std::list<SymbolElement> sel_vec{
+        {Symbol{1},  Symbol{2},  Symbol{1},  Symbol{2},  Symbol{3},  Symbol{4},  Symbol{3},  Symbol{4},  Symbol{1},  Symbol{2},  Symbol{5},
+         Symbol{6},  Symbol{1},  Symbol{2},  Symbol{5},  Symbol{2},  Symbol{7},  Symbol{8},  Symbol{7},  Symbol{8},  Symbol{6},  Symbol{2},
+         Symbol{6},  Symbol{2},  Symbol{9},  Symbol{10}, Symbol{11}, Symbol{9},  Symbol{12}, Symbol{13}, Symbol{12}, Symbol{14}, Symbol{1},
+         Symbol{2},  Symbol{1},  Symbol{2},  Symbol{3},  Symbol{4},  Symbol{3},  Symbol{4},  Symbol{1},  Symbol{2},  Symbol{5},  Symbol{6},
+         Symbol{1},  Symbol{2},  Symbol{5},  Symbol{2},  Symbol{7},  Symbol{8},  Symbol{7},  Symbol{8},  Symbol{6},  Symbol{2},  Symbol{6},
+         Symbol{2},  Symbol{9},  Symbol{10}, Symbol{11}, Symbol{9},  Symbol{12}, Symbol{13}, Symbol{12}, Symbol{14}, Symbol{15}, Symbol{16},
+         Symbol{15}, Symbol{16}, Symbol{17}, Symbol{18}, Symbol{19}, Symbol{20}, Symbol{15}, Symbol{16}, Symbol{15}, Symbol{16}, Symbol{17},
+         Symbol{18}, Symbol{19}, Symbol{20}, Symbol{21}, Symbol{22}, Symbol{23}, Symbol{24}, Symbol{17}, Symbol{2},  Symbol{6},  Symbol{17},
+         Symbol{25}, Symbol{26}, Symbol{25}, Symbol{27}, Symbol{20}, Symbol{28}, Symbol{29}, Symbol{14}, Symbol{15}, Symbol{16}, Symbol{15},
+         Symbol{16}, Symbol{17}, Symbol{18}, Symbol{19}, Symbol{20}, Symbol{15}, Symbol{16}, Symbol{15}, Symbol{16}, Symbol{17}, Symbol{18},
+         Symbol{19}, Symbol{20}, Symbol{21}, Symbol{22}, Symbol{23}, Symbol{24}, Symbol{17}, Symbol{2},  Symbol{6},  Symbol{17}, Symbol{25},
+         Symbol{26}, Symbol{25}, Symbol{27}, Symbol{18}, Symbol{19}, Symbol{30}, Symbol{31}, Symbol{32}, Symbol{33}, Symbol{32}, Symbol{33},
+         Symbol{5},  Symbol{2},  Symbol{6},  Symbol{1},  Symbol{32}, Symbol{33}, Symbol{32}, Symbol{33}, Symbol{1},  Symbol{14}, Symbol{20},
+         Symbol{34}, Symbol{1},  Symbol{1},  Symbol{20}, Symbol{34}, Symbol{1},  Symbol{1},  Symbol{1},  Symbol{1}}};
     ma.kb.bottom_up_construction(sel_vec, pl);
+    std::cout << "Test:" << std::endl;
+    // std::vector<Rule> test_rules;
+    std::cout << "Dic size: " << pl.get_dic_size() << std::endl;
+    // std::cout << ma.kb.grounded_rules(ma.kb.meaning_no(no)).front() << std::endl;
+    std::cout << "Test fin." << std::endl;
     //
     if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
       std::cout << "explain: true" << std::endl;
