@@ -334,7 +334,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
 
   CHUNK_TYPE chunk_type = UNABLE;
   Rule base, targ;
-  std::list<SymbolElement> noun1_ex, noun2_ex;
+  std::vector<SymbolElement> noun1_ex, noun2_ex;
   std::copy(std::next(src.get_external().begin(), fmatch_length), std::prev(src.get_external().end(), rmatch_length),
             std::back_inserter(noun1_ex));
   std::copy(std::next(dst.get_external().begin(), fmatch_length), std::prev(dst.get_external().end(), rmatch_length),
@@ -419,7 +419,7 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
 
       Meaning new_meaning = base.get_internal().get_means().replaced(in_pos, d_size, Variable(new_var_id));
       new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_sent_ind_id1)));
-      std::list<SymbolElement> vec_sel;
+      std::vector<SymbolElement> vec_sel;
       std::copy_n(std::begin(base.get_external()), fmatch_length, std::back_inserter(vec_sel));
       vec_sel.push_back(RightNonterminal(Category(new_cat_id), Variable(new_var_id)));
       std::copy(std::prev(std::end(base.get_external()), rmatch_length), std::end(base.get_external()), std::back_inserter(vec_sel));
@@ -734,13 +734,14 @@ bool Knowledge::replace(void) {
 bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents) {
   bool is_replaced = false;
   RuleDBType buf, swapDB;
-
-  std::for_each(std::begin(checking_sents), std::end(checking_sents), [this, &word, &is_replaced, &buf, &swapDB](Rule &r) {
+  std::boyer_moore_searcher search_word{std::begin(word.get_external()), std::end(word.get_external())};
+  std::for_each(std::begin(checking_sents), std::end(checking_sents), [this, &word, &is_replaced, &buf, &swapDB, &search_word](Rule &r) {
     if (r.get_external().size() > word.get_external().size() &&
         intention.replace_equal(r.get_internal().get_base(), word.get_internal().get_base())) {
-      std::list<SymbolElement> el_vec = r.get_external();
-      auto it = std::search(std::begin(el_vec), std::end(el_vec), std::begin(word.get_external()), std::end(word.get_external()));
-      if (it != std::end(el_vec)) {
+      auto it = std::search(std::begin(r.get_external()), std::end(r.get_external()), search_word);
+      if (it != std::end(r.get_external())) {
+        // std::size_t el_vec_pos = std::distance(std::begin(r.get_external()), it);
+        // std::vector<SymbolElement> el_vec = r.get_external();
         if (LOGGING_FLAG) {
           LogBox::push_log("REPLACE-> " + r.to_s());
         }
@@ -750,13 +751,13 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents) {
 
         new_var_id = var_indexer.generate();
         new_mean_id = ind_indexer.generate();
-        std::for_each(std::begin(word.get_external()), std::end(word.get_external()), [&](SymbolElement &se) {
+        std::for_each(std::begin(word.get_external()), std::end(word.get_external()), [&b_size](SymbolElement &se) {
           if (se.type() == ELEM_TYPE::NT_TYPE) {
             b_size++;
           }
         });
         // insertポジション計算
-        std::for_each(std::begin(el_vec), it, [&](SymbolElement &sel) {
+        std::for_each(std::begin(r.get_external()), it, [&b_pos](SymbolElement &sel) {
           if (sel.type() == ELEM_TYPE::NT_TYPE) {
             b_pos++;
           }
@@ -766,10 +767,10 @@ bool Knowledge::replacing(Rule &word, RuleDBType &checking_sents) {
         Meaning new_meaning = r.get_internal().get_means().replaced(b_pos, b_size, Variable(new_var_id));
         new_meaning = new_meaning.replaced(0, 1, Meaning(AMean(new_mean_id)));
 
-        it = el_vec.erase(it, std::next(it, word.get_external().size()));
-        el_vec.insert(it, RightNonterminal(word.get_internal().get_cat(), Variable(new_var_id)));
+        it = r.get_external().erase(it, std::next(it, word.get_external().size()));
+        r.get_external().insert(it, RightNonterminal(word.get_internal().get_cat(), Variable(new_var_id)));
 
-        Rule sent{LeftNonterminal{Category{r.get_internal().get_cat()}, new_meaning}, el_vec};
+        Rule sent{LeftNonterminal{Category{r.get_internal().get_cat()}, new_meaning}, r.get_external()};
         buf.push_back(sent);
         intention.replace(r.get_internal().get_base(), word.get_internal().get_base(), sent.get_internal().get_base(), b_pos, b_size);
         if (LOGGING_FLAG) {
@@ -885,10 +886,10 @@ std::string Knowledge::dic_amean_to_s() {
   return os.str();
 }
 
-std::list<SymbolElement> Knowledge::construct_buzz_word() {
+std::vector<SymbolElement> Knowledge::construct_buzz_word() {
   int length;
   int sym_id;
-  std::list<SymbolElement> buzz;
+  std::vector<SymbolElement> buzz;
 
   length = MT19937::irand(1, buzz_length);
   for (int i = 0; i < length; i++) {
@@ -922,7 +923,7 @@ bool Knowledge::explain(Meaning ref, RuleDBType &res) {
 void Knowledge::ground_with_pattern(Rule &src, RuleDBType &pattern) {
   // std::cout << "explained rule: " << src.get_internal() << " pattern size: " << pattern.size() << std::endl;
   // std::copy(std::begin(pattern), std::end(pattern), std::ostream_iterator<Rule>(std::cout, "\n"));
-  std::list<SymbolElement> vec_sel = pattern.front().get_external();
+  std::vector<SymbolElement> vec_sel = pattern.front().get_external();
   auto p_it = std::next(std::begin(pattern));
   std::size_t num = 0;
   while (p_it != std::end(pattern) && num != vec_sel.size()) {
@@ -948,7 +949,7 @@ Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref) {
   auto range = dic_amean_range(ref.get_base());
   std::for_each(range.first, range.second, [this, &ref, &grounded_rules](std::pair<Category, Rule> p) {
     std::function<void(RuleDBType & list)> f1 = [this, &ref, &grounded_rules](RuleDBType &list) {
-      Rule r(LeftNonterminal(Category(0), ref), std::list<SymbolElement>());
+      Rule r(LeftNonterminal(Category(0), ref), std::vector<SymbolElement>());
       ground_with_pattern(r, list);
       grounded_rules.push_back(r);
     };
@@ -1128,9 +1129,29 @@ bool Knowledge::construct_groundable_rules_1(Rule &base, std::vector<RuleDBType>
   return constructable;
 }
 
-bool Knowledge::construct_parsed_rules(std::list<SymbolElement> &str) { return true; }
-void Knowledge::bottom_up_construction(std::list<SymbolElement> &str, ParseLink &pl) {
-  std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
-  std::set<SymbolElement> str_set{std::begin(str), std::end(str)};
-  pl.add(ruleDB_ref, str_set, str.size());
+bool Knowledge::construct_parsed_rules(std::vector<SymbolElement> &str) {
+  ParseLink pl;
+  bool b = bottom_up_construction(str, pl);
+  if (b) {
+    std::cout << "Cannot parse" << std::endl;
+  } else {
+    std::cout << "May be possible to parse" << std::endl;
+  }
+  return b;
 }
+bool Knowledge::bottom_up_construction(std::vector<SymbolElement> &str, ParseLink &pl) {
+  std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
+  // std::set<SymbolElement> str_set{std::begin(str), std::end(str)};
+  // return pl.add(ruleDB_ref, str_set, str.size());
+  return pl.parse_init(ruleDB_ref, str);
+}
+
+std::size_t std::hash<AMean>::operator()(const AMean &dst) const noexcept { return hash<int>()(dst.obj); }
+
+// std::size_t std::hash<ParseNode>::operator()(const ParseNode &dst) const noexcept {
+//   size_t seed = 0;
+//   constexpr size_t value = std::pow(2, sizeof(size_t) * 8) / (1 + std::sqrt(5)) * 2;
+//   seed ^= hash<Category>()(dst.cat) + value + (seed << 6) + (seed >> 2);
+//   seed ^= hash<Variable>()(dst.var) + value + (seed << 6) + (seed >> 2);
+//   return seed;
+// }

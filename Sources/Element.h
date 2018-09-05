@@ -40,6 +40,12 @@ enum Type { MEANING_TYPE = 0, VAR_TYPE };
  * このインデックスは静的メンバ変数のDictionaryクラスインスタンスに依存します。
  */
 
+class AMean;
+template <>
+struct std::hash<AMean> {
+  std::size_t operator()(const AMean &) const noexcept;
+};
+
 class AMean {
   int obj;
 
@@ -64,6 +70,13 @@ class AMean {
   bool operator>=(const AMean &dst) const { return !(*this < dst); }
   std::string to_s() const { return Prefices::MEA + std::to_string(obj); }
   friend std::ostream &operator<<(std::ostream &out, const AMean &obj);
+  friend struct std::hash<AMean>;
+};
+
+class Variable;
+template <>
+struct std::hash<Variable> {
+  std::size_t operator()(const Variable &) const noexcept;
 };
 
 class Variable {
@@ -90,6 +103,13 @@ class Variable {
   bool operator>=(const Variable &dst) const { return !(*this < dst); }
   std::string to_s() const { return Prefices::VAR + std::to_string(obj); }
   friend std::ostream &operator<<(std::ostream &out, const Variable &obj);
+  friend struct std::hash<Variable>;
+};
+
+class Category;
+template <>
+struct std::hash<Category> {
+  std::size_t operator()(const Category &) const noexcept;
 };
 
 class Category {
@@ -116,6 +136,13 @@ class Category {
   bool operator>=(const Category &dst) const { return !(*this < dst); }
   std::string to_s() const { return Prefices::CAT + std::to_string(obj); }
   friend std::ostream &operator<<(std::ostream &out, const Category &obj);
+  friend struct std::hash<Category>;
+};
+
+class Symbol;
+template <>
+struct std::hash<Symbol> {
+  std::size_t operator()(const Symbol &) const noexcept;
 };
 
 class Symbol {
@@ -147,6 +174,7 @@ class Symbol {
     return "[" + conv_symbol[Dictionary::symbol[obj]] + "]";
   }
   friend std::ostream &operator<<(std::ostream &out, const Symbol &obj);
+  friend struct std::hash<Symbol>;
 };
 
 class MeaningElement;
@@ -337,6 +365,13 @@ class LeftNonterminal {
   std::string to_s() const { return cat.to_s() + Prefices::DEL + means.to_s(); }
   friend std::ostream &operator<<(std::ostream &out, const LeftNonterminal &obj);
 };
+
+class RightNonterminal;
+template <>
+struct std::hash<RightNonterminal> {
+  std::size_t operator()(const RightNonterminal &) const noexcept;
+};
+
 class RightNonterminal {
   Category cat;
   Variable var;
@@ -366,7 +401,15 @@ class RightNonterminal {
   const Variable &get_var() const { return var; }
   std::string to_s() const { return cat.to_s() + Prefices::DEL + var.to_s(); }
   friend std::ostream &operator<<(std::ostream &out, const RightNonterminal &obj);
+  friend struct std::hash<RightNonterminal>;
 };
+
+class SymbolElement;
+template <>
+struct std::hash<SymbolElement> {
+  std::size_t operator()(const SymbolElement &) const noexcept;
+};
+
 class SymbolElement {
   using ElementType = std::variant<RightNonterminal, Symbol>;
   ElementType element;
@@ -410,6 +453,7 @@ class SymbolElement {
     return std::visit([](auto &&arg) { return arg.to_s(); }, element);
   }
   friend std::ostream &operator<<(std::ostream &out, const SymbolElement &obj);
+  friend std::hash<SymbolElement>;
 };
 
 class Conception {

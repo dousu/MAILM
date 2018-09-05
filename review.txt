@@ -1,4 +1,4 @@
 XMLreader3
-static assessment file: ./Result/static/MAILM_2018y09m02d23h22m25s.d/static_result.rst
-Output file(app mode): "./Result/static/MAILM_2018y09m02d23h22m25s.d/static_result.rst"
+static assessment file: ./Result/static/MAILM_2018y09m04d19h05m50s.d/static_result.rst
+Output file(app mode): "./Result/static/MAILM_2018y09m04d19h05m50s.d/static_result.rst"
 Construct 01.xml
