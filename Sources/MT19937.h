@@ -1,10 +1,10 @@
 #ifndef MT19937_H_
 #define MT19937_H_
 
-#include <vector>
 #include <climits>
-#include <random>
 #include <iostream>
+#include <random>
+#include <vector>
 
 /*!
  * 乱数発生器を保持するクラス。
@@ -16,46 +16,45 @@
  * これにより、シリアライズデータからレジュームした場合は、
  * 正確に使用済み乱数を破棄する。
  */
-class MT19937
-{
-  public:
-	MT19937();
-	virtual ~MT19937();
+class MT19937 {
+ public:
+  MT19937();
+  virtual ~MT19937();
 
-	static unsigned long long int icount;
-	static unsigned long long int rcount;
+  static unsigned long long int icount;
+  static unsigned long long int rcount;
 
-	static std::mt19937 igen;
-	static std::uniform_int_distribution<> idist;
-	// static boost::variate_generator<boost::mt19937, boost::uniform_int<int> > _irand;
+  static std::mt19937 igen;
+  static std::uniform_int_distribution<> idist;
+  // static boost::variate_generator<boost::mt19937, boost::uniform_int<int> > _irand;
 
-	static std::mt19937 rgen;
-	static std::uniform_real_distribution<> rdist;
-	// static boost::variate_generator<boost::mt19937, boost::uniform_real<double> > _rrand;
+  static std::mt19937 rgen;
+  static std::uniform_real_distribution<> rdist;
+  // static boost::variate_generator<boost::mt19937, boost::uniform_real<double> > _rrand;
 
-	/*!
-	 * 整数乱数器
-	 */
-	static int irand(void);
+  /*!
+   * 整数乱数器
+   */
+  static int irand(void);
 
-	static int irand(int, int);
+  static int irand(int, int);
 
-	/*!
-	 * 実数乱数器
-	 */
-	static double rrand(void);
+  /*!
+   * 実数乱数器
+   */
+  static double rrand(void);
 
-	static double rrand(double, double);
+  static double rrand(double, double);
 
-	/*!
-	 * 使用済み乱数を破棄する
-	 */
-	static void waste(void);
+  /*!
+   * 使用済み乱数を破棄する
+   */
+  static void waste(void);
 
-	/*!
-	 * 乱数シードを設定する
-	 */
-	static void set_seed(std::uint32_t seed_value);
+  /*!
+   * 乱数シードを設定する
+   */
+  static void set_seed(std::size_t seed_value);
 };
 
 #endif /* MT19937_H_ */

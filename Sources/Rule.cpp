@@ -70,13 +70,7 @@ std::ostream &operator<<(std::ostream &out, const Rule &obj) {
 std::size_t std::hash<Variable>::operator()(const Variable &dst) const noexcept { return hash<int>()(dst.obj); }
 std::size_t std::hash<Category>::operator()(const Category &dst) const noexcept { return hash<int>()(dst.obj); }
 std::size_t std::hash<Symbol>::operator()(const Symbol &dst) const noexcept { return hash<int>()(dst.obj); }
-std::size_t std::hash<RightNonterminal>::operator()(const RightNonterminal &dst) const noexcept {
-  size_t seed = 0;
-  constexpr size_t value = std::pow(2, sizeof(size_t) * 8) / (1 + std::sqrt(5)) * 2;
-  seed ^= hash<Category>()(dst.cat) + value + (seed << 6) + (seed >> 2);
-  seed ^= hash<Variable>()(dst.var) + value + (seed << 6) + (seed >> 2);
-  return seed;
-}
+std::size_t std::hash<RightNonterminal>::operator()(const RightNonterminal &dst) const noexcept { return hash<Category>()(dst.cat); }
 std::size_t std::hash<SymbolElement>::operator()(const SymbolElement &dst) const noexcept {
   return hash<std::variant<RightNonterminal, Symbol>>()(dst.element);
 }

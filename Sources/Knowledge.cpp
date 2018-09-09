@@ -1129,29 +1129,147 @@ bool Knowledge::construct_groundable_rules_1(Rule &base, std::vector<RuleDBType>
   return constructable;
 }
 
+// degree of recursive loop < 2
 bool Knowledge::construct_parsed_rules(std::vector<SymbolElement> &str) {
   ParseLink pl;
   bool b = bottom_up_construction(str, pl);
-  if (b) {
+  if (!b) {
     std::cout << "Cannot parse" << std::endl;
-  } else {
-    std::cout << "May be possible to parse" << std::endl;
+    return false;
   }
+  std::cout << "May be possible to parse" << std::endl;
+  std::cout << "Test:" << std::endl;
+  // std::vector<Rule> test_rules;
+  std::cout << "Dic size: " << pl.get_dic_size() << std::endl;
+  int num = 1;
+  std::for_each(std::begin(pl.dic), std::end(pl.dic), [&num](auto &cat_string_map) {
+    std::cout << "Category: " << cat_string_map.first << std::endl;
+    std::for_each(std::begin(cat_string_map.second), std::end(cat_string_map.second), [&num](auto &string_pn) {
+      std::cout << num++ << ": " << string_pn.second.r << " // "
+                << "(" << string_pn.first.size() << ")";
+      std::copy(std::begin(string_pn.first), std::end(string_pn.first), std::ostream_iterator<SymbolElement>(std::cout, " "));
+      std::cout << std::endl;
+    });
+  });
+
+  // std::list<std::reference_wrapper<ParseLink::ParseNode>> buf;
+  pl.build_str_dic();
+  std::function<bool(const std::vector<SymbolElement> &, std::vector<SymbolElement> &)> f;
+  f = [this, &f, &pl](const std::vector<SymbolElement> &sel_vec, std::vector<SymbolElement> &ref_cat) -> bool {
+    std::size_t loc = 0;
+    auto it = pl.bottom_up_search_init();
+    std::optional<ParseLink::ParseNode> opt;
+    std::vector<SymbolElement> base_seq = ref_cat;
+    while ((opt = pl.bottom_up_search_next(sel_vec, it)) != std::nullopt) {
+      ParseLink::ParseNode &opt_p = opt.value();
+      ref_cat = base_seq;
+      ref_cat.push_back(RightNonterminal(opt_p.r.get_internal().get_cat(), Variable()));
+
+      // std::vector<Rule> parsed_rules;
+      // pl.expansion(parsed_rules, opt_p);
+      // std::cout << "str: ";
+      // std::copy(std::begin(opt_p.str), std::end(opt_p.str), std::ostream_iterator<SymbolElement>(std::cout, " "));
+      // std::cout << std::endl << "!!Rules!!" << std::endl;
+      // std::copy(std::begin(parsed_rules), std::end(parsed_rules), std::ostream_iterator<Rule>(std::cout, "\n"));
+      // std::cout << std::endl;
+
+      loc += opt_p.str.size();
+      if (loc == sel_vec.size() && is_generatable(ref_cat)) {
+        return true;
+      }
+      if (f(std::vector<SymbolElement>(std::next(std::begin(sel_vec), loc), std::end(sel_vec)), ref_cat)) {
+        return true;
+      }
+      loc = 0;
+      pl.bottom_up_search_init(it);
+    }
+    return false;
+  };
+
+  std::vector<SymbolElement> test_cat;
+  bool res;
+
+  //
+  res = f(str, test_cat);
+  //
+
+  if (!res) {
+    std::cout << "failed" << std::endl;
+    return false;
+  }
+  std::cout << "completed" << std::endl;
+  std::cout << "sequence of category: "
+            << "(" << test_cat.size() << ") ";
+  for (SymbolElement &c : test_cat) {
+    std::cout << " " << c;
+  }
+  std::cout << std::endl;
+  // // top-down
+  // std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&pl, &str](auto &p) {
+  //   // p.first: Category
+  // });
+  // std::cout << ma.kb.grounded_rules(ma.kb.meaning_no(no)).front() << std::endl;
+  std::cout << "Test fin." << std::endl;
+  //
   return b;
 }
-bool Knowledge::bottom_up_construction(std::vector<SymbolElement> &str, ParseLink &pl) {
+bool Knowledge::bottom_up_construction(const std::vector<SymbolElement> &str, ParseLink &pl) {
   std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
   // std::set<SymbolElement> str_set{std::begin(str), std::end(str)};
   // return pl.add(ruleDB_ref, str_set, str.size());
   return pl.parse_init(ruleDB_ref, str);
 }
 
+bool Knowledge::is_generatable(const std::vector<SymbolElement> &str) {
+  std::cout << "is_generatable: [";
+  std::copy(std::begin(str), std::end(str), std::ostream_iterator<SymbolElement>(std::cout, " "));
+  std::cout << "]" << std::endl;
+
+  ParseLink pl;
+  bool b = bottom_up_construction(str, pl);
+
+  // if (!b) {
+  //   std::cout << "Cannot generate" << std::endl;
+  //   return false;
+  // }
+
+  std::cout << "May be possible to generate" << std::endl;
+  std::cout.flush();
+
+  std::cout << "Dic size: " << pl.get_dic_size() << std::endl;
+  int num = 1;
+  std::for_each(std::begin(pl.dic), std::end(pl.dic), [&num](auto &cat_string_map) {
+    std::cout << "Category: " << cat_string_map.first << std::endl;
+    std::for_each(std::begin(cat_string_map.second), std::end(cat_string_map.second), [&num](auto &string_pn) {
+      std::cout << num++ << ": " << string_pn.second.r << " // "
+                << "(" << string_pn.first.size() << ")";
+      std::copy(std::begin(string_pn.first), std::end(string_pn.first), std::ostream_iterator<SymbolElement>(std::cout, " "));
+      std::cout << std::endl;
+    });
+  });
+
+  if (!b) {
+    std::cout << "Cannot generate" << std::endl;
+    return false;
+  }
+
+  return true;
+}
+
 std::size_t std::hash<AMean>::operator()(const AMean &dst) const noexcept { return hash<int>()(dst.obj); }
+
+// std::size_t std::hash<Rule>::operator()(const Rule &dst) const noexcept {
+//   size_t seed = 0;
+//   constexpr size_t value = pow(2, sizeof(size_t) * 8) / (1 + std::sqrt(5)) * 2;
+//   seed ^= hash<LeftNonterminal>()(dst.internal) + value + (seed << 6) + (seed >> 2);
+//   seed ^= HashSymbolVector()(dst.external) + value + (seed << 6) + (seed >> 2);
+//   return seed;
+// }
 
 // std::size_t std::hash<ParseNode>::operator()(const ParseNode &dst) const noexcept {
 //   size_t seed = 0;
-//   constexpr size_t value = std::pow(2, sizeof(size_t) * 8) / (1 + std::sqrt(5)) * 2;
-//   seed ^= hash<Category>()(dst.cat) + value + (seed << 6) + (seed >> 2);
-//   seed ^= hash<Variable>()(dst.var) + value + (seed << 6) + (seed >> 2);
+//   constexpr size_t value = pow(2, sizeof(size_t) * 8) / (1 + std::sqrt(5)) * 2;
+//   seed ^= hash<Rule>()(dst.r) + value + (seed << 6) + (seed >> 2);
+//   seed ^= HashSymbolVector()(dst.str) + value + (seed << 6) + (seed >> 2);
 //   return seed;
 // }

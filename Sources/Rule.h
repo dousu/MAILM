@@ -13,6 +13,17 @@
 #include "IndexFactory.h"
 #include "Semantics.h"
 
+template <class T>
+constexpr T pow(T base, T exp) noexcept {
+  return exp <= 0 ? 1 : exp == 1 ? base : base * pow(base, exp - 1);
+}
+
+class Rule;
+template <>
+struct std::hash<Rule> {
+  std::size_t operator()(const Rule &) const noexcept;
+};
+
 class Rule {
   // member
   LeftNonterminal internal;             //内部
@@ -43,6 +54,7 @@ class Rule {
   std::vector<SymbolElement> &get_external() { return external; }
   const std::vector<SymbolElement> &get_external() const { return external; }
   friend std::ostream &operator<<(std::ostream &out, const Rule &obj);
+  friend std::hash<Rule>;
 };
 
 #endif /* RULE_H_ */

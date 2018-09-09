@@ -98,7 +98,6 @@ void tree_assessment(Agent &ma, std::string out) {
     r_list.clear();
     std::cout << "Construct " << name << ".xml" << std::endl;
     // test
-    ParseLink pl;
     std::vector<SymbolElement> sel_vec{
         {Symbol{1},  Symbol{2},  Symbol{1},  Symbol{2},  Symbol{3},  Symbol{4},  Symbol{3},  Symbol{4},  Symbol{1},  Symbol{2},  Symbol{5},
          Symbol{6},  Symbol{1},  Symbol{2},  Symbol{5},  Symbol{2},  Symbol{7},  Symbol{8},  Symbol{7},  Symbol{8},  Symbol{6},  Symbol{2},
@@ -117,19 +116,8 @@ void tree_assessment(Agent &ma, std::string out) {
     // std::vector<SymbolElement> sel_vec{{Symbol{1}, Symbol{2}, Symbol{1}, Symbol{2}, Symbol{3}, Symbol{4}, Symbol{3},
     //                                     Symbol{4}, Symbol{1}, Symbol{2}, Symbol{5}, Symbol{6}, Symbol{1}, Symbol{2},
     //                                     Symbol{5}, Symbol{2}, Symbol{7}, Symbol{8}, Symbol{7}, Symbol{8}}};
-    bool possibility = ma.kb.bottom_up_construction(sel_vec, pl);
-    std::cout << "Test:" << std::endl;
-    // std::vector<Rule> test_rules;
-    std::cout << "Dic size: " << pl.get_dic_size() << std::endl;
-    int num = 1;
-    std::for_each(std::begin(pl.dic), std::end(pl.dic), [&num](ParseLink::ParseNode &p) {
-      std::cout << num++ << ": ";
-      std::copy(std::begin(p.str), std::end(p.str), std::ostream_iterator<SymbolElement>(std::cout, " "));
-      std::cout << std::endl;
-    });
-    // std::cout << ma.kb.grounded_rules(ma.kb.meaning_no(no)).front() << std::endl;
-    std::cout << "Test fin." << std::endl;
-    //
+    bool is_parsed = ma.kb.construct_parsed_rules(sel_vec);
+
     if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
       std::cout << "explain: true" << std::endl;
       tree_str = make_tree_str_for_dot(r_list);
@@ -215,6 +203,7 @@ int main(int argc, char *argv[]) {
   parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
   parent.learn();
   parent.grow();
+  std::cout << parent.kb.to_s() << std::endl;
   if (param.ANALYZE) {
     {
       std::filesystem::path p(param.RESULT_PATH + "static/" + param.FILE_PREFIX + param.DATE_STR + ".d/");
