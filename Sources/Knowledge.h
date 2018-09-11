@@ -86,12 +86,12 @@ class ParseLink {
  public:
   ParseLink() : dic() {}
   std::size_t get_dic_size() { return dic.size(); }
-  void expansion(std::vector<Rule> &rules, ParseNode &node) {
+  static void expansion(std::vector<Rule> &rules, ParseNode &node) {
     rules.push_back(node.r);
     if (node.next.size() == 0) {
       return;
     } else {
-      std::for_each(std::begin(node.next), std::end(node.next), [this, &rules](ParseNode &p) { expansion(rules, p); });
+      std::for_each(std::begin(node.next), std::end(node.next), [&rules](ParseNode &p) { expansion(rules, p); });
     }
   }
   auto search_init(const Category cat) {
@@ -156,7 +156,12 @@ class ParseLink {
   }
   bool parse_init(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
     dic.clear();
-    symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+    if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) ==
+        std::end(ref)) {
+      symbol_set.clear();
+    } else {
+      symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+    }
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
     std::list<std::reference_wrapper<Rule>> rules_nt;
@@ -181,28 +186,28 @@ class ParseLink {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt), [this, &ref, &b](Rule &r) { b = add(r, ref) || b; });
 
-        if (b) {
-          std::cout << "Dic size: " << get_dic_size() << std::endl;
-          int num = 1;
-          std::for_each(std::begin(dic), std::end(dic), [&num](auto &cat_string_map) {
-            std::cout << "Category: " << cat_string_map.first << std::endl;
-            std::for_each(std::begin(cat_string_map.second), std::end(cat_string_map.second), [&num](auto &string_pn) {
-              std::cout << num++ << ": record( ";
-              std::copy(std::begin(string_pn.second.record), std::end(string_pn.second.record),
-                        std::ostream_iterator<AMean>(std::cout, " "));
-              std::cout << ")" << string_pn.second.r << " // "
-                        << "(" << string_pn.first.size() << ")";
-              std::copy(std::begin(string_pn.first), std::end(string_pn.first), std::ostream_iterator<SymbolElement>(std::cout, " "));
-              std::cout << std::endl;
-            });
-          });
-        }
+        // if (b) {
+        //   std::cout << "Dic size: " << get_dic_size() << std::endl;
+        //   int num = 1;
+        //   std::for_each(std::begin(dic), std::end(dic), [&num](auto &cat_string_map) {
+        //     std::cout << "Category: " << cat_string_map.first << std::endl;
+        //     std::for_each(std::begin(cat_string_map.second), std::end(cat_string_map.second), [&num](auto &string_pn) {
+        //       std::cout << num++ << ": record( ";
+        //       std::copy(std::begin(string_pn.second.record), std::end(string_pn.second.record),
+        //                 std::ostream_iterator<AMean>(std::cout, " "));
+        //       std::cout << ")" << string_pn.second.r << " // "
+        //                 << "(" << string_pn.first.size() << ")";
+        //       std::copy(std::begin(string_pn.first), std::end(string_pn.first), std::ostream_iterator<SymbolElement>(std::cout, " "));
+        //       std::cout << std::endl;
+        //     });
+        //   });
+        // }
       }
     }
 
-    std::cout << "symbol set size: " << symbol_set.size() << " ";
-    std::copy(std::begin(symbol_set), std::end(symbol_set), std::ostream_iterator<SymbolElement>(std::cout, " "));
-    std::cout << std::endl;
+    // std::cout << "symbol set size: " << symbol_set.size() << " ";
+    // std::copy(std::begin(symbol_set), std::end(symbol_set), std::ostream_iterator<SymbolElement>(std::cout, " "));
+    // std::cout << std::endl;
 
     return symbol_set.empty();
   }
@@ -505,7 +510,7 @@ class Knowledge : public KnowledgeTypeDef {
                                     std::function<bool(const Category &, const std::any &)> &func);
 
  public:
-  bool construct_parsed_rules(std::vector<SymbolElement> &str);
+  bool construct_parsed_rules(const std::vector<SymbolElement> &str, std::function<void(RuleDBType &)> &func);
 
  private:
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);
