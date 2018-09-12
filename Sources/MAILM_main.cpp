@@ -116,7 +116,11 @@ void tree_assessment(Agent &ma, std::string out) {
     // std::vector<SymbolElement> sel_vec{{Symbol{1}, Symbol{2}, Symbol{1}, Symbol{2}, Symbol{3}, Symbol{4}, Symbol{3},
     //                                     Symbol{4}, Symbol{1}, Symbol{2}, Symbol{5}, Symbol{6}, Symbol{1}, Symbol{2},
     //                                     Symbol{5}, Symbol{2}, Symbol{7}, Symbol{8}, Symbol{7}, Symbol{8}}};
-    std::function<void(std::vector<Rule> &)> res_func;
+    std::function<void(std::vector<Rule> &)> res_func = [](std::vector<Rule> &rr) {
+      std::cout << std::endl;
+      std::copy(std::begin(rr), std::end(rr), std::ostream_iterator<Rule>(std::cout, "\n"));
+      std::cout << std::endl;
+    };
     bool is_parsed = ma.kb.construct_parsed_rules(sel_vec, res_func);
 
     if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
