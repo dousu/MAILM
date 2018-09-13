@@ -68,6 +68,6 @@ void MT19937::waste(void) {
 }
 
 void MT19937::set_seed(std::size_t seed_value) {
-  igen.seed(static_cast<unsigned long>(seed_value));
-  rgen.seed(static_cast<unsigned long>(seed_value));
+  igen.seed(seed_value);
+  rgen.seed(seed_value);
 }

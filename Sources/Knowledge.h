@@ -135,6 +135,8 @@ class ParseLink {
                     [this](auto &dic_pair) { str_dic.try_emplace(dic_pair.first, dic_pair.second); });
     });
   }
+  auto end_it() { return std::end(str_dic); }
+  bool empty() { return dic.size() == 0; }
   auto bottom_up_search_init(void) { return bottom_up_search_it = std::begin(str_dic); }
   void bottom_up_search_init(
       std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator it) {
@@ -143,10 +145,10 @@ class ParseLink {
   std::optional<std::reference_wrapper<ParseNode>> bottom_up_search_next(
       const std::vector<SymbolElement> &sel_vec,
       std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator &it) {
-    for (; bottom_up_search_it != std::end(str_dic); bottom_up_search_it++) {
-      ParseNode &p = (*bottom_up_search_it).second;
+    for (; bottom_up_search_it != std::end(str_dic);) {
+      ParseNode &p = (*(++bottom_up_search_it)).second;
       if (p.str.size() <= sel_vec.size() && std::equal(std::begin(p.str), std::end(p.str), std::begin(sel_vec))) {
-        it = ++bottom_up_search_it;
+        it = bottom_up_search_it;
         return p;
       }
     }
@@ -212,7 +214,7 @@ class ParseLink {
                     ParseNode box_p = box_pair.second;
                     std::copy(std::begin(p.str), std::end(p.str), std::back_inserter(box_p.str));
                     const std::vector<SymbolElement> &key = box_p.str;
-                    if ( subbox.count(key) == 0 &&
+                    if (subbox.count(key) == 0 &&
                         std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
                       box_p.next.push_back(p);
                       subbox[key] = box_p;
@@ -229,8 +231,7 @@ class ParseLink {
               box_p.str.push_back(sel);
               const std::vector<SymbolElement> &key = box_p.str;
 
-              if (subbox.count(key) == 0 &&
-                  std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
+              if (subbox.count(key) == 0 && std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
                 subbox[key] = box_p;
               }
             });
@@ -248,10 +249,8 @@ class ParseLink {
               ParseNode &box_p = box_pair.second;
               box_p.str.push_back(sel);
               const std::vector<SymbolElement> &key = box_p.str;
-              if (subbox.count(key) == 0 &&
-                  std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
+              if (subbox.count(key) == 0 && std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
                 subbox[key] = box_p;
-                
               }
             });
             if (subbox.size() != 0)
@@ -464,8 +463,6 @@ class Knowledge : public KnowledgeTypeDef {
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_range(const Category &c, const AMean &m);
   std::string dic_cat_to_s();
   std::string dic_amean_to_s();
-  bool bottom_up_construction(const std::vector<SymbolElement> &str, ParseLink &pl);
-  bool is_generatable(const std::vector<SymbolElement> &str);
 };
 
 #endif /* Knowledge_H_ */

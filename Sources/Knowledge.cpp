@@ -1138,12 +1138,19 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, st
       f;
   make_rules = [this, &make_rules, &f,
                 &ruleDB_ref](const std::vector<SymbolElement> &ref) -> std::pair<bool, std::vector<std::vector<Rule>>> {
+    std::cout << "str: ";
+    std::copy(std::begin(ref), std::end(ref), std::ostream_iterator<SymbolElement>(std::cout));
+    std::cout << std::endl;
+
     if (ref.size() == 1 && ref.front().type() == ELEM_TYPE::NT_TYPE) {
       return {true, std::vector<std::vector<Rule>>({std::vector<Rule>()})};
     }
     ParseLink pl;
     bool b = pl.parse_init(ruleDB_ref, ref);
-    if (!b) {
+
+    std::cout << "parse_init: " << b << std::endl;
+
+    if (!b || pl.empty()) {
       return {false, std::vector<std::vector<Rule>>()};
     }
     pl.build_str_dic();
@@ -1158,7 +1165,6 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, st
   f = [this, &f, &make_rules](ParseLink &pl, const std::vector<SymbolElement> &sel_vec, std::vector<SymbolElement> &ref_cat,
                               std::list<std::reference_wrapper<ParseLink::ParseNode>> &p_list,
                               std::vector<std::vector<Rule>> &rules) -> bool {
-    std::size_t loc = 0;
     auto it = pl.bottom_up_search_init();
     std::optional<ParseLink::ParseNode> opt;
     std::vector<SymbolElement> base_seq = ref_cat;
@@ -1170,36 +1176,42 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, st
       ref_cat.push_back(RightNonterminal(opt_p.r.get_internal().get_cat(), Variable()));
       p_list.push_back(opt_p);
 
-      loc += opt_p.str.size();
-      if (loc == sel_vec.size()) {
+      if (opt_p.str.size() == sel_vec.size()) {
+        std::cout << "[in]remaining number " << std::distance(it, pl.end_it()) << std::endl;
         auto ret = make_rules(ref_cat);
-        if (!ret.first) return false;
-        rules = ret.second;
-        std::for_each(std::begin(p_list), std::end(p_list), [&rules, &ref_cat](ParseLink::ParseNode &p) {
-          std::vector<Rule> tmp;
-          ParseLink::expansion(tmp, p);
-          auto insert_pos = std::find_if(std::begin(rules), std::end(rules), [](std::vector<Rule> &rr) { return rr.size() == 0; });
-          if (insert_pos == std::end(rules)) {
-            std::cerr << "Error : Knowledge::construct_parsed_rules()" << std::endl << "str: ";
-            std::copy(std::begin(ref_cat), std::end(ref_cat), std::ostream_iterator<SymbolElement>(std::cerr));
-            std::cerr << "rules size: " << rules.size() << std::endl;
-            exit(1);
-          }
-          insert_pos = rules.erase(insert_pos);
-          std::vector<std::vector<Rule>> tmp2{{tmp}};
-          std::for_each(std::begin(p.str), std::end(p.str), [&tmp2](SymbolElement &sel) {
-            if (sel.type() == ELEM_TYPE::NT_TYPE) {
-              tmp2.push_back(std::vector<Rule>());
+
+        std::cout << "parsed " << ret.first << " remaining number " << std::distance(it, pl.end_it()) << std::endl;
+
+        if (ret.first) {
+          rules = ret.second;
+          std::for_each(std::begin(p_list), std::end(p_list), [&rules, &ref_cat](ParseLink::ParseNode &p) {
+            std::vector<Rule> tmp;
+            ParseLink::expansion(tmp, p);
+            auto insert_pos = std::find_if(std::begin(rules), std::end(rules), [](std::vector<Rule> &rr) { return rr.size() == 0; });
+            if (insert_pos == std::end(rules)) {
+              std::cerr << "Error : Knowledge::construct_parsed_rules()" << std::endl << "str: ";
+              std::copy(std::begin(ref_cat), std::end(ref_cat), std::ostream_iterator<SymbolElement>(std::cerr));
+              std::cerr << "rules size: " << rules.size() << std::endl;
+              exit(1);
             }
+            insert_pos = rules.erase(insert_pos);
+            std::vector<std::vector<Rule>> tmp2{{tmp}};
+            std::for_each(std::begin(p.str), std::end(p.str), [&tmp2](SymbolElement &sel) {
+              if (sel.type() == ELEM_TYPE::NT_TYPE) {
+                tmp2.push_back(std::vector<Rule>());
+              }
+            });
+            rules.insert(insert_pos, std::begin(tmp2), std::end(tmp2));
           });
-          rules.insert(insert_pos, std::begin(tmp2), std::end(tmp2));
-        });
+          return true;
+        }
+      } else if (f(pl, std::vector<SymbolElement>(std::next(std::begin(sel_vec), opt_p.str.size()), std::end(sel_vec)), ref_cat, p_list,
+                   rules)) {
         return true;
       }
-      if (f(pl, std::vector<SymbolElement>(std::next(std::begin(sel_vec), loc), std::end(sel_vec)), ref_cat, p_list, rules)) {
-        return true;
-      }
-      loc = 0;
+
+      std::cout << "[out]remaining number " << std::distance(it, pl.end_it()) << std::endl;
+
       pl.bottom_up_search_init(it);
     }
     return false;
@@ -1207,10 +1219,9 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, st
   auto ret = make_rules(str);
   if (!ret.first) {
     return false;
-  } else {
-    std::for_each(std::begin(ret.second), std::end(ret.second), func);
-    return true;
   }
+  std::for_each(std::begin(ret.second), std::end(ret.second), func);
+  return true;
 }
 
 std::size_t std::hash<AMean>::operator()(const AMean &dst) const noexcept { return hash<int>()(dst.obj); }
