@@ -75,15 +75,13 @@ class ParseLink {
   };
   std::unordered_map<Category, std::map<std::vector<SymbolElement>, ParseNode, LengthGreater<std::vector<SymbolElement>>>> dic;
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>> str_dic;
-  Category search_cat;
-  std::map<std::vector<SymbolElement>, ParseNode, LengthGreater<std::vector<SymbolElement>>>::iterator search_it;
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator
       bottom_up_search_it;
   std::unordered_set<SymbolElement> symbol_set;
 
  public:
   ParseLink() : dic() {}
-  std::size_t get_dic_size() { return dic.size(); }
+  std::size_t get_dic_size() const { return dic.size(); }
   static void expansion(std::vector<Rule> &rules, ParseNode &node) {
     rules.push_back(node.r);
     if (node.next.size() == 0) {
@@ -91,43 +89,6 @@ class ParseLink {
     } else {
       std::for_each(std::begin(node.next), std::end(node.next), [&rules](ParseNode &p) { expansion(rules, p); });
     }
-  }
-  auto search_init(const Category cat) {
-    search_cat = cat;
-    return search_it = std::begin(dic[search_cat]);
-  }
-  void search_init(const Category cat,
-                   std::map<std::vector<SymbolElement>, ParseNode, LengthGreater<std::vector<SymbolElement>>>::iterator it) {
-    search_cat = cat;
-    search_it = it;
-  }
-  std::optional<std::reference_wrapper<ParseNode>> search_next(
-      const std::vector<SymbolElement> &sel_vec,
-      std::map<std::vector<SymbolElement>, ParseNode, LengthGreater<std::vector<SymbolElement>>>::iterator &it) {
-    while (search_it != std::end(dic[search_cat])) {
-      ParseNode &p = (*search_it).second;
-      if (std::equal(std::begin(p.str), std::end(p.str), std::begin(sel_vec))) {
-        it = ++search_it;
-        return p;
-      }
-      search_it++;
-    }
-    return std::nullopt;
-  }
-  bool random_call(ParseNode &pn, const Category &cat, const std::vector<SymbolElement> &sel_vec) {
-    std::vector<std::reference_wrapper<ParseNode>> vec;
-    std::for_each(std::begin(dic[cat]), std::end(dic[cat]),
-                  [&vec](std::map<std::vector<SymbolElement>, ParseNode, LengthGreater<std::vector<SymbolElement>>>::value_type &p) {
-                    vec.push_back(p.second);
-                  });
-    std::shuffle(std::begin(vec), std::end(vec), MT19937::igen);
-    for (ParseNode &p : vec) {
-      if (p.str.size() <= sel_vec.size() && std::equal(std::begin(p.str), std::end(p.str), std::begin(sel_vec))) {
-        pn = p;
-        return true;
-      }
-    }
-    return false;
   }
   void build_str_dic() {
     std::for_each(std::begin(dic), std::end(dic), [this](auto &dic_map) {
@@ -137,6 +98,21 @@ class ParseLink {
   }
   auto end_it() { return std::end(str_dic); }
   bool empty() { return dic.size() == 0; }
+  std::string to_s() const {
+    std::ostringstream os;
+    os << "Dic size: " << get_dic_size() << std::endl;
+    int num = 1;
+    std::for_each(std::begin(dic), std::end(dic), [&os, &num](auto &cat_string_map) {
+      os << "Category: " << cat_string_map.first << std::endl;
+      std::for_each(std::begin(cat_string_map.second), std::end(cat_string_map.second), [&os, &num](auto &string_pn) {
+        os << num++ << ": " << string_pn.second.r << " // "
+           << "(" << string_pn.first.size() << ")";
+        std::copy(std::begin(string_pn.first), std::end(string_pn.first), std::ostream_iterator<SymbolElement>(os, " "));
+        os << std::endl;
+      });
+    });
+    return os.str();
+  }
   auto bottom_up_search_init(void) { return bottom_up_search_it = std::begin(str_dic); }
   void bottom_up_search_init(
       std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator it) {
@@ -146,7 +122,7 @@ class ParseLink {
       const std::vector<SymbolElement> &sel_vec,
       std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator &it) {
     for (; bottom_up_search_it != std::end(str_dic);) {
-      ParseNode &p = (*(++bottom_up_search_it)).second;
+      ParseNode &p = (*(bottom_up_search_it++)).second;
       if (p.str.size() <= sel_vec.size() && std::equal(std::begin(p.str), std::end(p.str), std::begin(sel_vec))) {
         it = bottom_up_search_it;
         return p;
@@ -156,12 +132,49 @@ class ParseLink {
   }
   bool parse_init(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
     dic.clear();
-    if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) ==
+    // if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) ==
+    //     std::end(ref)) {
+    //   symbol_set.clear();
+    // } else {
+    symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+    // }
+    bool b = false;
+    std::list<std::reference_wrapper<Rule>> rules_sym;
+    std::list<std::reference_wrapper<Rule>> rules_nt;
+    std::for_each(std::begin(rules), std::end(rules), [this, &rules_sym, &rules_nt](Rule &r) {
+      if (std::find_if(std::begin(r.get_external()), std::end(r.get_external()),
+                       [](SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == std::end(r.get_external())) {
+        rules_sym.push_back(r);
+      } else {
+        rules_nt.push_back(r);
+      }
+    });
+    if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) !=
         std::end(ref)) {
-      symbol_set.clear();
+      std::for_each(std::begin(rules_sym), std::end(rules_sym), [this, &ref, &b](Rule &r) { b = add(r, ref) || b; });
+      while (b) {
+        b = false;
+        std::for_each(std::begin(rules_nt), std::end(rules_nt), [this, &ref, &b](Rule &r) { b = add(r, ref) || b; });
+      }
     } else {
-      symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+      b = true;
+      while (b) {
+        b = false;
+        std::for_each(std::begin(rules_nt), std::end(rules_nt), [this, &ref, &b](Rule &r) { b = add(r, ref) || b; });
+      }
     }
+
+    return symbol_set.empty();
+  }
+  bool parse_add(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
+    dic.clear();
+    // if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) ==
+    //     std::end(ref)) {
+    //   symbol_set.clear();
+    // } else {
+    //   symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+    // }
+    symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
     std::list<std::reference_wrapper<Rule>> rules_nt;
@@ -208,17 +221,16 @@ class ParseLink {
             // embedding pattern
             if (dic.count(cat) == 1) {
               std::for_each(std::begin(dic[cat]), std::end(dic[cat]), [this, &r, &ref, &subbox, &box, &used](auto &pa) {
-                ParseNode &p = pa.second;
-                if (p.record.find(r.get_internal().get_base()) == std::end(p.record)) {
-                  std::for_each(std::begin(box), std::end(box), [this, &r, &ref, &subbox, &p, &used](auto &box_pair) {
+                if (pa.second.record.find(r.get_internal().get_base()) == std::end(pa.second.record)) {
+                  std::for_each(std::begin(box), std::end(box), [this, &r, &ref, &subbox, &pa, &used](auto &box_pair) {
                     ParseNode box_p = box_pair.second;
-                    std::copy(std::begin(p.str), std::end(p.str), std::back_inserter(box_p.str));
+                    std::copy(std::begin(pa.second.str), std::end(pa.second.str), std::back_inserter(box_p.str));
                     const std::vector<SymbolElement> &key = box_p.str;
                     if (subbox.count(key) == 0 &&
                         std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
-                      box_p.next.push_back(p);
+                      box_p.next.push_back(pa.second);
                       subbox[key] = box_p;
-                      used.push_back(p);
+                      used.push_back(pa.second);
                     }
                   });
                 }
@@ -230,7 +242,6 @@ class ParseLink {
               ParseNode box_p = box_pair.second;
               box_p.str.push_back(sel);
               const std::vector<SymbolElement> &key = box_p.str;
-
               if (subbox.count(key) == 0 && std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
                 subbox[key] = box_p;
               }
@@ -246,11 +257,10 @@ class ParseLink {
           if (b) {
             std::unordered_map<std::vector<SymbolElement>, ParseNode, HashSymbolVector> subbox;
             std::for_each(std::begin(box), std::end(box), [this, &r, &ref, &subbox, &sel](auto &box_pair) {
-              ParseNode &box_p = box_pair.second;
-              box_p.str.push_back(sel);
-              const std::vector<SymbolElement> &key = box_p.str;
+              box_pair.second.str.push_back(sel);
+              const std::vector<SymbolElement> &key = box_pair.second.str;
               if (subbox.count(key) == 0 && std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
-                subbox[key] = box_p;
+                subbox[key] = box_pair.second;
               }
             });
             if (subbox.size() != 0)
@@ -269,12 +279,14 @@ class ParseLink {
       });
       if (b) {
         std::for_each(std::begin(used), std::end(used), [&r](ParseNode &p) { p.record.insert(r.get_internal().get_base()); });
-        std::for_each(std::begin(r.get_external()), std::end(r.get_external()),
-                      [this](const SymbolElement &sel) { symbol_set.erase(sel); });
+        if (symbol_set.size() != 0)
+          std::for_each(std::begin(r.get_external()), std::end(r.get_external()),
+                        [this](const SymbolElement &sel) { symbol_set.erase(sel); });
       }
     }
     return b;
   }
+  friend std::ostream &operator<<(std::ostream &out, const ParseLink &obj);
 };
 
 class KnowledgeTypeDef {

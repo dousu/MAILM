@@ -57,4 +57,40 @@ class Rule {
   friend std::hash<Rule>;
 };
 
+class UtteranceRules {
+  struct Node {
+    Rule r;
+    std::list<std::reference_wrapper<Node>> next;
+    Node() : r(), next() {}
+    Node(Rule &r) : r(r), next() {}
+    Node(Rule &r, std::list<std::reference_wrapper<Node>> &n) : r(r), next(n) {}
+    Node(const Node &dst) : r(dst.r), next(dst.next) {}
+    Node &operator=(const Node &dst) {
+      r = dst.r;
+      next = dst.next;
+      return *this;
+    }
+    friend std::hash<Node>;
+  };
+  Node top;
+  std::list<Node> rules;
+  UtteranceRules() : top(), rules() {}
+  void list_rules(std::vector<Rule> &ret) {
+    std::function<void(Node &)> func;
+    func = [&ret, &func](Node &n) {
+      ret.push_back(n.r);
+      std::for_each(std::begin(n.next), std::end(n.next), func);
+    };
+    func(top);
+  }
+  void vector_rules(std::vector<Rule> &ret) {
+    std::list<Rule> tmp;
+    ret = std::vector<Rule>(std::begin(tmp), std::end(tmp));
+  }
+  void add(Node &n) {
+    rules.push_back(n);
+    n = rules.back();
+  }
+};
+
 #endif /* RULE_H_ */
