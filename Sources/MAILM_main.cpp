@@ -97,34 +97,8 @@ void tree_assessment(Agent &ma, std::string out) {
     std::string name = XMLreader::labeling[no];
     r_list.clear();
     std::cout << "Construct " << name << ".xml" << std::endl;
-    // test
-    std::vector<SymbolElement> sel_vec{
-        {Symbol{1},  Symbol{2},  Symbol{1},  Symbol{2},  Symbol{3},  Symbol{4},  Symbol{3},  Symbol{4},  Symbol{1},  Symbol{2},  Symbol{5},
-         Symbol{6},  Symbol{1},  Symbol{2},  Symbol{5},  Symbol{2},  Symbol{7},  Symbol{8},  Symbol{7},  Symbol{8},  Symbol{6},  Symbol{2},
-         Symbol{6},  Symbol{2},  Symbol{9},  Symbol{10}, Symbol{11}, Symbol{9},  Symbol{12}, Symbol{13}, Symbol{12}, Symbol{14}, Symbol{1},
-         Symbol{2},  Symbol{1},  Symbol{2},  Symbol{3},  Symbol{4},  Symbol{3},  Symbol{4},  Symbol{1},  Symbol{2},  Symbol{5},  Symbol{6},
-         Symbol{1},  Symbol{2},  Symbol{5},  Symbol{2},  Symbol{7},  Symbol{8},  Symbol{7},  Symbol{8},  Symbol{6},  Symbol{2},  Symbol{6},
-         Symbol{2},  Symbol{9},  Symbol{10}, Symbol{11}, Symbol{9},  Symbol{12}, Symbol{13}, Symbol{12}, Symbol{14}, Symbol{15}, Symbol{16},
-         Symbol{15}, Symbol{16}, Symbol{17}, Symbol{18}, Symbol{19}, Symbol{20}, Symbol{15}, Symbol{16}, Symbol{15}, Symbol{16}, Symbol{17},
-         Symbol{18}, Symbol{19}, Symbol{20}, Symbol{21}, Symbol{22}, Symbol{23}, Symbol{24}, Symbol{17}, Symbol{2},  Symbol{6},  Symbol{17},
-         Symbol{25}, Symbol{26}, Symbol{25}, Symbol{27}, Symbol{20}, Symbol{28}, Symbol{29}, Symbol{14}, Symbol{15}, Symbol{16}, Symbol{15},
-         Symbol{16}, Symbol{17}, Symbol{18}, Symbol{19}, Symbol{20}, Symbol{15}, Symbol{16}, Symbol{15}, Symbol{16}, Symbol{17}, Symbol{18},
-         Symbol{19}, Symbol{20}, Symbol{21}, Symbol{22}, Symbol{23}, Symbol{24}, Symbol{17}, Symbol{2},  Symbol{6},  Symbol{17}, Symbol{25},
-         Symbol{26}, Symbol{25}, Symbol{27}, Symbol{18}, Symbol{19}, Symbol{30}, Symbol{31}, Symbol{32}, Symbol{33}, Symbol{32}, Symbol{33},
-         Symbol{5},  Symbol{2},  Symbol{6},  Symbol{1},  Symbol{32}, Symbol{33}, Symbol{32}, Symbol{33}, Symbol{1},  Symbol{14}, Symbol{20},
-         Symbol{34}, Symbol{1},  Symbol{1},  Symbol{20}, Symbol{34}, Symbol{1},  Symbol{1},  Symbol{1},  Symbol{1}}};
-    // std::vector<SymbolElement> sel_vec{{Symbol{1}, Symbol{2}, Symbol{1}, Symbol{2}, Symbol{3}, Symbol{4}, Symbol{3},
-    //                                     Symbol{4}, Symbol{1}, Symbol{2}, Symbol{5}, Symbol{6}, Symbol{1}, Symbol{2},
-    //                                     Symbol{5}, Symbol{2}, Symbol{7}, Symbol{8}, Symbol{7}, Symbol{8}}};
-    std::function<void(std::vector<Rule> &)> res_func = [](std::vector<Rule> &rr) {
-      std::cout << std::endl;
-      std::copy(std::begin(rr), std::end(rr), std::ostream_iterator<Rule>(std::cout, "\n"));
-      std::cout << std::endl;
-    };
-    bool is_parsed = ma.kb.construct_parsed_rules(sel_vec, res_func);
-
     if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
-      std::cout << "explain: true" << std::endl;
+      std::cout << "explaination: true" << std::endl;
       tree_str = make_tree_str_for_dot(r_list);
       std::cout << "made tree graph as a dot file" << std::endl;
 

@@ -1,5 +1,7 @@
 #include "Rule.h"
 
+UtteranceRules::Node UtteranceRules::empty_node = UtteranceRules::Node();
+
 Rule::Rule() noexcept {
   internal = LeftNonterminal();
   external.clear();
@@ -54,7 +56,7 @@ std::string Rule::to_s() const {
   std::ostringstream os;
   std::copy(std::begin(external), std::end(external), std::ostream_iterator<SymbolElement>(os, " "));
   str = os.str();
-  str.pop_back();
+  if (str.size() > 0) str.pop_back();
   return internal.to_s() + Prefices::ARW + str;
 }
 
@@ -73,4 +75,9 @@ std::size_t std::hash<Symbol>::operator()(const Symbol &dst) const noexcept { re
 std::size_t std::hash<RightNonterminal>::operator()(const RightNonterminal &dst) const noexcept { return hash<Category>()(dst.cat); }
 std::size_t std::hash<SymbolElement>::operator()(const SymbolElement &dst) const noexcept {
   return hash<std::variant<RightNonterminal, Symbol>>()(dst.element);
+}
+
+std::ostream &operator<<(std::ostream &out, const UtteranceRules &obj) {
+  out << obj.to_s();
+  return out;
 }

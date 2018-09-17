@@ -62,8 +62,8 @@ class ParseLink {
     std::unordered_set<AMean> record;
     std::vector<std::reference_wrapper<ParseNode>> next;
     ParseNode() : r(), str(), record(), next() {}
-    ParseNode(Rule &r) : r(r), str(), record(), next() {}
-    ParseNode(Rule &r, AMean &m) : r(r), str(), record({m}), next() {}
+    ParseNode(const Rule &r) : r(r), str(), record(), next() {}
+    ParseNode(const Rule &r, const AMean &m) : r(r), str(), record({m}), next() {}
     ParseNode(const ParseNode &dst) : r(dst.r), str(dst.str), record(dst.record), next(dst.next) {}
     ParseNode &operator=(const ParseNode &dst) {
       r = dst.r;
@@ -71,6 +71,7 @@ class ParseLink {
       next = dst.next;
       return *this;
     }
+    bool operator==(const ParseNode &dst) const { return r == dst.r && str == dst.str; }
     friend std::hash<ParseNode>;
   };
   std::unordered_map<Category, std::map<std::vector<SymbolElement>, ParseNode, LengthGreater<std::vector<SymbolElement>>>> dic;
@@ -80,16 +81,9 @@ class ParseLink {
   std::unordered_set<SymbolElement> symbol_set;
 
  public:
+  static ParseNode empty_node;
   ParseLink() : dic() {}
   std::size_t get_dic_size() const { return dic.size(); }
-  static void expansion(std::vector<Rule> &rules, ParseNode &node) {
-    rules.push_back(node.r);
-    if (node.next.size() == 0) {
-      return;
-    } else {
-      std::for_each(std::begin(node.next), std::end(node.next), [&rules](ParseNode &p) { expansion(rules, p); });
-    }
-  }
   void build_str_dic() {
     std::for_each(std::begin(dic), std::end(dic), [this](auto &dic_map) {
       std::for_each(std::begin(dic_map.second), std::end(dic_map.second),
@@ -132,12 +126,7 @@ class ParseLink {
   }
   bool parse_init(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
     dic.clear();
-    // if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) ==
-    //     std::end(ref)) {
-    //   symbol_set.clear();
-    // } else {
     symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
-    // }
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
     std::list<std::reference_wrapper<Rule>> rules_nt;
@@ -167,13 +156,6 @@ class ParseLink {
     return symbol_set.empty();
   }
   bool parse_add(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
-    dic.clear();
-    // if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) ==
-    //     std::end(ref)) {
-    //   symbol_set.clear();
-    // } else {
-    //   symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
-    // }
     symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
@@ -243,6 +225,7 @@ class ParseLink {
               box_p.str.push_back(sel);
               const std::vector<SymbolElement> &key = box_p.str;
               if (subbox.count(key) == 0 && std::search(std::begin(ref), std::end(ref), std::begin(key), std::end(key)) != std::end(ref)) {
+                box_p.next.push_back(std::reference_wrapper(empty_node));
                 subbox[key] = box_p;
               }
             });

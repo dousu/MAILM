@@ -57,40 +57,62 @@ class Rule {
   friend std::hash<Rule>;
 };
 
-class UtteranceRules {
+struct UtteranceRules {
   struct Node {
     Rule r;
     std::list<std::reference_wrapper<Node>> next;
     Node() : r(), next() {}
-    Node(Rule &r) : r(r), next() {}
-    Node(Rule &r, std::list<std::reference_wrapper<Node>> &n) : r(r), next(n) {}
+    Node(const Rule &r) : r(r), next() {}
+    Node(const Rule &r, const std::list<std::reference_wrapper<Node>> &n) : r(r), next(n) {}
     Node(const Node &dst) : r(dst.r), next(dst.next) {}
     Node &operator=(const Node &dst) {
       r = dst.r;
       next = dst.next;
       return *this;
     }
+    bool operator==(const Node &obj) const { return r == obj.r; }
     friend std::hash<Node>;
   };
+
+ private:
   Node top;
   std::list<Node> rules;
+
+ public:
+  static Node empty_node;
   UtteranceRules() : top(), rules() {}
-  void list_rules(std::vector<Rule> &ret) {
-    std::function<void(Node &)> func;
-    func = [&ret, &func](Node &n) {
+  void list_rules(std::list<Rule> &ret) const {
+    ret.clear();
+    std::function<void(const Node &)> func;
+    func = [&ret, &func](const Node &n) {
       ret.push_back(n.r);
       std::for_each(std::begin(n.next), std::end(n.next), func);
     };
     func(top);
   }
-  void vector_rules(std::vector<Rule> &ret) {
+  void vector_rules(std::vector<Rule> &ret) const {
+    ret.clear();
     std::list<Rule> tmp;
-    ret = std::vector<Rule>(std::begin(tmp), std::end(tmp));
+    list_rules(tmp);
+    std::copy(std::begin(tmp), std::end(tmp), std::back_inserter(ret));
   }
-  void add(Node &n) {
+  Node &add(const Node &n) {
     rules.push_back(n);
-    n = rules.back();
+    return rules.back();
   }
+  Node &add_top(const Node &n) {
+    top = n;
+    return top;
+  }
+  std::string to_s() const {
+    std::ostringstream os;
+    os << "UtteranceRules" << std::endl;
+    std::list<Rule> rlist;
+    list_rules(rlist);
+    std::copy(std::begin(rlist), std::end(rlist), std::ostream_iterator<Rule>(os, "\n"));
+    return os.str();
+  }
+  friend std::ostream &operator<<(std::ostream &out, const UtteranceRules &obj);
 };
 
 #endif /* RULE_H_ */
