@@ -122,10 +122,6 @@ void evaluate_knowledge(Agent &ma, MAILMParameters &param) {
 }
 
 int main(int argc, char *argv[]) {
-  /*
-   * ほぼ静的クラスだが、シリアライズのため（Dictionary）と、
-   * デストラクタ実行のため（LogBox）にインスタンスを作成
-   */
   LogBox log;  // for destructor
   MAILMParameters param;
 
