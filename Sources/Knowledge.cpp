@@ -1142,6 +1142,7 @@ bool Knowledge::construct_groundable_rules_1(Rule &base, std::vector<RuleDBType>
 
 bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, UtteranceRules &ur) {
   std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
+  std::unordered_set<SymbolElement> black_list;
   std::function<std::pair<bool, std::list<std::reference_wrapper<UtteranceRules::Node>>>(
       const std::vector<SymbolElement> &, std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &, UtteranceRules &)>
       make_rules;
@@ -1150,20 +1151,17 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
                      std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &,
                      std::list<std::reference_wrapper<UtteranceRules::Node>> &, UtteranceRules &)>
       f;
-  make_rules = [this, &make_rules, &f, &ruleDB_ref](
+  make_rules = [this, &make_rules, &f, &ruleDB_ref, &black_list](
                    const std::vector<SymbolElement> &ref, std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &str_set,
                    UtteranceRules &ur) -> std::pair<bool, std::list<std::reference_wrapper<UtteranceRules::Node>>> {
-    std::cout << "str: ";
-    std::copy(std::begin(ref), std::end(ref), std::ostream_iterator<SymbolElement>(std::cout, " "));
-    std::cout << std::endl;
-
+    
     if (ref.size() == 1 && ref.front().type() == ELEM_TYPE::NT_TYPE) {
-      UtteranceRules::Node empty_node;
-      return {true, std::list<std::reference_wrapper<UtteranceRules::Node>>{{empty_node}}};
+      return {true, std::list<std::reference_wrapper<UtteranceRules::Node>>{{UtteranceRules::empty_node}}};
     }
+
     ParseLink pl;
     bool b = pl.parse_init(ruleDB_ref, ref);
-
+    black_list.merge(pl.symbol_set_1);
     if (!b || pl.empty()) {
       return {false, std::list<std::reference_wrapper<UtteranceRules::Node>>()};
     }
@@ -1177,7 +1175,16 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
     } else
       return {false, std::list<std::reference_wrapper<UtteranceRules::Node>>()};
   };
-  f = [this, &f, &make_rules](ParseLink &pl, const std::vector<SymbolElement> &sel_vec, std::vector<SymbolElement> &ref_cat,
+  std::function<bool(const std::vector<SymbolElement> &)> black_list_checker;
+  black_list_checker = [&black_list](const std::vector<SymbolElement> & sel_vec) -> bool {
+    bool b = false;
+    std::for_each(std::begin(black_list), std::end(black_list), [&sel_vec, &b](const SymbolElement & obj){
+      if(b || std::find(std::begin(sel_vec), std::end(sel_vec), obj) != std::end(sel_vec))
+        b = true;
+    });
+    return b;
+  };
+  f = [this, &f, &make_rules, &black_list_checker](ParseLink &pl, const std::vector<SymbolElement> &sel_vec, std::vector<SymbolElement> &ref_cat,
                               std::list<std::reference_wrapper<ParseLink::ParseNode>> &p_list,
                               std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &str_set,
                               std::list<std::reference_wrapper<UtteranceRules::Node>> &nodes, UtteranceRules &ur) -> bool {
@@ -1185,7 +1192,8 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
     std::optional<ParseLink::ParseNode> opt;
     std::vector<SymbolElement> base_seq = ref_cat;
     auto base_p = p_list;
-    while ((opt = pl.bottom_up_search_next(sel_vec, it)) != std::nullopt) {
+    bool black = black_list_checker(base_seq);
+    while (!black && (opt = pl.bottom_up_search_next(sel_vec, it)) != std::nullopt) {
       ParseLink::ParseNode &opt_p = opt.value();
       ref_cat = base_seq;
       p_list = base_p;
@@ -1258,6 +1266,8 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
                    str_set, nodes, ur)) {
         return true;
       }
+      if(!black)
+        black = black_list_checker(base_seq);
       pl.bottom_up_search_init(it);
     }
     return false;
@@ -1267,50 +1277,50 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
   return ret.first;
 }
 
-bool Knowledge::construct_parsed_rules2(const std::vector<SymbolElement> &str, UtteranceRules &ur) {
-  std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
+// bool Knowledge::construct_parsed_rules2(const std::vector<SymbolElement> &str, UtteranceRules &ur) {
+//   std::list<std::reference_wrapper<Rule>> ruleDB_ref{std::begin(ruleDB), std::end(ruleDB)};
 
-  ParseLink2 pl;
-  bool b = pl.parse_init(ruleDB_ref, str);
-  if (!b) {
-    return false;
-  }
-  pl.build_str_dic();
-  auto it = pl.bottom_up_search_init();
-  auto opt = pl.bottom_up_search_next(str, it);
-  if (opt == std::nullopt) {
-    return false;
-  }
-  ParseLink2::ParseNode &opt_p = opt.value();
-  if (opt_p.str.size() != str.size()) {
-    return false;
-  }
-  std::function<UtteranceRules::Node &(ParseLink2::ParseNode &)> expansion;
-  expansion = [&expansion, &ur](ParseLink2::ParseNode &plpn) -> UtteranceRules::Node & {
-    UtteranceRules::Node &n = ur.add(UtteranceRules::Node(plpn.r));
-    if (plpn.next.size() != 0) {
-      std::for_each(std::begin(plpn.next), std::end(plpn.next), [&n, &expansion](ParseLink2::ParseNode &p) {
-        if (p == ParseLink2::empty_node) {
-          std::cerr << "irregular value" << std::endl;
-          exit(1);
-        }
-        n.next.push_back(expansion(p));
-      });
-    }
-    return n;
-  };
-  UtteranceRules::Node &urn = ur.add_top(UtteranceRules::Node(opt_p.r));
-  if (opt_p.next.size() != 0) {
-    std::for_each(std::begin(opt_p.next), std::end(opt_p.next), [&urn, &expansion](ParseLink2::ParseNode &pn) {
-      if (pn == ParseLink2::empty_node) {
-        std::cerr << "irregular value" << std::endl;
-        exit(1);
-      }
-      urn.next.push_back(expansion(pn));
-    });
-  }
-  return true;
-}
+//   ParseLink2 pl;
+//   bool b = pl.parse_init(ruleDB_ref, str);
+//   if (!b) {
+//     return false;
+//   }
+//   pl.build_str_dic();
+//   auto it = pl.bottom_up_search_init();
+//   auto opt = pl.bottom_up_search_next(str, it);
+//   if (opt == std::nullopt) {
+//     return false;
+//   }
+//   ParseLink2::ParseNode &opt_p = opt.value();
+//   if (opt_p.str.size() != str.size()) {
+//     return false;
+//   }
+//   std::function<UtteranceRules::Node &(ParseLink2::ParseNode &)> expansion;
+//   expansion = [&expansion, &ur](ParseLink2::ParseNode &plpn) -> UtteranceRules::Node & {
+//     UtteranceRules::Node &n = ur.add(UtteranceRules::Node(plpn.r));
+//     if (plpn.next.size() != 0) {
+//       std::for_each(std::begin(plpn.next), std::end(plpn.next), [&n, &expansion](ParseLink2::ParseNode &p) {
+//         if (p == ParseLink2::empty_node) {
+//           std::cerr << "irregular value" << std::endl;
+//           exit(1);
+//         }
+//         n.next.push_back(expansion(p));
+//       });
+//     }
+//     return n;
+//   };
+//   UtteranceRules::Node &urn = ur.add_top(UtteranceRules::Node(opt_p.r));
+//   if (opt_p.next.size() != 0) {
+//     std::for_each(std::begin(opt_p.next), std::end(opt_p.next), [&urn, &expansion](ParseLink2::ParseNode &pn) {
+//       if (pn == ParseLink2::empty_node) {
+//         std::cerr << "irregular value" << std::endl;
+//         exit(1);
+//       }
+//       urn.next.push_back(expansion(pn));
+//     });
+//   }
+//   return true;
+// }
 
 std::size_t std::hash<AMean>::operator()(const AMean &dst) const noexcept { return hash<int>()(dst.obj); }
 

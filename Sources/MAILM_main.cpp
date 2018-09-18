@@ -80,6 +80,22 @@ void static_assessment(Agent &ma, std::string out) {
   std::cout << "static assessment file: " << out << std::endl;
   std::ostringstream os;
   os << "Generation(" << ma.generation_index << ")" << std::endl << "Size = " << ma.kb.size() << std::endl;
+  int no;
+  for (no = 1; no <= XMLreader::labeling.size(); no++) {
+    std::string name = XMLreader::labeling[no];
+    std::cout << "Parse step " << name << ".xml" << std::endl;
+    std::copy(std::begin(XMLreader::strings[no]), std::end(XMLreader::strings[no]), std::ostream_iterator<SymbolElement>(std::cout, " "));
+    std::cout << std::endl;
+    auto ret = ma.kb.parse_string(XMLreader::strings[no]);
+    if (ret.size() != 0) {
+      std::copy(std::begin(ret), std::end(ret), std::ostream_iterator<Rule>(std::cout, "\n"));
+      std::cout << "finished to parse" << std::endl;
+      os << "Parsable[" << name << ".xml] = true" << std::endl;
+    } else{
+      std::cout << "Can't parse" << std::endl;
+      os << "Parsable[" << name << ".xml] = false" << std::endl;
+    }
+  }
   output_data_app(out, os.str());
 }
 
@@ -113,15 +129,6 @@ void tree_assessment(Agent &ma, std::string out) {
     } else {
       std::cout << "Can't construct" << std::endl;
     }
-    std::cout << "Parse step " << name << ".xml" << std::endl;
-    std::copy(std::begin(XMLreader::strings[no]), std::end(XMLreader::strings[no]), std::ostream_iterator<SymbolElement>(std::cout, " "));
-    std::cout << std::endl;
-    auto ret = ma.kb.parse_string(XMLreader::strings[no]);
-    if (ret.size() != 0) {
-      std::copy(std::begin(ret), std::end(ret), std::ostream_iterator<Rule>(std::cout, "\n"));
-      std::cout << "finished to parse" << std::endl;
-    } else
-      std::cout << "Can't parse" << std::endl;
   }
 }
 

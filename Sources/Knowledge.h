@@ -72,6 +72,7 @@ class ParseLink {
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>> str_dic;
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator
       bottom_up_search_it;
+public:
   std::unordered_set<SymbolElement> symbol_set;
   std::unordered_set<SymbolElement> symbol_set_1;
 
@@ -119,7 +120,7 @@ class ParseLink {
     }
     return std::nullopt;
   }
-  bool parse_init(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
+  bool parse_init(const std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
     dic.clear();
     symbol_set_1 = symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
     bool b = false;
@@ -128,7 +129,7 @@ class ParseLink {
     std::unordered_map<std::vector<SymbolElement>, bool, HashSymbolVector> searched_str;
     std::for_each(std::begin(rules), std::end(rules), [this, &rules_sym, &rules_nt](Rule &r) {
       if (std::find_if(std::begin(r.get_external()), std::end(r.get_external()),
-                       [](SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == std::end(r.get_external())) {
+                       [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == std::end(r.get_external())) {
         rules_sym.push_back(r);
       } else {
         rules_nt.push_back(r);
@@ -137,26 +138,26 @@ class ParseLink {
     if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) !=
         std::end(ref)) {
       std::for_each(std::begin(rules_sym), std::end(rules_sym),
-                    [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
-      if (!symbol_set_1.empty()) return false;
+                    [this, &ref, &b, &searched_str](const Rule &r) { b = add(r, ref, searched_str) || b; });
       while (b) {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
-                      [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+                      [this, &ref, &b, &searched_str](const Rule &r) { b = add(r, ref, searched_str) || b; });
+        if (!symbol_set_1.empty()) return false;
       }
     } else {
       b = true;
       while (b) {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
-                      [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+                      [this, &ref, &b, &searched_str](const Rule &r) { b = add(r, ref, searched_str) || b; });
         if (!symbol_set_1.empty()) return false;
       }
     }
 
     return symbol_set.empty();
   }
-  bool parse_add(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
+  bool parse_add(const std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
     symbol_set_1 = symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
@@ -164,7 +165,7 @@ class ParseLink {
     std::unordered_map<std::vector<SymbolElement>, bool, HashSymbolVector> searched_str;
     std::for_each(std::begin(rules), std::end(rules), [this, &rules_sym, &rules_nt](Rule &r) {
       if (std::find_if(std::begin(r.get_external()), std::end(r.get_external()),
-                       [](SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == std::end(r.get_external())) {
+                       [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == std::end(r.get_external())) {
         rules_sym.push_back(r);
       } else {
         rules_nt.push_back(r);
@@ -173,11 +174,11 @@ class ParseLink {
     if (std::find_if(std::begin(ref), std::end(ref), [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::SYM_TYPE; }) !=
         std::end(ref)) {
       std::for_each(std::begin(rules_sym), std::end(rules_sym),
-                    [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+                    [this, &ref, &b, &searched_str](const Rule &r) { b = add(r, ref, searched_str) || b; });
       while (b) {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
-                      [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+                      [this, &ref, &b, &searched_str](const Rule &r) { b = add(r, ref, searched_str) || b; });
         if (!symbol_set_1.empty()) return false;
       }
     } else {
@@ -185,7 +186,7 @@ class ParseLink {
       while (b) {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
-                      [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+                      [this, &ref, &b, &searched_str](const Rule &r) { b = add(r, ref, searched_str) || b; });
         if (!symbol_set_1.empty()) return false;
       }
     }
@@ -194,7 +195,7 @@ class ParseLink {
   }
 
  private:
-  bool add(Rule &r, const std::vector<SymbolElement> &ref,
+  bool add(const Rule &r, const std::vector<SymbolElement> &ref,
            std::unordered_map<std::vector<SymbolElement>, bool, HashSymbolVector> &searched_str) {
     // std::unordered_map<std::vector<SymbolElement>, ParseNode, HashSymbolVector> box{
     //     {std::vector<SymbolElement>(), ParseNode(r, r.get_internal().get_base())}};
@@ -202,7 +203,7 @@ class ParseLink {
     bool b = true;
     std::list<std::reference_wrapper<ParseNode>> used;
     std::for_each(
-        std::begin(r.get_external()), std::end(r.get_external()), [this, &r, &ref, &box, &b, &used, &searched_str](SymbolElement &sel) {
+        std::begin(r.get_external()), std::end(r.get_external()), [this, &r, &ref, &box, &b, &used, &searched_str](const SymbolElement &sel) {
           switch (sel.type()) {
             case ELEM_TYPE::NT_TYPE: {
               if (b) {
