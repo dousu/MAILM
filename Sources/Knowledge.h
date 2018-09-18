@@ -73,6 +73,7 @@ class ParseLink {
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator
       bottom_up_search_it;
   std::unordered_set<SymbolElement> symbol_set;
+  std::unordered_set<SymbolElement> symbol_set_1;
 
  public:
   static ParseNode empty_node;
@@ -120,7 +121,7 @@ class ParseLink {
   }
   bool parse_init(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
     dic.clear();
-    symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+    symbol_set_1 = symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
     std::list<std::reference_wrapper<Rule>> rules_nt;
@@ -137,6 +138,7 @@ class ParseLink {
         std::end(ref)) {
       std::for_each(std::begin(rules_sym), std::end(rules_sym),
                     [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+      if (!symbol_set_1.empty()) return false;
       while (b) {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
@@ -148,13 +150,14 @@ class ParseLink {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
                       [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+        if (!symbol_set_1.empty()) return false;
       }
     }
 
     return symbol_set.empty();
   }
   bool parse_add(std::list<std::reference_wrapper<Rule>> rules, const std::vector<SymbolElement> &ref) {
-    symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
+    symbol_set_1 = symbol_set = std::unordered_set<SymbolElement>{std::begin(ref), std::end(ref)};
     bool b = false;
     std::list<std::reference_wrapper<Rule>> rules_sym;
     std::list<std::reference_wrapper<Rule>> rules_nt;
@@ -175,6 +178,7 @@ class ParseLink {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
                       [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+        if (!symbol_set_1.empty()) return false;
       }
     } else {
       b = true;
@@ -182,6 +186,7 @@ class ParseLink {
         b = false;
         std::for_each(std::begin(rules_nt), std::end(rules_nt),
                       [this, &ref, &b, &searched_str](Rule &r) { b = add(r, ref, searched_str) || b; });
+        if (!symbol_set_1.empty()) return false;
       }
     }
 
@@ -191,9 +196,9 @@ class ParseLink {
  private:
   bool add(Rule &r, const std::vector<SymbolElement> &ref,
            std::unordered_map<std::vector<SymbolElement>, bool, HashSymbolVector> &searched_str) {
-    std::unordered_map<std::vector<SymbolElement>, ParseNode, HashSymbolVector> box{
-        {std::vector<SymbolElement>(), ParseNode(r, r.get_internal().get_base())}};
-    // std::unordered_map<std::vector<SymbolElement>, ParseNode, HashSymbolVector> box{{std::vector<SymbolElement>(), ParseNode(r)}};
+    // std::unordered_map<std::vector<SymbolElement>, ParseNode, HashSymbolVector> box{
+    //     {std::vector<SymbolElement>(), ParseNode(r, r.get_internal().get_base())}};
+    std::unordered_map<std::vector<SymbolElement>, ParseNode, HashSymbolVector> box{{std::vector<SymbolElement>(), ParseNode(r)}};
     bool b = true;
     std::list<std::reference_wrapper<ParseNode>> used;
     std::for_each(
@@ -281,11 +286,14 @@ class ParseLink {
       });
       if (b) {
         std::for_each(std::begin(used), std::end(used), [&r](ParseNode &p) { p.record.insert(r.get_internal().get_base()); });
-        if (symbol_set.size() != 0)
+        if (!symbol_set.empty())
           std::for_each(std::begin(r.get_external()), std::end(r.get_external()),
                         [this](const SymbolElement &sel) { symbol_set.erase(sel); });
       }
     }
+    if (!symbol_set_1.empty())
+      std::for_each(std::begin(r.get_external()), std::end(r.get_external()),
+                    [this](const SymbolElement &sel) { symbol_set_1.erase(sel); });
     return b;
   }
   friend std::ostream &operator<<(std::ostream &out, const ParseLink &obj);
