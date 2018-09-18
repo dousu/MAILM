@@ -113,6 +113,15 @@ void tree_assessment(Agent &ma, std::string out) {
     } else {
       std::cout << "Can't construct" << std::endl;
     }
+    std::cout << "Parse step " << name << ".xml" << std::endl;
+    std::copy(std::begin(XMLreader::strings[no]), std::end(XMLreader::strings[no]), std::ostream_iterator<SymbolElement>(std::cout, " "));
+    std::cout << std::endl;
+    auto ret = ma.kb.parse_string(XMLreader::strings[no]);
+    if (ret.size() != 0) {
+      std::copy(std::begin(ret), std::end(ret), std::ostream_iterator<Rule>(std::cout, "\n"));
+      std::cout << "finished to parse" << std::endl;
+    } else
+      std::cout << "Can't parse" << std::endl;
   }
 }
 
@@ -176,6 +185,7 @@ int main(int argc, char *argv[]) {
   Agent parent;
   parent.init_semantics(XMLreader::i_meaning_map);
   parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
+  if (param.LOGGING) LogBox::push_log(parent.kb.to_s());
   parent.learn();
   parent.grow();
   std::cout << parent.kb.to_s() << std::endl;
