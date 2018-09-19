@@ -72,7 +72,8 @@ class ParseLink {
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>> str_dic;
   std::map<std::vector<SymbolElement>, std::reference_wrapper<ParseNode>, LengthGreater<std::vector<SymbolElement>>>::iterator
       bottom_up_search_it;
-public:
+
+ public:
   std::unordered_set<SymbolElement> symbol_set;
   std::unordered_set<SymbolElement> symbol_set_1;
 
@@ -203,7 +204,8 @@ public:
     bool b = true;
     std::list<std::reference_wrapper<ParseNode>> used;
     std::for_each(
-        std::begin(r.get_external()), std::end(r.get_external()), [this, &r, &ref, &box, &b, &used, &searched_str](const SymbolElement &sel) {
+        std::begin(r.get_external()), std::end(r.get_external()),
+        [this, &r, &ref, &box, &b, &used, &searched_str](const SymbolElement &sel) {
           switch (sel.type()) {
             case ELEM_TYPE::NT_TYPE: {
               if (b) {

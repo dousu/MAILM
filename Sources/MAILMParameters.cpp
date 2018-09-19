@@ -12,6 +12,9 @@ MAILMParameters::MAILMParameters() {
   UTTERANCES = 25;
   Generation_Counter = 0;  //
 
+  MONO = false;
+  LILYPOND = false;
+
   // system parameters
   LOGGING = false;
   // PROGRESS = false;
@@ -41,6 +44,7 @@ MAILMParameters::MAILMParameters() {
   ALIAS_FILE = BASE_PATH + "Sources/alias.data";
   DIC_XML_FILE = BASE_PATH + "Sources/dic_xml.data";
   XML_DIR = BASE_PATH + "XML";
+  MONOXML_DIR = BASE_PATH + "monoXML";
   XML_EXT = ".xml";
   FILE_PREFIX = "MAILM_";
 
@@ -74,6 +78,15 @@ void MAILMParameters::set_option(ProgramOption &po) {
 
   if (po.count("utterances")) {
     UTTERANCES = po.get<int>("utterances");
+  }
+
+  if (po.count("mono")) {
+    MONO = true;
+    XML_DIR = MONOXML_DIR;
+  }
+
+  if (po.count("lilypond")) {
+    LILYPOND = true;
   }
 
   if (po.count("analyze")) {
@@ -124,6 +137,16 @@ std::string MAILMParameters::to_s() {
     bag.push_back(std::to_string(spo.get<int>("utteranes")));
   }
 
+  if (spo.count("mono")) {
+    bag.push_back("--mono");
+    bag.push_back(std::to_string(spo.get<bool>("mono")));
+  }
+
+  if (spo.count("lilypond")) {
+    bag.push_back("--lilypond");
+    bag.push_back(std::to_string(spo.get<bool>("lilypond")));
+  }
+
   if (spo.count("analyze")) {
     bag.push_back("--analyze");
     bag.push_back(std::to_string(spo.get<bool>("analyze")));
@@ -168,6 +191,10 @@ std::string MAILMParameters::to_all_s(void) {
   ss << "LOGGING = " << std::boolalpha << LOGGING << std::noboolalpha << std::endl;
   //  bool PROGRESS;
   // ss << "PROGRESS = " << PROGRESS << std::endl;
+  //  bool MONO;
+  ss << "MONO = " << std::boolalpha << MONO << std::noboolalpha << std::endl;
+  //  bool LILYPOND;
+  ss << "LILYPOND = " << std::boolalpha << LILYPOND << std::noboolalpha << std::endl;
   //  bool ANALYZE;
   ss << "ANALYZE = " << std::boolalpha << ANALYZE << std::noboolalpha << std::endl;
   //  std::string DICTIONARY_FILE;

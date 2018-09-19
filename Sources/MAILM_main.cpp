@@ -91,7 +91,7 @@ void static_assessment(Agent &ma, std::string out) {
       std::copy(std::begin(ret), std::end(ret), std::ostream_iterator<Rule>(std::cout, "\n"));
       std::cout << "finished to parse" << std::endl;
       os << "Parsable[" << name << ".xml] = true" << std::endl;
-    } else{
+    } else {
       std::cout << "Can't parse" << std::endl;
       os << "Parsable[" << name << ".xml] = false" << std::endl;
     }
@@ -154,6 +154,10 @@ int main(int argc, char *argv[]) {
       ("generations", ProgramOption::value<int>(), "Max generation number (100)")
       /*発話回数*/
       ("utterances", ProgramOption::value<int>(), "Uttering ratio for meaning space (25)")
+      // handling monophony
+      ("mono", "mode for monophony")
+      // using lilypond output
+      ("lilypond", "output by lilypond style")
       /*ロギング*/
       ("logging", "Logging")
       /*分析*/
@@ -186,7 +190,12 @@ int main(int argc, char *argv[]) {
                     file_list.push_back(p.path().generic_string());
                   }
                 });
-  XMLreader::make_init_data(file_list);
+  if (!param.MONO)
+    XMLreader::make_init_data(file_list);
+  else{
+    XMLreaderMono::make_init_data(file_list);
+    XMLreader::copy(XMLreaderMono());
+  }
 
   // test
   Agent parent;

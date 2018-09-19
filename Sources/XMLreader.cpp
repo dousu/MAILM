@@ -167,9 +167,161 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
   Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
   //文ルール追加
   buf.push_back(r_sent);
-  // std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<Rule>(std::cerr, "\n"));
   i_meaning_map[file_no] = flat_meaning;
   category_count--;
 }
 
 XMLreader XMLreader::copy(void) { return XMLreader(); }
+
+XMLreader XMLreader::copy(const XMLreaderMono &obj) {
+  alias = obj.alias;
+  conv_alias = obj.conv_alias;
+  i_meaning_map = obj.i_meaning_map;
+  i_beat_map = obj.i_beat_map;
+  strings = obj.strings;
+  labeling = obj.labeling;
+  core_meaning = obj.core_meaning;
+  input_rules = obj.input_rules;
+  conv_str = obj.conv_str;
+  return XMLreader();
+}
+
+std::map<std::string, std::string> XMLreaderMono::alias;
+std::map<std::string, std::string> XMLreaderMono::conv_alias;
+std::map<int, Meaning> XMLreaderMono::i_meaning_map;
+std::map<int, std::vector<int>> XMLreaderMono::i_beat_map;
+std::map<int, std::string> XMLreaderMono::labeling;
+std::map<AMean, Conception> XMLreaderMono::core_meaning;
+std::vector<Rule> XMLreaderMono::input_rules;
+std::map<std::string, int> XMLreaderMono::conv_str;
+std::unordered_map<int, std::vector<SymbolElement>> XMLreaderMono::strings;
+
+int XMLreaderMono::index_count = -1;
+int XMLreaderMono::variable_count = -1;
+int XMLreaderMono::category_count = -1;
+int XMLreaderMono::symbol_count = 1;
+
+void XMLreaderMono::make_init_data(std::vector<std::string> &file_paths) {
+  std::cout << "XMLreaderMono" << std::endl;
+  {
+    alias.clear();
+    conv_alias.clear();
+    i_meaning_map.clear();
+    i_beat_map.clear();
+    labeling.clear();
+    core_meaning.clear();
+    strings.clear();
+  }
+
+  std::sort(std::begin(file_paths), std::end(file_paths));
+  int no = 1;
+  std::for_each(std::begin(file_paths), std::end(file_paths), [&](std::string f_str) {
+    std::vector<Rule> buf;
+    load(f_str, buf, no++);
+    std::copy(std::begin(buf), std::end(buf), std::back_inserter(input_rules));
+  });
+}
+
+void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file_no) {
+  // strings[file_no]
+  boost::property_tree::ptree pt;
+  boost::property_tree::read_xml(file_path.c_str(), pt);
+
+  std::vector<std::string> lbuf1, lbuf2;
+  boost::algorithm::split(lbuf1, file_path, boost::algorithm::is_any_of("."), boost::algorithm::token_compress_on);
+  boost::algorithm::split(lbuf2, *(lbuf1.rbegin() + 1), boost::algorithm::is_any_of("/\\"), boost::algorithm::token_compress_on);
+  labeling[file_no] = *(lbuf2.rbegin());
+
+  //初期設定
+  std::string path1 = "score-partwise";
+  Meaning s_in, flat_meaning;
+  std::vector<SymbolElement> s_ex;
+
+  s_in = Meaning(AMean(index_count));
+  core_meaning[AMean(index_count)] = Conception();
+  core_meaning[AMean(index_count)].add(Prefices::SEN);
+
+  // sentenceのインデックス記録
+  flat_meaning = Meaning(AMean(index_count));
+
+  index_count--;
+  i_beat_map[file_no] = std::vector<int>();
+
+  BOOST_FOREACH (const boost::property_tree::ptree::value_type &part_t, pt.get_child(path1.c_str())) {
+    if (part_t.first == "part") {
+      BOOST_FOREACH (const boost::property_tree::ptree::value_type &measure_t, part_t.second.get_child("")) {
+        if (measure_t.first == "measure") {
+          std::vector<SymbolElement> sub_ex;
+          //入っているべきmetricの数を取得
+          // met_max = (measure_t.second.get_optional<int>((std::string("<xmlattr>.metricals")).c_str())).get();
+          // i_beat_map[file_no].push_back(met_max);
+          //検査対象measure以下の木をすべて取ってくる
+          BOOST_FOREACH (const boost::property_tree::ptree::value_type &note_t, measure_t.second.get_child("")) {
+            if (note_t.first == "note") {
+              //ここで順番に処理していけば順序通りにとれる
+              std::string str;
+              //すべてのpitchを取得
+              BOOST_FOREACH (const boost::property_tree::ptree::value_type &pitch_t, note_t.second.get_child("")) {
+                if (pitch_t.first == "pitch") {
+                  BOOST_FOREACH (const boost::property_tree::ptree::value_type &step_t, pitch_t.second.get_child("")) {
+                    boost::optional<std::string> val;
+                    if (step_t.first == "step" && (val = pitch_t.second.get_optional<std::string>("step"))) {
+                      str += val.get() + Prefices::DSP;
+                    }
+                  }
+                }
+              }
+
+              str = boost::algorithm::trim_copy(str);
+              if (str.size() == 0) {
+                str = std::string("rest");
+                core_meaning[AMean(index_count)] = Conception();
+                core_meaning[AMean(index_count)].add("rest");
+              }
+
+              // strのaliasの作成とword_exへの保存
+              std::string str2;
+              if (alias.find(str) == alias.end()) {
+                str2 = Prefices::SYN + std::to_string(symbol_count);
+                alias.insert(std::map<std::string, std::string>::value_type(str, str2));
+                conv_alias.insert(std::map<std::string, std::string>::value_type(str2, str));
+                Dictionary::symbol.insert(std::map<int, std::string>::value_type(symbol_count, str2));
+                Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, symbol_count));
+                conv_str[str] = symbol_count++;
+              } else {
+                str2 = alias[str];
+              }
+              sub_ex.push_back(Symbol(conv_str[str]));
+              strings[file_no].push_back(Symbol(conv_str[str]));
+            }
+          }
+          // word rule
+          Rule r(LeftNonterminal(Category(category_count), Meaning(AMean(index_count))), sub_ex);
+          buf.push_back(r);
+          if (core_meaning.find(AMean(index_count)) == core_meaning.end()) {
+            core_meaning[AMean(index_count)] = Conception();
+          }
+          core_meaning[AMean(index_count)].add(Prefices::MES);
+          core_meaning[AMean(index_count)].add(Prefices::MEA);
+
+          s_in.get_followings().push_back(Variable(variable_count));
+          flat_meaning.get_followings().push_back(Meaning(AMean(index_count)));
+          s_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+
+          index_count--;
+          variable_count--;
+          category_count--;
+        }
+      }
+    }
+  }
+
+  Symbol::conv_symbol = XMLreaderMono::conv_alias;
+  Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
+  //文ルール追加
+  buf.push_back(r_sent);
+  i_meaning_map[file_no] = flat_meaning;
+  category_count--;
+}
+
+XMLreaderMono XMLreaderMono::copy(void) { return XMLreaderMono(); }

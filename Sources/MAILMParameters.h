@@ -280,6 +280,8 @@ class MAILMParameters {
   uint32_t Generation_Counter;  //
 
   // system parameters
+  bool MONO;
+  bool LILYPOND;
   bool LOGGING;
   bool ANALYZE;
 
@@ -309,6 +311,7 @@ class MAILMParameters {
   std::string DIC_XML_FILE;
   std::string XML_DIR;
   std::string XML_EXT;
+  std::string MONOXML_DIR;
 
   MAILMParameters();
   ~MAILMParameters();
