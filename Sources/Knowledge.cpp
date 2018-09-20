@@ -153,16 +153,19 @@ bool Knowledge::consolidate(void) {
     std::for_each(std::begin(tmp), std::end(tmp), [this, &flag](int i) {
       switch (i) {
         case CONSOLIDATE_TYPE::CHUNK: {
+          std::cout << "chunk" << std::endl;
           flag = chunk() || flag;
           break;
         }
         case CONSOLIDATE_TYPE::MERGE: {
+          std::cout << "merge" << std::endl;
           if ((flag = merge() || flag)) {
             unique(input_box);
           }
           break;
         }
         case CONSOLIDATE_TYPE::REPLACE: {
+          std::cout << "replace" << std::endl;
           flag = replace() || flag;
           break;
         }
@@ -1154,7 +1157,6 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
   make_rules = [this, &make_rules, &f, &ruleDB_ref, &black_list](
                    const std::vector<SymbolElement> &ref, std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &str_set,
                    UtteranceRules &ur) -> std::pair<bool, std::list<std::reference_wrapper<UtteranceRules::Node>>> {
-    
     if (ref.size() == 1 && ref.front().type() == ELEM_TYPE::NT_TYPE) {
       return {true, std::list<std::reference_wrapper<UtteranceRules::Node>>{{UtteranceRules::empty_node}}};
     }
@@ -1176,18 +1178,18 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
       return {false, std::list<std::reference_wrapper<UtteranceRules::Node>>()};
   };
   std::function<bool(const std::vector<SymbolElement> &)> black_list_checker;
-  black_list_checker = [&black_list](const std::vector<SymbolElement> & sel_vec) -> bool {
+  black_list_checker = [&black_list](const std::vector<SymbolElement> &sel_vec) -> bool {
     bool b = false;
-    std::for_each(std::begin(black_list), std::end(black_list), [&sel_vec, &b](const SymbolElement & obj){
-      if(b || std::find(std::begin(sel_vec), std::end(sel_vec), obj) != std::end(sel_vec))
-        b = true;
+    std::for_each(std::begin(black_list), std::end(black_list), [&sel_vec, &b](const SymbolElement &obj) {
+      if (b || std::find(std::begin(sel_vec), std::end(sel_vec), obj) != std::end(sel_vec)) b = true;
     });
     return b;
   };
-  f = [this, &f, &make_rules, &black_list_checker](ParseLink &pl, const std::vector<SymbolElement> &sel_vec, std::vector<SymbolElement> &ref_cat,
-                              std::list<std::reference_wrapper<ParseLink::ParseNode>> &p_list,
-                              std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &str_set,
-                              std::list<std::reference_wrapper<UtteranceRules::Node>> &nodes, UtteranceRules &ur) -> bool {
+  f = [this, &f, &make_rules, &black_list_checker](
+          ParseLink &pl, const std::vector<SymbolElement> &sel_vec, std::vector<SymbolElement> &ref_cat,
+          std::list<std::reference_wrapper<ParseLink::ParseNode>> &p_list,
+          std::unordered_set<std::vector<SymbolElement>, HashSymbolVector> &str_set,
+          std::list<std::reference_wrapper<UtteranceRules::Node>> &nodes, UtteranceRules &ur) -> bool {
     auto it = pl.bottom_up_search_init();
     std::optional<ParseLink::ParseNode> opt;
     std::vector<SymbolElement> base_seq = ref_cat;
@@ -1266,8 +1268,7 @@ bool Knowledge::construct_parsed_rules(const std::vector<SymbolElement> &str, Ut
                    str_set, nodes, ur)) {
         return true;
       }
-      if(!black)
-        black = black_list_checker(base_seq);
+      if (!black) black = black_list_checker(base_seq);
       pl.bottom_up_search_init(it);
     }
     return false;

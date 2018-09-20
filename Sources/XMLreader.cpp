@@ -183,6 +183,10 @@ XMLreader XMLreader::copy(const XMLreaderMono &obj) {
   core_meaning = obj.core_meaning;
   input_rules = obj.input_rules;
   conv_str = obj.conv_str;
+  index_count = obj.index_count;
+  variable_count = obj.variable_count;
+  category_count = obj.category_count;
+  symbol_count = obj.symbol_count;
   return XMLreader();
 }
 
