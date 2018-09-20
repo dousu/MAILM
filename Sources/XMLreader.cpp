@@ -270,17 +270,24 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
                   BOOST_FOREACH (const boost::property_tree::ptree::value_type &step_t, pitch_t.second.get_child("")) {
                     boost::optional<std::string> val;
                     if (step_t.first == "step" && (val = pitch_t.second.get_optional<std::string>("step"))) {
-                      str += val.get() + Prefices::DSP;
+                      str += val.get();
                     }
                   }
                 }
-              }
+                if (str.size() == 0) {
+                  str = std::string("rest");
+                  core_meaning[AMean(index_count)] = Conception();
+                  core_meaning[AMean(index_count)].add("rest");
+                }
 
-              str = boost::algorithm::trim_copy(str);
-              if (str.size() == 0) {
-                str = std::string("rest");
-                core_meaning[AMean(index_count)] = Conception();
-                core_meaning[AMean(index_count)].add("rest");
+                if (pitch_t.first == "type") {
+                  if (boost::optional<std::string> val = note_t.second.get_optional<std::string>("type")) {
+                    str += val.get();
+                  }
+                }
+                if (pitch_t.first == "dot") {
+                  str += "d";
+                }
               }
 
               // strのaliasの作成とword_exへの保存

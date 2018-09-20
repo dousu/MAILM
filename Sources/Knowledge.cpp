@@ -153,19 +153,16 @@ bool Knowledge::consolidate(void) {
     std::for_each(std::begin(tmp), std::end(tmp), [this, &flag](int i) {
       switch (i) {
         case CONSOLIDATE_TYPE::CHUNK: {
-          std::cout << "chunk" << std::endl;
           flag = chunk() || flag;
           break;
         }
         case CONSOLIDATE_TYPE::MERGE: {
-          std::cout << "merge" << std::endl;
           if ((flag = merge() || flag)) {
             unique(input_box);
           }
           break;
         }
         case CONSOLIDATE_TYPE::REPLACE: {
-          std::cout << "replace" << std::endl;
           flag = replace() || flag;
           break;
         }
