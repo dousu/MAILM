@@ -27,6 +27,7 @@
 #include "Prefices.h"
 #include "Rule.h"
 #include "XMLreader.h"
+#include "LilypondOutput.h"
 
 void output_data(std::string, std::string);
 

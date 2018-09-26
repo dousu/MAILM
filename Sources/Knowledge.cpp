@@ -1060,6 +1060,138 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
   return rdb;
 }
 
+void Knowledge::generate_score_mono(std::map<AMean, Conception> &core_meaning, UtteranceRules &base, UtteranceRules &ret) {
+  std::vector<RuleDBType> res;
+  bool sentence, has_key, has_time;
+  enum State { SEN, MES };
+  std::string key_str, time_str;
+  std::function<bool(std::vector<RuleDBType> &)> f0 = [](std::vector<RuleDBType> &rules) {
+    // std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
+    // 	std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
+    // });
+    return true;
+  };
+  std::function<void(RuleDBType &)> f1 = [this, &res](RuleDBType rules) {
+    bool has_sentence = false;
+    std::for_each(std::begin(rules), std::end(rules),
+                  [this, &has_sentence](Rule &r) { has_sentence = has_sentence || r.is_sentence(intention); });
+    if (has_sentence) {
+      res.push_back(rules);
+    }
+  };
+  std::function<bool(Rule &)> f2 = [this, &sentence](Rule &r) {
+    // if (!sentence) {
+    //   sentence = r.is_sentence(intention);
+    //   return sentence;
+    // } else {
+    //   return product_loop;
+    // }
+    return r.is_sentence(intention);
+  };
+  std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [this, &f0, &f1, &f2, &sentence](auto &p) {
+    sentence = false;
+    construct_groundable_rules_mono(p.first, f0, f1, f2);
+  });
+  std::cout << "Number of generated score: " << res.size() << std::endl;
+
+  base.construct(res[MT19937::irand(0, res.size() - 1)]);
+
+  std::function<UtteranceRules::Node &(const UtteranceRules::Node &)> func;
+  std::function<UtteranceRules::Node &(UtteranceRules::Node &, std::function<UtteranceRules::Node &(const UtteranceRules::Node &)>)> func_1;
+  int parent_num = ut_category--;
+  func = [this, &ret, &core_meaning, &parent_num](const UtteranceRules::Node &n) -> UtteranceRules::Node & {
+    AMean am{ut_index--};
+    // core_meaning[am] = intention.get(n.r.get_internal().get_base());
+    return ret.add(Rule{LeftNonterminal{Category{parent_num}, Meaning{am, n.r.get_internal().get_followings()}}, n.r.get_external()});
+  };
+  func_1 = [this, &func, &func_1, &parent_num](
+               UtteranceRules::Node &n0,
+               std::function<UtteranceRules::Node &(const UtteranceRules::Node &)> func) -> UtteranceRules::Node & {
+    UtteranceRules::Node &n = func(n0);
+    auto next_it = std::begin(n0.next);
+    std::for_each(std::begin(n.r.get_external()), std::end(n.r.get_external()),
+                  [this, &func, &func_1, &parent_num, &n, &n0, &next_it](SymbolElement &sel) {
+                    if (sel.type() == ELEM_TYPE::NT_TYPE) {
+                      if (next_it == std::end(n0.next)) {
+                        std::cerr << "Error: generate_score()" << std::endl;
+                        exit(1);
+                      }
+                      parent_num = ut_category--;
+                      sel = RightNonterminal{Category(parent_num), sel.template get<RightNonterminal>().get_var()};
+                      n.next.push_back(func_1(*(next_it++), func));
+                    }
+                  });
+    return n;
+  };
+  AMean am{ut_index--};
+  // core_meaning[am] = intention.get(base.top.r.get_internal().get_base());
+  UtteranceRules::Node &n = ret.add_top(
+      Rule{LeftNonterminal{Category{parent_num}, Meaning{am, base.top.r.get_internal().get_followings()}}, base.top.r.get_external()});
+  auto next_it = std::begin(base.top.next);
+  std::for_each(std::begin(n.r.get_external()), std::end(n.r.get_external()),
+                [this, &func, &func_1, &parent_num, &n, &next_it, &base](SymbolElement &sel) {
+                  if (sel.type() == ELEM_TYPE::NT_TYPE) {
+                    if (next_it == std::end(base.top.next)) {
+                      std::cerr << "Error: generate_score()" << std::endl;
+                      exit(1);
+                    }
+                    parent_num = ut_category--;
+                    sel = RightNonterminal{Category(parent_num), sel.template get<RightNonterminal>().get_var()};
+                    n.next.push_back(func_1(*(next_it++), func));
+                  }
+                });
+}
+
+bool Knowledge::construct_groundable_rules_mono(const Category &c, std::function<bool(std::vector<RuleDBType> &)> &f0,
+                                                std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2) {
+  bool is_constructable = false;
+  if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
+    bool first = true;
+    product_loop = true;
+    std::vector<RuleDBType> prod;
+    std::vector<std::pair<AMean, Rule>> pairs{std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
+    std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
+    std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
+      if (f2(p.second)) {
+        std::vector<RuleDBType> sub_prod{{{p.second}}};
+        std::function<void(RuleDBType &)> f1_1 = [&sub_prod, &f0](RuleDBType &rules) {
+          std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
+            std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
+          });
+        };
+        std::function<bool(const Category &, const std::any &)> func = [this, &f0, &f1_1, &f2](const Category &c, const std::any &a) {
+          return construct_groundable_rules(c, f0, f1_1, f2);
+        };
+        bool subconst = construct_groundable_rules_1(p.second, sub_prod, func);
+        if (subconst) {
+          std::copy(std::begin(sub_prod), std::end(sub_prod), std::back_inserter(prod));
+          product_loop = false;
+          first = false;
+        } else {
+          if (first)
+            product_loop = true;
+          else
+            product_loop = false;
+        }
+        is_constructable = is_constructable || subconst;
+      }
+    });
+    std::for_each(std::begin(prod), std::end(prod), f1);
+    is_constructable = is_constructable ? f0(prod) : false;
+  }
+  return is_constructable;
+}
+
+bool Knowledge::construct_groundable_rules_mono_1(Rule &base, std::vector<RuleDBType> &prod,
+                                                  std::function<bool(const Category &, const std::any &)> &func) {
+  bool constructable = true;
+  std::for_each(std::begin(base.get_external()), std::end(base.get_external()), [&func, &constructable](SymbolElement &sel) {
+    if (constructable && sel.type() == ELEM_TYPE::NT_TYPE)
+      constructable = constructable && func(sel.template get<RightNonterminal>().get_cat(), 0);
+  });
+  return constructable;
+}
+
 std::vector<Rule> Knowledge::parse_string(const std::vector<SymbolElement> &str) {
   UtteranceRules ur;
   bool b = construct_parsed_rules(str, ur);

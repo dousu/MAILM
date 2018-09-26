@@ -431,6 +431,8 @@ class Knowledge {
 
   RuleDBType generate_score(std::map<AMean, Conception> &core_meaning, RuleDBType &base);
 
+  void generate_score_mono(std::map<AMean, Conception> &core_meaning, UtteranceRules &base, UtteranceRules &ret);
+
   RuleDBType parse_string(const std::vector<SymbolElement> &str);
 
   std::string meaning_no_to_s(int obj);
@@ -475,6 +477,10 @@ class Knowledge {
                                   std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2);
   bool construct_groundable_rules_1(Rule &base, std::vector<RuleDBType> &prod,
                                     std::function<bool(const Category &, const std::any &)> &func);
+  bool construct_groundable_rules_mono(const Category &c, std::function<bool(std::vector<RuleDBType> &)> &f0,
+                                       std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2);
+  bool construct_groundable_rules_mono_1(Rule &base, std::vector<RuleDBType> &prod,
+                                         std::function<bool(const Category &, const std::any &)> &func);
   bool construct_parsed_rules(const std::vector<SymbolElement> &str, UtteranceRules &ur);
   bool construct_parsed_rules2(const std::vector<SymbolElement> &str, UtteranceRules &ur);
   std::pair<std::multimap<AMean, Rule>::iterator, std::multimap<AMean, Rule>::iterator> dic_cat_range(const Category &c);

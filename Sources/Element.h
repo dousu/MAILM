@@ -173,6 +173,13 @@ class Symbol {
     }
     return "[" + conv_symbol[Dictionary::symbol[obj]] + "]";
   }
+  std::string mono_to_s() const {
+    if (Dictionary::symbol.find(obj) == Dictionary::symbol.end()) {
+      std::cerr << "Error: Symbol::mono_to_s()" << std::endl;
+      exit(1);
+    }
+    return conv_symbol[Dictionary::symbol[obj]];
+  }
   friend std::ostream &operator<<(std::ostream &out, const Symbol &obj);
   friend struct std::hash<Symbol>;
 };
@@ -452,6 +459,7 @@ class SymbolElement {
   std::string to_s() const {
     return std::visit([](auto &&arg) { return arg.to_s(); }, element);
   }
+  std::string mono_to_s() const { return std::get<Symbol>(element).mono_to_s(); }
   friend std::ostream &operator<<(std::ostream &out, const SymbolElement &obj);
   friend std::hash<SymbolElement>;
 };

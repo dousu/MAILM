@@ -236,6 +236,12 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
   boost::algorithm::split(lbuf2, *(lbuf1.rbegin() + 1), boost::algorithm::is_any_of("/\\"), boost::algorithm::token_compress_on);
   labeling[file_no] = *(lbuf2.rbegin());
 
+  int time_type;
+  int time_beats;
+
+  int key_fifth;
+  std::string key_mode;
+
   //初期設定
   std::string path1 = "score-partwise";
   Meaning s_in, flat_meaning;
@@ -261,6 +267,32 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
           // i_beat_map[file_no].push_back(met_max);
           //検査対象measure以下の木をすべて取ってくる
           BOOST_FOREACH (const boost::property_tree::ptree::value_type &note_t, measure_t.second.get_child("")) {
+            if (note_t.first == "attributes") {
+              BOOST_FOREACH (const boost::property_tree::ptree::value_type &time_t, note_t.second.get_child("")) {
+                if (time_t.first == "time") {
+                  BOOST_FOREACH (const boost::property_tree::ptree::value_type &beat_t, time_t.second.get_child("")) {
+                    boost::optional<std::string> val;
+                    if (beat_t.first == "beats" && (val = beat_t.second.get_optional<std::string>(""))) {
+                      time_beats = std::stoi(val.get());
+                    }
+                    if (beat_t.first == "beat-type" && (val = beat_t.second.get_optional<std::string>(""))) {
+                      time_type = std::stoi(val.get());
+                    }
+                  }
+                }
+                if (time_t.first == "key") {
+                  BOOST_FOREACH (const boost::property_tree::ptree::value_type &key_t, time_t.second.get_child("")) {
+                    boost::optional<std::string> val;
+                    if (key_t.first == "fifths" && (val = key_t.second.get_optional<std::string>(""))) {
+                      key_fifth = std::stoi(val.get());
+                    }
+                    if (key_t.first == "mode" && (val = key_t.second.get_optional<std::string>(""))) {
+                      key_mode = val.get();
+                    }
+                  }
+                }
+              }
+            }
             if (note_t.first == "note") {
               //ここで順番に処理していけば順序通りにとれる
               std::string str;
@@ -270,23 +302,38 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
                   BOOST_FOREACH (const boost::property_tree::ptree::value_type &step_t, pitch_t.second.get_child("")) {
                     boost::optional<std::string> val;
                     if (step_t.first == "step" && (val = pitch_t.second.get_optional<std::string>("step"))) {
-                      str += val.get();
+                      std::string data = val.get();
+                      std::transform(std::begin(data), std::end(data), std::begin(data), ::tolower);
+                      str += data;
                     }
                   }
                 }
                 if (str.size() == 0) {
-                  str = std::string("rest");
+                  str = std::string("r");
                   core_meaning[AMean(index_count)] = Conception();
                   core_meaning[AMean(index_count)].add("rest");
                 }
 
                 if (pitch_t.first == "type") {
                   if (boost::optional<std::string> val = note_t.second.get_optional<std::string>("type")) {
-                    str += val.get();
+                    std::string span = val.get();
+                    if (span == "whole") {
+                      str += "1";
+                    } else if (span == "half") {
+                      str += "2";
+                    } else if (span == "quarter") {
+                      str += "4";
+                    } else if (span == "eighth") {
+                      str += "8";
+                    } else {
+                      std::regex num("[1-9][0-9]*");
+                      std::sregex_token_iterator it(std::begin(span), std::end(span), num, 0);
+                      str += *it;
+                    }
                   }
                 }
                 if (pitch_t.first == "dot") {
-                  str += "d";
+                  str += ".";
                 }
               }
 
@@ -314,6 +361,9 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
           }
           core_meaning[AMean(index_count)].add(Prefices::MES);
           core_meaning[AMean(index_count)].add(Prefices::MEA);
+          core_meaning[AMean(index_count)].add("time" + std::to_string(time_beats) + "/" + std::to_string(time_type));
+          core_meaning[AMean(index_count)].add("fifth" + key_fifth);
+          core_meaning[AMean(index_count)].add("mode" + key_mode);
 
           s_in.get_followings().push_back(Variable(variable_count));
           flat_meaning.get_followings().push_back(Meaning(AMean(index_count)));

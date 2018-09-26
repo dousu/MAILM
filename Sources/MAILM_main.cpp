@@ -192,12 +192,11 @@ int main(int argc, char *argv[]) {
                 });
   if (!param.MONO)
     XMLreader::make_init_data(file_list);
-  else{
+  else {
     XMLreaderMono::make_init_data(file_list);
     XMLreader::copy(XMLreaderMono());
   }
 
-  // test
   Agent parent;
   parent.init_semantics(XMLreader::i_meaning_map);
   parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
@@ -225,6 +224,15 @@ int main(int argc, char *argv[]) {
     log.push_log(parent.kb.to_s());
     log.push_log(parent.kb.dic_to_s());
   }
+
+  if (param.LILYPOND && param.MONO) {
+    std::map<AMean, Conception> test_cmap;
+    UtteranceRules base, ur;
+    parent.kb.generate_score_mono(test_cmap, base, ur);
+    std::string output_str = OutputMusic::output(ur);
+    output_data_trunc("./test.ly", output_str);
+  }
+
   for (int g = 0; g < param.MAX_GENERATIONS; g++) {
     std::cout << std::endl << "Generation " << g + 1 << std::endl;
     std::vector<Rule> inputs = XMLreader::input_rules;
