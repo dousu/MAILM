@@ -13,6 +13,7 @@
 #include <iterator>
 #include <list>
 #include <optional>
+#include <set>
 #include <sstream>
 #include <string>
 #include <unordered_set>
@@ -25,12 +26,6 @@
 #include "Semantics.h"
 #include "XMLreader.h"
 
-#include <functional>
-#include <iostream>
-#include <iterator>
-#include <set>
-#include <vector>
-
 template <typename T>
 struct LengthGreater {
   bool operator()(const T &lhs, const T &rhs) const { return lhs.size() > rhs.size() || (lhs.size() == rhs.size() && lhs < rhs); }
@@ -38,7 +33,7 @@ struct LengthGreater {
 struct HashSymbolVector {
   std::size_t operator()(const std::vector<SymbolElement> &dst) const {
     size_t seed = 0;
-    constexpr size_t value = pow<std::size_t>(2, 32) / (1 + std::sqrt(5)) * 2;
+    constexpr size_t value = MAILM::pow<std::size_t>(2, 32) / (1 + MAILM::sqrt(5)) * 2;
     for (const SymbolElement &val : dst) {
       seed ^= std::hash<SymbolElement>()(val) + value + (seed << 6) + (seed >> 2);
     }
@@ -477,8 +472,9 @@ class Knowledge {
                                   std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2);
   bool construct_groundable_rules_1(Rule &base, std::vector<RuleDBType> &prod,
                                     std::function<bool(const Category &, const std::any &)> &func);
-  bool construct_groundable_rules_mono(const Category &c, std::function<bool(std::vector<RuleDBType> &)> &f0,
-                                       std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2);
+  std::map<AMean, Conception> generate_measure_mono(const Category &c, UtteranceRules &ur, std::string &key_str, std::string &time_str);
+  double measure_num;
+  std::optional<RuleDBType> construct_groundable_rules_mono(const Category &c, std::size_t len);
   bool construct_groundable_rules_mono_1(Rule &base, std::vector<RuleDBType> &prod,
                                          std::function<bool(const Category &, const std::any &)> &func);
   bool construct_parsed_rules(const std::vector<SymbolElement> &str, UtteranceRules &ur);

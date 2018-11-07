@@ -362,8 +362,8 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
           core_meaning[AMean(index_count)].add(Prefices::MES);
           core_meaning[AMean(index_count)].add(Prefices::MEA);
           core_meaning[AMean(index_count)].add("time" + std::to_string(time_beats) + "/" + std::to_string(time_type));
-          core_meaning[AMean(index_count)].add("fifth" + key_fifth);
-          core_meaning[AMean(index_count)].add("mode" + key_mode);
+          core_meaning[AMean(index_count)].add("keys" + key_fifth + "/" + key_mode);
+          // core_meaning[AMean(index_count)].add("mode" + key_mode);
 
           s_in.get_followings().push_back(Variable(variable_count));
           flat_meaning.get_followings().push_back(Meaning(AMean(index_count)));

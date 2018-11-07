@@ -51,6 +51,13 @@ bool Rule::is_measure(Semantics<Conception> &s) const {
   return s.get(internal.get_base()).include(c);
 }
 
+auto Rule::has_key(Semantics<Conception> &s) const {
+  // s.get(internal.get_base())
+  return s.get(internal.get_base()).search_begin_with("keys");
+}
+
+auto Rule::has_time(Semantics<Conception> &s) const { return s.get(internal.get_base()).search_begin_with("time"); }
+
 std::string Rule::to_s() const {
   std::string str;
   std::ostringstream os;

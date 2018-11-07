@@ -1062,14 +1062,14 @@ std::vector<Rule> Knowledge::generate_score(std::map<AMean, Conception> &core_me
 
 void Knowledge::generate_score_mono(std::map<AMean, Conception> &core_meaning, UtteranceRules &base, UtteranceRules &ret) {
   std::vector<RuleDBType> res;
-  bool sentence, has_key, has_time;
-  enum State { SEN, MES };
+  bool sentence, measure;
+  std::size_t mes_num, elm_num;
+  enum State { SEN, MES, MESC };
+  State now;
   std::string key_str, time_str;
-  std::function<bool(std::vector<RuleDBType> &)> f0 = [](std::vector<RuleDBType> &rules) {
-    // std::for_each(std::begin(rules), std::end(rules), [&](RuleDBType &list) {
-    // 	std::for_each(std::begin(list), std::end(list), [&](Rule &r) { sentence = sentence || r.is_sentence(intention); });
-    // });
-    return true;
+  std::map<AMean, Conception> map_m_c;
+  std::function<bool(std::vector<RuleDBType> &)> f0 = [&now, &elm_num, &mes_num](std::vector<RuleDBType> &rules) {
+    return now == State::MES && elm_num == mes_num;
   };
   std::function<void(RuleDBType &)> f1 = [this, &res](RuleDBType rules) {
     bool has_sentence = false;
@@ -1079,14 +1079,22 @@ void Knowledge::generate_score_mono(std::map<AMean, Conception> &core_meaning, U
       res.push_back(rules);
     }
   };
-  std::function<bool(Rule &)> f2 = [this, &sentence](Rule &r) {
-    // if (!sentence) {
-    //   sentence = r.is_sentence(intention);
-    //   return sentence;
-    // } else {
-    //   return product_loop;
-    // }
-    return r.is_sentence(intention);
+  std::function<bool(Rule &)> f2 = [this, &now](Rule &r) {
+    bool ret;
+    switch (now) {
+      case SEN: {
+        ret = r.is_sentence(intention) ? true : false;
+        now = State::MES;
+      } break;
+      case MES: {
+      } break;
+      case MESC: {
+      } break;
+      default:
+        std::cerr << "Error: Knowledge::generate_score_mono()::lamda<bool(Rule &)>" << std::endl;
+        exit(1);
+    }
+    return ret;
   };
   std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [this, &f0, &f1, &f2, &sentence](auto &p) {
     sentence = false;
@@ -1142,25 +1150,87 @@ void Knowledge::generate_score_mono(std::map<AMean, Conception> &core_meaning, U
                 });
 }
 
-bool Knowledge::construct_groundable_rules_mono(const Category &c, std::function<bool(std::vector<RuleDBType> &)> &f0,
-                                                std::function<void(RuleDBType &)> &f1, std::function<bool(Rule &)> &f2) {
+std::map<AMean, Conception> Knowledge::generate_measure_mono(const Category &c, UtteranceRules &ur, std::string &key_str,
+                                                             std::string &time_str) {
+  std::regex re("/");
+  std::string keystr, timestr;
+  std::vector<RuleDBType> res;
+  bool measure;
+  double mes_num, elm_num = 0;
+  enum State { MES, MESC, MESCL };
+  State now = State::MES;
+  // std::map<AMean, Conception> map_m_c;
+  // std::function<bool(std::vector<RuleDBType> &)> f0 = [&now, &elm_num, &mes_num](std::vector<RuleDBType> &) {
+  //   return now == State::MES && elm_num == mes_num;
+  // };
+  std::function<void(RuleDBType &)> f1 = [&res](RuleDBType rules) { res.push_back(rules); };
+  std::function<bool(Rule &)> f2 = [this, &now, &keystr, &timestr, &key_str, &time_str, &mes_num, &re](Rule &r) {
+    bool ret;
+    switch (now) {
+      case MES: {
+        auto keys_set = r.has_key(intention);
+        auto time_set = r.has_time(intention);
+        if (!keys_set.empty()) {
+          keystr = keys_set[MT19937::irand(0, keys_set.size() - 1)];
+        } else {
+          keystr = key_str;
+        }
+        if (!time_set.empty()) {
+          timestr = time_set[MT19937::irand(0, time_set.size() - 1)];
+        } else {
+          timestr = time_str;
+        }
+        if (keystr != "" && timestr != "") {
+          std::sregex_token_iterator it_time(std::next(std::begin(timestr), 4), std::end(timestr), re, -1), end;
+          mes_num = std::stof(*it_time) / std::stof(*std::next(it_time));
+          return true;
+        }
+        return false;
+      } break;
+      case MESC: {
+      } break;
+      case MESCL: {
+      } break;
+      default:
+        std::cerr << "Error: Knowledge::generate_score_mono()::lamda<bool(Rule &)>" << std::endl;
+        exit(1);
+    }
+    return ret;
+  };
+  std::vector<std::reference_wrapper<Category>> cat_vec;
+  std::for_each(std::begin(DB_cat_amean_dic), std::end(DB_cat_amean_dic), [&cat_vec](auto &p) { cat_vec.push_back(p.first); });
+  std::shuffle(std::begin(cat_vec), std::end(cat_vec), MT19937::igen);
+  std::for_each(std::begin(cat_vec), std::end(cat_vec), [this, &f1, &f2, &res](auto &c) {
+    if (res.empty()) construct_groundable_rules_mono(c, f1, f2);
+  });
+  std::cout << "Number of generated score: " << res.size() << std::endl;
+
+  if (res.size() != 1) {
+    std::cerr << "Error: Knowledge::generate_measure()" << std::endl;
+    exit(1);
+  }
+
+  ur.construct(res[MT19937::irand(0, res.size() - 1)]);
+}
+
+std::optional<std::vector<Rule>> Knowledge::construct_groundable_rules_mono(const Category &c, std::size_t len) {
   bool is_constructable = false;
   if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
-    bool first = true;
-    product_loop = true;
+    length = measure_num;
     std::vector<RuleDBType> prod;
     std::vector<std::pair<AMean, Rule>> pairs{std::begin(DB_cat_amean_dic[c]), std::end(DB_cat_amean_dic[c])};
     std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
     std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
       if (f2(p.second)) {
         std::vector<RuleDBType> sub_prod{{{p.second}}};
-        std::function<void(RuleDBType &)> f1_1 = [&sub_prod, &f0](RuleDBType &rules) {
+        std::function<bool(std::vector<RuleDBType> &)> f0_1 = [](std::vector<RuleDBType> &) { return true; };
+        std::function<void(RuleDBType &)> f1_1 = [&sub_prod](RuleDBType &rules) {
           std::for_each(std::begin(sub_prod), std::end(sub_prod), [&rules](RuleDBType &prod_rules) {
             std::copy(std::begin(rules), std::end(rules), std::back_inserter(prod_rules));
           });
         };
-        std::function<bool(const Category &, const std::any &)> func = [this, &f0, &f1_1, &f2](const Category &c, const std::any &a) {
-          return construct_groundable_rules(c, f0, f1_1, f2);
+        std::function<bool(const Category &, const std::any &)> func = [this, &f0_1, &f1_1, &f2](const Category &c, const std::any &a) {
+          return construct_groundable_rules(c, f0_1, f1_1, f2);
         };
         bool subconst = construct_groundable_rules_1(p.second, sub_prod, func);
         if (subconst) {
@@ -1168,6 +1238,7 @@ bool Knowledge::construct_groundable_rules_mono(const Category &c, std::function
           product_loop = false;
           first = false;
         } else {
+          measure_num = length;
           if (first)
             product_loop = true;
           else
@@ -1177,7 +1248,7 @@ bool Knowledge::construct_groundable_rules_mono(const Category &c, std::function
       }
     });
     std::for_each(std::begin(prod), std::end(prod), f1);
-    is_constructable = is_constructable ? f0(prod) : false;
+    // is_constructable = is_constructable ? f0(prod) : false;
   }
   return is_constructable;
 }

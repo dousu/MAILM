@@ -518,6 +518,12 @@ class Conception {
   bool empty() const noexcept { return factors.size() == 0 || factors.count("") == factors.size(); }
   void clear() { factors.clear(); }
   void add(std::string str) { factors.insert(str); }
+  std::set<std::string> search_begin_with(std::string str) {
+    std::set<std::string> ret;
+    std::copy_if(std::begin(factors), std::end(factors), std::inserter(ret, std::begin(ret)),
+                 [&str](std::string &obj) { return std::equal(std::begin(str), std::end(str), std::begin(obj)); });
+    return ret;
+  }
   std::string to_s() const {
     if (empty()) return "";
     std::string str;

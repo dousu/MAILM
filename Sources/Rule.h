@@ -13,10 +13,15 @@
 #include "IndexFactory.h"
 #include "Semantics.h"
 
+namespace MAILM {
 template <class T>
 constexpr T pow(T base, T exp) noexcept {
   return exp <= 0 ? 1 : exp == 1 ? base : base * pow(base, exp - 1);
 }
+constexpr double sqrt(std::size_t base) noexcept {
+  return 2.2360679775;  // 5
+}
+}  // namespace MAILM
 
 class Rule;
 template <>
@@ -48,6 +53,8 @@ class Rule {
   bool is_noun(Semantics<Conception> &s) const;
   bool is_sentence(Semantics<Conception> &s) const;
   bool is_measure(Semantics<Conception> &s) const;
+  auto has_key(Semantics<Conception> &s) const;
+  auto has_time(Semantics<Conception> &s) const;
   void set_rule(LeftNonterminal &nt, std::vector<SymbolElement> &ex);
   LeftNonterminal &get_internal() { return internal; }
   const LeftNonterminal &get_internal() const { return internal; }
@@ -195,6 +202,31 @@ struct UtteranceRules {
                       node.next.push_back(ret.second);
                     }
                   });
+  }
+  void insert(Node &n, UtteranceRules &ur) {
+    if (std::count_if(std::begin(n.r.get_external()), std::end(n.r.get_external()),
+                      [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; }) == n.next.size()) {
+      std::cerr << "Error: UtteranceRules::insert()" << std::endl;
+      exit(1);
+    }
+    std::vector<SymbolElement>::iterator it;
+    std::size_t s = 0;
+    while (s == n.next.size()) {
+      it = std::find_if(std::begin(n.r.get_external()), std::end(n.r.get_external()),
+                        [](const SymbolElement &sel) { return sel.type() == ELEM_TYPE::NT_TYPE; });
+      s++;
+    }
+    if ((*it).get<RightNonterminal>().get_cat() != ur.top.r.get_internal().get_cat()) {
+      std::cerr << "Error: UtteranceRules::insert()" << std::endl;
+      exit(1);
+    }
+    std::function<Node &(Node &)> func;
+    func = [this, &func](Node &n) -> Node & {
+      Node &node = add(n.r);
+      std::for_each(std::begin(n.next), std::end(n.next), [&func, &node](Node &nn) { node.next.push_back(func(nn)); });
+      return node;
+    };
+    n.next.push_back(func(ur.top));
   }
   friend std::ostream &operator<<(std::ostream &out, const UtteranceRules &obj);
 };
