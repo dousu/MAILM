@@ -45,7 +45,9 @@ MAILMParameters::MAILMParameters() {
   DIC_XML_FILE = BASE_PATH + "Sources/dic_xml.data";
   XML_DIR = BASE_PATH + "XML";
   MONOXML_DIR = BASE_PATH + "monoXML";
+  ABC_DIR = BASE_PATH + "abc";
   XML_EXT = ".xml";
+  ABC_EXT = ".abc";
   FILE_PREFIX = "MAILM_";
 
   RESULT_FILE = RESULT_PATH + FILE_PREFIX + DATE_STR + RESULT_EXT;
@@ -83,6 +85,13 @@ void MAILMParameters::set_option(ProgramOption &po) {
   if (po.count("mono")) {
     MONO = true;
     XML_DIR = MONOXML_DIR;
+  }
+
+  if (po.count("abc")) {
+    ABC = true;
+    MONO = true;
+    XML_DIR = ABC_DIR;
+    XML_EXT = ABC_EXT;
   }
 
   if (po.count("lilypond")) {
@@ -142,6 +151,11 @@ std::string MAILMParameters::to_s() {
     bag.push_back(std::to_string(spo.get<bool>("mono")));
   }
 
+  if (spo.count("abc")) {
+    bag.push_back("--abc");
+    bag.push_back(std::to_string(spo.get<bool>("abc")));
+  }
+
   if (spo.count("lilypond")) {
     bag.push_back("--lilypond");
     bag.push_back(std::to_string(spo.get<bool>("lilypond")));
@@ -193,6 +207,8 @@ std::string MAILMParameters::to_all_s(void) {
   // ss << "PROGRESS = " << PROGRESS << std::endl;
   //  bool MONO;
   ss << "MONO = " << std::boolalpha << MONO << std::noboolalpha << std::endl;
+  //  bool ABC;
+  ss << "ABC = " << std::boolalpha << ABC << std::noboolalpha << std::endl;
   //  bool LILYPOND;
   ss << "LILYPOND = " << std::boolalpha << LILYPOND << std::noboolalpha << std::endl;
   //  bool ANALYZE;

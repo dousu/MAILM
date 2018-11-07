@@ -156,6 +156,8 @@ int main(int argc, char *argv[]) {
       ("utterances", ProgramOption::value<int>(), "Uttering ratio for meaning space (25)")
       // handling monophony
       ("mono", "mode for monophony")
+      // using abc notation
+      ("abc", "abc notation for input and output")
       // using lilypond output
       ("lilypond", "output by lilypond style")
       /*ロギング*/

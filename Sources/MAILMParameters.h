@@ -281,6 +281,7 @@ class MAILMParameters {
 
   // system parameters
   bool MONO;
+  bool ABC;
   bool LILYPOND;
   bool LOGGING;
   bool ANALYZE;
@@ -312,6 +313,8 @@ class MAILMParameters {
   std::string XML_DIR;
   std::string XML_EXT;
   std::string MONOXML_DIR;
+  std::string ABC_DIR;
+  std::string ABC_EXT;
 
   MAILMParameters();
   ~MAILMParameters();
