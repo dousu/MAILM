@@ -87,6 +87,7 @@ class ABCreader : Reader {
   std::string opt_str;
   std::string name_str;
   std::string nl_str;
+  std::string note_str;
 
   std::string_view title(std::string_view str);
   std::string_view base_length(std::string_view str);
@@ -98,6 +99,7 @@ class ABCreader : Reader {
   std::string_view option(std::string_view str);
   std::string_view name(std::string_view str);
   std::string_view note_length(std::string_view str);
+  std::string_view next_line(std::string_view str);
 };
 
 #endif /* XMLREADER_H_ */
