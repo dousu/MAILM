@@ -1,0 +1,12 @@
+X:287
+T:score85
+L:1/4
+Q:1/4=96
+M:5/4
+I:linebreak $
+K:Gmin
+ !tenuto!G !tenuto!F !tenuto!B (!tenuto!c/f/) !tenuto!d | %1
+[M:6/4] (!tenuto!c/f/) !tenuto!d !tenuto!B !tenuto!c !tenuto!G !tenuto!F |[M:5/4] G F B (c/f/ d) | %3
+[M:6/4] (c/f/ d) B c G F |$[M:5/4] !tenuto!F !tenuto!G !tenuto!D (!tenuto!F/G/ !tenuto!C) | %5
+[M:6/4] (!tenuto!G/A/ !tenuto!F) f d (c/B/ F) | %6
+[M:5/4] !tenuto!F !tenuto!G !tenuto!D (!tenuto!F/G/ !tenuto!E) |[M:6/4] (B/c/ _A) _a f (e/_d/ A) |] %8

@@ -1,0 +1,10 @@
+X:200
+T:score277
+L:1/8
+Q:1/4=120
+M:4/4
+I:linebreak $
+K:Cmin
+ G2!p! | (c>d) (e>f) g2 g2 | (^f>g) (a>g) c4 | (d>G) (A>G) G2 c2 | %4
+ (6:4:6(c/d/c/=B/c/d/ (6:4:6e/=e/f/^f/a/g/) d4 | (c>d) (e>f) g2 g2 | (^f>g) (a>g) c4 | %7
+ (d>G) (A>G) G2 c2 | (5:4:5(d/e/d/c/)d/ (e>d) c2 z2 |] %9

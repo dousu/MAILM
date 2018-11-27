@@ -1,0 +1,9 @@
+X:168
+T:score248
+L:1/4
+Q:1/4=96
+M:2/2
+I:linebreak $
+K:D
+!p! ((D | .C) .B, .A,) (.C | .D .F .A) (.c | .d .e .f) .g |$ !fermata!a3!p! ((d | c B A) (B | %6
+ A G F) (G | F E D) (E |$ D C D)) (^d- | d e) .c .A | =d z z2 |] %11

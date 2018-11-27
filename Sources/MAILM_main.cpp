@@ -81,12 +81,12 @@ void static_assessment(Agent &ma, std::string out) {
   std::ostringstream os;
   os << "Generation(" << ma.generation_index << ")" << std::endl << "Size = " << ma.kb.size() << std::endl;
   int no;
-  for (no = 1; no <= XMLreader::labeling.size(); no++) {
-    std::string name = XMLreader::labeling[no];
+  for (no = 1; no <= Reader::labeling.size(); no++) {
+    std::string name = Reader::labeling[no];
     std::cout << "Parse step " << name << ".xml" << std::endl;
-    std::copy(std::begin(XMLreader::strings[no]), std::end(XMLreader::strings[no]), std::ostream_iterator<SymbolElement>(std::cout, " "));
+    std::copy(std::begin(Reader::strings[no]), std::end(Reader::strings[no]), std::ostream_iterator<SymbolElement>(std::cout, " "));
     std::cout << std::endl;
-    auto ret = ma.kb.parse_string(XMLreader::strings[no]);
+    auto ret = ma.kb.parse_string(Reader::strings[no]);
     if (ret.size() != 0) {
       std::copy(std::begin(ret), std::end(ret), std::ostream_iterator<Rule>(std::cout, "\n"));
       std::cout << "finished to parse" << std::endl;
@@ -107,10 +107,10 @@ void tree_assessment(Agent &ma, std::string out) {
   std::string tree_str;
   int no;
   std::vector<int> beat_nums;
-  for (int i = 1; i <= XMLreader::labeling.size(); i++) {
+  for (int i = 1; i <= Reader::labeling.size(); i++) {
     no = i;
-    beat_nums = XMLreader::i_beat_map[no];
-    std::string name = XMLreader::labeling[no];
+    beat_nums = Reader::i_beat_map[no];
+    std::string name = Reader::labeling[no];
     r_list.clear();
     std::cout << "Construct " << name << ".xml" << std::endl;
     if (ma.kb.explain(ma.kb.meaning_no(no), r_list)) {
@@ -192,16 +192,20 @@ int main(int argc, char *argv[]) {
                     file_list.push_back(p.path().generic_string());
                   }
                 });
-  if (!param.MONO)
-    XMLreader::make_init_data(file_list);
-  else {
-    XMLreaderMono::make_init_data(file_list);
-    XMLreader::copy(XMLreaderMono());
+  if (param.ABC) {
+    ABCreader abcr;
+    abcr.make_init_data(file_list);
+  } else if (param.MONO) {
+    XMLreaderMono xmlr;
+    xmlr.make_init_data(file_list);
+  } else {
+    XMLreader xmlr;
+    xmlr.make_init_data(file_list);
   }
 
   Agent parent;
-  parent.init_semantics(XMLreader::i_meaning_map);
-  parent.hear(XMLreader::input_rules, XMLreader::core_meaning);
+  parent.init_semantics(Reader::i_meaning_map);
+  parent.hear(Reader::input_rules, Reader::core_meaning);
   if (param.LOGGING) LogBox::push_log(parent.kb.to_s());
   parent.learn();
   parent.grow();
@@ -228,17 +232,17 @@ int main(int argc, char *argv[]) {
   }
 
   if (param.LILYPOND && param.MONO) {
-    std::map<AMean, Conception> test_cmap;
-    UtteranceRules base, ur;
-    parent.kb.generate_score_mono(test_cmap, base, ur);
-    std::string output_str = OutputMusic::output(ur);
-    output_data_trunc("./test.ly", output_str);
+    // std::map<AMean, Conception> test_cmap;
+    // UtteranceRules base, ur;
+    // parent.kb.generate_score(test_cmap, base, ur);
+    // std::string output_str = OutputMusic::output(ur);
+    // output_data_trunc("./test.ly", output_str);
   }
 
   for (int g = 0; g < param.MAX_GENERATIONS; g++) {
     std::cout << std::endl << "Generation " << g + 1 << std::endl;
-    std::vector<Rule> inputs = XMLreader::input_rules;
-    std::map<AMean, Conception> cmap = XMLreader::core_meaning;
+    std::vector<Rule> inputs = Reader::input_rules;
+    std::map<AMean, Conception> cmap = Reader::core_meaning;
     for (int u = 0; u < param.UTTERANCES; u++) {
       std::cout << std::endl << "Utterance " << u + 1 << std::endl;
       std::map<AMean, Conception> cmap_say;
@@ -257,7 +261,7 @@ int main(int argc, char *argv[]) {
       inputs.insert(std::end(inputs), std::begin(utter), std::end(utter));
     }
     Agent ma = parent.make_child();
-    ma.init_semantics(XMLreader::i_meaning_map);
+    ma.init_semantics(Reader::i_meaning_map);
     ma.hear(inputs, cmap);
     std::cout << "\n%%% initial state" << std::endl;
     std::cout << ma.to_s() << std::endl;

@@ -521,7 +521,7 @@ class Conception {
   std::set<std::string> search_begin_with(std::string str) {
     std::set<std::string> ret;
     std::copy_if(std::begin(factors), std::end(factors), std::inserter(ret, std::begin(ret)),
-                 [&str](std::string &obj) { return std::equal(std::begin(str), std::end(str), std::begin(obj)); });
+                 [&str](const std::string &obj) { return std::equal(std::begin(str), std::end(str), std::begin(obj)); });
     return ret;
   }
   std::string to_s() const {

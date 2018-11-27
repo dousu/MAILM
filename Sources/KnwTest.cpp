@@ -7,13 +7,13 @@ int main(int arg, char **argv) {
   std::for_each(std::begin(v), std::end(v), [&](int n) {
     std::string str = Prefices::SYN + std::to_string(n);
     std::string str2 = "[" + std::to_string(n) + "]";
-    XMLreader::alias.insert(std::map<std::string, std::string>::value_type(str, str2));
-    XMLreader::conv_alias.insert(std::map<std::string, std::string>::value_type(str2, str));
+    Reader::alias.insert(std::map<std::string, std::string>::value_type(str, str2));
+    Reader::conv_alias.insert(std::map<std::string, std::string>::value_type(str2, str));
     Dictionary::symbol.insert(std::map<int, std::string>::value_type(n, str2));
     Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, n));
-    XMLreader::conv_str[str] = n;
+    Reader::conv_str[str] = n;
   });
-  Symbol::conv_symbol = XMLreader::conv_alias;
+  Symbol::conv_symbol = Reader::conv_alias;
   Rule buf;
   Knowledge kb;
   std::vector<Rule> vec;

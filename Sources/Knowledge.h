@@ -426,7 +426,7 @@ class Knowledge {
 
   RuleDBType generate_score(std::map<AMean, Conception> &core_meaning, RuleDBType &base);
 
-  void generate_score_mono(std::map<AMean, Conception> &core_meaning, UtteranceRules &base, UtteranceRules &ret);
+  // void generate_score_mono(std::map<AMean, Conception> &core_meaning, UtteranceRules &base, UtteranceRules &ret);
 
   RuleDBType parse_string(const std::vector<SymbolElement> &str);
 
