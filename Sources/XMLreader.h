@@ -73,6 +73,31 @@ class ABCreader : Reader {
 
   void make_init_data(std::vector<std::string> &file_paths) override;
   void load(std::string, std::vector<Rule> &, int);
+
+  std::string t_str;
+  int l1;
+  int l2;
+  std::string q_str;
+  int q1;
+  int q2;
+  int q3;
+  int m1;
+  int m2;
+  std::string k_str;
+  std::string opt_str;
+  std::string name_str;
+  std::string nl_str;
+
+  std::string_view title(std::string_view str);
+  std::string_view base_length(std::string_view str);
+  std::string_view tempo(std::string_view str);
+  std::string_view rhythm(std::string_view str);
+  void k_(std::string_view str);
+  std::string_view key(std::string_view str);
+  std::string_view note(std::string_view str);
+  std::string_view option(std::string_view str);
+  std::string_view name(std::string_view str);
+  std::string_view note_length(std::string_view str);
 };
 
 #endif /* XMLREADER_H_ */

@@ -163,42 +163,13 @@ void XMLreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
       }
     }
   }
-  Symbol::conv_symbol = XMLreader::conv_alias;
+  Symbol::conv_symbol = conv_alias;
   Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
   //文ルール追加
   buf.push_back(r_sent);
   i_meaning_map[file_no] = flat_meaning;
   category_count--;
 }
-
-// XMLreader XMLreader::copy(void) { return XMLreader(); }
-
-// XMLreader XMLreader::copy(const XMLreaderMono &obj) {
-//   alias = obj.alias;
-//   conv_alias = obj.conv_alias;
-//   i_meaning_map = obj.i_meaning_map;
-//   i_beat_map = obj.i_beat_map;
-//   strings = obj.strings;
-//   labeling = obj.labeling;
-//   core_meaning = obj.core_meaning;
-//   input_rules = obj.input_rules;
-//   conv_str = obj.conv_str;
-//   index_count = obj.index_count;
-//   variable_count = obj.variable_count;
-//   category_count = obj.category_count;
-//   symbol_count = obj.symbol_count;
-//   return XMLreader();
-// }
-
-// std::map<std::string, std::string> XMLreaderMono::alias;
-// std::map<std::string, std::string> XMLreaderMono::conv_alias;
-// std::map<int, Meaning> XMLreaderMono::i_meaning_map;
-// std::map<int, std::vector<int>> XMLreaderMono::i_beat_map;
-// std::map<int, std::string> XMLreaderMono::labeling;
-// std::map<AMean, Conception> XMLreaderMono::core_meaning;
-// std::vector<Rule> XMLreaderMono::input_rules;
-// std::map<std::string, int> XMLreaderMono::conv_str;
-// std::unordered_map<int, std::vector<SymbolElement>> XMLreaderMono::strings;
 
 int XMLreaderMono::index_count = -1;
 int XMLreaderMono::variable_count = -1;
@@ -377,7 +348,7 @@ void XMLreaderMono::load(std::string file_path, std::vector<Rule> &buf, int file
     }
   }
 
-  Symbol::conv_symbol = XMLreaderMono::conv_alias;
+  Symbol::conv_symbol = conv_alias;
   Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
   //文ルール追加
   buf.push_back(r_sent);
@@ -562,10 +533,21 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf, int file_no)
     }
   }
 
-  Symbol::conv_symbol = XMLreaderMono::conv_alias;
+  Symbol::conv_symbol = conv_alias;
   Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
   //文ルール追加
   buf.push_back(r_sent);
   i_meaning_map[file_no] = flat_meaning;
   category_count--;
 }
+
+std::string_view ABCreader::title(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::base_length(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::tempo(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::rhythm(std::string_view str) { return std::string_view(""); }
+void ABCreader::k_(std::string_view str) {}
+std::string_view ABCreader::key(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::note(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::option(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::name(std::string_view str) { return std::string_view(""); }
+std::string_view ABCreader::note_length(std::string_view str) { return std::string_view(""); }
