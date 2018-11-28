@@ -548,25 +548,38 @@ std::string_view ABCreader::next_line(std::string_view str) {
 
 std::string_view ABCreader::title(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+  if (str.find("T:") != 0) {
+    std::cerr << "Title is not found" << std::endl;
+    exit(-1);
+  }
   std::string_view title_str = str.substr(2, str.find_first_of("\r\n"));
   title_str.remove_prefix(std::min(title_str.find_first_not_of(" "), title_str.size()));
+  // auto trim_pos = title_str.find(" ");
+  // if(trim_pos != title_str.npos)
+  //   title_str.remove_suffix(title_str.size() - trim_pos);
   t_str = title_str;
   str.remove_prefix(std::min(str.find_first_of("\n") + 1, str.size()));
   return str;
 }
 std::string_view ABCreader::base_length(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+  if (str.find("L:") != 0) {
+    return str;
+  }
   std::string_view base_length_str = str.substr(2, str.find_first_of("\r\n]"));
   // l1, l2
   base_length_str.remove_suffix(std::min(base_length_str.find_last_not_of(" "), base_length_str.size()));
   l1 = std::stoi(std::string(base_length_str.substr(0, base_length_str.find_first_of("/"))));
-  l2 = std::stoi(std::string(
-      base_length_str.substr(base_length_str.find_last_of("/") + 1, std::min(base_length_str.find_first_of(" "), base_length_str.size()))));
+  l2 = std::stoi(std::string(base_length_str.substr(base_length_str.find_last_of("/") + 1,
+                                                    std::min(base_length_str.find_first_of(" \r\n]"), base_length_str.size()))));
   str.remove_prefix(std::min(str.find_first_of("\n]") + 1, str.size()));
   return str;
 }
 std::string_view ABCreader::tempo(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+  if (str.find("Q:") != 0) {
+    return str;
+  }
   std::string_view tempo_str = str.substr(2, str.find_first_of("\r\n]"));
   // q_str, q1, q2, q3
   tempo_str.remove_suffix(std::min(tempo_str.find_last_not_of(" "), tempo_str.size()));
@@ -578,6 +591,9 @@ std::string_view ABCreader::tempo(std::string_view str) {
 }
 std::string_view ABCreader::rhythm(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+  if (str.find("M:") != 0) {
+    return str;
+  }
   std::string_view rhythm_str = str.substr(2, str.find_first_of("\r\n]"));
   // m1, m2
   rhythm_str.remove_suffix(std::min(rhythm_str.find_last_not_of(" "), rhythm_str.size()));
@@ -588,43 +604,89 @@ std::string_view ABCreader::rhythm(std::string_view str) {
   return str;
 }
 void ABCreader::k_(std::string_view str) {
+  str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+  if (str.find("K:") != 0) {
+    std::cerr << "Key is not found." << std::endl;
+    exit(-1);
+  }
   str = key(str);
-  str = note(str);
-  while (note_str != "") {
+  // str = note(str);
+  // if (str.find_first_of("<>") == 0) {
+  //   std::string note1, note2;
+  //   if (str.find_first_of("<") == 0) {
+  //     note1 = note_string(opt_str, name_str, len1, len2 / 2);
+  //     str = note(str);
+  //     note2 = note_string(opt_str, name_str, len1 * 3, len2 / 2);
+  //   } else {
+  //     note1 = note_string(opt_str, name_str, len1 * 3, len2 / 2);
+  //     str = note(str);
+  //     note2 = note_string(opt_str, name_str, len1, len2 / 2);
+  //   }
+  //   // do something with note1 and note2
+  // }
+  // note_str = note_string(opt_str, name_str, l1, l2);
+  bool cont, less_than, greater_than;
+  do {
+    // parencies ()[]
+    str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+    std::size_t loc = std::min(str.find_first_of("ABCDEFGabcdefg._=^"), str.size());
+    if (loc != str.size()) {
+      std::string_view strview = str.substr(0, loc);
+      if (strview.find_first_of("(") != strview.npos) {
+      }
+      if (strview.find_first_of(")") != strview.npos) {
+      }
+      if (strview.find_first_of("[") != strview.npos) {
+        std::string_view v = strview.substr(strview.find_first_of("[") + 1);
+        v = base_length(v);
+        v = rhythm(v);
+        v = tempo(v);
+      }
+      if (strview.find_first_of("|") != strview.npos) {
+      }
+      str.remove_prefix(str.find_first_of("ABCDEFGabcdefg._=^"));
+    }
     str = note(str);
     str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
-    if (str.find_first_of("|") == 0) {
-      str.remove_prefix(std::min(std::size_t(1), str.size()));
-    }
-  }
+    // note_str = note_string(opt_str, name_str, len1, len2);
+    // -, >, <
+  } while (note_str != "");
 }
 std::string_view ABCreader::key(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+  if (str.find("K:") != 0) {
+    return str;
+  }
   k_str = str.substr(2, str.find_first_of("\r\n]"));
   str.remove_prefix(std::min(str.find_first_of("\n]") + 1, str.size()));
   return str;
 }
 std::string_view ABCreader::note(std::string_view str) {
+  nl1 = l1;
+  nl2 = l2;
   note_str = "";
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   std::string_view rest = str;
   rest = option(rest);
   rest = name(rest);
   rest = note_length(rest);
-  note_str = opt_str + name_str + nl_str;
   return rest;
 }
 std::string_view ABCreader::option(std::string_view str) {
   opt_str = "";
-  std::string_view option_str = str.substr(0, str.find_first_of("ABCDEFabcdef"));
-  if (option_str.find_last_of("^") != std::string_view::npos) {
+  dot = false;
+  std::string_view option_str = str.substr(0, str.find_first_of("ABCDEFGabcdefg"));
+  if (option_str.find_last_of("^") != option_str.npos) {
     opt_str = "^";
-  } else if (option_str.find_last_of("=") != std::string_view::npos) {
+  } else if (option_str.find_last_of("=") != option_str.npos) {
     opt_str = "=";
-  } else if (option_str.find_last_of("_") != std::string_view::npos) {
+  } else if (option_str.find_last_of("_") != option_str.npos) {
     opt_str = "_";
   }
-  str.remove_prefix(std::min(str.find_first_of("ABCDEFabcdef"), str.size()));
+  if (option_str.find_last_of(".") != option_str.npos) {
+    dot = true;
+  }
+  str.remove_prefix(std::min(str.find_first_of("ABCDEFGabcdefg"), str.size()));
   return str;
 }
 std::string_view ABCreader::name(std::string_view str) {
@@ -635,7 +697,25 @@ std::string_view ABCreader::name(std::string_view str) {
 }
 std::string_view ABCreader::note_length(std::string_view str) {
   nl_str = "";
-  nl_str = str.substr(0, std::min(str.find_first_of(" \r\n"), str.size()));
-  str.remove_prefix(std::min(str.find_first_of(" \r\n") + 1, str.size()));
+  nl_str = str.substr(0, std::min(str.find_first_of("ABCDEFGabcdefg<>|[)(-. \r\n"), str.size()));
+  nl1 = nl2 = 1;
+  std::size_t bound = std::min(nl_str.find_first_of("/"), nl_str.size());
+  std::string v1 = nl_str.substr(0, bound);
+  if (v1 != "") nl1 = std::stoi(v1);
+  if (bound != nl_str.size()) {
+    if (bound == nl_str.size() - 1) {
+      nl2 = 2;
+    } else {
+      nl2 = std::stoi(std::string(nl_str.substr(bound + 1, nl_str.size())));
+    }
+  }
+  if (dot) {
+    nl1 *= 3;
+    nl2 *= 2;
+  }
+  str.remove_prefix(std::min(str.find_first_of("ABCDEFGabcdefg<>|[)(-. \r\n"), str.size()));
   return str;
+}
+std::string ABCreader::note_string(std::string_view opt_string, std::string_view note_string, int len1, int len2) {
+  return std::string(opt_string) + std::string(note_string) + std::to_string(len1) + "/" + std::to_string(len2);
 }
