@@ -610,31 +610,18 @@ void ABCreader::k_(std::string_view str) {
     exit(-1);
   }
   str = key(str);
-  // str = note(str);
-  // if (str.find_first_of("<>") == 0) {
-  //   std::string note1, note2;
-  //   if (str.find_first_of("<") == 0) {
-  //     note1 = note_string(opt_str, name_str, len1, len2 / 2);
-  //     str = note(str);
-  //     note2 = note_string(opt_str, name_str, len1 * 3, len2 / 2);
-  //   } else {
-  //     note1 = note_string(opt_str, name_str, len1 * 3, len2 / 2);
-  //     str = note(str);
-  //     note2 = note_string(opt_str, name_str, len1, len2 / 2);
-  //   }
-  //   // do something with note1 and note2
-  // }
-  // note_str = note_string(opt_str, name_str, l1, l2);
-  bool cont, less_than, greater_than;
-  do {
-    // parencies ()[]
-    str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
-    std::size_t loc = std::min(str.find_first_of("ABCDEFGabcdefg._=^"), str.size());
-    if (loc != str.size()) {
+  std::function<void(std::string_view)> func;
+  func = [this, &func](std::string_view str) {
+    bool less_than, greater_than, hyphen;
+    do {
+      // parenthesis ()[]
+      std::size_t loc = std::min(str.find_first_of("ABCDEFGabcdefg._=^"), str.size());
       std::string_view strview = str.substr(0, loc);
       if (strview.find_first_of("(") != strview.npos) {
+        func(str);
       }
       if (strview.find_first_of(")") != strview.npos) {
+        return;
       }
       if (strview.find_first_of("[") != strview.npos) {
         std::string_view v = strview.substr(strview.find_first_of("[") + 1);
@@ -645,12 +632,32 @@ void ABCreader::k_(std::string_view str) {
       if (strview.find_first_of("|") != strview.npos) {
       }
       str.remove_prefix(str.find_first_of("ABCDEFGabcdefg._=^"));
-    }
-    str = note(str);
-    str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
-    // note_str = note_string(opt_str, name_str, len1, len2);
-    // -, >, <
-  } while (note_str != "");
+      str = note(str);
+      // note_str = note_string(opt_str, name_str, len1, len2);
+      // -, >, <
+      if (greater_than) {
+        l2 *= 2;
+      }
+      if (less_than) {
+        l1 *= 3;
+        l2 *= 2;
+      }
+
+      hyphen = greater_than = less_than = false;
+      if (str.find_first_of("-") == 0) {
+        hyphen = true;
+      } else if (str.find_first_of(">") == 0) {
+        greater_than = true;
+        note_str = note_string(opt_str, name_str, l1 * 3, l2 * 2);
+      } else if (str.find_first_of("<") == 0) {
+        less_than = true;
+        note_str = note_string(opt_str, name_str, l1, l2 * 2);
+      } else {
+        note_str = note_string(opt_str, name_str, l1, l2);
+      }
+    } while (note_str != "");
+  };
+  func(str);
 }
 std::string_view ABCreader::key(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
@@ -665,7 +672,6 @@ std::string_view ABCreader::note(std::string_view str) {
   nl1 = l1;
   nl2 = l2;
   note_str = "";
-  str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   std::string_view rest = str;
   rest = option(rest);
   rest = name(rest);
@@ -699,10 +705,12 @@ std::string_view ABCreader::note_length(std::string_view str) {
   nl_str = "";
   nl_str = str.substr(0, std::min(str.find_first_of("ABCDEFGabcdefg<>|[)(-. \r\n"), str.size()));
   nl1 = nl2 = 1;
-  std::size_t bound = std::min(nl_str.find_first_of("/"), nl_str.size());
-  std::string v1 = nl_str.substr(0, bound);
-  if (v1 != "") nl1 = std::stoi(v1);
-  if (bound != nl_str.size()) {
+  std::size_t bound = nl_str.find_first_of("/");
+  if (bound != nl_str.npos) {
+    std::string v1 = nl_str.substr(0, bound);
+    nl1 = std::stoi(v1);
+  }
+  if (bound != nl_str.npos) {
     if (bound == nl_str.size() - 1) {
       nl2 = 2;
     } else {
