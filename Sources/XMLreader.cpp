@@ -384,161 +384,167 @@ void ABCreader::make_init_data(std::vector<std::string> &file_paths) {
 
 void ABCreader::load(std::string file_path, std::vector<Rule> &buf, int file_no) {
   // strings[file_no]
-  boost::property_tree::ptree pt;
-  boost::property_tree::read_xml(file_path.c_str(), pt);
-
-  std::vector<std::string> lbuf1, lbuf2;
-  boost::algorithm::split(lbuf1, file_path, boost::algorithm::is_any_of("."), boost::algorithm::token_compress_on);
-  boost::algorithm::split(lbuf2, *(lbuf1.rbegin() + 1), boost::algorithm::is_any_of("/\\"), boost::algorithm::token_compress_on);
-  labeling[file_no] = *(lbuf2.rbegin());
-
-  int time_type;
-  int time_beats;
-
-  int key_fifth;
-  std::string key_mode;
-
-  //初期設定
-  std::string path1 = "score-partwise";
-  Meaning s_in, flat_meaning;
-  std::vector<SymbolElement> s_ex;
-
-  s_in = Meaning(AMean(index_count));
-  core_meaning[AMean(index_count)] = Conception();
-  core_meaning[AMean(index_count)].add(Prefices::SEN);
-
-  // sentenceのインデックス記録
-  flat_meaning = Meaning(AMean(index_count));
-
-  index_count--;
-  i_beat_map[file_no] = std::vector<int>();
-
-  BOOST_FOREACH (const boost::property_tree::ptree::value_type &part_t, pt.get_child(path1.c_str())) {
-    if (part_t.first == "part") {
-      BOOST_FOREACH (const boost::property_tree::ptree::value_type &measure_t, part_t.second.get_child("")) {
-        if (measure_t.first == "measure") {
-          std::vector<SymbolElement> sub_ex;
-          //入っているべきmetricの数を取得
-          // met_max = (measure_t.second.get_optional<int>((std::string("<xmlattr>.metricals")).c_str())).get();
-          // i_beat_map[file_no].push_back(met_max);
-          //検査対象measure以下の木をすべて取ってくる
-          BOOST_FOREACH (const boost::property_tree::ptree::value_type &note_t, measure_t.second.get_child("")) {
-            if (note_t.first == "attributes") {
-              BOOST_FOREACH (const boost::property_tree::ptree::value_type &time_t, note_t.second.get_child("")) {
-                if (time_t.first == "time") {
-                  BOOST_FOREACH (const boost::property_tree::ptree::value_type &beat_t, time_t.second.get_child("")) {
-                    boost::optional<std::string> val;
-                    if (beat_t.first == "beats" && (val = beat_t.second.get_optional<std::string>(""))) {
-                      time_beats = std::stoi(val.get());
-                    }
-                    if (beat_t.first == "beat-type" && (val = beat_t.second.get_optional<std::string>(""))) {
-                      time_type = std::stoi(val.get());
-                    }
-                  }
-                }
-                if (time_t.first == "key") {
-                  BOOST_FOREACH (const boost::property_tree::ptree::value_type &key_t, time_t.second.get_child("")) {
-                    boost::optional<std::string> val;
-                    if (key_t.first == "fifths" && (val = key_t.second.get_optional<std::string>(""))) {
-                      key_fifth = std::stoi(val.get());
-                    }
-                    if (key_t.first == "mode" && (val = key_t.second.get_optional<std::string>(""))) {
-                      key_mode = val.get();
-                    }
-                  }
-                }
-              }
-            }
-            if (note_t.first == "note") {
-              //ここで順番に処理していけば順序通りにとれる
-              std::string str;
-              //すべてのpitchを取得
-              BOOST_FOREACH (const boost::property_tree::ptree::value_type &pitch_t, note_t.second.get_child("")) {
-                if (pitch_t.first == "pitch") {
-                  BOOST_FOREACH (const boost::property_tree::ptree::value_type &step_t, pitch_t.second.get_child("")) {
-                    boost::optional<std::string> val;
-                    if (step_t.first == "step" && (val = pitch_t.second.get_optional<std::string>("step"))) {
-                      std::string data = val.get();
-                      std::transform(std::begin(data), std::end(data), std::begin(data), ::tolower);
-                      str += data;
-                    }
-                  }
-                }
-                if (str.size() == 0) {
-                  str = std::string("r");
-                  core_meaning[AMean(index_count)] = Conception();
-                  core_meaning[AMean(index_count)].add("rest");
-                }
-
-                if (pitch_t.first == "type") {
-                  if (boost::optional<std::string> val = note_t.second.get_optional<std::string>("type")) {
-                    std::string span = val.get();
-                    if (span == "whole") {
-                      str += "1";
-                    } else if (span == "half") {
-                      str += "2";
-                    } else if (span == "quarter") {
-                      str += "4";
-                    } else if (span == "eighth") {
-                      str += "8";
-                    } else {
-                      std::regex num("[1-9][0-9]*");
-                      std::sregex_token_iterator it(std::begin(span), std::end(span), num, 0);
-                      str += *it;
-                    }
-                  }
-                }
-                if (pitch_t.first == "dot") {
-                  str += ".";
-                }
-              }
-
-              // strのaliasの作成とword_exへの保存
-              std::string str2;
-              if (alias.find(str) == alias.end()) {
-                str2 = Prefices::SYN + std::to_string(symbol_count);
-                alias.insert(std::map<std::string, std::string>::value_type(str, str2));
-                conv_alias.insert(std::map<std::string, std::string>::value_type(str2, str));
-                Dictionary::symbol.insert(std::map<int, std::string>::value_type(symbol_count, str2));
-                Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, symbol_count));
-                conv_str[str] = symbol_count++;
-              } else {
-                str2 = alias[str];
-              }
-              sub_ex.push_back(Symbol(conv_str[str]));
-              strings[file_no].push_back(Symbol(conv_str[str]));
-            }
-          }
-          // word rule
-          Rule r(LeftNonterminal(Category(category_count), Meaning(AMean(index_count))), sub_ex);
-          buf.push_back(r);
-          if (core_meaning.find(AMean(index_count)) == core_meaning.end()) {
-            core_meaning[AMean(index_count)] = Conception();
-          }
-          core_meaning[AMean(index_count)].add(Prefices::MES);
-          core_meaning[AMean(index_count)].add(Prefices::MEA);
-          core_meaning[AMean(index_count)].add("time" + std::to_string(time_beats) + "/" + std::to_string(time_type));
-          core_meaning[AMean(index_count)].add("keys" + std::to_string(key_fifth) + "/" + key_mode);
-          // core_meaning[AMean(index_count)].add("mode" + key_mode);
-
-          s_in.get_followings().push_back(Variable(variable_count));
-          flat_meaning.get_followings().push_back(Meaning(AMean(index_count)));
-          s_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
-
-          index_count--;
-          variable_count--;
-          category_count--;
-        }
-      }
-    }
+  std::fstream fs;
+  fs.open(file_path, std::ios::in);
+  for (std::string line; std::getline(fs, line);) {
+    std::cout << line << std::endl;
   }
 
-  Symbol::conv_symbol = conv_alias;
-  Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
-  //文ルール追加
-  buf.push_back(r_sent);
-  i_meaning_map[file_no] = flat_meaning;
-  category_count--;
+  // boost::property_tree::ptree pt;
+  // boost::property_tree::read_xml(file_path.c_str(), pt);
+
+  // std::vector<std::string> lbuf1, lbuf2;
+  // boost::algorithm::split(lbuf1, file_path, boost::algorithm::is_any_of("."), boost::algorithm::token_compress_on);
+  // boost::algorithm::split(lbuf2, *(lbuf1.rbegin() + 1), boost::algorithm::is_any_of("/\\"), boost::algorithm::token_compress_on);
+  // labeling[file_no] = *(lbuf2.rbegin());
+
+  // int time_type;
+  // int time_beats;
+
+  // int key_fifth;
+  // std::string key_mode;
+
+  // //初期設定
+  // std::string path1 = "score-partwise";
+  // Meaning s_in, flat_meaning;
+  // std::vector<SymbolElement> s_ex;
+
+  // s_in = Meaning(AMean(index_count));
+  // core_meaning[AMean(index_count)] = Conception();
+  // core_meaning[AMean(index_count)].add(Prefices::SEN);
+
+  // // sentenceのインデックス記録
+  // flat_meaning = Meaning(AMean(index_count));
+
+  // index_count--;
+  // i_beat_map[file_no] = std::vector<int>();
+
+  // BOOST_FOREACH (const boost::property_tree::ptree::value_type &part_t, pt.get_child(path1.c_str())) {
+  //   if (part_t.first == "part") {
+  //     BOOST_FOREACH (const boost::property_tree::ptree::value_type &measure_t, part_t.second.get_child("")) {
+  //       if (measure_t.first == "measure") {
+  //         std::vector<SymbolElement> sub_ex;
+  //         //入っているべきmetricの数を取得
+  //         // met_max = (measure_t.second.get_optional<int>((std::string("<xmlattr>.metricals")).c_str())).get();
+  //         // i_beat_map[file_no].push_back(met_max);
+  //         //検査対象measure以下の木をすべて取ってくる
+  //         BOOST_FOREACH (const boost::property_tree::ptree::value_type &note_t, measure_t.second.get_child("")) {
+  //           if (note_t.first == "attributes") {
+  //             BOOST_FOREACH (const boost::property_tree::ptree::value_type &time_t, note_t.second.get_child("")) {
+  //               if (time_t.first == "time") {
+  //                 BOOST_FOREACH (const boost::property_tree::ptree::value_type &beat_t, time_t.second.get_child("")) {
+  //                   boost::optional<std::string> val;
+  //                   if (beat_t.first == "beats" && (val = beat_t.second.get_optional<std::string>(""))) {
+  //                     time_beats = std::stoi(val.get());
+  //                   }
+  //                   if (beat_t.first == "beat-type" && (val = beat_t.second.get_optional<std::string>(""))) {
+  //                     time_type = std::stoi(val.get());
+  //                   }
+  //                 }
+  //               }
+  //               if (time_t.first == "key") {
+  //                 BOOST_FOREACH (const boost::property_tree::ptree::value_type &key_t, time_t.second.get_child("")) {
+  //                   boost::optional<std::string> val;
+  //                   if (key_t.first == "fifths" && (val = key_t.second.get_optional<std::string>(""))) {
+  //                     key_fifth = std::stoi(val.get());
+  //                   }
+  //                   if (key_t.first == "mode" && (val = key_t.second.get_optional<std::string>(""))) {
+  //                     key_mode = val.get();
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //           if (note_t.first == "note") {
+  //             //ここで順番に処理していけば順序通りにとれる
+  //             std::string str;
+  //             //すべてのpitchを取得
+  //             BOOST_FOREACH (const boost::property_tree::ptree::value_type &pitch_t, note_t.second.get_child("")) {
+  //               if (pitch_t.first == "pitch") {
+  //                 BOOST_FOREACH (const boost::property_tree::ptree::value_type &step_t, pitch_t.second.get_child("")) {
+  //                   boost::optional<std::string> val;
+  //                   if (step_t.first == "step" && (val = pitch_t.second.get_optional<std::string>("step"))) {
+  //                     std::string data = val.get();
+  //                     std::transform(std::begin(data), std::end(data), std::begin(data), ::tolower);
+  //                     str += data;
+  //                   }
+  //                 }
+  //               }
+  //               if (str.size() == 0) {
+  //                 str = std::string("r");
+  //                 core_meaning[AMean(index_count)] = Conception();
+  //                 core_meaning[AMean(index_count)].add("rest");
+  //               }
+
+  //               if (pitch_t.first == "type") {
+  //                 if (boost::optional<std::string> val = note_t.second.get_optional<std::string>("type")) {
+  //                   std::string span = val.get();
+  //                   if (span == "whole") {
+  //                     str += "1";
+  //                   } else if (span == "half") {
+  //                     str += "2";
+  //                   } else if (span == "quarter") {
+  //                     str += "4";
+  //                   } else if (span == "eighth") {
+  //                     str += "8";
+  //                   } else {
+  //                     std::regex num("[1-9][0-9]*");
+  //                     std::sregex_token_iterator it(std::begin(span), std::end(span), num, 0);
+  //                     str += *it;
+  //                   }
+  //                 }
+  //               }
+  //               if (pitch_t.first == "dot") {
+  //                 str += ".";
+  //               }
+  //             }
+
+  //             // strのaliasの作成とword_exへの保存
+  //             std::string str2;
+  //             if (alias.find(str) == alias.end()) {
+  //               str2 = Prefices::SYN + std::to_string(symbol_count);
+  //               alias.insert(std::map<std::string, std::string>::value_type(str, str2));
+  //               conv_alias.insert(std::map<std::string, std::string>::value_type(str2, str));
+  //               Dictionary::symbol.insert(std::map<int, std::string>::value_type(symbol_count, str2));
+  //               Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, symbol_count));
+  //               conv_str[str] = symbol_count++;
+  //             } else {
+  //               str2 = alias[str];
+  //             }
+  //             sub_ex.push_back(Symbol(conv_str[str]));
+  //             strings[file_no].push_back(Symbol(conv_str[str]));
+  //           }
+  //         }
+  //         // word rule
+  //         Rule r(LeftNonterminal(Category(category_count), Meaning(AMean(index_count))), sub_ex);
+  //         buf.push_back(r);
+  //         if (core_meaning.find(AMean(index_count)) == core_meaning.end()) {
+  //           core_meaning[AMean(index_count)] = Conception();
+  //         }
+  //         core_meaning[AMean(index_count)].add(Prefices::MES);
+  //         core_meaning[AMean(index_count)].add(Prefices::MEA);
+  //         core_meaning[AMean(index_count)].add("time" + std::to_string(time_beats) + "/" + std::to_string(time_type));
+  //         core_meaning[AMean(index_count)].add("keys" + std::to_string(key_fifth) + "/" + key_mode);
+  //         // core_meaning[AMean(index_count)].add("mode" + key_mode);
+
+  //         s_in.get_followings().push_back(Variable(variable_count));
+  //         flat_meaning.get_followings().push_back(Meaning(AMean(index_count)));
+  //         s_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+
+  //         index_count--;
+  //         variable_count--;
+  //         category_count--;
+  //       }
+  //     }
+  //   }
+  // }
+
+  // Symbol::conv_symbol = conv_alias;
+  // Rule r_sent(LeftNonterminal(Category(category_count), s_in), s_ex);
+  // //文ルール追加
+  // buf.push_back(r_sent);
+  // i_meaning_map[file_no] = flat_meaning;
+  // category_count--;
 }
 
 std::string_view ABCreader::next_line(std::string_view str) {
@@ -617,12 +623,6 @@ void ABCreader::k_(std::string_view str) {
       // parenthesis ()[]
       std::size_t loc = std::min(str.find_first_of("ABCDEFGabcdefg._=^"), str.size());
       std::string_view strview = str.substr(0, loc);
-      if (strview.find_first_of("(") != strview.npos) {
-        func(str);
-      }
-      if (strview.find_first_of(")") != strview.npos) {
-        return;
-      }
       if (strview.find_first_of("[") != strview.npos) {
         std::string_view v = strview.substr(strview.find_first_of("[") + 1);
         v = base_length(v);
@@ -631,6 +631,16 @@ void ABCreader::k_(std::string_view str) {
       }
       if (strview.find_first_of("|") != strview.npos) {
       }
+      if (strview.find_first_of("()") != strview.npos) {
+        if (strview.find_first_of("(") < strview.find_first_of(")")) {
+          str.remove_prefix(std::min(str.find_first_of("(") + 1, str.size()));
+          func(str);
+        }
+        if (strview.find_first_of(")") != strview.npos) {
+          return;
+        }
+      }
+
       str.remove_prefix(str.find_first_of("ABCDEFGabcdefg._=^"));
       str = note(str);
       // note_str = note_string(opt_str, name_str, len1, len2);
