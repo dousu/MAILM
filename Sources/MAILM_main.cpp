@@ -195,13 +195,13 @@ int main(int argc, char *argv[]) {
   if (param.ABC) {
     ABCreader abcr;
     abcr.make_init_data(file_list);
-  } else if (param.MONO) {
-    XMLreaderMono xmlr;
-    xmlr.make_init_data(file_list);
-  } else {
-    XMLreader xmlr;
-    xmlr.make_init_data(file_list);
-  }
+  }  // } else if (param.MONO) {
+  //   XMLreaderMono xmlr;
+  //   xmlr.make_init_data(file_list);
+  // } else {
+  //   XMLreader xmlr;
+  //   xmlr.make_init_data(file_list);
+  // }
 
   Agent parent;
   parent.init_semantics(Reader::i_meaning_map);

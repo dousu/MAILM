@@ -7,12 +7,12 @@
 #include <string>
 #include <vector>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/foreach.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
+// #include <boost/algorithm/string.hpp>
+// #include <boost/algorithm/string/trim.hpp>
+// #include <boost/foreach.hpp>
+// #include <boost/lexical_cast.hpp>
+// #include <boost/property_tree/ptree.hpp>
+// #include <boost/property_tree/xml_parser.hpp>
 
 #include "Element.h"
 #include "Prefices.h"
@@ -31,46 +31,42 @@ struct Reader {
   static std::vector<Rule> input_rules;                                // record of existing score
   static std::map<std::string, int> conv_str;                          // utility tool
   virtual void make_init_data(std::vector<std::string> &file_paths) = 0;
-};
-
-class XMLreader : Reader {
- public:
   static int index_count;
-
   static int variable_count;
-
   static int category_count;
-
   static int symbol_count;
-
-  void make_init_data(std::vector<std::string> &file_paths) override;
-  void load(std::string, std::vector<Rule> &, int);
 };
 
-class XMLreaderMono : Reader {
- public:
-  static int index_count;
+// class XMLreader : Reader {
+//  public:
+//   static int index_count;
 
-  static int variable_count;
+//   static int variable_count;
 
-  static int category_count;
+//   static int category_count;
 
-  static int symbol_count;
+//   static int symbol_count;
 
-  void make_init_data(std::vector<std::string> &file_paths) override;
-  void load(std::string, std::vector<Rule> &, int);
-};
+//   void make_init_data(std::vector<std::string> &file_paths) override;
+//   void load(std::string, std::vector<Rule> &, int);
+// };
+
+// class XMLreaderMono : Reader {
+//  public:
+//   static int index_count;
+
+//   static int variable_count;
+
+//   static int category_count;
+
+//   static int symbol_count;
+
+//   void make_init_data(std::vector<std::string> &file_paths) override;
+//   void load(std::string, std::vector<Rule> &, int);
+// };
 
 class ABCreader : Reader {
  public:
-  static int index_count;
-
-  static int variable_count;
-
-  static int category_count;
-
-  static int symbol_count;
-
   void make_init_data(std::vector<std::string> &file_paths) override;
   void load(std::string, std::vector<Rule> &, int);
 
@@ -104,6 +100,9 @@ class ABCreader : Reader {
   std::string_view note_length(std::string_view str);
   std::string_view next_line(std::string_view str);
   std::string note_string(std::string_view opt_string, std::string_view note_string, int len1, int len2);
+  static std::string_view range_substr(std::string_view &, std::size_t, std::size_t);
+  static std::string range_substr(const std::string &, std::size_t, std::size_t);
+  std::string_view quote_string(std::string_view);
 };
 
 #endif /* XMLREADER_H_ */

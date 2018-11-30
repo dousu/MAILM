@@ -15,12 +15,12 @@ all: ma
 
 ma: $(OBJS)
 	${CXX} ${CXXFLAGS} ./Sources/MAILM_main.cpp ${OBJS} ${LIBS} -o ./exe/mailm.exe
-	${CXX} ${CXXFLAGS} ./Sources/KnwTest.cpp ${OBJS} ${LIBS} -o ./exe/knwtest.exe
 
 boost:
 	${CXX} ./Sources/boost_version.cpp -o b_ver.exe
 
 test: ma
+	${CXX} ${CXXFLAGS} ./Sources/KnwTest.cpp ${OBJS} ${LIBS} -o ./exe/knwtest.exe
 
 clean:
 	rm -f ./Sources/*.o ./Sources/*.dump ./Sources/*.exe ./Sources/*.log ./Sources/*.rst ./Sources/*.d ./exe/*.exe ./exe/*.d

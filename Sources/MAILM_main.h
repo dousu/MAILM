@@ -8,26 +8,27 @@
 #include <ctime>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <queue>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/trim.hpp>
+// #include <boost/algorithm/string.hpp>
+// #include <boost/algorithm/string/trim.hpp>
 
 #include "Agent.h"
 #include "Dictionary.h"
 #include "Element.h"
 #include "Knowledge.h"
+#include "LilypondOutput.h"
 #include "LogBox.h"
 #include "MAILMParameters.h"
 #include "MT19937.h"
 #include "Prefices.h"
 #include "Rule.h"
 #include "XMLreader.h"
-#include "LilypondOutput.h"
 
 void output_data(std::string, std::string);
 

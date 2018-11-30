@@ -18,8 +18,8 @@ Agent Agent::make_child(void) {
 }
 
 Agent &Agent::grow() {
-  kb.ut_index = XMLreader::index_count;
-  kb.ut_category = XMLreader::category_count;
+  kb.ut_index = Reader::index_count;
+  kb.ut_category = Reader::category_count;
   return *this;
 }
 
