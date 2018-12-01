@@ -22,9 +22,9 @@
 #include "IndexFactory.h"
 #include "LogBox.h"
 #include "MT19937.h"
+#include "Reader.h"
 #include "Rule.h"
 #include "Semantics.h"
-#include "XMLreader.h"
 
 template <typename T>
 struct LengthGreater {

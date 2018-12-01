@@ -2,8 +2,8 @@
 #define Agent_H
 
 #include "Knowledge.h"
+#include "Reader.h"
 #include "Semantics.h"
-#include "XMLreader.h"
 
 class Agent {
  public:

@@ -1,5 +1,5 @@
 #include "Knowledge.h"
-#include "XMLreader.h"
+#include "Reader.h"
 
 int main(int arg, char **argv) {
   std::vector<int> v(10);

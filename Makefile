@@ -1,4 +1,4 @@
-SRCS = $(addprefix ./Sources/, Semantics.cpp Agent.cpp Knowledge.cpp Rule.cpp Element.cpp Dictionary.cpp XMLreader.cpp IndexFactory.cpp LogBox.cpp MT19937.cpp Semantics.cpp MAILMParameters.cpp)
+SRCS = $(addprefix ./Sources/, Semantics.cpp Agent.cpp Knowledge.cpp Rule.cpp Element.cpp Dictionary.cpp Reader.cpp IndexFactory.cpp LogBox.cpp MT19937.cpp Semantics.cpp MAILMParameters.cpp)
 DEPS = $(patsubst %.cpp,%.d,$(SRCS))
 OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 LIBS = -lstdc++fs

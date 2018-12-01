@@ -27,8 +27,8 @@
 #include "MAILMParameters.h"
 #include "MT19937.h"
 #include "Prefices.h"
+#include "Reader.h"
 #include "Rule.h"
-#include "XMLreader.h"
 
 void output_data(std::string, std::string);
 
