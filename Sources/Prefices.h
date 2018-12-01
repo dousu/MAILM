@@ -22,6 +22,7 @@ const std::string DSP = "  ";
 const std::string MES = "M";
 const std::string MEA = "L";
 const std::string UNO = "_";
+const std::string SLR = "SLUR";
 } // namespace Prefices
 
 #endif /* PREFICES_H_ */

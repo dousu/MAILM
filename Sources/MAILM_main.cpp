@@ -203,11 +203,15 @@ int main(int argc, char *argv[]) {
   //   xmlr.make_init_data(file_list);
   // }
 
+  std::cout << "Read" << std::endl;
   Agent parent;
   parent.init_semantics(Reader::i_meaning_map);
+  std::cout << "Initialize" << std::endl;
   parent.hear(Reader::input_rules, Reader::core_meaning);
+  std::cout << "Heared" << std::endl;
   if (param.LOGGING) LogBox::push_log(parent.kb.to_s());
   parent.learn();
+  std::cout << "Learned" << std::endl;
   parent.grow();
   std::cout << parent.kb.to_s() << std::endl;
   if (param.ANALYZE) {
