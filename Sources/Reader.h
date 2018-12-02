@@ -93,11 +93,11 @@ class ABCreader : Reader {
   std::vector<Rule> buf;
 
   std::string_view title(std::string_view str);
-  std::string_view base_length(std::string_view str);
-  std::string_view tempo(std::string_view str);
-  std::string_view rhythm(std::string_view str);
-  void k_(std::string_view str, Meaning &, std::vector<SymbolElement> &);
-  std::string_view key(std::string_view str);
+  std::pair<bool, std::string_view> base_length(std::string_view str);
+  std::pair<bool, std::string_view> tempo(std::string_view str);
+  std::pair<bool, std::string_view> rhythm(std::string_view str);
+  void k_(std::string_view str, AMean &, Meaning &, std::vector<SymbolElement> &);
+  std::pair<bool, std::string_view> key(std::string_view str);
   std::string_view note(std::string_view str);
   std::string_view option(std::string_view str);
   std::string_view name(std::string_view str);
@@ -107,8 +107,9 @@ class ABCreader : Reader {
   std::string rhythm_string(int len1, int len2);
   static std::string_view range_substr(std::string_view &, std::size_t, std::size_t);
   static std::string range_substr(const std::string &, std::size_t, std::size_t);
-  std::string quote_string(std::string_view&);
-  std::string exclamation_string(std::string_view&);
+  std::string quote_string(const std::string &);
+  std::string exclamation_string(const std::string &);
+  std::pair<std::string, std::string_view> score_option(std::string_view str);
 };
 
 #endif /* READER_H_ */
