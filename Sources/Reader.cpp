@@ -8,7 +8,8 @@ std::map<int, std::string> Reader::labeling;
 std::map<AMean, Conception> Reader::core_meaning;
 std::vector<Rule> Reader::input_rules;
 std::map<std::string, int> Reader::conv_str;
-std::unordered_map<std::size_t, std::vector<SymbolElement>> Reader::strings;
+std::unordered_map<std::size_t, std::vector<SymbolElement>>
+    Reader::strings;
 
 int Reader::index_count = -1;
 int Reader::variable_count = -1;
@@ -29,15 +30,20 @@ void ABCreader::make_init_data(std::vector<std::string> &file_paths) {
 
   std::sort(std::begin(file_paths), std::end(file_paths));
   int no = 1;
-  std::for_each(std::begin(file_paths), std::end(file_paths), [&](std::string f_str) {
-    buf.clear();
-    load(f_str, buf, no++);
-    std::copy(std::begin(buf), std::end(buf), std::ostream_iterator<Rule>(std::cout, "\n"));
-    std::copy(std::begin(buf), std::end(buf), std::back_inserter(input_rules));
-  });
+  std::for_each(std::begin(file_paths), std::end(file_paths),
+                [&](std::string f_str) {
+                  buf.clear();
+                  load(f_str, buf, no++);
+                  std::copy(
+                      std::begin(buf), std::end(buf),
+                      std::ostream_iterator<Rule>(std::cout, "\n"));
+                  std::copy(std::begin(buf), std::end(buf),
+                            std::back_inserter(input_rules));
+                });
 }
 
-void ABCreader::load(std::string file_path, std::vector<Rule> &buf, std::size_t no) {
+void ABCreader::load(std::string file_path, std::vector<Rule> &buf,
+                     std::size_t no) {
   // strings[file_no]
   file_no = no;
   std::fstream fs;
@@ -53,6 +59,7 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf, std::size_t 
   AMean sent_ind(index_count);
   s_in = Meaning(sent_ind);
   core_meaning[sent_ind] = Conception();
+  core_meaning[sent_ind].add(Prefices::SEN);
 
   // sentenceのインデックス記録
   flat_meaning = Meaning(AMean(index_count));
@@ -89,9 +96,11 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf, std::size_t 
   q2 = 4;
   q3 = 100;
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
-  while (str.find("Q:") != 0 && str.size() != 0 && str.find("M:") != 0) {
+  while (str.find("Q:") != 0 && str.size() != 0 &&
+         str.find("M:") != 0) {
     str = next_line(str);
-    str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+    str.remove_prefix(
+        std::min(str.find_first_not_of(" "), str.size()));
   }
   auto [qbool, qstr] = tempo(str);
   str = qstr;
@@ -112,7 +121,8 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf, std::size_t 
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   while (str.find("K:") != 0 && str.size() != 0) {
     str = next_line(str);
-    str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
+    str.remove_prefix(
+        std::min(str.find_first_not_of(" "), str.size()));
   }
   Category sent_cat(category_count);
   category_count--;
@@ -130,7 +140,8 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf, std::size_t 
 
 std::string_view ABCreader::next_line(std::string_view str) {
   // std::cout << str;
-  str.remove_prefix(std::min(str.find_first_of("\n") + 1, str.size()));
+  str.remove_prefix(
+      std::min(str.find_first_of("\n") + 1, str.size()));
   // std::cout << str;
   return str;
 }
@@ -142,59 +153,86 @@ std::string_view ABCreader::title(std::string_view str) {
   if (str.find("T:") != 0) {
     return str;
   }
-  std::string_view title_str = range_substr(str, 2, str.find_first_of("\r\n"));
-  title_str.remove_prefix(std::min(title_str.find_first_not_of(" "), title_str.size()));
+  std::string_view title_str =
+      range_substr(str, 2, str.find_first_of("\r\n"));
+  title_str.remove_prefix(
+      std::min(title_str.find_first_not_of(" "), title_str.size()));
   t_str = title_str;
-  str.remove_prefix(std::min(str.find_first_of("\n") + 1, str.size()));
+  str.remove_prefix(
+      std::min(str.find_first_of("\n") + 1, str.size()));
   return str;
 }
-std::pair<bool, std::string_view> ABCreader::base_length(std::string_view str) {
+std::pair<bool, std::string_view> ABCreader::base_length(
+    std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   if (str.find("L:") != 0) {
     return {false, str};
   }
 
-  std::string_view base_length_str = range_substr(str, 2, str.find_first_of("\r\n]"));
+  std::string_view base_length_str =
+      range_substr(str, 2, str.find_first_of("\r\n]"));
   // l1, l2
-  base_length_str.remove_prefix(std::min(base_length_str.find_first_not_of(" "), base_length_str.size()));
+  base_length_str.remove_prefix(
+      std::min(base_length_str.find_first_not_of(" "),
+               base_length_str.size()));
 
-  l1 = std::stoi(std::string(range_substr(base_length_str, 0, base_length_str.find_first_of("/"))));
-  l2 = std::stoi(std::string(range_substr(base_length_str, base_length_str.find_first_of("/") + 1,
-                                          std::min(base_length_str.find_first_of(" \r\n]"), base_length_str.size()))));
-  str.remove_prefix(std::min(str.find_first_of("\n]") + 1, str.size()));
+  l1 = std::stoi(std::string(range_substr(
+      base_length_str, 0, base_length_str.find_first_of("/"))));
+  l2 = std::stoi(std::string(range_substr(
+      base_length_str, base_length_str.find_first_of("/") + 1,
+      std::min(base_length_str.find_first_of(" \r\n]"),
+               base_length_str.size()))));
+  str.remove_prefix(
+      std::min(str.find_first_of("\n]") + 1, str.size()));
   return {true, str};
 }
-std::pair<bool, std::string_view> ABCreader::tempo(std::string_view str) {
+std::pair<bool, std::string_view> ABCreader::tempo(
+    std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   if (str.find("Q:") != 0) {
     return {false, str};
   }
-  std::string_view tempo_str = range_substr(str, 2, str.find_first_of("\r\n]"));
+  std::string_view tempo_str =
+      range_substr(str, 2, str.find_first_of("\r\n]"));
   // q_str, q1, q2, q3
-  tempo_str.remove_prefix(std::min(tempo_str.find_first_not_of(" "), tempo_str.size()));
+  tempo_str.remove_prefix(
+      std::min(tempo_str.find_first_not_of(" "), tempo_str.size()));
   q_str = quote_string(std::string(tempo_str));
-  q1 = std::stoi(std::string(range_substr(tempo_str, 0, tempo_str.find_first_of("/"))));
-  q2 = std::stoi(std::string(range_substr(tempo_str, tempo_str.find_first_of("/") + 1, tempo_str.find_first_of("="))));
-  q3 = std::stoi(
-      std::string(range_substr(tempo_str, tempo_str.find_first_of("=") + 1, std::min(tempo_str.find_first_of(" "), tempo_str.size()))));
-  str.remove_prefix(std::min(str.find_first_of("\n]") + 1, str.size()));
+  q1 = std::stoi(std::string(
+      range_substr(tempo_str, 0, tempo_str.find_first_of("/"))));
+  q2 = std::stoi(std::string(
+      range_substr(tempo_str, tempo_str.find_first_of("/") + 1,
+                   tempo_str.find_first_of("="))));
+  q3 = std::stoi(std::string(range_substr(
+      tempo_str, tempo_str.find_first_of("=") + 1,
+      std::min(tempo_str.find_first_of(" "), tempo_str.size()))));
+  str.remove_prefix(
+      std::min(str.find_first_of("\n]") + 1, str.size()));
   return {true, str};
 }
-std::pair<bool, std::string_view> ABCreader::rhythm(std::string_view str) {
+std::pair<bool, std::string_view> ABCreader::rhythm(
+    std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   if (str.find("M:") != 0) {
     return {false, str};
   }
-  std::string_view rhythm_str = range_substr(str, 2, str.find_first_of("\r\n]"));
+  std::string_view rhythm_str =
+      range_substr(str, 2, str.find_first_of("\r\n]"));
   // m1, m2
-  rhythm_str.remove_prefix(std::min(rhythm_str.find_first_not_of(" "), rhythm_str.size()));
-  m1 = std::stoi(std::string(range_substr(rhythm_str, 0, rhythm_str.find_first_of("/"))));
-  m2 = std::stoi(
-      std::string(range_substr(rhythm_str, rhythm_str.find_first_of("/") + 1, std::min(rhythm_str.find_first_of(" "), rhythm_str.size()))));
-  str.remove_prefix(std::min(str.find_first_of("\n]") + 1, str.size()));
+  rhythm_str.remove_prefix(
+      std::min(rhythm_str.find_first_not_of(" "), rhythm_str.size()));
+  m1 = std::stoi(std::string(
+      range_substr(rhythm_str, 0, rhythm_str.find_first_of("/"))));
+  m2 = std::stoi(std::string(range_substr(
+      rhythm_str, rhythm_str.find_first_of("/") + 1,
+      std::min(rhythm_str.find_first_of(" "), rhythm_str.size()))));
+  str.remove_prefix(
+      std::min(str.find_first_of("\n]") + 1, str.size()));
   return {true, str};
 }
-void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::vector<SymbolElement> &exter) {
+void ABCreader::k_(std::string_view str, AMean &sent_ind,
+                   Meaning &inter,
+                   std::vector<SymbolElement> &exter) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
 
   // std::cout << "in k_ " << std::endl;
@@ -206,13 +244,22 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
   }
   auto [kbool, kstr] = key(str);
   std::cout << "K: " << k_str << std::endl;
-  core_meaning[sent_ind].add(k_str);
-  core_meaning[sent_ind].add(std::to_string(q1) + "/" + std::to_string(q2) + "=" + std::to_string(q3));
+  core_meaning[sent_ind].add("K:" + k_str);
+  core_meaning[sent_ind].add("Q:" + std::to_string(q1) + "/" +
+                             std::to_string(q2) + "=" +
+                             std::to_string(q3));
+  core_meaning[sent_ind].add("M:" + std::to_string(m1) + "/" +
+                             std::to_string(m2));
   str = kstr;
-  std::function<std::string_view(std::string_view, Meaning &, std::vector<SymbolElement> &, Meaning &)> func;
+  std::function<std::string_view(std::string_view, Meaning &,
+                                 std::vector<SymbolElement> &,
+                                 Meaning &)>
+      func;
   bool rhythm_zone = false, tempo_zone = false, key_zone = false;
-  func = [this, &func, &rhythm_zone, &tempo_zone, &key_zone](std::string_view str, Meaning &base_in, std::vector<SymbolElement> &base_ex,
-                                                             Meaning &flat) -> std::string_view {
+  func = [this, &func, &rhythm_zone, &tempo_zone, &key_zone](
+             std::string_view str, Meaning &base_in,
+             std::vector<SymbolElement> &base_ex,
+             Meaning &flat) -> std::string_view {
     std::vector<SymbolElement> sub_ex;
     std::cout << "(";
     bool less_than = false, greater_than = false, hyphen = false;
@@ -223,11 +270,13 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
         score_option_str = a;
         str = b;
         if (score_option_str == "|") {
-          str.remove_prefix(std::min(str.find_first_of("|") + 1, str.size()));
+          str.remove_prefix(
+              std::min(str.find_first_of("|") + 1, str.size()));
           continue;
         }
         if (score_option_str == "[") {
-          str = range_substr(str, str.find_first_of("[") + 1, str.size());
+          str = range_substr(str, str.find_first_of("[") + 1,
+                             str.size());
           auto [mbool, mstr] = rhythm(str);
           str = mstr;
           if (mbool) {
@@ -239,12 +288,15 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
             AMean word_ind(index_count);
             word_in = Meaning(word_ind);
             core_meaning[word_ind] = Conception();
-            core_meaning[word_ind].add(std::to_string(m1) + "/" + std::to_string(m2));
+            core_meaning[word_ind].add("M:" + std::to_string(m1) +
+                                       "/" + std::to_string(m2));
             // core_meaning[word_ind].add(Prefices::SLR);
 
             // word
-            base_in.get_followings().push_back(Variable(variable_count));
-            base_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+            base_in.get_followings().push_back(
+                Variable(variable_count));
+            base_ex.push_back(RightNonterminal(
+                Category(category_count), Variable(variable_count)));
 
             Meaning flat_ = Meaning(AMean(index_count));
 
@@ -263,19 +315,27 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
           if (qbool) {
             tempo_zone = true;
             std::cout << "["
-                      << "Q:" << std::to_string(q1) + "/" + std::to_string(q2) + "=" + std::to_string(q3) << "]";
+                      << "Q:"
+                      << std::to_string(q1) + "/" +
+                             std::to_string(q2) + "=" +
+                             std::to_string(q3)
+                      << "]";
             Category word_cat(category_count);
             Meaning word_in;
             std::vector<SymbolElement> word_ex;
             AMean word_ind(index_count);
             word_in = Meaning(word_ind);
             core_meaning[word_ind] = Conception();
-            core_meaning[word_ind].add(std::to_string(q1) + "/" + std::to_string(q2) + "=" + std::to_string(q3));
+            core_meaning[word_ind].add("Q:" + std::to_string(q1) +
+                                       "/" + std::to_string(q2) +
+                                       "=" + std::to_string(q3));
             // core_meaning[word_ind].add(Prefices::SLR);
 
             // word
-            base_in.get_followings().push_back(Variable(variable_count));
-            base_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+            base_in.get_followings().push_back(
+                Variable(variable_count));
+            base_ex.push_back(RightNonterminal(
+                Category(category_count), Variable(variable_count)));
 
             Meaning flat_ = Meaning(AMean(index_count));
 
@@ -302,12 +362,14 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
             AMean word_ind(index_count);
             word_in = Meaning(word_ind);
             core_meaning[word_ind] = Conception();
-            core_meaning[word_ind].add(k_str);
+            core_meaning[word_ind].add("K:" + k_str);
             // core_meaning[word_ind].add(Prefices::SLR);
 
             // word
-            base_in.get_followings().push_back(Variable(variable_count));
-            base_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+            base_in.get_followings().push_back(
+                Variable(variable_count));
+            base_ex.push_back(RightNonterminal(
+                Category(category_count), Variable(variable_count)));
 
             Meaning flat_ = Meaning(AMean(index_count));
 
@@ -323,19 +385,21 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
           }
         }
         if (score_option_str == "(") {
-          str.remove_prefix(std::min(str.find_first_of("(") + 1, str.size()));
+          str.remove_prefix(
+              std::min(str.find_first_of("(") + 1, str.size()));
           Category word_cat(category_count);
           Meaning word_in;
           std::vector<SymbolElement> word_ex;
           AMean word_ind(index_count);
           word_in = Meaning(word_ind);
           core_meaning[word_ind] = Conception();
-          core_meaning[word_ind].add(std::to_string(m1) + "/" + std::to_string(m2));
           core_meaning[word_ind].add(Prefices::SLR);
 
           // word
-          base_in.get_followings().push_back(Variable(variable_count));
-          base_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+          base_in.get_followings().push_back(
+              Variable(variable_count));
+          base_ex.push_back(RightNonterminal(
+              Category(category_count), Variable(variable_count)));
 
           Meaning flat_ = Meaning(AMean(index_count));
 
@@ -352,38 +416,45 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
         if (score_option_str == ")") {
           if (rhythm_zone) {
             rhythm_zone = false;
-            str.remove_prefix(std::min(str.find_first_of(")"), str.size()));
+            str.remove_prefix(
+                std::min(str.find_first_of(")"), str.size()));
             return str;
           }
           if (tempo_zone) {
             tempo_zone = false;
-            str.remove_prefix(std::min(str.find_first_of(")"), str.size()));
+            str.remove_prefix(
+                std::min(str.find_first_of(")"), str.size()));
             return str;
           }
           if (key_zone) {
             key_zone = false;
-            str.remove_prefix(std::min(str.find_first_of(")"), str.size()));
+            str.remove_prefix(
+                std::min(str.find_first_of(")"), str.size()));
             return str;
           }
-          str.remove_prefix(std::min(str.find_first_of(")") + 1, str.size()));
+          str.remove_prefix(
+              std::min(str.find_first_of(")") + 1, str.size()));
           return str;
         }
         if (score_option_str == "!") {
           str.remove_prefix(std::min(std::size_t(1), str.size()));
-          str.remove_prefix(std::min(str.find_first_of("!") + 1, str.size()));
+          str.remove_prefix(
+              std::min(str.find_first_of("!") + 1, str.size()));
           continue;
         }
         if (score_option_str == "\"") {
           // std::cout << std::endl << std::string(str) << std::endl;
           str.remove_prefix(std::min(std::size_t(1), str.size()));
-          str.remove_prefix(std::min(str.find_first_of("\"") + 1, str.size()));
+          str.remove_prefix(
+              std::min(str.find_first_of("\"") + 1, str.size()));
           // std::cout << std::string(str) << std::endl;
           continue;
         }
         // std::cout << score_option_str << std::endl;
       } while (score_option_str != "");
 
-      str.remove_prefix(std::min(str.find_first_of("ABCDEFGZabcdefgz._=^"), str.size()));
+      str.remove_prefix(std::min(
+          str.find_first_of("ABCDEFGZabcdefgz._=^"), str.size()));
       // std::cout << "before pocessing: " << str << std::endl;
       str = note(str);
       // std::cout << "after pocessing: " << str << std::endl;
@@ -420,10 +491,17 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
         if (alias.find(opt_str + name_str) == alias.end()) {
           std::string str2;
           str2 = Prefices::SYN + std::to_string(symbol_count);
-          alias.insert(std::map<std::string, std::string>::value_type(opt_str + name_str, str2));
-          conv_alias.insert(std::map<std::string, std::string>::value_type(str2, opt_str + name_str));
-          Dictionary::symbol.insert(std::map<int, std::string>::value_type(symbol_count, str2));
-          Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, symbol_count));
+          alias.insert(std::map<std::string, std::string>::value_type(
+              opt_str + name_str, str2));
+          conv_alias.insert(
+              std::map<std::string, std::string>::value_type(
+                  str2, opt_str + name_str));
+          Dictionary::symbol.insert(
+              std::map<int, std::string>::value_type(symbol_count,
+                                                     str2));
+          Dictionary::conv_symbol.insert(
+              std::map<std::string, int>::value_type(str2,
+                                                     symbol_count));
           conv_str[opt_str + name_str] = symbol_count++;
         }
         Category note_cat(category_count);
@@ -432,7 +510,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
         AMean note_ind(index_count);
         note_in = Meaning(note_ind);
         core_meaning[note_ind] = Conception();
-        core_meaning[note_ind].add(std::to_string(nl1) + "/" + std::to_string(nl2));
+        core_meaning[note_ind].add(std::to_string(nl1) + "/" +
+                                   std::to_string(nl2));
         if (note_str.find_first_of("z") != note_str.npos) {
           core_meaning[note_ind].add("rest");
         }
@@ -442,7 +521,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
         // base_ex.push_back(Symbol(conv_str[note_str]));
         base_in.get_followings().push_back(Variable(variable_count));
         flat.get_followings().push_back(Meaning(AMean(index_count)));
-        base_ex.push_back(RightNonterminal(Category(category_count), Variable(variable_count)));
+        base_ex.push_back(RightNonterminal(Category(category_count),
+                                           Variable(variable_count)));
 
         index_count--;
         variable_count--;
@@ -455,10 +535,17 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
         if (alias.find(opt_str + name_str) == alias.end()) {
           std::string str2;
           str2 = Prefices::SYN + std::to_string(symbol_count);
-          alias.insert(std::map<std::string, std::string>::value_type(note_str, str2));
-          conv_alias.insert(std::map<std::string, std::string>::value_type(str2, note_str));
-          Dictionary::symbol.insert(std::map<int, std::string>::value_type(symbol_count, str2));
-          Dictionary::conv_symbol.insert(std::map<std::string, int>::value_type(str2, symbol_count));
+          alias.insert(std::map<std::string, std::string>::value_type(
+              note_str, str2));
+          conv_alias.insert(
+              std::map<std::string, std::string>::value_type(
+                  str2, note_str));
+          Dictionary::symbol.insert(
+              std::map<int, std::string>::value_type(symbol_count,
+                                                     str2));
+          Dictionary::conv_symbol.insert(
+              std::map<std::string, int>::value_type(str2,
+                                                     symbol_count));
           conv_str[note_str] = symbol_count++;
         }
         base_ex.push_back(Symbol(conv_str[note_str]));
@@ -470,7 +557,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind, Meaning &inter, std::v
   str = func(str, inter, exter, flat_meaning);
   std::cout << ")" << std::endl;
 }
-std::pair<bool, std::string_view> ABCreader::key(std::string_view str) {
+std::pair<bool, std::string_view> ABCreader::key(
+    std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   if (str.find("K:") != 0) {
     return {false, str};
@@ -478,9 +566,10 @@ std::pair<bool, std::string_view> ABCreader::key(std::string_view str) {
   k_str = range_substr(str, 2, str.find_first_of("\r\n]"));
   // std::cout << "Key: " << k_str << std::endl;
   // std::string_view k_view = k_str;
-  // k_view.remove_suffix(std::min(k_view.find_last_not_of(" "), k_view.size()));
-  // k_str = k_view;
-  str.remove_prefix(std::min(str.find_first_of("\n]") + 1, str.size()));
+  // k_view.remove_suffix(std::min(k_view.find_last_not_of(" "),
+  // k_view.size())); k_str = k_view;
+  str.remove_prefix(
+      std::min(str.find_first_of("\n]") + 1, str.size()));
   return {true, str};
 }
 std::string_view ABCreader::note(std::string_view str) {
@@ -500,9 +589,11 @@ std::string_view ABCreader::option(std::string_view str) {
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
   // if (str.find_first_of("!") == 0) {
   //   str = range_substr(str, 1, str.size());
-  //   str = range_substr(str, std::min(str.find_first_of("!") + 1, str.size()), str.size());
+  //   str = range_substr(str, std::min(str.find_first_of("!") + 1,
+  //   str.size()), str.size());
   // }
-  option_str = range_substr(str, 0, str.find_first_of("ABCDEFGZabcdefgz"));
+  option_str =
+      range_substr(str, 0, str.find_first_of("ABCDEFGZabcdefgz"));
 
   // std::cout << "option: " << option_str << std::endl;
 
@@ -512,13 +603,16 @@ std::string_view ABCreader::option(std::string_view str) {
   }
   if (option_str.find_first_of("^") != option_str.npos) {  // sharp
     opt_str += "^";
-  } else if (option_str.find_first_of("=") != option_str.npos) {  // natural
+  } else if (option_str.find_first_of("=") !=
+             option_str.npos) {  // natural
     opt_str += "=";
-  } else if (option_str.find_first_of("_") != option_str.npos) {  // flat
+  } else if (option_str.find_first_of("_") !=
+             option_str.npos) {  // flat
     opt_str += "_";
   }
 
-  str.remove_prefix(std::min(str.find_first_of("ABCDEFGZabcdefgz"), str.size()));
+  str.remove_prefix(
+      std::min(str.find_first_of("ABCDEFGZabcdefgz"), str.size()));
   return str;
 }
 std::string_view ABCreader::name(std::string_view str) {
@@ -527,7 +621,11 @@ std::string_view ABCreader::name(std::string_view str) {
     return str;
   }
   std::string_view tmp = range_substr(str, 1, str.size());
-  auto loc = std::min(tmp.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^/1234567890!\" \r\n"), tmp.size()) + 1;
+  auto loc =
+      std::min(tmp.find_first_of(
+                   "ABCDEFGZabcdefgz<>|[)(-._=^/1234567890!\" \r\n"),
+               tmp.size()) +
+      1;
   name_str = range_substr(str, 0, loc);
 
   str.remove_prefix(loc);
@@ -535,9 +633,14 @@ std::string_view ABCreader::name(std::string_view str) {
 }
 std::string_view ABCreader::note_length(std::string_view str) {
   nl_str = "";
-  nl_str = range_substr(str, 0, std::min(str.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^!\" \r\n"), str.size()));
+  nl_str = range_substr(
+      str, 0,
+      std::min(
+          str.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^!\" \r\n"),
+          str.size()));
 
-  // std::cout << "note length: " << nl_str << " size: " << str.size() << std::endl;
+  // std::cout << "note length: " << nl_str << " size: " << str.size()
+  // << std::endl;
 
   std::size_t bound = nl_str.find_first_of("/");
   if (bound != nl_str.npos) {
@@ -547,7 +650,8 @@ std::string_view ABCreader::note_length(std::string_view str) {
     if (bound == nl_str.size() - 1) {
       nl2 *= 2;
     } else {
-      nl2 *= std::stoi(std::string(range_substr(nl_str, bound + 1, nl_str.size())));
+      nl2 *= std::stoi(std::string(
+          range_substr(nl_str, bound + 1, nl_str.size())));
     }
   } else if (nl_str != "") {
     nl1 *= std::stoi(std::string(nl_str));
@@ -556,36 +660,55 @@ std::string_view ABCreader::note_length(std::string_view str) {
   //   nl1 *= 3;
   //   nl2 *= 2;
   // }
-  str.remove_prefix(std::min(str.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^!\" \r\n"), str.size() - 1));
+  str.remove_prefix(std::min(
+      str.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^!\" \r\n"),
+      str.size() - 1));
   return str;
 }
-std::string ABCreader::note_string(std::string_view opt_string, std::string_view note_string, int len1, int len2) {
+std::string ABCreader::note_string(std::string_view opt_string,
+                                   std::string_view note_string,
+                                   int len1, int len2) {
   if (note_string == "") {
     return "";
   }
   auto val = std::gcd(len1, len2);
-  return std::string(opt_string) + std::string(note_string) + std::to_string(len1 / val) + "/" + std::to_string(len2 / val);
+  return std::string(opt_string) + std::string(note_string) +
+         std::to_string(len1 / val) + "/" +
+         std::to_string(len2 / val);
 }
-std::string ABCreader::rhythm_string(int len1, int len2) { return "M:" + std::to_string(len1) + "/" + std::to_string(len2); }
+std::string ABCreader::rhythm_string(int len1, int len2) {
+  return "M:" + std::to_string(len1) + "/" + std::to_string(len2);
+}
 
-std::string_view ABCreader::range_substr(std::string_view &v, std::size_t p1, std::size_t p2) { return v.substr(p1, p2 - p1); }
-std::string ABCreader::range_substr(const std::string &v, std::size_t p1, std::size_t p2) { return v.substr(p1, p2 - p1); }
+std::string_view ABCreader::range_substr(std::string_view &v,
+                                         std::size_t p1,
+                                         std::size_t p2) {
+  return v.substr(p1, p2 - p1);
+}
+std::string ABCreader::range_substr(const std::string &v,
+                                    std::size_t p1, std::size_t p2) {
+  return v.substr(p1, p2 - p1);
+}
 std::string ABCreader::quote_string(const std::string &v) {
   auto pos = v.find_first_of("\"");
   if (pos == v.npos || pos == v.find_last_of("\"")) {
     return "";
   }
-  return std::string(range_substr(v, v.find_first_of("\"") + 1, v.find_last_of("\"")));
+  return std::string(range_substr(v, v.find_first_of("\"") + 1,
+                                  v.find_last_of("\"")));
 }
 std::string ABCreader::exclamation_string(const std::string &v) {
   auto pos = v.find_first_of("!");
   if (pos == v.npos || pos == v.find_last_of("!")) {
     return "";
   }
-  return std::string(range_substr(v, v.find_first_of("!") + 1, v.find_last_of("!")));
+  return std::string(
+      range_substr(v, v.find_first_of("!") + 1, v.find_last_of("!")));
 }
-std::pair<std::string, std::string_view> ABCreader::score_option(std::string_view str) {
-  str.remove_prefix(std::min(str.find_first_of("ABCDEFGZabcdefgz|[)(._=^!\""), str.size()));
+std::pair<std::string, std::string_view> ABCreader::score_option(
+    std::string_view str) {
+  str.remove_prefix(std::min(
+      str.find_first_of("ABCDEFGZabcdefgz|[)(._=^!\""), str.size()));
   if (str.find_first_of("|") == 0) {
     return {"|", str};
   }
