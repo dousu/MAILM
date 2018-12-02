@@ -3,10 +3,9 @@
 #include <string>
 
 /*!
-  * 記号定義
-  */
-namespace Prefices
-{
+ * 記号定義
+ */
+namespace Prefices {
 const std::string CAT = "C";
 const std::string VAR = "x";
 const std::string SEN = "S";
@@ -23,6 +22,6 @@ const std::string MES = "M";
 const std::string MEA = "L";
 const std::string UNO = "_";
 const std::string SLR = "SLUR";
-} // namespace Prefices
+}  // namespace Prefices
 
 #endif /* PREFICES_H_ */
