@@ -487,7 +487,7 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
       // std::cout << "Found: " << note_str << std::endl;
       std::cout << note_str << " ";
 
-      if (false) {
+      if (true) {
         if (alias.find(opt_str + name_str) == alias.end()) {
           std::string str2;
           str2 = Prefices::SYN + std::to_string(symbol_count);
@@ -531,7 +531,7 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
         Rule r_note(LeftNonterminal(note_cat, note_in), note_ex);
         buf.push_back(r_note);
       }
-      {
+      if (false) {
         if (alias.find(opt_str + name_str) == alias.end()) {
           std::string str2;
           str2 = Prefices::SYN + std::to_string(symbol_count);
