@@ -247,6 +247,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
   core_meaning[sent_ind].add(std::to_string(q1) + "/" +
                              std::to_string(q2) + "=" +
                              std::to_string(q3));
+  core_meaning[sent_ind].add(std::to_string(m1) + "/" +
+                             std::to_string(m2));
   str = kstr;
   std::function<std::string_view(std::string_view, Meaning &,
                                  std::vector<SymbolElement> &,
