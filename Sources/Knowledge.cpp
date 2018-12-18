@@ -163,7 +163,7 @@ bool Knowledge::consolidate(void) {
   std::iota(std::begin(ar), std::end(ar), 0);
   if (LOGGING_FLAG) LogBox::push_log("\n\n!!CONSOLIDATE!!");
   while (flag) {
-    std::cout << to_s() << std::endl;
+    // std::cout << to_s() << std::endl;
     flag = false;
     tmp = ar;
     std::shuffle(std::begin(tmp), std::end(tmp), MT19937::igen);
