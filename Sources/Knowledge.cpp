@@ -162,37 +162,41 @@ bool Knowledge::consolidate(void) {
   std::array<int, CONSOLIDATE_TYPE::ALL_METHOD> ar, tmp;
   std::iota(std::begin(ar), std::end(ar), 0);
   if (LOGGING_FLAG) LogBox::push_log("\n\n!!CONSOLIDATE!!");
-  while (flag) {
-    // std::cout << to_s() << std::endl;
-    flag = false;
-    tmp = ar;
-    std::shuffle(std::begin(tmp), std::end(tmp), MT19937::igen);
-    std::for_each(std::begin(tmp), std::end(tmp),
-                  [this, &flag](int i) {
-                    switch (i) {
-                      case CONSOLIDATE_TYPE::CHUNK: {
-                        flag = chunk() || flag;
-                        break;
-                      }
-                      case CONSOLIDATE_TYPE::MERGE: {
-                        if ((flag = merge() || flag)) {
-                          unique(input_box);
-                        }
-                        break;
-                      }
-                      case CONSOLIDATE_TYPE::REPLACE: {
-                        flag = replace() || flag;
-                        break;
-                      }
-                      default:
-                        std::cerr << "Consolidate Error" << std::endl;
-                        exit(1);
-                    }
-                  });
+  try {
+    while (flag) {
+      flag = false;
+      tmp = ar;
+      std::shuffle(std::begin(tmp), std::end(tmp), MT19937::igen);
+      std::for_each(
+          std::begin(tmp), std::end(tmp), [this, &flag](int i) {
+            switch (i) {
+              case CONSOLIDATE_TYPE::CHUNK: {
+                flag = chunk() || flag;
+                break;
+              }
+              case CONSOLIDATE_TYPE::MERGE: {
+                if ((flag = merge() || flag)) {
+                  unique(input_box);
+                }
+                break;
+              }
+              case CONSOLIDATE_TYPE::REPLACE: {
+                flag = replace() || flag;
+                break;
+              }
+              default:
+                std::cerr << "Consolidate Error" << std::endl;
+                exit(1);
+            }
+          });
 
-    if (LOGGING_FLAG) {
-      LogBox::refresh_log();
+      if (LOGGING_FLAG) {
+        LogBox::refresh_log();
+      }
     }
+  } catch (...) {
+    LogBox::refresh_log();
+    std::rethrow_exception(std::current_exception());
   }
 
   if (LOGGING_FLAG) {

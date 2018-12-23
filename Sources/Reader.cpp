@@ -59,7 +59,7 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf,
   AMean sent_ind(index_count);
   s_in = Meaning(sent_ind);
   core_meaning[sent_ind] = Conception();
-  core_meaning[sent_ind].add(Prefices::SEN);
+  // core_meaning[sent_ind].add(Prefices::SEN);
 
   // sentenceのインデックス記録
   flat_meaning = Meaning(AMean(index_count));
@@ -135,6 +135,20 @@ void ABCreader::load(std::string file_path, std::vector<Rule> &buf,
   buf.push_back(r_sent);
   i_meaning_map[file_no] = flat_meaning;
   std::cout << "Flat:" << std::endl << flat_meaning << std::endl;
+  std::cout << "Core Meanings" << std::endl;
+  std::function<void(AMean &)> view_core_meaning = [](AMean &am) {
+    std::cout << am.to_s() << "[" << core_meaning[am].to_s() << "]";
+  };
+  std::function<void(Meaning &)> confirm_meaning;
+  confirm_meaning = [&confirm_meaning,
+                     &view_core_meaning](Meaning &m) {
+    view_core_meaning(m.get_base());
+    std::cout << std::endl;
+    for (auto &m_el : m.get_followings()) {
+      confirm_meaning(m_el.get<Meaning>());
+    }
+  };
+  confirm_meaning(flat_meaning);
   labeling[file_no] = t_str;
 }
 
@@ -233,6 +247,8 @@ std::pair<bool, std::string_view> ABCreader::rhythm(
 void ABCreader::k_(std::string_view str, AMean &sent_ind,
                    Meaning &inter,
                    std::vector<SymbolElement> &exter) {
+  //! [number](
+  //! Cat -> Cat is prohibited
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
 
   // std::cout << "in k_ " << std::endl;
@@ -261,6 +277,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
              std::vector<SymbolElement> &base_ex,
              Meaning &flat) -> std::string_view {
     std::vector<SymbolElement> sub_ex;
+    Meaning sub_in;
+    Meaning sub_flat;
     std::cout << "(";
     bool less_than = false, greater_than = false, hyphen = false;
     do {
@@ -304,10 +322,13 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
             variable_count--;
             category_count--;
             str = func(str, word_in, word_ex, flat_);
+            sub_ex = word_ex;
+            sub_in = word_in;
+            sub_flat = flat_;
             flat.get_followings().push_back(flat_);
-            std::cout << ")";
             Rule r_word(LeftNonterminal(word_cat, word_in), word_ex);
             buf.push_back(r_word);
+            std::cout << ")";
             continue;
           }
           auto [qbool, qstr] = tempo(str);
@@ -343,6 +364,9 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
             variable_count--;
             category_count--;
             str = func(str, word_in, word_ex, flat_);
+            sub_ex = word_ex;
+            sub_in = word_in;
+            sub_flat = flat_;
             flat.get_followings().push_back(flat_);
             std::cout << ")";
             Rule r_word(LeftNonterminal(word_cat, word_in), word_ex);
@@ -377,6 +401,9 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
             variable_count--;
             category_count--;
             str = func(str, word_in, word_ex, flat_);
+            sub_ex = word_ex;
+            sub_in = word_in;
+            sub_flat = flat_;
             flat.get_followings().push_back(flat_);
             std::cout << ")";
             Rule r_word(LeftNonterminal(word_cat, word_in), word_ex);
@@ -407,6 +434,9 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
           variable_count--;
           category_count--;
           str = func(str, word_in, word_ex, flat_);
+          sub_ex = word_ex;
+          sub_in = word_in;
+          sub_flat = flat_;
           flat.get_followings().push_back(flat_);
           std::cout << ")";
           Rule r_word(LeftNonterminal(word_cat, word_in), word_ex);
@@ -418,22 +448,62 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
             rhythm_zone = false;
             str.remove_prefix(
                 std::min(str.find_first_of(")"), str.size()));
+            if (base_ex.size() == 1 &&
+                base_ex.front().type() == ELEM_TYPE::NT_TYPE) {
+              flat = sub_flat;
+              core_meaning[sub_in.get_base()].add(
+                  core_meaning[base_in.get_base()]);
+              core_meaning.erase(base_in.get_base());
+              base_ex = sub_ex;
+              base_in = sub_in;
+              buf.erase(std::prev(std::end(buf)));
+            }
             return str;
           }
           if (tempo_zone) {
             tempo_zone = false;
             str.remove_prefix(
                 std::min(str.find_first_of(")"), str.size()));
+            if (base_ex.size() == 1 &&
+                base_ex.front().type() == ELEM_TYPE::NT_TYPE) {
+              flat = sub_flat;
+              core_meaning[sub_in.get_base()].add(
+                  core_meaning[base_in.get_base()]);
+              core_meaning.erase(base_in.get_base());
+              base_ex = sub_ex;
+              base_in = sub_in;
+              buf.erase(std::prev(std::end(buf)));
+            }
             return str;
           }
           if (key_zone) {
             key_zone = false;
             str.remove_prefix(
                 std::min(str.find_first_of(")"), str.size()));
+            if (base_ex.size() == 1 &&
+                base_ex.front().type() == ELEM_TYPE::NT_TYPE) {
+              flat = sub_flat;
+              core_meaning[sub_in.get_base()].add(
+                  core_meaning[base_in.get_base()]);
+              core_meaning.erase(base_in.get_base());
+              base_ex = sub_ex;
+              base_in = sub_in;
+              buf.erase(std::prev(std::end(buf)));
+            }
             return str;
           }
           str.remove_prefix(
               std::min(str.find_first_of(")") + 1, str.size()));
+          if (base_ex.size() == 1 &&
+              base_ex.front().type() == ELEM_TYPE::NT_TYPE) {
+            flat = sub_flat;
+            core_meaning[sub_in.get_base()].add(
+                core_meaning[base_in.get_base()]);
+            core_meaning.erase(base_in.get_base());
+            base_ex = sub_ex;
+            base_in = sub_in;
+            buf.erase(std::prev(std::end(buf)));
+          }
           return str;
         }
         if (score_option_str == "!") {
@@ -460,6 +530,16 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
       // std::cout << "after pocessing: " << str << std::endl;
       // note_str = note_string(opt_str, name_str, len1, len2);
       if (name_str == "") {
+        if (base_ex.size() == 1 &&
+            base_ex.front().type() == ELEM_TYPE::NT_TYPE) {
+          flat = sub_flat;
+          core_meaning[sub_in.get_base()].add(
+              core_meaning[base_in.get_base()]);
+          core_meaning.erase(base_in.get_base());
+          base_ex = sub_ex;
+          base_in = sub_in;
+          buf.erase(std::prev(std::end(buf)));
+        }
         return str;
       }
       // -, >, <
@@ -510,12 +590,11 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
         AMean note_ind(index_count);
         note_in = Meaning(note_ind);
         core_meaning[note_ind] = Conception();
-        core_meaning[note_ind].add(std::to_string(nl1) + "/" +
+        core_meaning[note_ind].add("L:" + std::to_string(nl1) + "/" +
                                    std::to_string(nl2));
         if (note_str.find_first_of("z") != note_str.npos) {
           core_meaning[note_ind].add("rest");
         }
-        core_meaning[note_ind].add(Prefices::SLR);
         note_ex.push_back(Symbol(conv_str[opt_str + name_str]));
 
         // base_ex.push_back(Symbol(conv_str[note_str]));
@@ -530,8 +609,7 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
 
         Rule r_note(LeftNonterminal(note_cat, note_in), note_ex);
         buf.push_back(r_note);
-      }
-      if (false) {
+      } else {
         if (alias.find(note_str) == alias.end()) {
           std::string str2;
           str2 = Prefices::SYN + std::to_string(symbol_count);
@@ -552,6 +630,16 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
       }
       strings[file_no].push_back(Symbol(conv_str[note_str]));
     } while (note_str != "");
+    if (base_ex.size() == 1 &&
+        base_ex.front().type() == ELEM_TYPE::NT_TYPE) {
+      flat = sub_flat;
+      core_meaning[sub_in.get_base()].add(
+          core_meaning[base_in.get_base()]);
+      core_meaning.erase(base_in.get_base());
+      base_ex = sub_ex;
+      base_in = sub_in;
+      buf.erase(std::prev(std::end(buf)));
+    }
     return str;
   };
   str = func(str, inter, exter, flat_meaning);
@@ -587,15 +675,9 @@ std::string_view ABCreader::option(std::string_view str) {
   dot = false;
   std::string_view option_str;
   str.remove_prefix(std::min(str.find_first_not_of(" "), str.size()));
-  // if (str.find_first_of("!") == 0) {
-  //   str = range_substr(str, 1, str.size());
-  //   str = range_substr(str, std::min(str.find_first_of("!") + 1,
-  //   str.size()), str.size());
-  // }
+
   option_str =
       range_substr(str, 0, str.find_first_of("ABCDEFGZabcdefgz"));
-
-  // std::cout << "option: " << option_str << std::endl;
 
   if (option_str.find_first_of(".") != option_str.npos) {  // staccato
     dot = true;
@@ -636,11 +718,8 @@ std::string_view ABCreader::note_length(std::string_view str) {
   nl_str = range_substr(
       str, 0,
       std::min(
-          str.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^!\" \r\n"),
+          str.find_first_of("ABCDEFGZabcdefgz<>|[)(-._=^!\" \r\nP"),
           str.size()));
-
-  // std::cout << "note length: " << nl_str << " size: " << str.size()
-  // << std::endl;
 
   std::size_t bound = nl_str.find_first_of("/");
   if (bound != nl_str.npos) {
