@@ -336,14 +336,14 @@ Knowledge::RuleDBType Knowledge::chunking(Rule &src, Rule &dst) {
   enum CHUNK_TYPE { UNABLE = 0, TYPE1, TYPE2 };
   RuleDBType buf;
 
+  if (!intention.chunk_equal(src.get_internal().get_base(),
+                             dst.get_internal().get_base())) {
+    return buf;
+  }
+
   bool multi_cat;
   if (src.get_internal().get_cat() != dst.get_internal().get_cat()) {
-    if (intention.chunk_equal(src.get_internal().get_base(),
-                              dst.get_internal().get_base())) {
-      multi_cat = true;
-    } else {
-      return buf;
-    }
+    multi_cat = true;
   }
 
   //外部言語検査

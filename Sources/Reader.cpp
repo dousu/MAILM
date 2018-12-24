@@ -261,9 +261,9 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
   auto [kbool, kstr] = key(str);
   std::cout << "K: " << k_str << std::endl;
   core_meaning[sent_ind].add("K:" + k_str);
-  // core_meaning[sent_ind].add("Q:" + std::to_string(q1) + "/" +
-  //                            std::to_string(q2) + "=" +
-  //                            std::to_string(q3));
+  core_meaning[sent_ind].add("Q:" + std::to_string(q1) + "/" +
+                             std::to_string(q2) + "=" +
+                             std::to_string(q3));
   core_meaning[sent_ind].add("M:" + std::to_string(m1) + "/" +
                              std::to_string(m2));
   str = kstr;
@@ -347,10 +347,9 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
             AMean word_ind(index_count);
             word_in = Meaning(word_ind);
             core_meaning[word_ind] = Conception();
-            // core_meaning[word_ind].add("Q:" + std::to_string(q1) +
-            //                            "/" + std::to_string(q2) +
-            //                            "=" + std::to_string(q3));
-            // core_meaning[word_ind].add(Prefices::SLR);
+            core_meaning[word_ind].add("Q:" + std::to_string(q1) +
+                                       "/" + std::to_string(q2) +
+                                       "=" + std::to_string(q3));
 
             // word
             base_in.get_followings().push_back(
