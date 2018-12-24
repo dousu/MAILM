@@ -595,6 +595,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
           core_meaning[note_ind].add("rest");
         }
         note_ex.push_back(Symbol(conv_str[opt_str + name_str]));
+        strings[file_no].push_back(
+            Symbol(conv_str[opt_str + name_str]));
 
         // base_ex.push_back(Symbol(conv_str[note_str]));
         base_in.get_followings().push_back(Variable(variable_count));
@@ -626,8 +628,8 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
           conv_str[note_str] = symbol_count++;
         }
         base_ex.push_back(Symbol(conv_str[note_str]));
+        strings[file_no].push_back(Symbol(conv_str[note_str]));
       }
-      strings[file_no].push_back(Symbol(conv_str[note_str]));
     } while (note_str != "");
     if (base_ex.size() == 1 &&
         base_ex.front().type() == ELEM_TYPE::NT_TYPE) {

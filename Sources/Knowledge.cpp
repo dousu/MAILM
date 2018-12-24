@@ -1226,25 +1226,26 @@ std::vector<Rule> Knowledge::generate_score(
       };
   std::function<void(RuleDBType &)> f1 = [this,
                                           &res](RuleDBType rules) {
-    bool has_sentence = false;
-    std::for_each(std::begin(rules), std::end(rules),
-                  [this, &has_sentence](Rule &r) {
-                    has_sentence =
-                        has_sentence || r.is_sentence(intention);
-                  });
-    if (has_sentence) {
-      res.push_back(rules);
-    }
+    // bool has_sentence = false;
+    // std::for_each(std::begin(rules), std::end(rules),
+    //               [this, &has_sentence](Rule &r) {
+    //                 has_sentence =
+    //                     has_sentence || r.is_sentence(intention);
+    //               });
+    // if (has_sentence) {
+    res.push_back(rules);
+    // }
   };
   std::function<bool(Rule &)> f2 = [this, &sentence](Rule &r) {
-    if (!sentence) {
-      sentence = r.is_sentence(intention);
-      // return product_loop || !sentence;
-      return sentence;
-    } else {
-      return product_loop;
-    }
+    // if (!sentence) {
+    //   sentence = r.is_sentence(intention);
+    //   // return product_loop || !sentence;
+    //   return sentence;
+    // } else {
+    //   return product_loop;
+    // }
     // return product_loop || !sentence; //return product_loop
+    return product_loop;
   };
   std::for_each(std::begin(DB_cat_amean_dic),
                 std::end(DB_cat_amean_dic),

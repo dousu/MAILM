@@ -23,17 +23,19 @@ Agent &Agent::grow() {
   return *this;
 }
 
-std::vector<Rule> Agent::say(std::map<AMean, Conception> &mapping, std::vector<Rule> &base) {
+std::vector<Rule> Agent::say(std::map<AMean, Conception> &mapping,
+                             std::vector<Rule> &base) {
   try {
     std::vector<Rule> res = kb.generate_score(mapping, base);
     return res;
   } catch (...) {
     LogBox::refresh_log();
-    throw;
+    std::rethrow_exception(std::current_exception());
   }
 }
 
-void Agent::hear(std::vector<Rule> rules, std::map<AMean, Conception> mapping) {
+void Agent::hear(std::vector<Rule> rules,
+                 std::map<AMean, Conception> mapping) {
   registration(mapping);
   kb.send_box(rules);
 }
@@ -44,8 +46,12 @@ void Agent::registration(std::map<AMean, Conception> &core_meaning) {
   }
 }
 
-void Agent::init_semantics(TransRules ini_sem) { kb.init_semantics_rules(ini_sem); }
+void Agent::init_semantics(TransRules ini_sem) {
+  kb.init_semantics_rules(ini_sem);
+}
 
 void Agent::learn(void) { kb.consolidate(); }
 
-std::string Agent::to_s() { return "Agent's Knowledge: \n" + kb.to_s() + "\n"; }
+std::string Agent::to_s() {
+  return "Agent's Knowledge: \n" + kb.to_s() + "\n";
+}
