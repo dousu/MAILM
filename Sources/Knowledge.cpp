@@ -29,6 +29,7 @@ Knowledge &Knowledge::operator=(const Knowledge &dst) {
 
   DB_cat_amean_dic = dst.DB_cat_amean_dic;
   DB_amean_cat_dic = dst.DB_amean_cat_dic;
+  DB_cat = dst.DB_cat;
   LOGGING_FLAG = dst.LOGGING_FLAG;
   ABSENT_LIMIT = dst.ABSENT_LIMIT;
   CONTROLS = dst.CONTROLS;
@@ -50,6 +51,7 @@ void Knowledge::clear(void) {
 
   DB_cat_amean_dic.clear();
   DB_amean_cat_dic.clear();
+  DB_cat.clear();
   intention.clear();
 }
 
@@ -155,9 +157,7 @@ void Knowledge::unique(std::list<T> &vec) {
  * ・Sentenceカテゴリがwordに入る可能性はある
  */
 
-bool Knowledge::consolidate(void) {
-  // std::cout << intention.mapping_to_s() << std::endl;
-  // std::cout << intention.rules_to_s() << std::endl;
+bool Knowledge::learning(void) {
   bool flag = true;
   std::array<int, CONSOLIDATE_TYPE::ALL_METHOD> ar, tmp;
   std::iota(std::begin(ar), std::end(ar), 0);
@@ -1014,6 +1014,7 @@ Meaning Knowledge::meaning_no(int obj) {
 void Knowledge::build_word_index(void) {
   DB_cat_amean_dic.clear();
   DB_amean_cat_dic.clear();
+  DB_cat.clear();
   dic_add(ruleDB);
 }
 
@@ -1033,6 +1034,7 @@ void Knowledge::dic_add(Rule &r) {
     std::multimap<Category, Rule>::value_type pair({c, r});
     DB_amean_cat_dic[m].insert(pair);
   }
+  { DB_cat.push_back(c); }
 }
 
 std::string Knowledge::meaning_no_to_s(int obj) {
@@ -1214,48 +1216,127 @@ Knowledge::dic_range(const Category &c, const AMean &m) {
 std::vector<Rule> Knowledge::generate_score(
     std::map<AMean, Conception> &core_meaning, RuleDBType &base) {
   std::vector<RuleDBType> res;
-  bool sentence;
+  bool sentence_check = false, q_check = false, m_check = false,
+       k_check = false;
   std::function<bool(std::vector<RuleDBType> &)> f0 =
-      [](std::vector<RuleDBType> &rules) {
+      [&core_meaning, &sentence_check, &q_check, &m_check,
+       &k_check](std::vector<RuleDBType> &rules_vec) { return true; };
+  std::function<void(RuleDBType &)> f1 =
+      [this, &res, &core_meaning, &sentence_check](RuleDBType rules) {
+        // bool sentence_check = false, q_check = false, m_check =
+        // false,
+        //      k_check = false;
+
+        // std::for_each(
+        //     std::begin(rules), std::end(rules),
+        //     [&core_meaning, &sentence_check, &q_check, &m_check,
+        //      &k_check](Rule &r_el) {
+        //       if (sentence_check) {
+        //         Conception &cc =
+        //             core_meaning[r_el.get_internal().get_base()];
+        //         q_check =
+        //             q_check || cc.include([](const std::string
+        //             &str) {
+        //               return str.find_first_of("Q:") == 0;
+        //             });
+        //         m_check =
+        //             m_check || cc.include([](const std::string
+        //             &str) {
+        //               return str.find_first_of("M:") == 0;
+        //             });
+        //         k_check =
+        //             k_check || cc.include([](const std::string
+        //             &str) {
+        //               return str.find_first_of("Q:") == 0;
+        //             });
+        //         sentence_check = q_check && m_check && k_check;
+        //       }
+        //     });
+        // if (sentence_check) {
+        res.push_back(rules);
+        // }
+        // bool has_sentence = false;
         // std::for_each(std::begin(rules), std::end(rules),
-        // [&](RuleDBType &list) { std::for_each(std::begin(list),
-        // std::end(list), [&](Rule &r) { sentence = sentence ||
-        // r.is_sentence(intention); });
-        // });
-        return true;
+        //               [this, &has_sentence](Rule &r) {
+        //                 has_sentence =
+        //                     has_sentence ||
+        //                     r.is_sentence(intention);
+        //               });
+        // if (has_sentence) {
+        // res.push_back(rules);
+        // }
       };
-  std::function<void(RuleDBType &)> f1 = [this,
-                                          &res](RuleDBType rules) {
-    // bool has_sentence = false;
-    // std::for_each(std::begin(rules), std::end(rules),
-    //               [this, &has_sentence](Rule &r) {
-    //                 has_sentence =
-    //                     has_sentence || r.is_sentence(intention);
-    //               });
-    // if (has_sentence) {
-    res.push_back(rules);
-    // }
+  std::function<bool(Rule &)> f2 = [this, &sentence_check, &q_check,
+                                    &m_check, &k_check](Rule &r) {
+    if (!product_loop) return false;
+    // std::cout << "Check a rule: " << r << std::endl;  // L-14024
+    if (r.get_external().front().type() != ELEM_TYPE::SYM_TYPE) {
+      // std::cout << "Skip a rule: " << r << std::endl;
+      if (product_loop) {
+        Conception cc = intention.get(r.get_internal().get_base());
+        q_check = q_check || cc.include([](const std::string &str) {
+          return str.find_first_of("Q:") == 0;
+        });
+        m_check = m_check || cc.include([](const std::string &str) {
+          return str.find_first_of("M:") == 0;
+        });
+        k_check = k_check || cc.include([](const std::string &str) {
+          return str.find_first_of("K:") == 0;
+        });
+        sentence_check = q_check && m_check && k_check;
+        // std::cout << "[" << cc << "]"
+        //           << "Checked: sentence: " << sentence_check
+        //           << " q_check: " << q_check
+        //           << " m_check: " << m_check
+        //           << " k_check: " << k_check << std::endl;
+        return true;
+      }
+      return false;
+    }
+
+    if (sentence_check) return product_loop;
+    bool old_q, old_m, old_k;
+    old_q = q_check;
+    old_m = m_check;
+    old_k = k_check;
+    Conception cc = intention.get(r.get_internal().get_base());
+    q_check = q_check || cc.include([](const std::string &str) {
+      return str.find_first_of("Q:") == 0;
+    });
+    m_check = m_check || cc.include([](const std::string &str) {
+      return str.find_first_of("M:") == 0;
+    });
+    k_check = k_check || cc.include([](const std::string &str) {
+      return str.find_first_of("K:") == 0;
+    });
+    sentence_check = q_check && m_check && k_check;
+
+    // std::cout << "[" << cc << "]"
+    //           << "Checked: sentence: " << sentence_check
+    //           << " q_check: " << q_check << " m_check: " << m_check
+    //           << " k_check: " << k_check << std::endl;
+    if (!sentence_check) {
+      q_check = old_q;
+      m_check = old_m;
+      k_check = old_k;
+      return false;
+    }
+
+    return true;
   };
-  std::function<bool(Rule &)> f2 = [this, &sentence](Rule &r) {
-    // if (!sentence) {
-    //   sentence = r.is_sentence(intention);
-    //   // return product_loop || !sentence;
-    //   return sentence;
-    // } else {
-    //   return product_loop;
-    // }
-    // return product_loop || !sentence; //return product_loop
-    return product_loop;
-  };
-  std::for_each(std::begin(DB_cat_amean_dic),
-                std::end(DB_cat_amean_dic),
-                [this, &f0, &f1, &f2, &sentence](auto &p) {
-                  sentence = false;
-                  construct_groundable_rules(p.first, f0, f1, f2);
+  std::vector<std::reference_wrapper<Category>> shuffled{
+      std::begin(DB_cat), std::end(DB_cat)};
+  std::shuffle(std::begin(shuffled), std::end(shuffled),
+               MT19937::igen);
+  std::for_each(std::begin(shuffled), std::end(shuffled),
+                [this, &f0, &f1, &f2, &res](auto &c) {
+                  if (res.size() == 0) {
+                    construct_groundable_rules(c, f0, f1, f2);
+                  }
                 });
   std::cout << "Number of generated score: " << res.size()
             << std::endl;
-
+  if (res.size() == 0) return std::vector<Rule>();
   RuleDBType rdb0 = res[MT19937::irand(0, res.size() - 1)], rdb;
   base = rdb0;
   int index = 0;

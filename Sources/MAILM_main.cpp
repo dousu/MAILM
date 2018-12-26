@@ -251,8 +251,8 @@ int main(int argc, char *argv[]) {
   parent.hear(Reader::input_rules, Reader::core_meaning);
   std::cout << "Heared" << std::endl;
   if (param.LOGGING) LogBox::push_log(parent.kb.to_s());
-  parent.learn();
-  std::cout << "Learned" << std::endl;
+  // parent.learn();
+  // std::cout << "Learned" << std::endl;
   parent.grow();
   std::cout << parent.kb.to_s() << std::endl;
   if (param.ANALYZE) {
@@ -264,15 +264,33 @@ int main(int argc, char *argv[]) {
         std::filesystem::create_directory(p);
       }
     }
-    {
-      std::filesystem::path p(param.RESULT_PATH + "dot/" +
-                              param.FILE_PREFIX + param.DATE_STR +
-                              ".d/");
-      if (!std::filesystem::exists(p)) {
-        std::filesystem::create_directory(p);
-      }
-    }
+
     evaluate_knowledge(parent, param);
+  }
+  // for utterance data
+  {
+    std::filesystem::path p(param.RESULT_PATH + "dot/" +
+                            param.FILE_PREFIX + param.DATE_STR +
+                            ".d/");
+    if (!std::filesystem::exists(p)) {
+      std::filesystem::create_directory(p);
+    }
+  }
+  {
+    std::filesystem::path p(param.RESULT_PATH + "ly/" +
+                            param.FILE_PREFIX + param.DATE_STR +
+                            ".d/");
+    if (!std::filesystem::exists(p)) {
+      std::filesystem::create_directory(p);
+    }
+  }
+  {
+    std::filesystem::path p(param.RESULT_PATH + "abc/" +
+                            param.FILE_PREFIX + param.DATE_STR +
+                            ".d/");
+    if (!std::filesystem::exists(p)) {
+      std::filesystem::create_directory(p);
+    }
   }
   if (param.LOGGING) {
     log.push_log("******************PARENT");
@@ -280,18 +298,38 @@ int main(int argc, char *argv[]) {
     log.push_log(parent.kb.dic_to_s());
   }
 
-  if (param.LILYPOND && param.MONO) {
-    // std::map<AMean, Conception> test_cmap;
-    // UtteranceRules base, ur;
-    // parent.kb.generate_score(test_cmap, base, ur);
-    // std::string output_str = OutputMusic::output(ur);
-    // output_data_trunc("./test.ly", output_str);
-  }
-
   for (int g = 0; g < param.MAX_GENERATIONS; g++) {
     std::cout << std::endl << "Generation " << g + 1 << std::endl;
     std::vector<Rule> inputs = Reader::input_rules;
     std::map<AMean, Conception> cmap = Reader::core_meaning;
+    std::filesystem::path dot_dir, ly_dir, abc_dir;
+    {
+      dot_dir = std::filesystem::path(
+          param.RESULT_PATH + "dot/" + param.FILE_PREFIX +
+          param.DATE_STR + ".d/" + "generation" +
+          std::to_string(parent.generation_index) + ".d/");
+      if (!std::filesystem::exists(dot_dir)) {
+        std::filesystem::create_directory(dot_dir);
+      }
+    }
+    if (param.LILYPOND) {
+      ly_dir = std::filesystem::path(
+          param.RESULT_PATH + "ly/" + param.FILE_PREFIX +
+          param.DATE_STR + ".d/" + "generation" +
+          std::to_string(parent.generation_index) + ".d/");
+      if (!std::filesystem::exists(ly_dir)) {
+        std::filesystem::create_directory(ly_dir);
+      }
+    }
+    if (param.ABC) {
+      abc_dir = std::filesystem::path(
+          param.RESULT_PATH + "abc/" + param.FILE_PREFIX +
+          param.DATE_STR + ".d/" + "generation" +
+          std::to_string(parent.generation_index) + ".d/");
+      if (!std::filesystem::exists(abc_dir)) {
+        std::filesystem::create_directory(abc_dir);
+      }
+    }
     for (int u = 0; u < param.UTTERANCES; u++) {
       std::cout << std::endl << "Utterance " << u + 1 << std::endl;
       std::map<AMean, Conception> cmap_say;
@@ -299,17 +337,41 @@ int main(int argc, char *argv[]) {
       std::vector<Rule> utter = parent.say(cmap_say, base);
       std::copy(std::begin(utter), std::end(utter),
                 std::ostream_iterator<Rule>(std::cout, "\n"));
+      std::cout << std::endl << "Core Meanings" << std::endl;
+      std::function<void(AMean &)> view_core_meaning =
+          [&cmap_say](AMean &am) {
+            std::cout << am.to_s() << "[" << cmap_say[am].to_s()
+                      << "]" << std::endl;
+          };
+      for (auto &u_rule : utter) {
+        view_core_meaning(u_rule.get_internal().get_base());
+      }
+      std::cout << std::endl;
       if (utter.size() != 0) {
-        output_data_trunc(param.RESULT_PATH + "dot/" +
-                              param.FILE_PREFIX + param.DATE_STR +
-                              ".d/" + "generation" +
-                              std::to_string(g) + ".d/utter" +
+        output_data_trunc(dot_dir.string() + "utter" +
                               std::to_string(u + 1) + ".dot",
                           make_tree_str_for_dot(base));
+        if (param.LILYPOND) {
+          std::string output_str =
+              LyOutputMusic::output(utter, cmap_say);
+          std::cout << output_str << std::endl;
+          output_data_trunc(ly_dir.string() + "utter" +
+                                std::to_string(u + 1) + ".ly",
+                            output_str);
+        }
+        if (param.ABC) {
+          std::string output_str =
+              AbcOutputMusic::output(u + 1, utter, cmap_say);
+          std::cout << output_str << std::endl;
+          output_data_trunc(abc_dir.string() + "utter" +
+                                std::to_string(u + 1) + ".abc",
+                            output_str);
+        }
         std::cout << "output fin." << std::endl;
       } else {
         std::cout << "no utterance" << std::endl;
       }
+      std::cout << std::endl;
       cmap.merge(cmap_say);
       inputs.insert(std::end(inputs), std::begin(utter),
                     std::end(utter));

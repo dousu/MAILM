@@ -656,6 +656,10 @@ class Conception {
                          std::begin(obj.factors),
                          std::end(obj.factors));
   }
+  bool include(std::function<bool(const std::string &)> func) const {
+    return std::find_if(std::begin(factors), std::end(factors),
+                        func) != std::end(factors);
+  }
   bool empty() const noexcept {
     return factors.size() == 0 || factors.count("") == factors.size();
   }
@@ -671,6 +675,17 @@ class Conception {
                                      std::begin(obj));
                  });
     return ret;
+  }
+  std::vector<std::string> extract_if(
+      std::function<bool(const std::string &)> func) const {
+    std::vector<std::string> buf;
+    auto it = std::begin(factors);
+    while ((it = std::find_if(it, std::end(factors), func)) !=
+           std::end(factors)) {
+      buf.push_back(*it);
+      ++it;
+    }
+    return buf;
   }
   std::string to_s() const {
     if (empty()) return "";

@@ -13,26 +13,44 @@
 #include "Rule.h"
 #include "Semantics.h"
 
-class OutputMusic {
+class LyOutputMusic {
  public:
   static Semantics<Conception> intention;
   static Knowledge kb;
-  static std::string output(UtteranceRules &ur) {
-    std::cout << ur << std::endl;
+  static std::string output(std::vector<Rule> &ur,
+                            std::map<AMean, Conception> cmap) {
+    std::copy(std::begin(ur), std::end(ur),
+              std::ostream_iterator<Rule>(std::cout, "\n"));
 
     std::ostringstream os;
-    std::string relative_s = "c'", key_s = "c", major_minor_s = "major", time_s = "4/4", symbol_string = "c4 e8 c4 d8 c8 c8";
+    std::string relative_s = "c'", key_s = "c",
+                major_minor_s = "major", time_s = "4/4",
+                symbol_string = "c4 e8 c4 d8 c8 c8";
 
-    std::list<std::string> tmp_str;
-    auto sel_vec = ur.string();
-    std::transform(std::begin(sel_vec), std::end(sel_vec), std::back_inserter(tmp_str),
-                   [](const SymbolElement &sel) { return sel.mono_to_s(); });
-    symbol_string = std::accumulate(std::next(std::begin(tmp_str)), std::end(tmp_str), tmp_str.front(),
-                                    [](std::string a, std::string b) { return a + " " + b; });
+    // std::list<std::string> tmp_str;
+    // auto sel_vec = ur.string();
+    // std::transform(
+    //     std::begin(sel_vec), std::end(sel_vec),
+    //     std::back_inserter(tmp_str),
+    //     [](const SymbolElement &sel) { return sel.mono_to_s(); });
+    // symbol_string = std::accumulate(
+    //     std::next(std::begin(tmp_str)), std::end(tmp_str),
+    //     tmp_str.front(),
+    //     [](std::string a, std::string b) { return a + " " + b; });
+    std::function<std::string(std::vector<Rule>::iterator,
+                              std::vector<Rule>::iterator)>
+        func;
+    func = [&relative_s, &key_s, &time_s](
+               std::vector<Rule>::iterator,
+               std::vector<Rule>::iterator) {
+      return "c4 e8 c4 d8 c8 c8";
+    };
+    symbol_string = func(std::begin(ur), std::end(ur));
 
     os << "melody = "
        << "\\relative " << relative_s << " {" << std::endl
-       << Prefices::DSP << "\\key " << key_s << " \\" << major_minor_s << std::endl
+       << Prefices::DSP << "\\key " << key_s << " \\" << major_minor_s
+       << std::endl
        << Prefices::DSP << "\\time " << time_s << std::endl
        << Prefices::DSP << symbol_string << std::endl
        << "}" << std::endl

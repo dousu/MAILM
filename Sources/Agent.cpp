@@ -20,6 +20,8 @@ Agent Agent::make_child(void) {
 Agent &Agent::grow() {
   kb.ut_index = Reader::index_count;
   kb.ut_category = Reader::category_count;
+  kb.send_db(kb.input_box);
+  kb.build_word_index();
   return *this;
 }
 
@@ -50,7 +52,7 @@ void Agent::init_semantics(TransRules ini_sem) {
   kb.init_semantics_rules(ini_sem);
 }
 
-void Agent::learn(void) { kb.consolidate(); }
+void Agent::learn(void) { kb.learning(); }
 
 std::string Agent::to_s() {
   return "Agent's Knowledge: \n" + kb.to_s() + "\n";

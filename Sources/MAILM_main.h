@@ -18,6 +18,7 @@
 // #include <boost/algorithm/string.hpp>
 // #include <boost/algorithm/string/trim.hpp>
 
+#include "AbcOutput.h"
 #include "Agent.h"
 #include "Dictionary.h"
 #include "Element.h"

@@ -589,7 +589,7 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
         AMean note_ind(index_count);
         note_in = Meaning(note_ind);
         core_meaning[note_ind] = Conception();
-        core_meaning[note_ind].add("L:" + std::to_string(nl1) + "/" +
+        core_meaning[note_ind].add("NL:" + std::to_string(nl1) + "/" +
                                    std::to_string(nl2));
         if (note_str.find_first_of("z") != note_str.npos) {
           core_meaning[note_ind].add("rest");
@@ -598,12 +598,15 @@ void ABCreader::k_(std::string_view str, AMean &sent_ind,
         strings[file_no].push_back(
             Symbol(conv_str[opt_str + name_str]));
 
+        sub_ex = note_ex;
+        sub_in = note_in;
+        sub_flat = Meaning(AMean(index_count));
+
         // base_ex.push_back(Symbol(conv_str[note_str]));
         base_in.get_followings().push_back(Variable(variable_count));
         flat.get_followings().push_back(Meaning(AMean(index_count)));
         base_ex.push_back(RightNonterminal(Category(category_count),
                                            Variable(variable_count)));
-
         index_count--;
         variable_count--;
         category_count--;

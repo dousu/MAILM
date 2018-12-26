@@ -1,6 +1,8 @@
 # Simulation Results
 Result/dot/*.d/
 Result/static/*.d/
+Result/ly/*.d/
+Result/abc/*.d/
 *review.txt
 
 # Prerequisites
