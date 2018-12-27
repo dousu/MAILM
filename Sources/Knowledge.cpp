@@ -1314,6 +1314,9 @@ std::vector<Rule> Knowledge::generate_score(
                     if (res.size() == 0) {
                       construct_groundable_rules(c, f0, f1, f2);
                     }
+                    if (LOGGING_FLAG) {
+                      LogBox::refresh_log();
+                    }
                   });
   } catch (...) {
     LogBox::refresh_log();
