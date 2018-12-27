@@ -1218,61 +1218,31 @@ std::vector<Rule> Knowledge::generate_score(
   std::vector<RuleDBType> res;
   bool sentence_check = false, q_check = false, m_check = false,
        k_check = false;
+
+  if (LOGGING_FLAG) {
+    LogBox::push_log("###Generating the original score");
+  }
+
   std::function<bool(std::vector<RuleDBType> &)> f0 =
       [&core_meaning, &sentence_check, &q_check, &m_check,
        &k_check](std::vector<RuleDBType> &rules_vec) { return true; };
   std::function<void(RuleDBType &)> f1 =
       [this, &res, &core_meaning, &sentence_check](RuleDBType rules) {
-        // bool sentence_check = false, q_check = false, m_check =
-        // false,
-        //      k_check = false;
-
-        // std::for_each(
-        //     std::begin(rules), std::end(rules),
-        //     [&core_meaning, &sentence_check, &q_check, &m_check,
-        //      &k_check](Rule &r_el) {
-        //       if (sentence_check) {
-        //         Conception &cc =
-        //             core_meaning[r_el.get_internal().get_base()];
-        //         q_check =
-        //             q_check || cc.include([](const std::string
-        //             &str) {
-        //               return str.find_first_of("Q:") == 0;
-        //             });
-        //         m_check =
-        //             m_check || cc.include([](const std::string
-        //             &str) {
-        //               return str.find_first_of("M:") == 0;
-        //             });
-        //         k_check =
-        //             k_check || cc.include([](const std::string
-        //             &str) {
-        //               return str.find_first_of("Q:") == 0;
-        //             });
-        //         sentence_check = q_check && m_check && k_check;
-        //       }
-        //     });
-        // if (sentence_check) {
         res.push_back(rules);
-        // }
-        // bool has_sentence = false;
-        // std::for_each(std::begin(rules), std::end(rules),
-        //               [this, &has_sentence](Rule &r) {
-        //                 has_sentence =
-        //                     has_sentence ||
-        //                     r.is_sentence(intention);
-        //               });
-        // if (has_sentence) {
-        // res.push_back(rules);
-        // }
       };
   std::function<bool(Rule &)> f2 = [this, &sentence_check, &q_check,
                                     &m_check, &k_check](Rule &r) {
     if (!product_loop) return false;
-    // std::cout << "Check a rule: " << r << std::endl;  // L-14024
-    if (r.get_external().front().type() != ELEM_TYPE::SYM_TYPE) {
-      // std::cout << "Skip a rule: " << r << std::endl;
+    if (!sentence_check &&
+        r.get_external().front().type() != ELEM_TYPE::SYM_TYPE) {
       if (product_loop) {
+        if (LOGGING_FLAG) {
+          LogBox::push_log("Check the rule: " + r.to_s());
+          LogBox::push_log("state:");
+          LogBox::push_log("q_check " + std::to_string(q_check));
+          LogBox::push_log("m_check " + std::to_string(m_check));
+          LogBox::push_log("k_check " + std::to_string(k_check));
+        }
         Conception cc = intention.get(r.get_internal().get_base());
         q_check = q_check || cc.include([](const std::string &str) {
           return str.find_first_of("Q:") == 0;
@@ -1284,11 +1254,12 @@ std::vector<Rule> Knowledge::generate_score(
           return str.find_first_of("K:") == 0;
         });
         sentence_check = q_check && m_check && k_check;
-        // std::cout << "[" << cc << "]"
-        //           << "Checked: sentence: " << sentence_check
-        //           << " q_check: " << q_check
-        //           << " m_check: " << m_check
-        //           << " k_check: " << k_check << std::endl;
+        if (LOGGING_FLAG) {
+          LogBox::push_log("result:");
+          LogBox::push_log("q_check " + std::to_string(q_check));
+          LogBox::push_log("m_check " + std::to_string(m_check));
+          LogBox::push_log("k_check " + std::to_string(k_check));
+        }
         return true;
       }
       return false;
@@ -1299,6 +1270,13 @@ std::vector<Rule> Knowledge::generate_score(
     old_q = q_check;
     old_m = m_check;
     old_k = k_check;
+    if (LOGGING_FLAG) {
+      LogBox::push_log("Check the rule: " + r.to_s());
+      LogBox::push_log("state:");
+      LogBox::push_log("q_check " + std::to_string(q_check));
+      LogBox::push_log("m_check " + std::to_string(m_check));
+      LogBox::push_log("k_check " + std::to_string(k_check));
+    }
     Conception cc = intention.get(r.get_internal().get_base());
     q_check = q_check || cc.include([](const std::string &str) {
       return str.find_first_of("Q:") == 0;
@@ -1310,11 +1288,13 @@ std::vector<Rule> Knowledge::generate_score(
       return str.find_first_of("K:") == 0;
     });
     sentence_check = q_check && m_check && k_check;
+    if (LOGGING_FLAG) {
+      LogBox::push_log("result:");
+      LogBox::push_log("q_check " + std::to_string(q_check));
+      LogBox::push_log("m_check " + std::to_string(m_check));
+      LogBox::push_log("k_check " + std::to_string(k_check));
+    }
 
-    // std::cout << "[" << cc << "]"
-    //           << "Checked: sentence: " << sentence_check
-    //           << " q_check: " << q_check << " m_check: " << m_check
-    //           << " k_check: " << k_check << std::endl;
     if (!sentence_check) {
       q_check = old_q;
       m_check = old_m;
@@ -1324,16 +1304,24 @@ std::vector<Rule> Knowledge::generate_score(
 
     return true;
   };
-  std::vector<std::reference_wrapper<Category>> shuffled{
-      std::begin(DB_cat), std::end(DB_cat)};
-  std::shuffle(std::begin(shuffled), std::end(shuffled),
-               MT19937::igen);
-  std::for_each(std::begin(shuffled), std::end(shuffled),
-                [this, &f0, &f1, &f2, &res](auto &c) {
-                  if (res.size() == 0) {
-                    construct_groundable_rules(c, f0, f1, f2);
-                  }
-                });
+  try {
+    std::vector<std::reference_wrapper<Category>> shuffled{
+        std::begin(DB_cat), std::end(DB_cat)};
+    std::shuffle(std::begin(shuffled), std::end(shuffled),
+                 MT19937::igen);
+    std::for_each(std::begin(shuffled), std::end(shuffled),
+                  [this, &f0, &f1, &f2, &res](auto &c) {
+                    if (res.size() == 0) {
+                      construct_groundable_rules(c, f0, f1, f2);
+                    }
+                  });
+  } catch (...) {
+    LogBox::refresh_log();
+    std::rethrow_exception(std::current_exception());
+  }
+  if (LOGGING_FLAG) {
+    LogBox::push_log("Generating the original score###");
+  }
   std::cout << "Number of generated score: " << res.size()
             << std::endl;
   if (res.size() == 0) return std::vector<Rule>();
