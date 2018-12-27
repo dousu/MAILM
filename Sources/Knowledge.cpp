@@ -1311,7 +1311,8 @@ std::vector<Rule> Knowledge::generate_score(
     std::shuffle(std::begin(shuffled), std::end(shuffled),
                  MT19937::igen);
     std::for_each(std::begin(shuffled), std::end(shuffled),
-                  [this, &f0, &f1, &f2, &res](auto &c) {
+                  [this, &f0, &f1, &f2, &res, &sentence_check,
+                   &q_check, &m_check, &k_check](auto &c) {
                     sentence_check = false, q_check = false,
                     m_check = false, k_check = false;
                     if (res.size() == 0) {
