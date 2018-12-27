@@ -1310,18 +1310,27 @@ std::vector<Rule> Knowledge::generate_score(
         std::begin(DB_cat), std::end(DB_cat)};
     std::shuffle(std::begin(shuffled), std::end(shuffled),
                  MT19937::igen);
-    std::for_each(std::begin(shuffled), std::end(shuffled),
-                  [this, &f0, &f1, &f2, &res, &sentence_check,
-                   &q_check, &m_check, &k_check](auto &c) {
-                    sentence_check = false, q_check = false,
-                    m_check = false, k_check = false;
-                    if (res.size() == 0) {
-                      construct_groundable_rules(c, f0, f1, f2);
-                    }
-                    if (LOGGING_FLAG) {
-                      LogBox::refresh_log();
-                    }
-                  });
+    std::for_each(
+        std::begin(shuffled), std::end(shuffled),
+        [this, &f0, &f1, &f2, &res, &sentence_check, &q_check,
+         &m_check, &k_check](auto &c) {
+          if (LOGGING_FLAG) {
+            LogBox::push_log("selected Category: " + c.to_s());
+          }
+          sentence_check = false;
+          q_check = false;
+          m_check = false;
+          k_check = false;
+          if (res.size() == 0) {
+            construct_groundable_rules(c, f0, f1, f2);
+          }
+          if (LOGGING_FLAG) {
+            LogBox::push_log(
+                "Fin: " + c.to_s() +
+                "Number of Result: " + std::to_string(res.size()));
+            LogBox::refresh_log();
+          }
+        });
   } catch (...) {
     LogBox::refresh_log();
     std::rethrow_exception(std::current_exception());
@@ -1436,7 +1445,13 @@ bool Knowledge::construct_groundable_rules(
         std::end(DB_cat_amean_dic[c])};
     std::shuffle(std::begin(pairs), std::end(pairs), MT19937::igen);
     std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
+      if (LOGGING_FLAG) {
+        LogBox::push_log("selected: " + p.second.to_s());
+      }
       if (f2(p.second)) {
+        if (LOGGING_FLAG) {
+          LogBox::push_log("passed: true");
+        }
         std::vector<RuleDBType> sub_prod{{{p.second}}};
         std::function<void(RuleDBType &)> f1_1 =
             [&sub_prod, &f0](RuleDBType &rules) {
@@ -1466,6 +1481,10 @@ bool Knowledge::construct_groundable_rules(
             product_loop = false;
         }
         is_constructable = is_constructable || subconst;
+      } else {
+        if (LOGGING_FLAG) {
+          LogBox::push_log("passed: false");
+        }
       }
     });
     std::for_each(std::begin(prod), std::end(prod), f1);
