@@ -354,7 +354,7 @@ int main(int argc, char *argv[]) {
         if (param.LILYPOND) {
           std::string output_str =
               LyOutputMusic::output(utter, cmap_say);
-          std::cout << output_str << std::endl;
+          // std::cout << output_str << std::endl;
           output_data_trunc(ly_dir.string() + "utter" +
                                 std::to_string(u + 1) + ".ly",
                             output_str);
