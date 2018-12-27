@@ -1315,7 +1315,8 @@ std::vector<Rule> Knowledge::generate_score(
         [this, &f0, &f1, &f2, &res, &sentence_check, &q_check,
          &m_check, &k_check](auto &c) {
           if (LOGGING_FLAG) {
-            LogBox::push_log("selected Category: " + c.to_s());
+            LogBox::push_log("selected Category: " +
+                             static_cast<Category>(c).to_s());
           }
           sentence_check = false;
           q_check = false;
@@ -1326,7 +1327,7 @@ std::vector<Rule> Knowledge::generate_score(
           }
           if (LOGGING_FLAG) {
             LogBox::push_log(
-                "Fin: " + c.to_s() +
+                "Fin: " + static_cast<Category>(c).to_s() +
                 "Number of Result: " + std::to_string(res.size()));
             LogBox::refresh_log();
           }
