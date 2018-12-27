@@ -1266,6 +1266,7 @@ std::vector<Rule> Knowledge::generate_score(
     }
 
     if (sentence_check) return product_loop;
+
     bool old_q, old_m, old_k;
     old_q = q_check;
     old_m = m_check;
@@ -1311,6 +1312,8 @@ std::vector<Rule> Knowledge::generate_score(
                  MT19937::igen);
     std::for_each(std::begin(shuffled), std::end(shuffled),
                   [this, &f0, &f1, &f2, &res](auto &c) {
+                    sentence_check = false, q_check = false,
+                    m_check = false, k_check = false;
                     if (res.size() == 0) {
                       construct_groundable_rules(c, f0, f1, f2);
                     }
