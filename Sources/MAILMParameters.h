@@ -84,7 +84,8 @@ struct OptionValue {
     } else {
       OptionTypes emp = T();
       std::cerr << "invalid get in OptionValue" << std::endl
-                << "Value Type ID: " << return_type() << "  Called Type ID: " << emp.index() << std::endl;
+                << "Value Type ID: " << return_type()
+                << "  Called Type ID: " << emp.index() << std::endl;
       exit(1);
     }
   }
@@ -94,7 +95,9 @@ struct OptionValue {
     return std::holds_alternative<T>(obj);
   }
 
-  type_id return_type() const { return static_cast<type_id>(obj.index()); }
+  type_id return_type() const {
+    return static_cast<type_id>(obj.index());
+  }
 };
 struct ProgramOption {
  private:
@@ -106,7 +109,8 @@ struct ProgramOption {
   std::set<int> exist;
 
  public:
-  ProgramOption() : idx(), id(), val_list(), desc_list(), type_inf(), exist(){};
+  ProgramOption()
+      : idx(), id(), val_list(), desc_list(), type_inf(), exist(){};
   ProgramOption(const ProgramOption &po) {
     idx = po.idx;
     id = po.id;
@@ -140,7 +144,8 @@ struct ProgramOption {
 
   ProgramOption &add_option() { return *this; }
 
-  ProgramOption &operator()(std::string key, OptionValue val, std::string str) {
+  ProgramOption &operator()(std::string key, OptionValue val,
+                            std::string str) {
     int index = idx.generate();
     id[key] = index;
     val_list[index] = val;
@@ -180,7 +185,8 @@ struct ProgramOption {
   void help() {
     std::string help_comment = "HELP:\n";
     for (auto index : id) {
-      help_comment += "  " + index.first + "\t" + desc_list[index.second] + "\n";
+      help_comment +=
+          "  " + index.first + "\t" + desc_list[index.second] + "\n";
     }
     std::cout << help_comment << std::endl;
     exit(0);
@@ -192,7 +198,9 @@ struct ProgramOption {
     while (i < argc) {
       std::string str(argv[i]);
       std::string option;
-      if (str.find("-") != 0 || (str.find("-") == 0 && str.size() < 2) || (str.find("--") == 0 && str.size() < 3)) {
+      if (str.find("-") != 0 ||
+          (str.find("-") == 0 && str.size() < 2) ||
+          (str.find("--") == 0 && str.size() < 3)) {
         if (id.count(key) == 0) {
           std::cerr << "unknown option key" << std::endl;
           exit(1);
@@ -222,7 +230,9 @@ struct ProgramOption {
                 exit(1);
             }
           } catch (...) {
-            std::cerr << "Error in ProgramOption::parse . substitution of type[" << ti << "]" << std::endl;
+            std::cerr << "Error in ProgramOption::parse . "
+                         "substitution of type["
+                      << ti << "]" << std::endl;
             exit(1);
           }
         }
@@ -235,14 +245,18 @@ struct ProgramOption {
         try {
           val_list[id[key]] = true;
         } catch (...) {
-          std::cerr << "Error in ProgramOption::parse . substitution of bool type" << std::endl;
+          std::cerr << "Error in ProgramOption::parse . substitution "
+                       "of bool type"
+                    << std::endl;
           exit(1);
         }
       }
       if (str.find("--") == 0) {
-        std::copy(std::begin(str) + 2, std::end(str), std::back_inserter(option));
+        std::copy(std::begin(str) + 2, std::end(str),
+                  std::back_inserter(option));
       } else {
-        std::copy(std::begin(str) + 1, std::end(str), std::back_inserter(option));
+        std::copy(std::begin(str) + 1, std::end(str),
+                  std::back_inserter(option));
       }
       if (option == "h" || option == "help") {
         help();
@@ -269,6 +283,7 @@ class MAILMParameters {
  public:
   // experiment parameters
   int MAX_GENERATIONS;
+  int LIMIT_UTTERANCE;
   double PER_UTTERANCES;
   int RANDOM_SEED;  //
 

@@ -186,6 +186,9 @@ int main(int argc, char *argv[]) {
       /*発話回数*/
       ("utterances", ProgramOption::value<int>(),
        "Uttering ratio for meaning space (25)")
+      /* Utterance Limit*/
+      ("utterancelimit", ProgramOption::value<int>(),
+       "Limitation of the utterance length (100)")
       // handling monophony
       ("mono", "mode for monophony")
       // using abc notation
@@ -243,6 +246,7 @@ int main(int argc, char *argv[]) {
   //   XMLreader xmlr;
   //   xmlr.make_init_data(file_list);
   // }
+  Knowledge::UTTERANCE_LIMIT = param.LIMIT_UTTERANCE;
 
   std::cout << "Read" << std::endl;
   Agent parent;

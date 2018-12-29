@@ -3,6 +3,7 @@
 MAILMParameters::MAILMParameters() {
   // experiment parameters
   MAX_GENERATIONS = 10;
+  LIMIT_UTTERANCE = 100;
   RANDOM_SEED = 101010;  //
 
   CONTROLS = 0x0;
@@ -82,6 +83,10 @@ void MAILMParameters::set_option(ProgramOption &po) {
     UTTERANCES = po.get<int>("utterances");
   }
 
+  if (po.count("utterancelimit")) {
+    LIMIT_UTTERANCE = po.get<int>("utterancelimit");
+  }
+
   if (po.count("mono")) {
     MONO = true;
     XML_DIR = MONOXML_DIR;
@@ -114,9 +119,14 @@ void MAILMParameters::set_option(ProgramOption &po) {
     LOGGING = po.get<bool>("logging");
   }
   RESULT_PATH = BASE_PATH + "Result/";
-  if (ANALYZE && po.count("prefix")) RESULT_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + RESULT_EXT;
-  if (LOGGING && po.count("prefix")) LOG_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR + LOG_EXT;
-  if (po.count("dictionary") || po.count("prefix")) DICTIONARY_FILE = BASE_PATH + Prefices::DEL + DICTIONARY_FILE;
+  if (ANALYZE && po.count("prefix"))
+    RESULT_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX +
+                  DATE_STR + RESULT_EXT;
+  if (LOGGING && po.count("prefix"))
+    LOG_FILE = RESULT_PATH + Prefices::DEL + FILE_PREFIX + DATE_STR +
+               LOG_EXT;
+  if (po.count("dictionary") || po.count("prefix"))
+    DICTIONARY_FILE = BASE_PATH + Prefices::DEL + DICTIONARY_FILE;
 }
 
 std::string MAILMParameters::to_s() {
@@ -144,6 +154,11 @@ std::string MAILMParameters::to_s() {
   if (spo.count("utterances")) {
     bag.push_back("--utterances");
     bag.push_back(std::to_string(spo.get<int>("utteranes")));
+  }
+
+  if (spo.count("utterancelimit")) {
+    bag.push_back("--utterancelimit");
+    bag.push_back(std::to_string(spo.get<int>("utteranelimit")));
   }
 
   if (spo.count("mono")) {
@@ -181,7 +196,8 @@ std::string MAILMParameters::to_s() {
     bag.push_back(std::to_string(spo.get<bool>("logging")));
   }
   std::ostringstream os;
-  std::copy(std::begin(bag), std::end(bag), std::ostream_iterator<std::string>(os, " "));
+  std::copy(std::begin(bag), std::end(bag),
+            std::ostream_iterator<std::string>(os, " "));
   return os.str();
 }
 
@@ -202,17 +218,22 @@ std::string MAILMParameters::to_all_s(void) {
   //  uint32_t Generation_Counter; //
   ss << "Generation_Counter = " << Generation_Counter << std::endl;
   //  bool LOGGING;
-  ss << "LOGGING = " << std::boolalpha << LOGGING << std::noboolalpha << std::endl;
+  ss << "LOGGING = " << std::boolalpha << LOGGING << std::noboolalpha
+     << std::endl;
   //  bool PROGRESS;
   // ss << "PROGRESS = " << PROGRESS << std::endl;
   //  bool MONO;
-  ss << "MONO = " << std::boolalpha << MONO << std::noboolalpha << std::endl;
+  ss << "MONO = " << std::boolalpha << MONO << std::noboolalpha
+     << std::endl;
   //  bool ABC;
-  ss << "ABC = " << std::boolalpha << ABC << std::noboolalpha << std::endl;
+  ss << "ABC = " << std::boolalpha << ABC << std::noboolalpha
+     << std::endl;
   //  bool LILYPOND;
-  ss << "LILYPOND = " << std::boolalpha << LILYPOND << std::noboolalpha << std::endl;
+  ss << "LILYPOND = " << std::boolalpha << LILYPOND
+     << std::noboolalpha << std::endl;
   //  bool ANALYZE;
-  ss << "ANALYZE = " << std::boolalpha << ANALYZE << std::noboolalpha << std::endl;
+  ss << "ANALYZE = " << std::boolalpha << ANALYZE << std::noboolalpha
+     << std::endl;
   //  std::string DICTIONARY_FILE;
   ss << "DICTIONARY_FILE = " << DICTIONARY_FILE << std::endl;
   //  std::string FILE_PREFIX;

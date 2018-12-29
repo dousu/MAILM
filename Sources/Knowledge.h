@@ -454,7 +454,7 @@ class Knowledge {
     RANDOM,
     NUM_SORT
   };
-  enum CONSOLIDATE_TYPE { CHUNK = 0, MERGE, REPLACE, ALL_METHOD };
+  enum LEARNING_TYPE { CHUNK = 0, MERGE, REPLACE, ALL_METHOD };
 
   int ut_index;
   int ut_category;
@@ -467,6 +467,7 @@ class Knowledge {
   static int buzz_length;
   static int EXPRESSION_LIMIT;
   static int RECURSIVE_LIMIT;
+  static std::size_t UTTERANCE_LIMIT;
 
   static const uint32_t USE_OBLITERATION = 0x01;
   static const uint32_t USE_SEMICOMPLETE_FABRICATION = 0x02;
@@ -622,20 +623,21 @@ class Knowledge {
   std::vector<SymbolElement> construct_buzz_word();
   bool construct_groundable_rules(
       const Category &c, Meaning m,
-      std::function<void(RuleDBType &)> &f);
+      std::function<void(std::pair<RuleDBType, std::size_t> &)> &f);
   bool construct_groundable_rules(
       const Category &c, Meaning m,
-      std::function<void(RuleDBType &)> &f1,
+      std::function<void(std::pair<RuleDBType, std::size_t> &)> &f1,
       std::function<bool(Rule &)> &f2);
   bool product_loop;
   bool construct_groundable_rules(
       const Category &c,
-      std::function<bool(std::vector<RuleDBType> &)> &f0,
-      std::function<void(RuleDBType &)> &f1,
-      std::function<bool(Rule &)> &f2);
+      std::function<bool(
+          std::vector<std::pair<RuleDBType, std::size_t>> &)> &f0,
+      std::function<void(std::pair<RuleDBType, std::size_t> &)> &f1,
+      std::function<bool(Rule &)> &f2, std::size_t minlen);
   bool construct_groundable_rules_1(
-      Rule &base, std::vector<RuleDBType> &prod,
-      std::function<bool(const Category &, const std::any &)> &func);
+      Rule &, std::function<bool(const Category &)> &, std::size_t &,
+      std::vector<std::pair<RuleDBType, std::size_t>> &);
   std::map<AMean, Conception> generate_measure_mono(
       const Category &c, UtteranceRules &ur, std::string &key_str,
       std::string &time_str);

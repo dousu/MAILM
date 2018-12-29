@@ -6,6 +6,7 @@ uint32_t Knowledge::CONTROLS = 0x00L;
 int Knowledge::buzz_length = 3;
 int Knowledge::EXPRESSION_LIMIT = 15;
 int Knowledge::RECURSIVE_LIMIT = 3;
+std::size_t Knowledge::UTTERANCE_LIMIT = 100;
 ParseLink::ParseNode ParseLink::empty_node = ParseLink::ParseNode();
 ParseLink2::ParseNode ParseLink2::empty_node =
     ParseLink2::ParseNode();
@@ -159,7 +160,7 @@ void Knowledge::unique(std::list<T> &vec) {
 
 bool Knowledge::learning(void) {
   bool flag = true;
-  std::array<int, CONSOLIDATE_TYPE::ALL_METHOD> ar, tmp;
+  std::array<int, LEARNING_TYPE::ALL_METHOD> ar, tmp;
   std::iota(std::begin(ar), std::end(ar), 0);
   if (LOGGING_FLAG) LogBox::push_log("\n\n!!CONSOLIDATE!!");
   try {
@@ -170,17 +171,17 @@ bool Knowledge::learning(void) {
       std::for_each(
           std::begin(tmp), std::end(tmp), [this, &flag](int i) {
             switch (i) {
-              case CONSOLIDATE_TYPE::CHUNK: {
+              case LEARNING_TYPE::CHUNK: {
                 flag = chunk() || flag;
                 break;
               }
-              case CONSOLIDATE_TYPE::MERGE: {
+              case LEARNING_TYPE::MERGE: {
                 if ((flag = merge() || flag)) {
                   unique(input_box);
                 }
                 break;
               }
-              case CONSOLIDATE_TYPE::REPLACE: {
+              case LEARNING_TYPE::REPLACE: {
                 flag = replace() || flag;
                 break;
               }
@@ -1107,14 +1108,16 @@ std::vector<SymbolElement> Knowledge::construct_buzz_word() {
 bool Knowledge::explain(Meaning ref, RuleDBType &res) {
   std::vector<RuleDBType> pattern_list;
   auto range = dic_amean_range(ref.get_base());
-  std::for_each(range.first, range.second,
-                [this, &pattern_list, &ref](auto &p) {
-                  std::function<void(RuleDBType & list)> f1 =
-                      [&pattern_list](RuleDBType &list) -> void {
-                    pattern_list.push_back(list);
-                  };
-                  construct_groundable_rules(p.first, ref, f1);
-                });
+  std::for_each(
+      range.first, range.second,
+      [this, &pattern_list, &ref](auto &p) {
+        std::function<void(std::pair<RuleDBType, std::size_t> &)> f1 =
+            [&pattern_list](
+                std::pair<RuleDBType, std::size_t> &list) -> void {
+          pattern_list.push_back(list.first);
+        };
+        construct_groundable_rules(p.first, ref, f1);
+      });
   if (pattern_list.size() > 0) {
     res = pattern_list[MT19937::irand(0, pattern_list.size() - 1)];
     return true;
@@ -1157,11 +1160,12 @@ Knowledge::RuleDBType Knowledge::grounded_rules(Meaning ref) {
   std::for_each(
       range.first, range.second,
       [this, &ref, &grounded_rules](std::pair<Category, Rule> p) {
-        std::function<void(RuleDBType & list)> f1 =
-            [this, &ref, &grounded_rules](RuleDBType &list) {
+        std::function<void(std::pair<RuleDBType, std::size_t> &)> f1 =
+            [this, &ref, &grounded_rules](
+                std::pair<RuleDBType, std::size_t> &list) {
               Rule r(LeftNonterminal(Category(0), ref),
                      std::vector<SymbolElement>());
-              ground_with_pattern(r, list);
+              ground_with_pattern(r, list.first);
               grounded_rules.push_back(r);
             };
         construct_groundable_rules(p.first, ref, f1);
@@ -1223,12 +1227,18 @@ std::vector<Rule> Knowledge::generate_score(
     LogBox::push_log("###Generating the original score");
   }
 
-  std::function<bool(std::vector<RuleDBType> &)> f0 =
-      [&core_meaning, &sentence_check, &q_check, &m_check,
-       &k_check](std::vector<RuleDBType> &rules_vec) { return true; };
-  std::function<void(RuleDBType &)> f1 =
-      [this, &res, &core_meaning, &sentence_check](RuleDBType rules) {
-        res.push_back(rules);
+  std::function<bool(
+      std::vector<std::pair<RuleDBType, std::size_t>> &)>
+      f0 = [&core_meaning, &sentence_check, &q_check, &m_check,
+            &k_check](std::vector<std::pair<RuleDBType, std::size_t>>
+                          &rules_vec) {
+        return rules_vec.size() >= 1;
+      };
+  std::function<void(std::pair<RuleDBType, std::size_t> &)> f1 =
+      [this, &res, &core_meaning,
+       &sentence_check](std::pair<RuleDBType, std::size_t> rules) {
+        if (rules.second < UTTERANCE_LIMIT)
+          res.push_back(rules.first);
       };
   std::function<bool(Rule &)> f2 = [this, &sentence_check, &q_check,
                                     &m_check, &k_check](Rule &r) {
@@ -1323,7 +1333,8 @@ std::vector<Rule> Knowledge::generate_score(
           m_check = false;
           k_check = false;
           if (res.size() == 0) {
-            construct_groundable_rules(c, f0, f1, f2);
+            construct_groundable_rules(c, f0, f1, f2,
+                                       static_cast<std::size_t>(0));
           }
           if (LOGGING_FLAG) {
             LogBox::push_log(
@@ -1403,7 +1414,7 @@ std::vector<Rule> Knowledge::parse_string(
 
 bool Knowledge::construct_groundable_rules(
     const Category &c, Meaning m,
-    std::function<void(RuleDBType &)> &f) {
+    std::function<void(std::pair<RuleDBType, std::size_t> &)> &f) {
   std::function<bool(Rule &)> f2 = [](Rule &r) -> bool {
     return true;
   };
@@ -1412,15 +1423,18 @@ bool Knowledge::construct_groundable_rules(
 
 bool Knowledge::construct_groundable_rules(
     const Category &c, Meaning m,
-    std::function<void(RuleDBType &)> &f1,
+    std::function<void(std::pair<RuleDBType, std::size_t> &)> &f1,
     std::function<bool(Rule &)> &f2) {
   std::size_t index = 0;
   std::list<AMean> ref;
   m.flat_list(ref);
   auto it = std::begin(ref);
   auto it_end = std::end(ref);
-  std::function<bool(std::vector<RuleDBType> &)> f0 =
-      [](std::vector<RuleDBType> &rdb_vec) -> bool { return true; };
+  std::function<bool(
+      std::vector<std::pair<RuleDBType, std::size_t>> &)>
+      f0 =
+          [](std::vector<std::pair<RuleDBType, std::size_t>> &rdb_vec)
+      -> bool { return true; };
   std::function<bool(Rule &)> f2_1 = [this, &m, &f2, &index, &it,
                                       &it_end](Rule &r) -> bool {
     bool b = it != it_end && r.get_internal().get_base() == *it &&
@@ -1428,19 +1442,23 @@ bool Knowledge::construct_groundable_rules(
     if (b) it++;
     return b;
   };
-  return construct_groundable_rules(c, f0, f1, f2_1);
+  return construct_groundable_rules(c, f0, f1, f2_1,
+                                    static_cast<std::size_t>(0));
 }
 
 bool Knowledge::construct_groundable_rules(
     const Category &c,
-    std::function<bool(std::vector<RuleDBType> &)> &f0,
-    std::function<void(RuleDBType &)> &f1,
-    std::function<bool(Rule &)> &f2) {
+    std::function<
+        bool(std::vector<std::pair<RuleDBType, std::size_t>> &)> &f0,
+    std::function<void(std::pair<RuleDBType, std::size_t> &)> &f1,
+    std::function<bool(Rule &)> &f2, std::size_t minlen) {
+  // ut_length, UTTERANCE_LIMIT
+  // std::size_t ut_length;
   bool is_constructable = false;
   if (DB_cat_amean_dic.find(c) != std::end(DB_cat_amean_dic)) {
     bool first = true;
     product_loop = true;
-    std::vector<RuleDBType> prod;
+    std::vector<std::pair<RuleDBType, std::size_t>> prod;
     std::vector<std::pair<AMean, Rule>> pairs{
         std::begin(DB_cat_amean_dic[c]),
         std::end(DB_cat_amean_dic[c])};
@@ -1449,27 +1467,40 @@ bool Knowledge::construct_groundable_rules(
       if (LOGGING_FLAG) {
         LogBox::push_log("selected: " + p.second.to_s());
       }
-      if (f2(p.second)) {
+      if (minlen + p.second.get_external().size() - 1 <=
+              UTTERANCE_LIMIT &&
+          f2(p.second)) {
         if (LOGGING_FLAG) {
           LogBox::push_log("passed: true");
         }
-        std::vector<RuleDBType> sub_prod{{{p.second}}};
-        std::function<void(RuleDBType &)> f1_1 =
-            [&sub_prod, &f0](RuleDBType &rules) {
-              std::for_each(std::begin(sub_prod), std::end(sub_prod),
-                            [&rules](RuleDBType &prod_rules) {
-                              std::copy(
-                                  std::begin(rules), std::end(rules),
-                                  std::back_inserter(prod_rules));
-                            });
+        std::vector<std::pair<RuleDBType, std::size_t>> sub_prod{
+            {{{p.second},
+              minlen + p.second.get_external().size() - 1}}};
+        std::size_t minlen_f1 =
+            minlen + p.second.get_external().size() - 1;
+        std::function<void(std::pair<RuleDBType, std::size_t> &)>
+            f1_1 = [&sub_prod, &f0, &minlen_f1](
+                       std::pair<RuleDBType, std::size_t> &rules) {
+              std::for_each(
+                  std::begin(sub_prod), std::end(sub_prod),
+                  [&rules](std::pair<RuleDBType, std::size_t>
+                               &prod_rules) {
+                    if (prod_rules.second + rules.second - 1 <=
+                        UTTERANCE_LIMIT) {
+                      std::copy(std::begin(rules.first),
+                                std::end(rules.first),
+                                std::back_inserter(prod_rules.first));
+                      prod_rules.second += rules.second - 1;
+                    }
+                  });
             };
-        std::function<bool(const Category &, const std::any &)> func =
-            [this, &f0, &f1_1, &f2](const Category &c,
-                                    const std::any &a) {
-              return construct_groundable_rules(c, f0, f1_1, f2);
+        std::function<bool(const Category &)> func =
+            [this, &f0, &f1_1, &f2, &minlen_f1](const Category &c) {
+              return construct_groundable_rules(c, f0, f1_1, f2,
+                                                minlen_f1);
             };
-        bool subconst =
-            construct_groundable_rules_1(p.second, sub_prod, func);
+        bool subconst = construct_groundable_rules_1(
+            p.second, func, minlen_f1, sub_prod);
         if (subconst) {
           std::copy(std::begin(sub_prod), std::end(sub_prod),
                     std::back_inserter(prod));
@@ -1495,16 +1526,21 @@ bool Knowledge::construct_groundable_rules(
 }
 
 bool Knowledge::construct_groundable_rules_1(
-    Rule &base, std::vector<RuleDBType> &prod,
-    std::function<bool(const Category &, const std::any &)> &func) {
+    Rule &base, std::function<bool(const Category &)> &func,
+    std::size_t &minlen_f1,
+    std::vector<std::pair<RuleDBType, std::size_t>> &prod) {
   bool constructable = true;
   std::for_each(
       std::begin(base.get_external()), std::end(base.get_external()),
-      [&func, &constructable](SymbolElement &sel) {
-        if (constructable && sel.type() == ELEM_TYPE::NT_TYPE)
+      [&func, &constructable, &prod, &minlen_f1](SymbolElement &sel) {
+        if (constructable && sel.type() == ELEM_TYPE::NT_TYPE) {
           constructable =
               constructable &&
-              func(sel.template get<RightNonterminal>().get_cat(), 0);
+              func(sel.template get<RightNonterminal>().get_cat());
+          for (auto p : prod) {
+            minlen_f1 = std::min(minlen_f1, p.second);
+          }
+        }
       });
   return constructable;
 }
