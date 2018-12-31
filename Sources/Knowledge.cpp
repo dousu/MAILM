@@ -1466,6 +1466,11 @@ bool Knowledge::construct_groundable_rules(
     std::for_each(std::begin(pairs), std::end(pairs), [&](auto &p) {
       if (LOGGING_FLAG) {
         LogBox::push_log("selected: " + p.second.to_s());
+        LogBox::push_log(
+            "current length: " +
+            std::to_string(minlen + p.second.get_external().size() -
+                           1) +
+            "Limit length: " + std::to_string(UTTERANCE_LIMIT));
       }
       if (minlen + p.second.get_external().size() - 1 <=
               UTTERANCE_LIMIT &&
